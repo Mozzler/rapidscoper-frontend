@@ -1,0 +1,41 @@
+.v-text-field--solo .v-input__control .v-input__slot {
+  border: 1px solid $color-grey;
+  box-shadow: none !important;
+  font-size: 14px !important;
+  height: 40px !important;
+  min-height: auto;
+  border-radius: 4px !important;
+}
+
+.v-input {
+  &.v-input--is-focused .v-input__control {
+    .v-input__slot {
+      border-color: $color-primary;
+    }
+  }
+
+  &.error--text .v-input__control {
+    .v-input__slot {
+      border-color: $color-red;
+    }
+  }
+}
+
+.label {
+  display: block;
+  text-align: left;
+  margin-bottom: 6px;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 14px;
+  color:$color-black;
+  text-indent: 2px;
+  opacity: 0.6;
+}
+
+.v-text-field.v-text-field--enclosed .v-text-field__details {
+  padding: 0 !important;
+  font-size: 12px !important;
+  font-weight: 600;
+  color: $color-red;
+}

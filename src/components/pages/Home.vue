@@ -10,7 +10,7 @@
           <v-btn depressed>Normal</v-btn>
         </div>
         <div>
-          <v-btn depressed color="primary" @click="test" disabled>Primary</v-btn>
+          <v-btn depressed @click="test" outline>Primary</v-btn>
         </div>
         <div>
           <v-btn color="error">Error</v-btn>
@@ -20,17 +20,22 @@
         </div>
       </v-flex>
 
-      <form>
-        <v-flex xs12 sm6 md3>
+
+      <v-form ref="form" lazy-validation v-model="valid">
+        <div>
+          <label class="label">Label</label>
           <v-text-field
+            v-model="name"
+            :rules="nameRules"
+            required
             placeholder="Placeholder"
             solo
           ></v-text-field>
-        </v-flex>
+        </div>
 
-        <v-btn>submit</v-btn>
+        <v-btn @click="validate">submit</v-btn>
         <v-btn>clear</v-btn>
-      </form>
+      </v-form>
     </v-layout>
   </div>
 </template>
@@ -43,9 +48,22 @@ export default {
   components: {
     HelloWorld
   },
+  data() {
+    return {
+      valid: true,
+      name: '',
+      nameRules: [
+        v => !!v || 'Name is required',
+        v => (v && v.length <= 10) || 'Name must be less than 10 characters'
+      ]
+    }
+  },
   methods: {
     test() {
       console.log('disabled');
+    },
+    validate() {
+      this.$refs.form.validate();
     }
   }
 };

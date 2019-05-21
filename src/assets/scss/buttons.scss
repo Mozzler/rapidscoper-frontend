@@ -2,14 +2,27 @@ button {
   &.v-btn {
     text-transform: none;
     border-radius: 4px;
+    font-weight: 500;
   }
 
   &.primary:hover {
-    background: linear-gradient(0deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), #7839DF !important;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), $color-primary !important;
   }
 
-  &.secondary:hover {
-    background: rgba(0, 0, 0, 0.05);
+  &.v-btn--outline {
+    color: $color-black !important;
+    border-color: $color-primary !important;
+  }
+
+  &:disabled.v-btn.v-btn--disabled:not(.v-btn--icon):not(.v-btn--flat):not(.v-btn--outline) {
+    background-color: $color-primary !important;
+    opacity: 0.3;
+    color: $color-white !important;
+  }
+
+  &.v-btn--large {
+    font-weight: 600;
+    padding: 12px 26px;
   }
 }
 
