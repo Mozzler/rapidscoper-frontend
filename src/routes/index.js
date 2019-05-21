@@ -1,13 +1,26 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-
-import list from './list.js';
+import SignupRoutes from './signup';
+import helpers from './router-helpers';
 
 Vue.use(Router);
 
-let router = new Router({
-  routes: list,
-  mode: 'history'
+const router = new Router({
+  mode: 'history',
+  routes: [
+    {
+      path: '*',
+      redirect: '/'
+    },
+    {
+      path: '/',
+      name: 'main',
+      component: () => import('@/components/pages/Home'),
+      beforeEnter: helpers.ifAuthenticated
+      // children: [],
+    },
+    ...SignupRoutes
+  ]
 });
 
 export default router;

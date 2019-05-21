@@ -1,10 +1,7 @@
 <template>
   <div class="app">
     <div class="app__img" />
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-
     <v-layout align-center>
-
       <v-flex xs12 sm4 text-xs-center>
         <div>
           <v-btn depressed large class="primary">Primary</v-btn>
@@ -16,14 +13,13 @@
           <v-btn depressed class="primary">Primary</v-btn>
         </div>
         <div>
-          <v-btn depressed outline>Primary</v-btn>
+          <v-btn depressed outline>Primary 1</v-btn>
         </div>
         <div>
           <v-btn depressed outline large>Primary</v-btn>
         </div>
       </v-flex>
-
-
+      <logo-git-hub/>
       <v-form ref="form" lazy-validation v-model="valid">
         <div>
           <label class="label">Label</label>
@@ -35,7 +31,6 @@
             solo
           ></v-text-field>
         </div>
-
         <v-btn @click="validate">submit</v-btn>
         <v-btn>clear</v-btn>
       </v-form>
@@ -44,28 +39,23 @@
 </template>
 
 <script>
-import HelloWorld from '../particles/cards/HelloWorld';
+import LogoGitHub from '../particles/icons/LogoGitHub';
 
 export default {
   name: 'Home',
   components: {
-    HelloWorld
+    LogoGitHub
   },
-  data() {
-    return {
-      valid: true,
-      name: '',
-      nameRules: [
-        v => !!v || 'Name is required',
-        v => (v && v.length <= 10) || 'Name must be less than 10 characters'
-      ]
-    }
-  },
+  data: () => ({
+    valid: true,
+    name: '',
+    nameRules: [
+      v => !!v || 'Name is required',
+      v => (v && v.length <= 10) || 'Name must be less than 10 characters'
+    ]
+  }),
   methods: {
-    test() {
-      console.log('disabled');
-    },
-    validate() {
+    validate () {
       this.$refs.form.validate();
     }
   }
