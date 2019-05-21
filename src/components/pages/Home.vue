@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <img alt="Vue logo" src="../../assets/logo.png">
+  <div class="app">
+    <div class="app__img" />
     <HelloWorld msg="Welcome to Your Vue.js App"/>
   </div>
 </template>
@@ -15,7 +15,3 @@
       }
     }
 </script>
-
-<style scoped>
-
-</style>

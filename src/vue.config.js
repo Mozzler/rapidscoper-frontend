@@ -1,4 +1,5 @@
 const HtmlPlugin = require('html-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 const appPath = `${__dirname}/src`;
 
@@ -15,7 +16,6 @@ module.exports = {
     resolve: {
       alias: {
         '@': appPath,
-        'assets': `${appPath}/assets`,
       },
       symlinks: false,
     },
@@ -38,6 +38,12 @@ module.exports = {
         template: `${appPath}/assets/index.html`,
         hash: true,
       }),
+      new CopyPlugin([
+        {
+          from: `${appPath}/assets/img`,
+          to: `public/assets/img`
+        },
+      ]),
     ],
   },
 };
