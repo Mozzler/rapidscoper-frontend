@@ -1,4 +1,4 @@
-import Vue from 'vue'
-import VueAxiosPlugin from './axios-plugin'
+import Vue from 'vue';
+import VueAxiosPlugin from './axios-plugin';
 
-Vue.use(VueAxiosPlugin)
+Vue.use(VueAxiosPlugin);
