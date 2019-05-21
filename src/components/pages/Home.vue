@@ -7,16 +7,19 @@
 
       <v-flex xs12 sm4 text-xs-center>
         <div>
-          <v-btn depressed>Normal</v-btn>
+          <v-btn depressed large class="primary">Primary</v-btn>
         </div>
         <div>
-          <v-btn depressed @click="test" outline>Primary</v-btn>
+          <v-btn depressed large disabled>Primary</v-btn>
         </div>
         <div>
-          <v-btn color="error">Error</v-btn>
+          <v-btn depressed class="primary">Primary</v-btn>
         </div>
         <div>
-          <v-btn depressed disabled>Disabled</v-btn>
+          <v-btn depressed outline>Primary</v-btn>
+        </div>
+        <div>
+          <v-btn depressed outline large>Primary</v-btn>
         </div>
       </v-flex>
 
