@@ -6,12 +6,12 @@
 </template>
 
 <script>
-    import HelloWorld from '../particles/HelloWorld';
+import HelloWorld from '../particles/HelloWorld'
 
-    export default {
-      name: "Home",
-      components: {
-        HelloWorld
-      }
-    }
+export default {
+  name: 'Home',
+  components: {
+    HelloWorld
+  }
+}
 </script>

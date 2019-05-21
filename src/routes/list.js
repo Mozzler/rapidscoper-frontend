@@ -1,11 +1,11 @@
-import Home from '../components/pages/Home';
+import Home from '../components/pages/Home'
 
 export default [
   {
     path: '/',
-    redirect: 'home',
+    redirect: 'home'
   },
-  /*{
+  /* {
     path: '/sign-in',
     name: 'Sign In',
     component: AuthPage,
@@ -20,10 +20,10 @@ export default [
     meta: {
       guest: true
     }
-  },*/
+  }, */
   {
     path: '/home',
     name: 'Home',
-    component: Home,
-  },
-];
+    component: Home
+  }
+]
