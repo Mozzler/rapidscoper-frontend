@@ -3,6 +3,7 @@
     <v-layout row wrap>
       <v-flex xs12 class="signup-input">
         <v-text-field
+          :key="`${action}-email`"
           name="email"
           v-validate="'required|email|min:6|max:255'"
           v-model="user.email"
@@ -14,6 +15,7 @@
       </v-flex>
       <v-flex xs12 class="signup-input">
         <v-text-field
+          :key="`${action}-password`"
           name="password"
           v-validate="'required|min:6|max:255'"
           v-model="user.password"
@@ -70,6 +72,15 @@
         else {
           this.processing = false;
         }
+      }
+    },
+    watch: {
+      authType() {
+        this.user = {
+          email: null,
+          password: null
+        };
+        //this.$validator.reset();
       }
     }
   };

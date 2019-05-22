@@ -54,6 +54,6 @@ export default {
       $event.preventDefault();
       this.emailFormVisible = true;
     }
-  }
+  },
 };
 </script>
