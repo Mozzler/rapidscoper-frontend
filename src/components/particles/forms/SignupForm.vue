@@ -1,14 +1,14 @@
 <template>
   <v-form class="signup-with-email">
     <v-layout row wrap>
-      <v-flex xs12 class="mb-5px">
+      <v-flex xs12 class="signup-input">
         <v-text-field
           v-model="user.email"
           placeholder="Email"
           solo
         ></v-text-field>
       </v-flex>
-      <v-flex xs12 class="mb-5px">
+      <v-flex xs12 class="signup-input">
         <v-text-field
           v-model="user.password"
           placeholder="Password"
