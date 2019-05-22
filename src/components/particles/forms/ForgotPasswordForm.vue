@@ -33,9 +33,9 @@
         </template>
         <template v-else>
           <v-flex xs12>
-            <v-btn @click.native="goToForgotPassword">
+            <router-link to="/forgot-password" @click.native="resend">
               Resend reset link
-            </v-btn>
+            </router-link>
           </v-flex>
         </template>
       </v-layout>
@@ -53,7 +53,7 @@
       email: null,
       label: null,
       processing: false,
-      sent: false
+      sent: true
     }),
     beforeMount() {
       this.label = 'Enter your Email address and we will send you a link to reset your password.';
@@ -77,8 +77,7 @@
           this.processing = false;
         }
       },
-      goToForgotPassword($event) {
-        $event.preventDefault();
+      resend($event) {
          /*this.$store.dispatch(this.action, this.user)
           .then(() => {
           });*/

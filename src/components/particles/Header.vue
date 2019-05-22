@@ -15,7 +15,7 @@
         </template>
         <template v-else>
           <p class="text-xs-right">
-            <router-link to="/" @click.native="logout">Logout</router-link>
+            <router-link to="/" @click.native="logout">Log Out</router-link>
           </p>
         </template>
       </v-flex>

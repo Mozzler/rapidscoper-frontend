@@ -61,6 +61,7 @@
           /*this.$store.dispatch(this.action, this.user)
             .then(() => {
             });*/
+          this.$router.push('/');
         }
         else {
           this.processing = false;

@@ -28,7 +28,7 @@ export default [
   {
     path: '/create-account',
     name: 'create-account',
-    beforeEnter: helpers.ifNotAuthenticated,
+    beforeEnter: helpers.ifAuthenticated,
     component: () => import('@/components/pages/auth/ForgotPassword')
   },
   // {
@@ -40,15 +40,7 @@ export default [
   //   name: 'signup-github'
   // },
   // {
-  //   path: '/signup/forgot-password',
-  //   name: 'forgot-password'
-  // },
-  // {
   //   path: '/signup/forgot-password-success',
   //   name: 'forgot-password-success'
   // },
-  // {
-  //   path: '/signup/change-password',
-  //   name: 'change-password'
-  // }
 ];

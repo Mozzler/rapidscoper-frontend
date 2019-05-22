@@ -76,7 +76,9 @@
         if(result) {
           this.processing = true;
           await this.$store.dispatch(this.action, this.user);
-          this.$router.push('/');
+
+          let route = this.type !== 'Sign Up' ? '/' : 'create-account';
+          this.$router.push(route);
         }
         else {
           this.processing = false;
