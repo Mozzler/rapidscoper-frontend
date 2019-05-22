@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-content>
+    <v-content class="theme--rapid">
       <app-header/>
       <router-view />
     </v-content>
@@ -19,5 +19,5 @@ export default {
 </script>
 
 <style lang="scss">
-  @import './assets/scss/index.scss';
+  @import 'assets/scss/index';
 </style>

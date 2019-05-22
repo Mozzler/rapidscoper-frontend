@@ -28,19 +28,3 @@ export default {
   }
 };
 </script>
-
-<style lang="scss" scoped>
-  .header-container {
-    padding: 32px 120px;
-    .app-logo {
-      height: 40px;
-      width: 115px;
-    }
-    p {
-      margin: 0px;
-    }
-    @media only screen and (max-width: 959px) {
-      padding: 16px;
-    }
-  }
-</style>
