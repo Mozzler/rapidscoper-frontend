@@ -19,7 +19,7 @@ const mutations = {
 };
 
 const actions = {
-  [AUTH_LOGIN]: async ({ commit }, { email, password }) => {
+  [AUTH_LOGIN]: async ({ commit }, data) => {
     // commit(CHANGE_AUTHENTICATED, true);
     // localStorage.setItem('token', 'superSecretToken');
   },
@@ -27,9 +27,9 @@ const actions = {
     // commit(CHANGE_AUTHENTICATED, false);
     // localStorage.removeItem('token');
   },
-  [AUTH_REGISTER]: ({ commit }) => {
-    // commit(CHANGE_AUTHENTICATED, true);
-    // localStorage.setItem('token', 'superSecretToken');
+  [AUTH_REGISTER]: ({ commit }, data) => {
+    commit(CHANGE_AUTHENTICATED, true);
+    localStorage.setItem('token', 'superSecretToken');
   }
 };
 

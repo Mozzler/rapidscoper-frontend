@@ -8,6 +8,7 @@
           v-model="user.email"
           placeholder="Email"
           :error-messages="errors.first('email')"
+          :disabled="processing"
           solo
         ></v-text-field>
       </v-flex>
@@ -18,8 +19,9 @@
           v-model="user.password"
           placeholder="Password"
           :error-messages="errors.first('password')"
-          solo
           :type="'password'"
+          :disabled="processing"
+          solo
         ></v-text-field>
       </v-flex>
       <v-btn class="primary submit-btn mt-5px" block large @click="submit">
@@ -31,6 +33,7 @@
 
 <script>
 
+  import * as actions from '../../../store/actions/auth';
 
   export default {
     name: 'SignupForm',
@@ -39,11 +42,21 @@
         email: null,
         password: null
       },
+      processing: false
     }),
     methods: {
-      submit() {
-        let result = this.$validator.validate();
-        console.log(this.errors);
+      async submit() {
+        this.processing = true;
+
+        let result = await this.$validator.validate();
+
+        if(result) {
+          this.processing = true;
+          await this.$store.dispatch(actions.AUTH_REGISTER, this.user);
+        }
+        else {
+          this.processing = false;
+        }
       }
     }
   };
