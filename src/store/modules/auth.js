@@ -20,12 +20,12 @@ const mutations = {
 
 const actions = {
   [AUTH_LOGIN]: async ({ commit }, data) => {
-    // commit(CHANGE_AUTHENTICATED, true);
-    // localStorage.setItem('token', 'superSecretToken');
+    commit(CHANGE_AUTHENTICATED, true);
+    localStorage.setItem('token', 'superSecretToken');
   },
   [AUTH_LOGOUT]: ({ commit }) => {
-    // commit(CHANGE_AUTHENTICATED, false);
-    // localStorage.removeItem('token');
+    commit(CHANGE_AUTHENTICATED, false);
+    localStorage.removeItem('token');
   },
   [AUTH_REGISTER]: ({ commit }, data) => {
     commit(CHANGE_AUTHENTICATED, true);

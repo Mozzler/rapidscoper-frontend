@@ -5,12 +5,17 @@
           <logo-rapid-scope class="app-logo"/>
       </v-flex>
       <v-flex xs6>
+        <template v-if="!isAuthenticated">
           <p class="text-xs-right" v-if="isSignup">Already have an account?
             <router-link :to="'login'">Log In</router-link>
           </p>
-        <p class="text-xs-right" v-else>Don't have an account?
-          <router-link :to="'signup'">Sign Up</router-link>
-        </p>
+          <p class="text-xs-right" v-else>Don't have an account?
+            <router-link :to="'signup'">Sign Up</router-link>
+          </p>
+        </template>
+        <template v-else>
+          <button @click="logout">Logout</button>
+        </template>
       </v-flex>
     </v-layout>
   </v-container>
@@ -18,21 +23,26 @@
 
 <script>
 import LogoRapidScope from './icons/LogoRapidScope';
+import * as authConst from '@/store/actions/auth';
 
 export default {
   name: 'AppHeader',
   components: {
     LogoRapidScope
   },
-  data: () => ({
-
-  }),
-  methods: {
-  },
   computed: {
     isSignup() {
       return this.$route.name === 'signup';
+    },
+    isAuthenticated() {
+      return this.$store.getters[authConst.IS_AUTHENTICATED];
     }
   },
+  methods: {
+    async logout() {
+      await this.$store.dispatch(authConst.AUTH_LOGOUT);
+      this.$router.push('/signup');
+    }
+  }
 };
 </script>
