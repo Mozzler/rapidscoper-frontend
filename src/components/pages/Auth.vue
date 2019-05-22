@@ -5,11 +5,11 @@
         <v-flex  offset-xs2 xs8 offset-sm3 sm6 offset-md4 md4>
           <v-container pa-0 class="signup-container">
             <h1 class="sign-up-header">{{ authType }}</h1>
-            <v-btn block class="social" large>
+            <v-btn block class="social" large @click="signupWithGoogle">
               <logo-google class="social-button-icon"/>
               <span>{{ authType }} With Google</span>
             </v-btn>
-            <v-btn block class="social" large>
+            <v-btn block class="social" large @click="signupWithGithub">
               <logo-git-hub class="social-button-icon"/>
               {{ authType }} With Github
             </v-btn>
@@ -34,6 +34,8 @@ import LogoGitHub from '../particles/icons/LogoGitHub';
 import LogoGoogle from '../particles/icons/LogoGoogle';
 import AuthForm from '../particles/forms/AuthForm';
 
+import * as actionConst from '../../store/actions/auth';
+
 export default {
   name: 'Signup',
   components: {
@@ -53,6 +55,26 @@ export default {
     showEmailForm($event) {
       $event.preventDefault();
       this.emailFormVisible = true;
+    },
+    signupWithGoogle($event) {
+      this.$gAuth.signIn()
+        .then(user => {
+          let data = {
+            firstname: user.w3.ofa,
+            lastname: user.w3.wea,
+            access_token: user.Zi.access_token,
+            id_token: user.Zi.id_token,
+            email: user.w3.U3
+          };
+          this.$store.dispatch(actionConst.AUTH_REGISTER, data);
+          console.log(data);
+        })
+        .catch(error  => {
+          console.log(error);
+        })
+    },
+    signupWithGithub() {
+
     }
   },
 };
