@@ -5,6 +5,7 @@
         <v-flex  offset-xs2 xs8 offset-sm3 sm6 offset-md4 md4>
           <forgot-password-form v-if="$route.name === 'forgot-password'"/>
           <change-password-form v-if="$route.name === 'change-password'"/>
+          <create-account-form v-if="$route.name === 'create-account'"/>
         </v-flex>
       </v-layout>
     </v-container>
@@ -14,13 +15,15 @@
 <script>
   import ForgotPasswordForm from '../../particles/forms/ForgotPasswordForm';
   import ChangePasswordForm from '../../particles/forms/ChangePasswordForm';
+  import CreateAccountForm from '../../particles/forms/CreateAccountForm';
   import * as actionConst from '../../../store/actions/auth';
 
   export default {
     name: 'SignupForm',
     components: {
       ForgotPasswordForm,
-      ChangePasswordForm
+      ChangePasswordForm,
+      CreateAccountForm
     },
   };
 </script>

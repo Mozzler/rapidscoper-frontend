@@ -25,6 +25,12 @@ export default [
     beforeEnter: helpers.ifNotAuthenticated,
     component: () => import('@/components/pages/auth/ForgotPassword')
   },
+  {
+    path: '/create-account',
+    name: 'create-account',
+    beforeEnter: helpers.ifNotAuthenticated,
+    component: () => import('@/components/pages/auth/ForgotPassword')
+  },
   // {
   //   path: '/signup/google',
   //   name: 'signup-google'
