@@ -27,7 +27,7 @@
         ></v-text-field>
       </v-flex>
       <v-btn class="primary submit-btn mt-5px" block large @click="submit">
-        Sign Up with Email
+        {{ type }} with Email
       </v-btn>
     </v-layout>
   </v-form>
@@ -75,12 +75,11 @@
       }
     },
     watch: {
-      authType() {
+      action() {
         this.user = {
           email: null,
           password: null
         };
-        //this.$validator.reset();
       }
     }
   };
