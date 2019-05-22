@@ -13,7 +13,7 @@
               <logo-git-hub class="social-button-icon"/>
               {{ authType }} With Github
             </v-btn>
-            <p class="signup-text-1" v-if="emailFormVisible">
+            <p class="signup-text-1" v-if="emailFormVisible && authType === 'Sign Up'">
               Or just <a href="" @click="showEmailForm">{{ authType }} with Email</a>
             </p>
             <auth-form v-else :type="authType"/>
@@ -44,17 +44,21 @@ export default {
     AuthForm
   },
   data: () => ({
-    emailFormVisible: false
+    emailFormVisible: null
   }),
   computed: {
     authType() {
       return this.$route.name === 'signup' ? 'Sign Up' : 'Log In';
     }
   },
+  beforeMount() {
+    this.emailFormVisible = this.authType === 'Sign Up';
+  },
   methods: {
     showEmailForm($event) {
+      console.log($event);
       $event.preventDefault();
-      this.emailFormVisible = true;
+      this.emailFormVisible = false;
     },
     signupWithGoogle($event) {
       this.$gAuth.signIn()
@@ -66,7 +70,13 @@ export default {
             id_token: user.Zi.id_token,
             email: user.w3.U3
           };
-          this.$store.dispatch(actionConst.AUTH_REGISTER, data);
+          this.$store.dispatch(actionConst.AUTH_REGISTER, data)
+            .then(() => {
+              this.$router.push('/');
+            })
+            .catch(error => {
+              console.log()
+            });
         })
         .catch(error  => {
           console.log(error);
@@ -78,7 +88,7 @@ export default {
   },
   watch: {
     '$route.name'() {
-      this.emailFormVisible = false;
+      this.emailFormVisible = true;
     }
   }
 };

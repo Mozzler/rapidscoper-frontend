@@ -25,7 +25,7 @@
           </v-flex>
           <v-flex xs12>
             <p class="forgot-link">
-              <router-link :to="'login'" key="to-login">
+              <router-link :to="'login'">
                 Back to login
               </router-link>
             </p>
@@ -53,7 +53,7 @@
       email: null,
       label: null,
       processing: false,
-      sent: true
+      sent: false
     }),
     beforeMount() {
       this.label = 'Enter your Email address and we will send you a link to reset your password.';
