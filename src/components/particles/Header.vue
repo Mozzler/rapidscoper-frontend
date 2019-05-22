@@ -14,7 +14,9 @@
           </p>
         </template>
         <template v-else>
-          <button @click="logout">Logout</button>
+          <p class="text-xs-right">
+            <router-link to="/" @click.native="logout">Logout</router-link>
+          </p>
         </template>
       </v-flex>
     </v-layout>
@@ -39,7 +41,8 @@ export default {
     }
   },
   methods: {
-    async logout() {
+    async logout(event) {
+      event.preventDefault();
       await this.$store.dispatch(authConst.AUTH_LOGOUT);
       this.$router.push('/signup');
     }
