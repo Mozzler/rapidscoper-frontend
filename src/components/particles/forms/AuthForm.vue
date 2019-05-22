@@ -33,10 +33,17 @@
 
 <script>
 
-  import * as actions from '../../../store/actions/auth';
+  import * as actionConst from '../../../store/actions/auth';
 
   export default {
     name: 'SignupForm',
+    props: {
+        type: {
+          type: String,
+          default: 'Sign Up',
+          required: true
+        }
+    },
     data: () => ({
       user: {
         email: null,
@@ -44,6 +51,11 @@
       },
       processing: false
     }),
+    computed: {
+      action() {
+        return this.type === 'Sign Up' ? actionConst.AUTH_REGISTER : actionConst.AUTH_LOGIN;
+      }
+    },
     methods: {
       async submit() {
         this.processing = true;
@@ -52,7 +64,8 @@
 
         if(result) {
           this.processing = true;
-          await this.$store.dispatch(actions.AUTH_REGISTER, this.user);
+          await this.$store.dispatch(this.action, this.user);
+          this.$router.push('/');
         }
         else {
           this.processing = false;

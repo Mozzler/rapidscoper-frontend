@@ -5,9 +5,12 @@
           <logo-rapid-scope class="app-logo"/>
       </v-flex>
       <v-flex xs6>
-          <p class="text-xs-right">Already have an account?
-            <a href="http://www.google.com">Log In</a>
+          <p class="text-xs-right" v-if="isSignup">Already have an account?
+            <router-link :to="'login'">Log In</router-link>
           </p>
+        <p class="text-xs-right" v-else>Don't have an account?
+          <router-link :to="'signup'">Sign Up</router-link>
+        </p>
       </v-flex>
     </v-layout>
   </v-container>
@@ -25,6 +28,11 @@ export default {
 
   }),
   methods: {
-  }
+  },
+  computed: {
+    isSignup() {
+      return this.$route.name === 'signup';
+    }
+  },
 };
 </script>

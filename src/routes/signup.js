@@ -2,10 +2,16 @@ import helpers from './router-helpers';
 
 export default [
   {
+    path: '/login',
+    name: 'login',
+    beforeEnter: helpers.ifNotAuthenticated,
+    component: () => import('@/components/pages/Auth')
+  },
+  {
     path: '/signup',
     name: 'signup',
     beforeEnter: helpers.ifNotAuthenticated,
-    component: () => import('@/components/pages/Signup')
+    component: () => import('@/components/pages/Auth')
   }
   // {
   //   path: '/signup/google',
