@@ -26,9 +26,18 @@
           solo
         ></v-text-field>
       </v-flex>
-      <v-btn class="primary submit-btn mt-5px" block large @click="submit">
-        {{ type }} with Email
-      </v-btn>
+      <v-flex xs12>
+        <v-btn class="primary submit-btn mt-5px" block large @click="submit">
+          {{ type }} with Email
+        </v-btn>
+      </v-flex>
+      <v-flex xs12 v-if="type !== 'Sign Up'">
+        <p class="forgot-link">
+          <router-link :to="'forgot-password'">
+            Forgot Password
+          </router-link>
+        </p>
+      </v-flex>
     </v-layout>
   </v-form>
 </template>

@@ -5,14 +5,26 @@ export default [
     path: '/login',
     name: 'login',
     beforeEnter: helpers.ifNotAuthenticated,
-    component: () => import('@/components/pages/Auth')
+    component: () => import('@/components/pages/auth/Auth')
   },
   {
     path: '/signup',
     name: 'signup',
     beforeEnter: helpers.ifNotAuthenticated,
-    component: () => import('@/components/pages/Auth')
-  }
+    component: () => import('@/components/pages/auth/Auth')
+  },
+  {
+    path: '/forgot-password',
+    name: 'forgot-password',
+    beforeEnter: helpers.ifNotAuthenticated,
+    component: () => import('@/components/pages/auth/ForgotPassword')
+  },
+  {
+    path: '/change-password',
+    name: 'change-password',
+    beforeEnter: helpers.ifNotAuthenticated,
+    component: () => import('@/components/pages/auth/ForgotPassword')
+  },
   // {
   //   path: '/signup/google',
   //   name: 'signup-google'

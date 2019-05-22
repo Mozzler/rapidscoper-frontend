@@ -30,11 +30,11 @@
 </template>
 
 <script>
-import LogoGitHub from '../particles/icons/LogoGitHub';
-import LogoGoogle from '../particles/icons/LogoGoogle';
-import AuthForm from '../particles/forms/AuthForm';
+import LogoGitHub from '../../particles/icons/LogoGitHub';
+import LogoGoogle from '../../particles/icons/LogoGoogle';
+import AuthForm from '../../particles/forms/AuthForm';
 
-import * as actionConst from '../../store/actions/auth';
+import * as actionConst from '../../../store/actions/auth';
 
 export default {
   name: 'Signup',
@@ -67,7 +67,6 @@ export default {
             email: user.w3.U3
           };
           this.$store.dispatch(actionConst.AUTH_REGISTER, data);
-          console.log(data);
         })
         .catch(error  => {
           console.log(error);
@@ -77,5 +76,10 @@ export default {
 
     }
   },
+  watch: {
+    '$route.name'() {
+      this.emailFormVisible = false;
+    }
+  }
 };
 </script>
