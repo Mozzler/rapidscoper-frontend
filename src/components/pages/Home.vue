@@ -1,8 +1,8 @@
 <template>
-    <v-flex class="fill-height">
-      <!--<sidebar />-->
-      <dashboard-content />
-    </v-flex>
+  <v-layout align-start justify-start row fill-height>
+    <sidebar />
+    <dashboard-content />
+  </v-layout>
 </template>
 
 <script>
