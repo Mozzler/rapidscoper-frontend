@@ -1,0 +1,53 @@
+.sidebar {
+  position: relative;
+
+  .v-list__tile__title {
+    font-weight: 600;
+  }
+
+  .sidebar__item {
+    cursor: pointer;
+
+    &:hover {
+      border-left: 2px solid $primary;
+      background-color: rgba($primary, 0.2);
+    }
+  }
+
+  .sidebar__item--active {
+    border-left: 2px solid $primary;
+    background-color: rgba($primary, 0.1);
+  }
+
+  .sidebar-footer {
+    position: absolute;
+    bottom: 29px;
+    width: 100%;
+
+    svg {
+      display: block;
+      margin: auto;
+    }
+  }
+
+  .sidebar-section {
+    margin-left: 15px;
+    text-transform: uppercase;
+    color: rgba($black, 0.6);
+    letter-spacing: 0.05em;
+    font-weight: 900;
+    font-size: 10px;
+  }
+
+  .sidebar-header {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 61px;
+
+    img {
+      margin-top: 64px;
+      width: 56px;
+      height: 56px;
+    }
+  }
+}

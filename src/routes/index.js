@@ -5,19 +5,20 @@ import helpers from './router-helpers';
 
 Vue.use(Router);
 
+import Home from '@/components/pages/Home';
+
 const router = new Router({
   mode: 'history',
   routes: [
     {
       path: '*',
-      redirect: '/'
+      redirect: '/dashboard/all-projects'
     },
     {
-      path: '/',
+      path: '/dashboard/:tab',
       name: 'main',
-      component: () => import('@/components/pages/Home'),
+      component: Home,
       beforeEnter: helpers.ifAuthenticated
-      // children: [],
     },
     ...SignupRoutes
   ]

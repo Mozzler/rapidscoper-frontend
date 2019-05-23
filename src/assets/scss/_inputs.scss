@@ -1,5 +1,5 @@
 .v-text-field--solo .v-input__control .v-input__slot {
-  border: 1px solid $color-grey;
+  border: 1px solid $grey;
   box-shadow: none !important;
   font-size: 14px !important;
   height: 40px !important;
@@ -10,13 +10,13 @@
 .v-input {
   &.v-input--is-focused .v-input__control {
     .v-input__slot {
-      border-color: $color-primary;
+      border-color: $primary;
     }
   }
 
   &.error--text .v-input__control {
     .v-input__slot {
-      border-color: $color-red;
+      border-color: $red;
     }
   }
 }
@@ -28,7 +28,7 @@
   font-weight: 600;
   font-size: 12px;
   line-height: 14px;
-  color:$color-black;
+  color: $black;
   text-indent: 2px;
   opacity: 0.6;
 }
@@ -37,7 +37,7 @@
   padding: 0 !important;
   font-size: 12px !important;
   font-weight: 600;
-  color: $color-red;
+  color: $red;
   margin: 0 !important;
 }
 

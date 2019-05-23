@@ -1,32 +1,35 @@
 <template>
-  <div class="signup-section">
-    <v-container fluid>
-      <v-layout row wrap>
-        <v-flex  offset-xs2 xs8 offset-sm3 sm6 offset-md4 md4>
-          <v-container pa-0 class="signup-container">
-            <h1 class="sign-up-header">{{ authType }}</h1>
-            <v-btn block large @click="signupWithGoogle"
-                   class="btn-rapid social">
-              <logo-google class="social-button-icon"/>
-              <span>{{ authType }} With Google</span>
-            </v-btn>
-            <v-btn block class="btn-rapid social" large @click="signupWithGithub">
-              <logo-git-hub class="social-button-icon"/>
-              {{ authType }} With Github
-            </v-btn>
-            <p class="signup-text-1" v-if="emailFormVisible && authType === 'Sign Up'">
-              Or just <a href="" @click="showEmailForm">{{ authType }} with Email</a>
-            </p>
-            <auth-form v-else :type="authType"/>
-            <p class="signup-text-2">By continuing, you agree to our
-              <a href="http://www.google.com">Terms of Service</a>
-              and
-              <a href="http://www.google.com">Privacy&nbsp;Policy</a>
-            </p>
-          </v-container>
-        </v-flex>
-      </v-layout>
-    </v-container>
+  <div>
+    <app-header/>
+    <div class="signup-section">
+      <v-container fluid>
+        <v-layout row wrap>
+          <v-flex  offset-xs2 xs8 offset-sm3 sm6 offset-md4 md4>
+            <v-container pa-0 class="signup-container">
+              <h1 class="sign-up-header">{{ authType }}</h1>
+              <v-btn block large @click="signupWithGoogle"
+                     class="btn-rapid social">
+                <logo-google class="social-button-icon"/>
+                <span>{{ authType }} With Google</span>
+              </v-btn>
+              <v-btn block class="btn-rapid social" large @click="signupWithGithub">
+                <logo-git-hub class="social-button-icon"/>
+                {{ authType }} With Github
+              </v-btn>
+              <p class="signup-text-1" v-if="emailFormVisible && authType === 'Sign Up'">
+                Or just <a href="" @click="showEmailForm">{{ authType }} with Email</a>
+              </p>
+              <auth-form v-else :type="authType"/>
+              <p class="signup-text-2">By continuing, you agree to our
+                <a href="http://www.google.com">Terms of Service</a>
+                and
+                <a href="http://www.google.com">Privacy&nbsp;Policy</a>
+              </p>
+            </v-container>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </div>
   </div>
 </template>
 
@@ -34,6 +37,7 @@
 import LogoGitHub from '../../particles/icons/LogoGitHub';
 import LogoGoogle from '../../particles/icons/LogoGoogle';
 import AuthForm from '../../particles/forms/AuthForm';
+import AppHeader from '../../particles/Header';
 
 import * as actionConst from '../../../store/actions/auth';
 
@@ -42,7 +46,8 @@ export default {
   components: {
     LogoGitHub,
     LogoGoogle,
-    AuthForm
+    AuthForm,
+    AppHeader
   },
   data: () => ({
     emailFormVisible: null

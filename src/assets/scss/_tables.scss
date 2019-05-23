@@ -1,0 +1,62 @@
+.projects-table {
+  margin-top: 24px;
+
+  thead {
+    tr {
+      height: 48px !important;
+    }
+  }
+  tbody {
+    tr {
+      height: 55px;
+    }
+  }
+  th {
+    text-transform: uppercase;
+    font-weight: 900 !important;
+    font-size: 10px !important;
+    line-height: 12px;
+    letter-spacing: 0.05em;
+  }
+  td {
+    font-size: 14px !important;
+  }
+  td:first-child {
+    font-weight: 600 !important;
+  }
+  td:nth-child(2) {
+    padding: 7px !important;
+  }
+
+  .index {
+    margin-left: 8px;
+    font-size: 12px;
+    line-height: 14px;
+    border-radius: 2px;
+    background-color: $red;
+    color: $white;
+    padding: 0 4px;
+  }
+
+  img {
+    display: inline-block;
+    position: relative;
+    width: 24px;
+    height: 24px;
+    margin: 8px 2px 0;
+  }
+
+  .v-datatable__progress {
+    display: none;
+  }
+
+  .v-icon {
+    color: rgba($black, 0.8) !important;
+    font-size: 12px;
+    cursor: pointer;
+
+    &:hover {
+      color: $primary !important;
+    }
+  }
+}

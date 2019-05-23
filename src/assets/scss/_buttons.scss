@@ -8,23 +8,23 @@
 
   &.social {
     margin-top: 24px;
-    background: $color-white !important;
+    background: $white !important;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25) !important;
   }
 
   &.primary:hover {
-    background: linear-gradient(0deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), $color-primary !important;
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), $primary !important;
   }
 
   &.v-btn--outline {
-    color: $color-black !important;
-    wiborder-color: $color-primary !important;
+    color: $black !important;
+    border-color: $primary !important;
   }
 
   &:disabled.v-btn.v-btn--disabled:not(.v-btn--icon):not(.v-btn--flat):not(.v-btn--outline) {
-    background-color: $color-primary !important;
+    background-color: $primary !important;
     opacity: 0.3;
-    color: $color-white !important;
+    color: $white !important;
   }
 
   &.v-btn--large {
