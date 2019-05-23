@@ -1,6 +1,12 @@
 .projects-table {
   margin-top: 24px;
   cursor: default;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+
+  table {
+    table-layout: fixed !important;
+  }
 
   thead {
     tr {
@@ -20,6 +26,7 @@
     letter-spacing: 0.05em;
   }
   td {
+    width: 25% !important;
     font-size: 14px !important;
   }
   td:first-child {
