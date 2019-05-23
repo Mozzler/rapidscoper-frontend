@@ -19,7 +19,7 @@
             ></v-text-field>
           </v-flex>
           <v-flex xs12>
-            <v-btn class="primary submit-btn mt-5px" block large @click="reset">
+            <v-btn class="btn-rapid primary submit-btn mt-5px" block large @click="reset">
               Send reset link
             </v-btn>
           </v-flex>
@@ -45,43 +45,42 @@
 
 <script>
 
-  import * as actionConst from '../../../store/actions/auth';
+import * as actionConst from '../../../store/actions/auth';
 
-  export default {
-    name: 'ForgotPasswordForm',
-    data: () => ({
-      email: null,
-      label: null,
-      processing: false,
-      sent: false
-    }),
-    beforeMount() {
-      this.label = 'Enter your Email address and we will send you a link to reset your password.';
-    },
-    methods: {
-      async reset() {
+export default {
+  name: 'ForgotPasswordForm',
+  data: () => ({
+    email: null,
+    label: null,
+    processing: false,
+    sent: false
+  }),
+  beforeMount () {
+    this.label = 'Enter your Email address and we will send you a link to reset your password.';
+  },
+  methods: {
+    async reset () {
+      this.processing = true;
+
+      let result = await this.$validator.validate();
+
+      if (result) {
         this.processing = true;
-
-        let result = await this.$validator.validate();
-
-        if(result) {
-          this.processing = true;
-          /*this.$store.dispatch(this.action, this.user)
+        /* this.$store.dispatch(this.action, this.user)
             .then(() => {
-            });*/
+            }); */
 
-          this.sent = true;
-          this.label = 'Check your inbox and click the link to reset your password. In case you couldn’t find the email in your inbox, please check your spam folder.'
-        }
-        else {
-          this.processing = false;
-        }
-      },
-      resend($event) {
-         /*this.$store.dispatch(this.action, this.user)
-          .then(() => {
-          });*/
+        this.sent = true;
+        this.label = 'Check your inbox and click the link to reset your password. In case you couldn’t find the email in your inbox, please check your spam folder.';
+      } else {
+        this.processing = false;
       }
     },
-  };
+    resend ($event) {
+      /* this.$store.dispatch(this.action, this.user)
+          .then(() => {
+          }); */
+    }
+  }
+};
 </script>

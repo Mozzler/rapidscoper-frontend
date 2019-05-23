@@ -32,7 +32,7 @@
           ></v-text-field>
         </v-flex>
         <v-flex xs12>
-          <v-btn class="primary submit-btn mt-5px" block large @click="reset">
+          <v-btn class="btn-rapid primary submit-btn mt-5px" block large @click="reset">
             Change password
           </v-btn>
         </v-flex>
@@ -43,33 +43,32 @@
 
 <script>
 
-  import * as actionConst from '../../../store/actions/auth';
+import * as actionConst from '../../../store/actions/auth';
 
-  export default {
-    name: 'ForgotPasswordForm',
-    data: () => ({
-      user: {
-        email: null,
-        password: null
-      },
-      processing: false,
-    }),
-    methods: {
-      async reset() {
-        this.processing = true;
-
-        let result = await this.$validator.validate();
-
-        if(result) {
-          this.processing = true;
-          /*this.$store.dispatch(this.action, this.user)
-            .then(() => {
-            });*/
-        }
-        else {
-          this.processing = false;
-        }
-      },
+export default {
+  name: 'ForgotPasswordForm',
+  data: () => ({
+    user: {
+      email: null,
+      password: null
     },
-  };
+    processing: false
+  }),
+  methods: {
+    async reset () {
+      this.processing = true;
+
+      let result = await this.$validator.validate();
+
+      if (result) {
+        this.processing = true;
+        /* this.$store.dispatch(this.action, this.user)
+            .then(() => {
+            }); */
+      } else {
+        this.processing = false;
+      }
+    }
+  }
+};
 </script>

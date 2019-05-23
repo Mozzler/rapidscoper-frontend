@@ -1,4 +1,4 @@
-import { 
+import {
   IS_AUTHENTICATED,
   CHANGE_AUTHENTICATED,
   AUTH_LOGIN,
@@ -7,7 +7,7 @@ import {
 } from '../actions/auth';
 
 const state = {
-  is_authenticated: !!localStorage.getItem('token'),
+  is_authenticated: !!localStorage.getItem('token')
 };
 
 const getters = {

@@ -1,8 +1,5 @@
-.signup-with-email {
-  border-top: 1px solid $color-grey1;
-  margin-top: 32px;
-  padding-top: 39px;
-}
+@import './forms/signup';
+@import './forms/invitation';
 
 .form-label {
   width: 100%;

@@ -1,4 +1,4 @@
-button {
+.btn-rapid {
   &.v-btn {
     text-transform: none;
     border-radius: 4px;
@@ -18,7 +18,7 @@ button {
 
   &.v-btn--outline {
     color: $color-black !important;
-    border-color: $color-primary !important;
+    wiborder-color: $color-primary !important;
   }
 
   &:disabled.v-btn.v-btn--disabled:not(.v-btn--icon):not(.v-btn--flat):not(.v-btn--outline) {

@@ -28,7 +28,7 @@
           ></v-text-field>
         </v-flex>
         <v-flex xs12>
-          <v-btn class="primary submit-btn mt-5px" block large @click="create">
+          <v-btn class="btn-rapid primary submit-btn mt-5px" block large @click="create">
             Create
           </v-btn>
         </v-flex>
@@ -39,34 +39,33 @@
 
 <script>
 
-  import * as actionConst from '../../../store/actions/auth';
+import * as actionConst from '../../../store/actions/auth';
 
-  export default {
-    name: 'CreateAccountForm',
-    data: () => ({
-      user: {
-        email: null,
-        password: null
-      },
-      processing: false,
-    }),
-    methods: {
-      async create() {
-        this.processing = true;
-
-        let result = await this.$validator.validate();
-
-        if(result) {
-          this.processing = true;
-          /*this.$store.dispatch(this.action, this.user)
-            .then(() => {
-            });*/
-          this.$router.push('/');
-        }
-        else {
-          this.processing = false;
-        }
-      },
+export default {
+  name: 'CreateAccountForm',
+  data: () => ({
+    user: {
+      email: null,
+      password: null
     },
-  };
+    processing: false
+  }),
+  methods: {
+    async create () {
+      this.processing = true;
+
+      let result = await this.$validator.validate();
+
+      if (result) {
+        this.processing = true;
+        /* this.$store.dispatch(this.action, this.user)
+            .then(() => {
+            }); */
+        this.$router.push('/');
+      } else {
+        this.processing = false;
+      }
+    }
+  }
+};
 </script>

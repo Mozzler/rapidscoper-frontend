@@ -6,7 +6,7 @@ const dictionary = {
     attributes: {
       'password_confirmation': 'password'
     }
-  },
+  }
 };
 
 export default Vue.use(VeeValidate, {

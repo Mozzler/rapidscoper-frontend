@@ -5,11 +5,12 @@
         <v-flex  offset-xs2 xs8 offset-sm3 sm6 offset-md4 md4>
           <v-container pa-0 class="signup-container">
             <h1 class="sign-up-header">{{ authType }}</h1>
-            <v-btn block class="social" large @click="signupWithGoogle">
+            <v-btn block large @click="signupWithGoogle"
+                   class="btn-rapid social">
               <logo-google class="social-button-icon"/>
               <span>{{ authType }} With Google</span>
             </v-btn>
-            <v-btn block class="social" large @click="signupWithGithub">
+            <v-btn block class="btn-rapid social" large @click="signupWithGithub">
               <logo-git-hub class="social-button-icon"/>
               {{ authType }} With Github
             </v-btn>
@@ -37,7 +38,7 @@ import AuthForm from '../../particles/forms/AuthForm';
 import * as actionConst from '../../../store/actions/auth';
 
 export default {
-  name: 'Signup',
+  name: 'AuthTypePage',
   components: {
     LogoGitHub,
     LogoGoogle,
@@ -47,20 +48,20 @@ export default {
     emailFormVisible: null
   }),
   computed: {
-    authType() {
+    authType () {
       return this.$route.name === 'signup' ? 'Sign Up' : 'Log In';
     }
   },
-  beforeMount() {
+  beforeMount () {
     this.emailFormVisible = this.authType === 'Sign Up';
   },
   methods: {
-    showEmailForm($event) {
+    showEmailForm ($event) {
       console.log($event);
       $event.preventDefault();
       this.emailFormVisible = false;
     },
-    signupWithGoogle($event) {
+    signupWithGoogle ($event) {
       this.$gAuth.signIn()
         .then(user => {
           let data = {
@@ -75,19 +76,19 @@ export default {
               this.$router.push('/');
             })
             .catch(error => {
-              console.log()
+              console.log();
             });
         })
-        .catch(error  => {
+        .catch(error => {
           console.log(error);
-        })
+        });
     },
-    signupWithGithub() {
+    signupWithGithub () {
 
     }
   },
   watch: {
-    '$route.name'() {
+    '$route.name' () {
       this.emailFormVisible = true;
     }
   }

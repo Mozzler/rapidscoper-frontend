@@ -33,15 +33,15 @@ export default {
     LogoRapidScope
   },
   computed: {
-    isSignup() {
+    isSignup () {
       return this.$route.name === 'signup';
     },
-    isAuthenticated() {
+    isAuthenticated () {
       return this.$store.getters[authConst.IS_AUTHENTICATED];
     }
   },
   methods: {
-    async logout(event) {
+    async logout (event) {
       event.preventDefault();
       await this.$store.dispatch(authConst.AUTH_LOGOUT);
       this.$router.push('/signup');

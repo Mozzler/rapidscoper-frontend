@@ -27,7 +27,7 @@
         ></v-text-field>
       </v-flex>
       <v-flex xs12>
-        <v-btn class="primary submit-btn mt-5px" block large @click="submit">
+        <v-btn class="btn-rapid primary submit-btn mt-5px" block large @click="submit">
           {{ type }} with Email
         </v-btn>
       </v-flex>
@@ -44,54 +44,53 @@
 
 <script>
 
-  import * as actionConst from '../../../store/actions/auth';
+import * as actionConst from '../../../store/actions/auth';
 
-  export default {
-    name: 'SignupForm',
-    props: {
-        type: {
-          type: String,
-          default: 'Sign Up',
-          required: true
-        }
+export default {
+  name: 'SignupForm',
+  props: {
+    type: {
+      type: String,
+      default: 'Sign Up',
+      required: true
+    }
+  },
+  data: () => ({
+    user: {
+      email: null,
+      password: null
     },
-    data: () => ({
-      user: {
-        email: null,
-        password: null
-      },
-      processing: false
-    }),
-    computed: {
-      action() {
-        return this.type === 'Sign Up' ? actionConst.AUTH_REGISTER : actionConst.AUTH_LOGIN;
-      }
-    },
-    methods: {
-      async submit() {
+    processing: false
+  }),
+  computed: {
+    action () {
+      return this.type === 'Sign Up' ? actionConst.AUTH_REGISTER : actionConst.AUTH_LOGIN;
+    }
+  },
+  methods: {
+    async submit () {
+      this.processing = true;
+
+      let result = await this.$validator.validate();
+
+      if (result) {
         this.processing = true;
+        await this.$store.dispatch(this.action, this.user);
 
-        let result = await this.$validator.validate();
-
-        if(result) {
-          this.processing = true;
-          await this.$store.dispatch(this.action, this.user);
-
-          let route = this.type !== 'Sign Up' ? '/' : 'create-account';
-          this.$router.push(route);
-        }
-        else {
-          this.processing = false;
-        }
-      }
-    },
-    watch: {
-      action() {
-        this.user = {
-          email: null,
-          password: null
-        };
+        let route = this.type !== 'Sign Up' ? '/' : 'create-account';
+        this.$router.push(route);
+      } else {
+        this.processing = false;
       }
     }
-  };
+  },
+  watch: {
+    action () {
+      this.user = {
+        email: null,
+        password: null
+      };
+    }
+  }
+};
 </script>
