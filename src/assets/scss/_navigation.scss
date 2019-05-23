@@ -16,9 +16,22 @@
     }
   }
 
+  .sidebar-notification {
+    font-size: 28px;
+    position: absolute;
+    top: 26px;
+    right: 26px;
+    color: $black !important;
+    cursor: pointer;
+
+    &:hover {
+      color: $primary !important;
+    }
+  }
+
   .sidebar__item--active {
     border-left: 2px solid $primary;
-    background-color: rgba($primary, 0.1);
+    background-color: rgba($primary, 0.05);
   }
 
   .sidebar-footer {

@@ -5,6 +5,7 @@
     class="sidebar">
 
     <div class="sidebar-header">
+      <v-icon class="sidebar-notification">notifications</v-icon>
       <div class="sidebar-header__img">
         <img src="@/assets/img/user.png"/>
       </div>
