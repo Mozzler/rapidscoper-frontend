@@ -33,7 +33,7 @@
     data() {
         return {
           tabs: ['Projects', 'Users', 'Billing'],
-          activeTab: 'Projects'
+          activeTab: 'Users'
         }
     },
     methods: {
