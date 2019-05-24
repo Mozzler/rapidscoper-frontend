@@ -1,0 +1,42 @@
+.btn-rapid {
+  &.v-btn {
+    text-transform: none;
+    border-radius: 4px;
+    font-weight: 500;
+    margin: 0;
+  }
+
+  &.social {
+    margin-top: 24px;
+    background: $white !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25) !important;
+  }
+
+  &.primary:hover {
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), $primary !important;
+  }
+
+  &.v-btn--outline {
+    color: $black !important;
+    border-color: $primary !important;
+  }
+
+  &:disabled.v-btn.v-btn--disabled:not(.v-btn--icon):not(.v-btn--flat):not(.v-btn--outline) {
+    background-color: $primary !important;
+    opacity: 0.3;
+    color: $white !important;
+  }
+
+  &.v-btn--large {
+    height: 40px;
+    font-weight: 600;
+    font-size: 14px;
+  }
+}
+
+
+
+
+
+
+

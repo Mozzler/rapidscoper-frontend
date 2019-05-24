@@ -1,0 +1,19 @@
+.signup-container {
+  
+  .social-button-icon {
+    margin: 0 8px;
+    width: 16px;
+    height: 16px;
+  }
+}
+
+.red-circle {
+  display: inline-block;
+  position: absolute;
+  margin-left: 8px;
+  margin-top: 9px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: $red;
+}

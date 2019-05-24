@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css?family=Lato&display=swap');
+
+@import 'variables';
+@import 'buttons';
+@import 'headers';
+@import 'inputs';
+@import 'forms';
+@import 'sections';
+@import 'icons';
+@import 'navigation';
+@import 'tables';
+@import 'selects';
+
+.theme--rapid {
+  font-family: 'Lato', sans-serif;
+}
+
+h1 {
+  font-size: 24px;
+}
+a {
+  color: $primary;
+  font-weight: 600;
+}
+
+.text-bold {
+  font-weight: 600;
+}
+
+.text-bolder {
+  font-weight: 900;
+}
+
+.text-greyed {
+  color: rgba($black, 0.6);
+}
+
+.dashboard-content {
+  margin: 40px ;
+}
+

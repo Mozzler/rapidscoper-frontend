@@ -1,0 +1,32 @@
+img {
+  display: block;
+  margin: 27px auto 18px auto;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+}
+
+.invitation__text {
+  font-weight: bold;
+}
+
+.invitation__date {
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+.invitation__project {
+  font-size: 18px;
+  line-height: 22px;
+  margin: 19px 0 36px 0;
+  font-weight: bold;
+}
+
+.invitation__btn {
+  width: 176px;
+}
+
+.invitation__decline {
+  display: block;
+  margin-top: 26px;
+}

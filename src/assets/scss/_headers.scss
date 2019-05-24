@@ -1,0 +1,17 @@
+.header-container {
+  padding: 32px 120px;
+  .app-logo {
+    height: 40px;
+    width: 115px;
+  }
+  p {
+    margin: 0;
+  }
+  @media only screen and (max-width: 959px) {
+    padding: 16px;
+  }
+}
+
+.sign-up-header--m47 {
+  margin-bottom: 47px;
+}

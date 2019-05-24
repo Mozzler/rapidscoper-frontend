@@ -10,14 +10,14 @@ VueAxiosPlugin.install = (Vue, options) => {
     resHandleFunc: response => response,
     resErrorFunc: error => Promise.reject(error)
   };
-  
+
   const initOptions = {
     ...defaultOptions,
     ...options
   };
 
   axios.defaults.baseURL = API_URL;
-  
+
   const service = axios.create(initOptions);
 
   service.interceptors.request.use(
@@ -34,11 +34,11 @@ VueAxiosPlugin.install = (Vue, options) => {
 
   Object.defineProperties(Vue.prototype, {
     $axios: {
-      get() {
+      get () {
         return service;
       }
     }
   });
-}
+};
 
 export default VueAxiosPlugin;
