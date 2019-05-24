@@ -28,6 +28,7 @@
           <v-icon>delete</v-icon>
         </td>
       </tr>
+      <span class="tr-border" />
     </template>
   </v-data-table>
 </template>
