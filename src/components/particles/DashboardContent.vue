@@ -2,9 +2,7 @@
   <v-container>
     <v-layout align-center justify-space-between row fill-height>
       <h1>All projects</h1>
-      <v-btn large class="btn-rapid primary large">
-        Create new project
-      </v-btn>
+      <dashboard-action-btn :text="'Create new project'"/>
     </v-layout>
     <v-data-table
         :headers="headers"
@@ -38,50 +36,55 @@
 </template>
 
 <script>
-    export default {
-      name: "DashboardContent",
-      data() {
-          return {
-            headers: [
-              {
-                text: 'project',
-                sortable: false,
-                value: 'name'
-              },
-              {
-                text: 'members',
-                sortable: false,
-                value: 'members',
-              },
-              {
-                text: 'last changes',
-                sortable: false,
-                value: 'last changes',
-              },
-              {
-                text: 'actions',
-                sortable: false,
-                value: 'actions',
-              },
-            ],
-            items: [
-              {
-                name: 'Skellorbit',
-                index: 4,
-                last_changes: 'a day ago',
-              },
-              {
-                name: 'Skellorbit',
-                index: 4,
-                last_changes: '2 days ago',
-              },
-              {
-                name: 'Skellorbit',
-                index: null,
-                last_changes: 'a day ago',
-              },
-            ]
-          }
-      }
-    }
+  import DashboardActionBtn from '@/components/particles/buttons/DashboardActionButton';
+
+  export default {
+    name: "DashboardContent",
+    components: {
+      DashboardActionBtn
+    },
+    data() {
+        return {
+          headers: [
+            {
+              text: 'project',
+              sortable: false,
+              value: 'name'
+            },
+            {
+              text: 'members',
+              sortable: false,
+              value: 'members',
+            },
+            {
+              text: 'last changes',
+              sortable: false,
+              value: 'last changes',
+            },
+            {
+              text: 'actions',
+              sortable: false,
+              value: 'actions',
+            },
+          ],
+          items: [
+            {
+              name: 'Skellorbit',
+              index: 4,
+              last_changes: 'a day ago',
+            },
+            {
+              name: 'Skellorbit',
+              index: 4,
+              last_changes: '2 days ago',
+            },
+            {
+              name: 'Skellorbit',
+              index: null,
+              last_changes: 'a day ago',
+            },
+          ]
+        }
+    },
+  }
 </script>
