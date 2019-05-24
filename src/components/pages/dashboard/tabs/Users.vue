@@ -38,7 +38,7 @@
       data() {
         return {
           roles: [
-            'Full Member'
+            'Manager', 'Full Member', 'Client'
           ],
           headers: [
             {

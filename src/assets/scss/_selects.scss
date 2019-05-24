@@ -3,6 +3,10 @@
   color: $black;
   font-size: 14px !important;
 
+  &.v-list__tile {
+    height: 24px !important;
+  }
+
   .v-text-field__details {
     display: none !important;
   }

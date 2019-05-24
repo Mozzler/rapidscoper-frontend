@@ -25,9 +25,9 @@
             </span>
           </td>
           <td>
-              <span v-for="i in 3">
-                <img src="@/assets/img/user.png" />
-              </span>
+            <v-layout align-center justify-start row fill-height>
+              <img src="@/assets/img/user.png" v-for="i in 3" />
+            </v-layout>
           </td>
           <td>{{ props.item.last_changes }}</td>
           <td>
