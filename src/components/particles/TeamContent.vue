@@ -13,6 +13,7 @@
     </v-tabs>
     <tab-projects v-if="activeTab === 'Projects'" />
     <tab-users v-if="activeTab === 'Users'" />
+    <tab-billing v-if="activeTab === 'Billing'" />
   </v-container>
 </template>
 
@@ -20,6 +21,7 @@
   import Navigation from '@/mixins/navigation';
   import TabProjects from '@/components/pages/dashboard/tabs/Projects';
   import TabUsers from '@/components/pages/dashboard/tabs/Users';
+  import TabBilling from '@/components/pages/dashboard/tabs/Billing';
 
   export default {
     name: "TeamContent",
@@ -28,12 +30,13 @@
     ],
     components: {
       TabProjects,
-      TabUsers
+      TabUsers,
+      TabBilling
     },
     data() {
         return {
           tabs: ['Projects', 'Users', 'Billing'],
-          activeTab: 'Users'
+          activeTab: 'Projects'
         }
     },
     methods: {

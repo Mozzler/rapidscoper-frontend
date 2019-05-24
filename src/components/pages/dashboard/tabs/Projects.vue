@@ -37,6 +37,7 @@
             </v-layout>
           </td>
         </tr>
+        <span class="tr-border" />
       </template>
     </v-data-table>
   </div>

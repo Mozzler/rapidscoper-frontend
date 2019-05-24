@@ -11,15 +11,26 @@
   cursor: default;
   box-shadow: 0 2px 3px rgba(0,0,0, 0.2);
   border-radius: 4px;
+  position: relative;
 
   thead {
     tr {
+      margin: 20px;
       height: 48px !important;
     }
   }
+
   tbody {
+    .tr-border {
+      width: calc(100% - 48px);
+      border-bottom: 1px solid $grey1;
+      position: absolute;
+      margin: 0 24px;
+    }
+
     tr {
       height: 55px;
+      border-bottom: none !important;
     }
   }
   th {
@@ -31,7 +42,7 @@
   }
   td {
     font-size: 14px !important;
-    width: calc(100% - 47px)/3;
+    width: calc(100% - 47px)/3 !important;
 
     &:first-child {
       font-weight: 600 !important;

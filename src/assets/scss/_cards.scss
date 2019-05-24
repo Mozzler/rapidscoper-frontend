@@ -1,0 +1,14 @@
+.billing-card {
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2) !important;
+  border-radius: 4px !important;
+  color: $black;
+}
+
+.billing-card__title {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.billing-card__text {
+  font-size: 14px;
+}
