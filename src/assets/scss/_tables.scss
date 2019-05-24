@@ -1,12 +1,16 @@
-.projects-table {
+.table-container {
+  padding-top: 22px;
+  background-color: $white;
+  margin-top: 16px;
+  box-shadow: 0 2px 3px rgba(0,0,0, 0.2);
+  border-radius: 4px;
+}
+
+.dashboard-table {
   margin-top: 24px;
   cursor: default;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 2px 3px rgba(0,0,0, 0.2);
   border-radius: 4px;
-
-  table {
-    table-layout: fixed !important;
-  }
 
   thead {
     tr {
@@ -26,14 +30,19 @@
     letter-spacing: 0.05em;
   }
   td {
-    width: 25% !important;
     font-size: 14px !important;
-  }
-  td:first-child {
-    font-weight: 600 !important;
-  }
-  td:nth-child(2) {
-    padding: 7px !important;
+    width: calc(100% - 47px)/3;
+
+    &:first-child {
+      font-weight: 600 !important;
+    }
+    &:nth-child(2) {
+      padding: 7px !important;
+    }
+
+    &:last-child {
+      width: 47px;
+    }
   }
 
   .index {
@@ -51,7 +60,7 @@
     position: relative;
     width: 24px;
     height: 24px;
-    margin: 8px 2px 0;
+    margin: 0 8px 0 0;
   }
 
   .v-datatable__progress {
@@ -67,4 +76,11 @@
       color: $primary !important;
     }
   }
+}
+
+.projects-table {
+  margin-top: 0;
+  cursor: default;
+  box-shadow: 0 2px 3px rgba($white, 0.2);
+  border-radius: 4px;
 }

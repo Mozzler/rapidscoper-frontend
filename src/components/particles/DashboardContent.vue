@@ -11,7 +11,7 @@
         :items="items"
         item-key="name"
         :hide-actions="true"
-        class="projects-table">
+        class="dashboard-table">
 
       <template v-slot:items="props">
         <tr @click="props.expanded = !props.expanded">
@@ -62,7 +62,6 @@
                 text: 'actions',
                 sortable: false,
                 value: 'actions',
-                align: 'right',
               },
             ],
             items: [

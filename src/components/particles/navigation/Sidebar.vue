@@ -16,7 +16,7 @@
 
     <v-list>
       <v-list-tile v-for="(number, key) in items" :key="key" class="sidebar__item"
-        :class="{'sidebar__item--active': $route.params.tab === itemToParam(key)}"
+        :class="{'sidebar__item--active': $route.params.name === itemToParam(key)}"
         @click="goTo(key, 'dashboard')">
           <v-list-tile-content>
             <v-list-tile-title>
@@ -35,7 +35,7 @@
       <v-list-tile
         v-for="(number, key) in teams"
         :key="key" class="sidebar__item"
-        :class="{'sidebar__item--active': $route.params.tab === itemToParam(key)}"
+        :class="{'sidebar__item--active': $route.params.name === itemToParam(key)}"
         @click="goTo(key, 'team')">
         <v-list-tile-content>
           <v-list-tile-title>
@@ -63,9 +63,14 @@
 
 <script>
     import LogoRapidScope from "../icons/LogoRapidScope";
+    import Navigation from '@/mixins/navigation';
+
     export default {
       name: "Sidebar",
       components: {LogoRapidScope},
+      mixins: [
+        Navigation
+      ],
       data() {
         return {
           drawer: true,
@@ -85,9 +90,6 @@
         }
       },
       methods: {
-        itemToParam(str) {
-          return str.toLowerCase().replace(/ /g, '-');
-        },
         goTo(item, name) {
           console.log(name);
           this.$router.push({
