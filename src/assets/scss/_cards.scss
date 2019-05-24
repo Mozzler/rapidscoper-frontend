@@ -8,6 +8,16 @@
   font-size: 14px;
 }
 
+.offset {
+  margin-left: 20px;
+
+  @media (max-width: 960px) {
+    & {
+      margin-left: 0 !important;
+    }
+  }
+}
+
 .billing-card__title {
   font-weight: 600;
   font-size: 16px;
@@ -29,4 +39,8 @@
 
 .billing-card__text {
   margin-top: 7px;
+}
+
+.billing-card__logo {
+  display: inline-block;
 }
