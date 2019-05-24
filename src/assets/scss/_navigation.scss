@@ -82,3 +82,30 @@
     }
   }
 }
+
+.tabs {
+  .theme--light.v-tabs__bar {
+    background-color: transparent;
+    margin-top: 24px ;
+    border-bottom: 1px solid $grey1;
+
+    .v-tabs__div {
+      margin: 0;
+      font-weight: 600;
+      font-size: 16px;
+      text-transform: capitalize;
+      padding: 0 8px;
+      min-width: 0;
+    }
+
+    .v-tabs__item--active {
+      color: $primary;
+    }
+  }
+
+  .accent {
+    height: 3px;
+    background-color: $primary !important;
+    border: none !important;
+  }
+}

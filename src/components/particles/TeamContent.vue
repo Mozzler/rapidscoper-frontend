@@ -1,11 +1,17 @@
 <template>
   <v-container>
     <v-layout align-center justify-space-between row fill-height>
-      <h1>All projects</h1>
+      <h1>{{ $route.params.name | toTitle }}</h1>
       <v-btn large class="btn-rapid primary large">
         Create new project
       </v-btn>
     </v-layout>
+    <v-tabs fixed-tabs class="tabs">
+      <v-tab v-for="item in ['Projects', 'Users', 'Billing']"
+        :key="item">
+        {{ item }}
+      </v-tab>
+    </v-tabs>
     <v-data-table
         :headers="headers"
         :items="items"
@@ -39,7 +45,18 @@
 
 <script>
     export default {
-      name: "DashboardContent",
+      name: "TeamContent",
+      filters: {
+        toTitle (str) {
+          let parts = str.split('-');
+
+          parts.forEach((item, index) => {
+            parts[index] = item.charAt(0).toUpperCase() + item.substring(1);
+          });
+
+          return parts.join(' ');
+        }
+      },
       data() {
           return {
             headers: [

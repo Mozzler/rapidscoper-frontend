@@ -16,8 +16,8 @@
 
     <v-list>
       <v-list-tile v-for="(number, key) in items" :key="key" class="sidebar__item"
-        :class="{'sidebar__item--active': $route.params.tab === itemToParam(key, 'main')}"
-        @click="goTo(key)">
+        :class="{'sidebar__item--active': $route.params.tab === itemToParam(key)}"
+        @click="goTo(key, 'dashboard')">
           <v-list-tile-content>
             <v-list-tile-title>
               <v-layout align-center justify-space-between row fill-height>
@@ -34,8 +34,9 @@
     <v-list>
       <v-list-tile
         v-for="(number, key) in teams"
-        :key="key"
-        @click="">
+        :key="key" class="sidebar__item"
+        :class="{'sidebar__item--active': $route.params.tab === itemToParam(key)}"
+        @click="goTo(key, 'team')">
         <v-list-tile-content>
           <v-list-tile-title>
             <v-layout align-center justify-space-between row fill-height>
@@ -88,10 +89,12 @@
           return str.toLowerCase().replace(/ /g, '-');
         },
         goTo(item, name) {
+          console.log(name);
           this.$router.push({
-            name: name,
+            name: 'dashboard',
             params: {
-              tab: this.itemToParam(item)
+              name: this.itemToParam(item),
+              section: name
             }
           });
         }

@@ -5,7 +5,7 @@ import helpers from './router-helpers';
 
 Vue.use(Router);
 
-import Home from '@/components/pages/Home';
+import Home from '@/components/pages/dashboard/Home';
 
 const router = new Router({
   mode: 'history',
@@ -15,8 +15,8 @@ const router = new Router({
       redirect: '/dashboard/all-projects'
     },
     {
-      path: '/dashboard/:tab',
-      name: 'main',
+      path: '/:section/:name',
+      name: 'dashboard',
       component: Home,
       beforeEnter: helpers.ifAuthenticated
     },
