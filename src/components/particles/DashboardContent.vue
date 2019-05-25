@@ -20,9 +20,11 @@
             </span>
           </td>
           <td>
-            <span v-for="i in 3">
-              <img src="@/assets/img/user.png" />
-            </span>
+            <v-layout fill-height justify-center align-center row>
+              <span v-for="i in 3">
+                <img src="@/assets/img/user.png" />
+              </span>
+            </v-layout>
           </td>
           <td>{{ props.item.last_changes }}</td>
           <td>
@@ -87,6 +89,6 @@ export default {
         }
       ]
     };
-  },
+  }
 };
 </script>

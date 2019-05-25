@@ -26,7 +26,7 @@
           </td>
           <td>
             <v-layout align-center justify-start row fill-height>
-              <img src="@/assets/img/user.png" v-for="i in 3" />
+              <img src="@/assets/img/user.png" v-for="i in 3" :key="i"/>
             </v-layout>
           </td>
           <td>{{ props.item.last_changes }}</td>

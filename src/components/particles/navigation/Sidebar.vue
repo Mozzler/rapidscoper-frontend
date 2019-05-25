@@ -108,14 +108,14 @@ export default {
         'The Bumpy Hamsters': 16,
         'West World': 3,
         'The Ramblers': 1
-      },
+      }
     };
   },
   computed: {
-    minified() {
+    minified () {
       return this.$store.state.auth.minified;
     },
-    team() {
+    team () {
       return this.$route.params.section === 'team';
     }
   },
@@ -129,9 +129,9 @@ export default {
         }
       });
     },
-    updateState() {
+    updateState () {
       this.$store.commit('updateSidebarState', !this.minified);
     }
-  },
+  }
 };
 </script>

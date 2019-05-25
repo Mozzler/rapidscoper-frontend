@@ -11,7 +11,7 @@
 export default {
   name: 'app',
   computed: {
-    sidebarMini() {
+    sidebarMini () {
       return this.$store.state.auth.minified;
     }
   }

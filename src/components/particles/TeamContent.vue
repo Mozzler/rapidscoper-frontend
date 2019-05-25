@@ -17,9 +17,9 @@
 
 <script>
 import Navigation from '@/mixins/navigation';
-import TabProjects from '@/components/pages/dashboard/tabs/Projects';
-import TabUsers from '@/components/pages/dashboard/tabs/Users';
-import TabBilling from '@/components/pages/dashboard/tabs/Billing';
+import TabProjects from '@/components/particles/tabs/Projects';
+import TabUsers from '@/components/particles/tabs/Users';
+import TabBilling from '@/components/particles/tabs/Billing';
 import DashboardActionButton from './buttons/DashboardActionButton';
 
 export default {
