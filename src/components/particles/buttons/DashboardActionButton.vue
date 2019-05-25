@@ -5,13 +5,13 @@
 </template>
 
 <script>
-    export default {
-      name: "DashboardActionButton",
-      props: {
-        text: {
-          default: null,
-          type: String
-        }
-      }
+export default {
+  name: 'DashboardActionButton',
+  props: {
+    text: {
+      default: null,
+      type: String
     }
+  }
+};
 </script>

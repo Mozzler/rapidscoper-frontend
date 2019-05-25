@@ -37,9 +37,9 @@
 </template>
 
 <script>
-    export default {
-        name: "Invite User"
-    }
+export default {
+  name: 'Invite User'
+};
 </script>
 
 <style scoped>

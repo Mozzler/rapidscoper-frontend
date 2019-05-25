@@ -3,9 +3,9 @@ import Router from 'vue-router';
 import SignupRoutes from './signup';
 import helpers from './router-helpers';
 
-Vue.use(Router);
-
 import Home from '@/components/pages/dashboard/Home';
+
+Vue.use(Router);
 
 const router = new Router({
   mode: 'history',

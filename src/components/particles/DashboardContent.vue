@@ -25,9 +25,11 @@
             </span>
           </td>
           <td>{{ props.item.last_changes }}</td>
-          <td class="text-xs-right">
-            <v-icon>share</v-icon>
-            <v-icon class="ml-3">archive</v-icon>
+          <td>
+            <v-layout justify-center align-center row fill-height>
+              <v-icon>share</v-icon>
+              <v-icon class="ml-3">archive</v-icon>
+            </v-layout>
           </td>
         </tr>
       </template>
@@ -36,55 +38,55 @@
 </template>
 
 <script>
-  import DashboardActionBtn from '@/components/particles/buttons/DashboardActionButton';
+import DashboardActionBtn from '@/components/particles/buttons/DashboardActionButton';
 
-  export default {
-    name: "DashboardContent",
-    components: {
-      DashboardActionBtn
-    },
-    data() {
-        return {
-          headers: [
-            {
-              text: 'project',
-              sortable: false,
-              value: 'name'
-            },
-            {
-              text: 'members',
-              sortable: false,
-              value: 'members',
-            },
-            {
-              text: 'last changes',
-              sortable: false,
-              value: 'last changes',
-            },
-            {
-              text: 'actions',
-              sortable: false,
-              value: 'actions',
-            },
-          ],
-          items: [
-            {
-              name: 'Skellorbit',
-              index: 4,
-              last_changes: 'a day ago',
-            },
-            {
-              name: 'Skellorbit',
-              index: 4,
-              last_changes: '2 days ago',
-            },
-            {
-              name: 'Skellorbit',
-              index: null,
-              last_changes: 'a day ago',
-            },
-          ]
+export default {
+  name: 'DashboardContent',
+  components: {
+    DashboardActionBtn
+  },
+  data () {
+    return {
+      headers: [
+        {
+          text: 'project',
+          sortable: false,
+          value: 'name'
+        },
+        {
+          text: 'members',
+          sortable: false,
+          value: 'members'
+        },
+        {
+          text: 'last changes',
+          sortable: false,
+          value: 'last changes'
+        },
+        {
+          text: 'actions',
+          sortable: false,
+          value: 'actions'
         }
-    },
-  }
+      ],
+      items: [
+        {
+          name: 'Skellorbit',
+          index: 4,
+          last_changes: 'a day ago'
+        },
+        {
+          name: 'Skellorbit',
+          index: 4,
+          last_changes: '2 days ago'
+        },
+        {
+          name: 'Skellorbit',
+          index: null,
+          last_changes: 'a day ago'
+        }
+      ]
+    };
+  },
+};
 </script>

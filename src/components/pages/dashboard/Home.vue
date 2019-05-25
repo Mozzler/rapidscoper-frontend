@@ -9,21 +9,21 @@
 </template>
 
 <script>
-import Sidebar from "../../particles/navigation/Sidebar";
-import DashboardContent from "../../particles/DashboardContent";
-import TeamContent from "../../particles/TeamContent";
+import Sidebar from '../../particles/navigation/Sidebar';
+import DashboardContent from '../../particles/DashboardContent';
+import TeamContent from '../../particles/TeamContent';
 
 export default {
   name: 'Home',
   components: {
     DashboardContent,
     TeamContent,
-    Sidebar,
+    Sidebar
   },
   computed: {
-    route() {
+    route () {
       return this.$route.params.section;
-    }
+    },
   }
 };
 </script>

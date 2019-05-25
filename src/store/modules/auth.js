@@ -7,7 +7,8 @@ import {
 } from '../actions/auth';
 
 const state = {
-  is_authenticated: !!localStorage.getItem('token')
+  is_authenticated: !!localStorage.getItem('token'),
+  minified: localStorage.getItem('minified') === 'true'
 };
 
 const getters = {

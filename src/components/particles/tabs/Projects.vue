@@ -44,54 +44,54 @@
 </template>
 
 <script>
-    export default {
-      name: "Projects",
-      data() {
-        return {
-          active: 'Active',
-          dropdown: ['Active'],
-          headers: [
-            {
-              text: 'project',
-              sortable: false,
-              value: 'name'
-            },
-            {
-              text: 'members',
-              sortable: false,
-              value: 'members',
-            },
-            {
-              text: 'last changes',
-              sortable: false,
-              value: 'last changes',
-            },
-            {
-              text: 'actions',
-              sortable: false,
-              value: 'actions',
-            },
-          ],
-          items: [
-            {
-              name: 'Skellorbit',
-              index: 4,
-              last_changes: 'a day ago',
-            },
-            {
-              name: 'Skellorbit',
-              index: 4,
-              last_changes: '2 days ago',
-            },
-            {
-              name: 'Skellorbit',
-              index: null,
-              last_changes: 'a day ago',
-            },
-          ]
+export default {
+  name: 'Projects',
+  data () {
+    return {
+      active: 'Active',
+      dropdown: ['Active'],
+      headers: [
+        {
+          text: 'project',
+          sortable: false,
+          value: 'name'
+        },
+        {
+          text: 'members',
+          sortable: false,
+          value: 'members'
+        },
+        {
+          text: 'last changes',
+          sortable: false,
+          value: 'last changes'
+        },
+        {
+          text: 'actions',
+          sortable: false,
+          value: 'actions'
         }
-      },
-    }
+      ],
+      items: [
+        {
+          name: 'Skellorbit',
+          index: 4,
+          last_changes: 'a day ago'
+        },
+        {
+          name: 'Skellorbit',
+          index: 4,
+          last_changes: '2 days ago'
+        },
+        {
+          name: 'Skellorbit',
+          index: null,
+          last_changes: 'a day ago'
+        }
+      ]
+    };
+  }
+};
 </script>
 
 <style scoped>

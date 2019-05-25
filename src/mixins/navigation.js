@@ -9,8 +9,8 @@ export default {
 
       return parts.join(' ');
     },
-    itemToParam(str) {
+    itemToParam (str) {
       return str.toLowerCase().replace(/ /g, '-');
-    },
+    }
   }
-}
+};

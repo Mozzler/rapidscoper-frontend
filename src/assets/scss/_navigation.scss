@@ -1,6 +1,4 @@
 .sidebar {
-  position: relative;
-
   .v-list__tile {
     color: $black !important;
     padding: 0 24px !important;
@@ -32,6 +30,10 @@
   .sidebar__item--active {
     border-left: 2px solid $primary;
     background-color: rgba($primary, 0.05);
+
+    i {
+      color: $primary;
+    }
   }
 
   .sidebar-footer {
@@ -52,6 +54,7 @@
     letter-spacing: 0.05em;
     font-weight: 900;
     font-size: 10px;
+    cursor: default;
   }
 
   .sidebar-add {
@@ -107,5 +110,20 @@
     height: 3px;
     background-color: $primary !important;
     border: none !important;
+  }
+}
+
+.v-navigation-drawer--mini-variant {
+  width: 50px !important;
+
+  .sidebar-section {
+    margin: 14px 0 14px 6px;
+  }
+  .v-list__tile__content {
+    opacity: 1 !important;
+  }
+
+  .v-list__tile {
+    padding: 0 10px !important;
   }
 }

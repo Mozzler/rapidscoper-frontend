@@ -16,45 +16,45 @@
 </template>
 
 <script>
-  import Navigation from '@/mixins/navigation';
-  import TabProjects from '@/components/pages/dashboard/tabs/Projects';
-  import TabUsers from '@/components/pages/dashboard/tabs/Users';
-  import TabBilling from '@/components/pages/dashboard/tabs/Billing';
-  import DashboardActionButton from "./buttons/DashboardActionButton";
+import Navigation from '@/mixins/navigation';
+import TabProjects from '@/components/pages/dashboard/tabs/Projects';
+import TabUsers from '@/components/pages/dashboard/tabs/Users';
+import TabBilling from '@/components/pages/dashboard/tabs/Billing';
+import DashboardActionButton from './buttons/DashboardActionButton';
 
-  export default {
-    name: "TeamContent",
-    mixins: [
-      Navigation
-    ],
-    components: {
-      DashboardActionButton,
-      TabProjects,
-      TabUsers,
-      TabBilling
-    },
-    data() {
-        return {
-          tabs: ['Projects', 'Users', 'Billing'],
-          activeTab: 'Projects'
-        }
-    },
-    methods: {
-      setTab(item) {
-        this.activeTab = item;
-      }
-    },
-    computed: {
-      btnText() {
-        switch (this.activeTab) {
-          case 'Projects':
-            return 'Create new project';
-          case 'Users':
-            return 'Invite user';
-          default:
-            return null;
-        }
+export default {
+  name: 'TeamContent',
+  mixins: [
+    Navigation
+  ],
+  components: {
+    DashboardActionButton,
+    TabProjects,
+    TabUsers,
+    TabBilling
+  },
+  data () {
+    return {
+      tabs: ['Projects', 'Users', 'Billing'],
+      activeTab: 'Projects'
+    };
+  },
+  methods: {
+    setTab (item) {
+      this.activeTab = item;
+    }
+  },
+  computed: {
+    btnText () {
+      switch (this.activeTab) {
+        case 'Projects':
+          return 'Create new project';
+        case 'Users':
+          return 'Invite user';
+        default:
+          return null;
       }
     }
   }
+};
 </script>

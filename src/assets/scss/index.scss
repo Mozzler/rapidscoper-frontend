@@ -36,7 +36,10 @@ a {
   color: rgba($black, 0.6);
 }
 
-.dashboard-content {
-  margin: 40px ;
+.text-primary {
+  color: $primary !important;
+}
+.padding-left--50 {
+  padding-left: 50px !important;
 }
 

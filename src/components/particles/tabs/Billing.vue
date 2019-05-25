@@ -31,19 +31,19 @@
 </template>
 
 <script>
-  import MasterCardIcon from '@/components/particles/icons/MasterCardIcon'
+import MasterCardIcon from '@/components/particles/icons/MasterCardIcon';
 
-  export default {
-    name: "Billing",
-    components: {
-      MasterCardIcon
-    },
-    data() {
-      return {
+export default {
+  name: 'Billing',
+  components: {
+    MasterCardIcon
+  },
+  data () {
+    return {
 
-      }
-    },
+    };
   }
+};
 </script>
 
 <style scoped>

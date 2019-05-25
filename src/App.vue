@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-content class="theme--rapid">
+    <v-content class="theme--rapid" :class="{'padding-left--50': sidebarMini}">
       <router-view />
     </v-content>
   </v-app>
@@ -10,6 +10,11 @@
 
 export default {
   name: 'app',
+  computed: {
+    sidebarMini() {
+      return this.$store.state.auth.minified;
+    }
+  }
 };
 </script>
 

@@ -7,37 +7,37 @@ module.exports = {
   runtimeCompiler: true,
   outputDir: 'public',
   css: { extract: {
-      filename: 'css/style.css',
-      chunkFilename: 'css/[id].css',
-    } },
+    filename: 'css/style.css',
+    chunkFilename: 'css/[id].css'
+  } },
   configureWebpack: {
     entry: { app: `${appPath}/main.js` },
     resolve: {
       alias: {
         '@': appPath,
-        'assets': `${appPath}/assets`,
+        'assets': `${appPath}/assets`
       },
-      symlinks: false,
+      symlinks: false
     },
     module: { rules: [
-        {
-          test: /\.js$/,
-          loader: 'babel-loader',
-          exclude: file => (
-            /node_modules/.test(file)
-            && !/\.vue\.js/.test(file)
-          ),
-        },
-      ] },
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        exclude: file => (
+          /node_modules/.test(file) &&
+            !/\.vue\.js/.test(file)
+        )
+      }
+    ] },
     output: {
       filename: 'js/script.js',
-      chunkFilename: 'js/[id].js',
+      chunkFilename: 'js/[id].js'
     },
     plugins: [
       new HtmlPlugin({
         template: `${appPath}/assets/index.html`,
-        hash: true,
-      }),
-    ],
-  },
+        hash: true
+      })
+    ]
+  }
 };
