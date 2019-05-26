@@ -39,26 +39,18 @@
         </v-list-tile>
       </v-list>
 
-      <div class="sidebar-section" :class="{'text-primary': team && minified}">
+      <div @click="() => teamMenu = !teamMenu" class="sidebar-section"
+           :class="{'text-primary': team && minified}">
         Teams
       </div>
 
-      <v-list v-if="!minified">
-        <v-list-tile
-          v-for="(number, key) in teams"
-          :key="key" class="sidebar__item"
-          :class="{'sidebar__item--active': $route.params.name === itemToParam(key)}"
-          @click="goTo(key, 'team')">
-          <v-list-tile-content>
-            <v-list-tile-title>
-              <v-layout align-center justify-space-between row fill-height>
-                <span>{{ key }} <div class="red-circle" /></span>
-                <span class="text-greyed">{{ number }}</span>
-              </v-layout>
-            </v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-      </v-list>
+      <absolute-menu v-if="minified"
+                     :x="22" :y="230" :visible="teamMenu">
+        <template #content>
+          <team-list />
+        </template>
+      </absolute-menu>
+      <team-list v-else />
 
       <div class="sidebar-add">
         <v-icon>add</v-icon>
@@ -77,10 +69,16 @@
 <script>
 import LogoRapidScope from '../icons/LogoRapidScope';
 import Navigation from '@/mixins/navigation';
+import TeamList from "../lists/TeamList";
+import AbsoluteMenu from "../menus/AbsoluteMenu";
 
 export default {
   name: 'Sidebar',
-  components: { LogoRapidScope },
+  components: {
+    AbsoluteMenu,
+    TeamList,
+    LogoRapidScope
+  },
   mixins: [
     Navigation
   ],
@@ -88,6 +86,7 @@ export default {
     return {
       drawer: true,
       right: null,
+      teamMenu: false,
 
       items: [
         {
@@ -105,12 +104,7 @@ export default {
           number: 12,
           icon: 'archive'
         }
-      ],
-      teams: {
-        'The Bumpy Hamsters': 16,
-        'West World': 3,
-        'The Ramblers': 1
-      }
+      ]
     };
   },
   computed: {
@@ -122,17 +116,13 @@ export default {
     }
   },
   methods: {
-    goTo (item, name) {
-      this.$router.push({
-        name: 'dashboard',
-        params: {
-          name: this.itemToParam(item),
-          section: name
-        }
-      });
-    },
     updateState () {
-      this.$store.commit('updateSidebarState', !this.minified);
+      new Promise(resolve => {
+        this.teamMenu = false;
+        resolve();
+      }).then(() => {
+        this.$store.commit('updateSidebarState', !this.minified);
+      });
     }
   }
 };

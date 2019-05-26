@@ -11,6 +11,15 @@ export default {
     },
     itemToParam (str) {
       return str.toLowerCase().replace(/ /g, '-');
-    }
+    },
+    goTo (item, name) {
+      this.$router.push({
+        name: 'dashboard',
+        params: {
+          name: this.itemToParam(item),
+          section: name
+        }
+      });
+    },
   }
 };
