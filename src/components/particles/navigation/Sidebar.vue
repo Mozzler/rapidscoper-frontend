@@ -22,48 +22,50 @@
       </div>
     </div>
 
-    <v-list>
-      <v-list-tile v-for="(item, key) in items" :key="key" class="sidebar__item"
-        :class="{'sidebar__item--active': $route.params.name === itemToParam(item.title)}"
-        @click="goTo(item.title, 'dashboard')">
+    <div class="sidebar-scroll">
+      <v-list>
+        <v-list-tile v-for="(item, key) in items" :key="key" class="sidebar__item"
+          :class="{'sidebar__item--active': $route.params.name === itemToParam(item.title)}"
+          @click="goTo(item.title, 'dashboard')">
+            <v-list-tile-content>
+              <v-list-tile-title>
+                <v-icon v-if="minified">{{item.icon}}</v-icon>
+                <v-layout v-else align-center justify-space-between row fill-height>
+                    <span>{{ item.title }}</span>
+                    <span class="text-greyed">{{ item.number }}</span>
+                </v-layout>
+              </v-list-tile-title>
+            </v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+
+      <div class="sidebar-section" :class="{'text-primary': team && minified}">
+        Teams
+      </div>
+
+      <v-list v-if="!minified">
+        <v-list-tile
+          v-for="(number, key) in teams"
+          :key="key" class="sidebar__item"
+          :class="{'sidebar__item--active': $route.params.name === itemToParam(key)}"
+          @click="goTo(key, 'team')">
           <v-list-tile-content>
             <v-list-tile-title>
-              <v-icon v-if="minified">{{item.icon}}</v-icon>
-              <v-layout v-else align-center justify-space-between row fill-height>
-                  <span>{{ item.title }}</span>
-                  <span class="text-greyed">{{ item.number }}</span>
+              <v-layout align-center justify-space-between row fill-height>
+                <span>{{ key }} <div class="red-circle" /></span>
+                <span class="text-greyed">{{ number }}</span>
               </v-layout>
             </v-list-tile-title>
           </v-list-tile-content>
-      </v-list-tile>
-    </v-list>
+        </v-list-tile>
+      </v-list>
 
-    <div class="sidebar-section" :class="{'text-primary': team && minified}">
-      Teams
-    </div>
-
-    <v-list v-if="!minified">
-      <v-list-tile
-        v-for="(number, key) in teams"
-        :key="key" class="sidebar__item"
-        :class="{'sidebar__item--active': $route.params.name === itemToParam(key)}"
-        @click="goTo(key, 'team')">
-        <v-list-tile-content>
-          <v-list-tile-title>
-            <v-layout align-center justify-space-between row fill-height>
-              <span>{{ key }} <div class="red-circle" /></span>
-              <span class="text-greyed">{{ number }}</span>
-            </v-layout>
-          </v-list-tile-title>
-        </v-list-tile-content>
-      </v-list-tile>
-    </v-list>
-
-    <div class="sidebar-add">
-      <v-icon>add</v-icon>
-      <span v-if="!minified">
-        Add team
-      </span>
+      <div class="sidebar-add">
+        <v-icon>add</v-icon>
+        <span v-if="!minified">
+          Add team
+        </span>
+      </div>
     </div>
 
     <div class="sidebar-footer" v-if="!minified">

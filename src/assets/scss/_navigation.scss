@@ -36,10 +36,34 @@
     }
   }
 
+  .sidebar-scroll {
+    max-height: calc(100% - 380px);
+    height: calc(100% - 380px);
+    overflow-y: auto;
+    position: relative;
+
+    &::-webkit-scrollbar {
+      width: 10px;
+    }
+
+    &::-webkit-scrollbar-track {
+      border-radius: 3px;
+      box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba($primary, 0.7);
+      outline: 1px solid slategrey;
+      border-radius: 3px;
+    }
+  }
+
   .sidebar-footer {
     position: absolute;
-    bottom: 29px;
+    bottom: 0;
+    padding: 29px 0;
     width: 100%;
+    background-color: rgba(255,255,255,0.5);
 
     svg {
       display: block;
@@ -113,6 +137,10 @@
   }
 }
 
+.v-navigation-drawer {
+  overflow-y: hidden;
+}
+
 .v-navigation-drawer--mini-variant {
   width: 50px !important;
 
@@ -125,5 +153,12 @@
 
   .v-list__tile {
     padding: 0 10px !important;
+  }
+
+  .sidebar-scroll {
+    max-height: 100%;
+    height: 100%;
+    overflow-y: hidden;
+    position: relative;
   }
 }
