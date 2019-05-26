@@ -2,7 +2,17 @@
   <v-container>
     <v-layout align-center justify-space-between row fill-height>
       <h1>{{ toTitle($route.params.name) }}</h1>
-      <dashboard-action-button :text="btnText" v-if="btnText" />
+      <dashboard-action-btn
+        v-if="btnText"
+        :text="btnText"
+        :mobile="true">
+        <template #mobile>
+          <v-btn icon class="primary">
+            <v-icon v-if="activeTab === 'Projects'">add</v-icon>
+            <v-icon v-else-if="activeTab === 'Users'">how_to_reg</v-icon>
+          </v-btn>
+        </template>
+      </dashboard-action-btn>
     </v-layout>
     <v-tabs fixed-tabs class="tabs">
       <v-tab v-for="tab in tabs" :key="tab" @click="setTab(tab)">
@@ -20,7 +30,7 @@ import Navigation from '@/mixins/navigation';
 import TabProjects from '@/components/particles/tabs/Projects';
 import TabUsers from '@/components/particles/tabs/Users';
 import TabBilling from '@/components/particles/tabs/Billing';
-import DashboardActionButton from './buttons/DashboardActionButton';
+import DashboardActionBtn from './buttons/DashboardActionButton';
 
 export default {
   name: 'TeamContent',
@@ -28,7 +38,7 @@ export default {
     Navigation
   ],
   components: {
-    DashboardActionButton,
+    DashboardActionBtn,
     TabProjects,
     TabUsers,
     TabBilling

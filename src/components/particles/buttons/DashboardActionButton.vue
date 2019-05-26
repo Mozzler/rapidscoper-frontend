@@ -1,7 +1,11 @@
 <template>
-  <v-btn large class="btn-rapid primary large">
-    {{ text }}
-  </v-btn>
+  <div>
+    <slot name="mobile" v-if="mobile && $store.state.auth.isMobileDevice"/>
+    <v-btn large v-else
+           class="btn-rapid primary large">
+      {{ text }}
+    </v-btn>
+  </div>
 </template>
 
 <script>
@@ -11,6 +15,10 @@ export default {
     text: {
       default: null,
       type: String
+    },
+    mobile: {
+      default: false,
+      type: Boolean
     }
   }
 };

@@ -8,7 +8,8 @@ import {
 
 const state = {
   is_authenticated: !!localStorage.getItem('token'),
-  minified: localStorage.getItem('minified') === 'true'
+  minified: localStorage.getItem('minified') === 'true',
+  isMobileDevice: false
 };
 
 const getters = {

@@ -2,7 +2,15 @@
   <v-container>
     <v-layout align-center justify-space-between row fill-height>
       <h1>All projects</h1>
-      <dashboard-action-btn :text="'Create new project'"/>
+      <dashboard-action-btn
+        :text="'Create new project'"
+        :mobile="true">
+        <template #mobile>
+          <v-btn icon class="primary">
+            <v-icon>add</v-icon>
+          </v-btn>
+        </template>
+      </dashboard-action-btn>
     </v-layout>
     <v-data-table
         :headers="headers"
