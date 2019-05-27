@@ -4,6 +4,7 @@ import SignupRoutes from './signup';
 import helpers from './router-helpers';
 
 import Home from '@/components/pages/dashboard/Home';
+import PastInvoice from '@/components/pages/dashboard/PastInvoice';
 
 Vue.use(Router);
 
@@ -18,6 +19,12 @@ const router = new Router({
       path: '/:section/:name',
       name: 'dashboard',
       component: Home,
+      beforeEnter: helpers.ifAuthenticated
+    },
+    {
+      path: '/:section/:name/past-invoice',
+      name: 'past-invoice',
+      component: PastInvoice,
       beforeEnter: helpers.ifAuthenticated
     },
     ...SignupRoutes

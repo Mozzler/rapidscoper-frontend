@@ -10,7 +10,7 @@
         <template #mobile>
           <v-btn icon class="primary" @click="showModal">
             <v-icon v-if="activeTab === 'Projects'">add</v-icon>
-            <v-icon v-else-if="activeTab === 'Users'">how_to_reg</v-icon>`
+            <v-icon v-else-if="activeTab === 'Users'">how_to_reg</v-icon>
           </v-btn>
         </template>
       </dashboard-action-btn>
@@ -54,7 +54,7 @@ export default {
   },
   data () {
     return {
-      tabs: ['Projects', 'Users', 'Billing'],
+      tabs: ['Projects', 'Users', 'Billing', 'Advanced'],
       activeTab: 'Projects',
       modals: {
         Projects: false,

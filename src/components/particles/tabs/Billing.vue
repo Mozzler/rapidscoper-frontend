@@ -21,11 +21,19 @@
     <v-flex sm12 md5>
       <v-card class="billing-card mt-3"
               :class="{'ml-0': $vuetify.breakpoint.smAndDown, 'ml-3': $vuetify.breakpoint.mdAndUp}">
-        <div class="billing-card__title">Upgrade to Premium</div>
-        <div>Unlock all features of RapidScoper include unlimited projects and export by upgrading to Premium Subscription Plan</div>
-        <v-btn large class="btn-rapid primary mt-4">
-          Upgrade
-        </v-btn>
+        <template v-if="!paid">
+          <div class="billing-card__title">Upgrade to Premium</div>
+          <div>Unlock all features of RapidScoper include unlimited projects and export by upgrading to Premium Subscription Plan</div>
+          <v-btn large class="btn-rapid primary mt-4">
+            Upgrade
+          </v-btn>
+        </template>
+        <template v-else>
+          <div class="billing-card__title">Next invoice</div>
+          <div>5 users renew monthly on May 28, 2019</div>
+          <div class="text-bold mt-4">$ 49.95</div>
+          <div class="billing-card__action" @click="goTo">See past invoice</div>
+        </template>
       </v-card>
     </v-flex>
 
@@ -46,8 +54,15 @@ export default {
   },
   data () {
     return {
+      paid: true,
       showChangePlanModal: false
     };
+  },
+  methods: {
+    goTo() {
+      let path = `${this.$route.path}/past-invoice`;
+      this.$router.push(path);
+    }
   }
 };
 </script>
