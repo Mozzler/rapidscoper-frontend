@@ -6,7 +6,7 @@
           <div class="billing-card__title">Your Plan</div>
           <div>You are on a Basic Plan.</div>
           <div class="text-greyed billing-card__text">It's free forever.</div>
-          <div class="billing-card__action">Change Plan</div>
+          <div class="billing-card__action" @click="showChangePlanModal = true">Change Plan</div>
         </v-card>
         <v-card class="billing-card mt-3">
           <div class="billing-card__title">Payment Details</div>
@@ -28,20 +28,25 @@
         </v-btn>
       </v-card>
     </v-flex>
+
+    <change-plan-modal :show="showChangePlanModal"
+      @close-modal="() => showChangePlanModal = false" />
   </v-layout>
 </template>
 
 <script>
 import MasterCardIcon from '@/components/particles/icons/MasterCardIcon';
+import ChangePlanModal from '@/components/particles/modals/ChangePlan';
 
 export default {
   name: 'Billing',
   components: {
-    MasterCardIcon
+    MasterCardIcon,
+    ChangePlanModal
   },
   data () {
     return {
-
+      showChangePlanModal: true
     };
   }
 };

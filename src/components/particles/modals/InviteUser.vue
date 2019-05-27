@@ -1,7 +1,7 @@
 <template>
   <v-layout row justify-center>
     <v-dialog v-model="dialog" max-width="608">
-      <v-card class="billing-card">
+      <v-card class="modal-card">
 
         <div class="modal-header">
           <h1> Invite user </h1>

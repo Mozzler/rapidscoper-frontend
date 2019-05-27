@@ -48,13 +48,31 @@
   margin-top: 43px;
 }
 
-.modal-header {
-  display: block;
-  position: relative;
-}
 
-.modal-close-btn {
-  position: absolute !important;
-  top: -18px;
-  right: -22px;
+.modal-card {
+
+  padding: 24px;
+
+  .modal-header {
+    display: block;
+    position: relative;
+  }
+
+  .modal-close-btn {
+    position: absolute !important;
+    top: -16px;
+    right: -18px;
+
+  }
+
+  .modal-row {
+    cursor: pointer;
+    padding: 16px 24px;
+    margin: 0 -24px
+  }
+
+  .modal-row--checked {
+    border-left: 2px solid $primary;
+    background-color: rgba($primary, 0.05);
+  }
 }
