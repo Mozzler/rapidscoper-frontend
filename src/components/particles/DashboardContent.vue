@@ -29,20 +29,19 @@
             </span>
           </td>
           <td>
-            <v-layout fill-height justify-center align-center row>
-              <span v-for="i in 3">
-                <img src="@/assets/img/user.png" />
-              </span>
+            <v-layout align-center justify-start row fill-height>
+              <img src="@/assets/img/user.png" v-for="i in 3" :key="i"/>
             </v-layout>
           </td>
           <td>{{ props.item.last_changes }}</td>
           <td>
-            <v-layout justify-center align-center row fill-height>
+            <v-layout align-center justify-space-between row fill-height>
               <v-icon>share</v-icon>
-              <v-icon class="ml-3">archive</v-icon>
+              <v-icon>archive</v-icon>
             </v-layout>
           </td>
         </tr>
+        <span class="tr-border" />
       </template>
     </v-data-table>
     <create-project-modal :show="showCreateProjectModal" @close-modal="closeModal" />

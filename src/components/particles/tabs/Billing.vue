@@ -1,5 +1,7 @@
 <template>
   <v-layout row wrap>
+    <change-plan-modal :show="showChangePlanModal"
+                       @close-modal="() => showChangePlanModal = false" />
     <v-flex xs12 sm12 md7>
       <v-layout column wrap>
         <v-card class="billing-card mt-3">
@@ -14,7 +16,9 @@
             <master-card-icon class="billing-card__logo"/>
             <span class="ml-2">**** **** **** 4149</span>
           </div>
-          <div class="billing-card__action">Update payment info</div>
+          <div class="billing-card__action">
+            {{ !isMobileDevice ? 'Update payment info' : 'Update' }}
+          </div>
         </v-card>
       </v-layout>
     </v-flex>
@@ -36,9 +40,6 @@
         </template>
       </v-card>
     </v-flex>
-
-    <change-plan-modal :show="showChangePlanModal"
-      @close-modal="() => showChangePlanModal = false" />
   </v-layout>
 </template>
 
@@ -62,6 +63,11 @@ export default {
     goTo() {
       let path = `${this.$route.path}/past-invoice`;
       this.$router.push(path);
+    }
+  },
+  computed: {
+    isMobileDevice() {
+      return this.$store.state.auth.isMobileDevice;
     }
   }
 };
