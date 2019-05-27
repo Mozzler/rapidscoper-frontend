@@ -3,10 +3,11 @@
     <v-layout align-center justify-space-between row fill-height>
       <h1>All projects</h1>
       <dashboard-action-btn
+        @show-modal="showModal"
         :text="'Create new project'"
         :mobile="true">
         <template #mobile>
-          <v-btn icon class="primary">
+          <v-btn icon class="primary" @click="showModal">
             <v-icon>add</v-icon>
           </v-btn>
         </template>
@@ -44,19 +45,23 @@
         </tr>
       </template>
     </v-data-table>
+    <create-project-modal :show="showCreateProjectModal" @close-modal="closeModal" />
   </v-container>
 </template>
 
 <script>
 import DashboardActionBtn from '@/components/particles/buttons/DashboardActionButton';
+import CreateProjectModal from '@/components/particles/modals/CreateProject';
 
 export default {
   name: 'DashboardContent',
   components: {
-    DashboardActionBtn
+    DashboardActionBtn,
+    CreateProjectModal
   },
   data () {
     return {
+      showCreateProjectModal: false,
       headers: [
         {
           text: 'project',
@@ -97,6 +102,15 @@ export default {
         }
       ]
     };
+  },
+  methods: {
+    showModal() {
+      console.log('test');
+      this.showCreateProjectModal = true;
+    },
+    closeModal() {
+      this.showCreateProjectModal = false;
+    }
   }
 };
 </script>
