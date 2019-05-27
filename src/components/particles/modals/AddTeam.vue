@@ -1,0 +1,70 @@
+<template>
+  <v-layout row justify-center>
+    <v-dialog v-model="dialog" max-width="416">
+      <v-card class="modal-card">
+
+        <div class="modal-header">
+          <h1> Create new team </h1>
+          <v-btn icon class="modal-close-btn" @click="() => $emit('close-modal')">
+            <v-icon>close</v-icon>
+          </v-btn>
+        </div>
+
+        <v-card-text class="mt-3 padding-0">
+          <v-layout row wrap>
+            <v-flex xs12>
+              Name your team.
+            </v-flex>
+            <v-flex xs12 mt-4>
+              <v-text-field
+                key="team name"
+                name="Team name"
+                placeholder="Team name"
+                v-model="team"
+                :error-messages="errors.first('Team name')"
+                solo
+              ></v-text-field>
+            </v-flex>
+          </v-layout>
+          <v-flex shrink mt-4 class="text-xs-right">
+            <v-btn class="btn-rapid mr-3" large outline
+                   @click="() => $emit('close-modal')">
+              Cancel
+            </v-btn>
+            <v-btn class="btn-rapid primary" large
+                   @click="() => $emit('close-modal')">
+              Create team
+            </v-btn>
+          </v-flex>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+  </v-layout>
+</template>
+
+<script>
+    export default {
+      name: "AddTeam",
+      props: {
+        show: {
+          type: Boolean,
+          default: false
+        },
+      },
+      data() {
+        return {
+          team: null,
+          dialog: this.show
+        }
+      },
+      watch: {
+        show() {
+          this.dialog = this.show;
+        }
+      }
+    }
+</script>
+
+<style scoped>
+
+</style>

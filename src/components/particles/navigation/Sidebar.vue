@@ -37,12 +37,11 @@
               </v-list-tile-title>
             </v-list-tile-content>
         </v-list-tile>
+        <div @click="() => teamMenu = !teamMenu" class="sidebar-section"
+             :class="{'text-primary': team && minified}">
+          Teams
+        </div>
       </v-list>
-
-      <div @click="() => teamMenu = !teamMenu" class="sidebar-section"
-           :class="{'text-primary': team && minified}">
-        Teams
-      </div>
 
       <absolute-menu v-if="minified"
                      :x="22" :y="230" :visible="teamMenu">
@@ -52,7 +51,7 @@
       </absolute-menu>
       <team-list v-else />
 
-      <div class="sidebar-add">
+      <div class="sidebar-add" @click="showAddTeamModal = true">
         <v-icon>add</v-icon>
         <span v-if="!minified">
           Add team
@@ -63,6 +62,10 @@
     <div class="sidebar-footer" v-if="!minified">
       <logo-rapid-scope />
     </div>
+
+    <add-team-modal v-if="showAddTeamModal"
+                    :show="showAddTeamModal = true"
+                    @close-modal="() => showAddTeamModal = false"/>
   </v-navigation-drawer>
 </template>
 
@@ -71,13 +74,15 @@ import LogoRapidScope from '../icons/LogoRapidScope';
 import Navigation from '@/mixins/navigation';
 import TeamList from "../lists/TeamList";
 import AbsoluteMenu from "../menus/AbsoluteMenu";
+import AddTeamModal from "@/components/particles/modals/AddTeam";
 
 export default {
   name: 'Sidebar',
   components: {
     AbsoluteMenu,
     TeamList,
-    LogoRapidScope
+    LogoRapidScope,
+    AddTeamModal
   },
   mixins: [
     Navigation
@@ -87,6 +92,7 @@ export default {
       drawer: true,
       right: null,
       teamMenu: false,
+      showAddTeamModal: false,
 
       items: [
         {
