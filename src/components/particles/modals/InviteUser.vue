@@ -31,9 +31,7 @@
               </div>
             </v-flex>
 
-            <v-flex shrink pl-3 :class="{
-              'text-xs-right': !isMobileDevice,
-              'text-xs-center': isMobileDevice }">
+            <v-flex shrink pl-3 v-if="!isMobileDevice">
               <v-btn class="btn-rapid primary" large
                      @click="() => $emit('close-modal')">
                 Invite
