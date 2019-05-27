@@ -1,6 +1,7 @@
 .rapid-select {
   width: 110px;
   color: $black;
+  display: inline-block;
   font-size: 14px !important;
 
   &.v-list__tile {
@@ -78,4 +79,8 @@
   &.v-text-field {
     margin: 0 24px;
   }
+}
+
+.align-right {
+  float: right !important;
 }

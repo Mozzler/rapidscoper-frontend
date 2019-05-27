@@ -46,7 +46,7 @@ export default {
   },
   data () {
     return {
-      showChangePlanModal: true
+      showChangePlanModal: false
     };
   }
 };

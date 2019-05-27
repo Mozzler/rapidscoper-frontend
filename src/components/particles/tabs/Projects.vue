@@ -1,7 +1,7 @@
 <template>
   <div class="table-container">
     <v-autocomplete
-      ref="country"
+      ref="select"
       v-model="active"
       :items="dropdown"
       placeholder="Select..."

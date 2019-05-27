@@ -24,6 +24,7 @@
     <tab-users v-if="activeTab === 'Users'" />
     <tab-billing v-if="activeTab === 'Billing'" />
 
+    <create-project-modal :show="modals.Projects" @close-modal="closeModal" />
     <invite-user-modal :show="modals.Users" @close-modal="closeModal" />
   </v-container>
 </template>
@@ -34,7 +35,9 @@ import TabProjects from '@/components/particles/tabs/Projects';
 import TabUsers from '@/components/particles/tabs/Users';
 import TabBilling from '@/components/particles/tabs/Billing';
 import DashboardActionBtn from './buttons/DashboardActionButton';
+
 import InviteUserModal from '@/components/particles/modals/InviteUser';
+import CreateProjectModal from '@/components/particles/modals/CreateProject';
 
 export default {
   name: 'TeamContent',
@@ -43,6 +46,7 @@ export default {
   ],
   components: {
     InviteUserModal,
+    CreateProjectModal,
     DashboardActionBtn,
     TabProjects,
     TabUsers,
