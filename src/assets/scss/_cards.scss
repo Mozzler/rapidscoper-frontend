@@ -1,5 +1,4 @@
 .billing-card {
-  margin-top: 20px;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2) !important;
   border-radius: 4px !important;
   color: $black;
@@ -43,4 +42,19 @@
 
 .billing-card__logo {
   display: inline-block;
+}
+
+.invite-user-card {
+  margin-top: 43px;
+}
+
+.modal-header {
+  display: block;
+  position: relative;
+}
+
+.modal-close-btn {
+  position: absolute !important;
+  top: -18px;
+  right: -22px;
 }

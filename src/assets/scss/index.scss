@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Lato&display=swap');
 
 @import 'variables';
+@import 'typography';
 @import 'buttons';
 @import 'headers';
 @import 'inputs';
@@ -12,38 +13,5 @@
 @import 'selects';
 @import 'cards';
 
-.theme--rapid {
-  font-family: 'Lato', sans-serif;
-}
 
-h1 {
-  font-size: 24px;
-
-  @media(max-height: 767px) {
-    font-size: 20px;
-  }
-}
-a {
-  color: $primary;
-  font-weight: 600;
-}
-
-.text-bold {
-  font-weight: 600;
-}
-
-.text-bolder {
-  font-weight: 900;
-}
-
-.text-greyed {
-  color: rgba($black, 0.6);
-}
-
-.text-primary {
-  color: $primary !important;
-}
-.padding-left--50 {
-  padding-left: 50px !important;
-}
 

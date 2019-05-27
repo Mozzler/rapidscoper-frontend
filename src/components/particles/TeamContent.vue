@@ -5,11 +5,12 @@
       <dashboard-action-btn
         v-if="btnText"
         :text="btnText"
+        @show-modal="showModal"
         :mobile="true">
         <template #mobile>
-          <v-btn icon class="primary">
+          <v-btn icon class="primary" @click="showModal">
             <v-icon v-if="activeTab === 'Projects'">add</v-icon>
-            <v-icon v-else-if="activeTab === 'Users'">how_to_reg</v-icon>
+            <v-icon v-else-if="activeTab === 'Users'">how_to_reg</v-icon>`
           </v-btn>
         </template>
       </dashboard-action-btn>
@@ -22,6 +23,8 @@
     <tab-projects v-if="activeTab === 'Projects'" />
     <tab-users v-if="activeTab === 'Users'" />
     <tab-billing v-if="activeTab === 'Billing'" />
+
+    <invite-user-modal :show="modals.Users" @close-modal="closeModal" />
   </v-container>
 </template>
 
@@ -31,6 +34,7 @@ import TabProjects from '@/components/particles/tabs/Projects';
 import TabUsers from '@/components/particles/tabs/Users';
 import TabBilling from '@/components/particles/tabs/Billing';
 import DashboardActionBtn from './buttons/DashboardActionButton';
+import InviteUserModal from '@/components/particles/modals/InviteUser';
 
 export default {
   name: 'TeamContent',
@@ -38,6 +42,7 @@ export default {
     Navigation
   ],
   components: {
+    InviteUserModal,
     DashboardActionBtn,
     TabProjects,
     TabUsers,
@@ -46,12 +51,22 @@ export default {
   data () {
     return {
       tabs: ['Projects', 'Users', 'Billing'],
-      activeTab: 'Projects'
+      activeTab: 'Projects',
+      modals: {
+        Projects: false,
+        Users: false
+      }
     };
   },
   methods: {
     setTab (item) {
       this.activeTab = item;
+    },
+    showModal() {
+      this.modals[this.activeTab] = true;
+    },
+    closeModal() {
+      this.modals[this.activeTab] = false;
     }
   },
   computed: {

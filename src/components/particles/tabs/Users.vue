@@ -74,7 +74,7 @@ export default {
           email: 'jenniferfoster@gmail.com',
           role: 'Full Member'
         }
-      ]
+      ],
     };
   }
 };

@@ -48,3 +48,21 @@
 .forgot-link {
   margin-top: 26px;
 }
+
+.input-group {
+  display: block;
+  position: relative;
+
+  .v-input {
+    position: absolute !important;
+  }
+
+  .full-width {
+    width: 100%;
+  }
+
+  .rapid-select {
+    top: 3px;
+    right: 6px;
+  }
+}

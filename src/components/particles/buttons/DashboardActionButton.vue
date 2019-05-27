@@ -1,7 +1,7 @@
 <template>
   <div>
     <slot name="mobile" v-if="mobile && $store.state.auth.isMobileDevice"/>
-    <v-btn large v-else
+    <v-btn large v-else @click="() => $emit('show-modal')"
            class="btn-rapid primary large">
       {{ text }}
     </v-btn>
