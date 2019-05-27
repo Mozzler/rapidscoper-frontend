@@ -26,14 +26,16 @@
               ></v-text-field>
             </v-flex>
           </v-layout>
-          <v-flex shrink mt-4 class="text-xs-right">
+          <v-flex shrink mt-4 :class="{
+            'text-xs-right': !isMobileDevice,
+            'text-xs-center': isMobileDevice }">
             <v-btn class="btn-rapid mr-3" large outline
                    @click="() => $emit('close-modal')">
               Cancel
             </v-btn>
             <v-btn class="btn-rapid primary" large
                    @click="() => $emit('close-modal')">
-              Create team
+              {{ isMobileDevice ? 'Create' : 'Create team' }}
             </v-btn>
           </v-flex>
         </v-card-text>
@@ -60,6 +62,11 @@
       watch: {
         show() {
           this.dialog = this.show;
+        }
+      },
+      computed: {
+        isMobileDevice() {
+          return this.$store.state.auth.isMobileDevice;
         }
       }
     }

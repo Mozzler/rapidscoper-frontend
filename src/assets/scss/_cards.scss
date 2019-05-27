@@ -56,6 +56,10 @@
   .modal-header {
     display: block;
     position: relative;
+
+    input {
+      width: 90%;
+    }
   }
 
   .modal-close-btn {
@@ -74,5 +78,9 @@
   .modal-row--checked {
     border-left: 2px solid $primary;
     background-color: rgba($primary, 0.05);
+  }
+
+  button {
+    max-width: 60px;
   }
 }

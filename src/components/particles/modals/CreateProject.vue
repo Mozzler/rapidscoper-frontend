@@ -42,17 +42,18 @@
             </v-flex>
           </v-layout>
 
-          <v-flex shrink mt-4 class="text-xs-right">
+          <v-flex shrink mt-4 :class="{
+            'text-xs-right': !isMobileDevice,
+            'text-xs-center': isMobileDevice }">
             <v-btn class="btn-rapid mr-3" large outline
                    @click="() => $emit('close-modal')">
               Cancel
             </v-btn>
             <v-btn class="btn-rapid primary" large
                    @click="() => $emit('close-modal')">
-              Create project
+              {{ isMobileDevice ? 'Create' : 'Create project' }}
             </v-btn>
           </v-flex>
-
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -84,8 +85,10 @@ export default {
         title: 'Untitled'
       }
   },
-  methods: {
-
+  computed: {
+    isMobileDevice() {
+      return this.$store.state.auth.isMobileDevice;
+    }
   },
   watch: {
     show() {
