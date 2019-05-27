@@ -80,7 +80,9 @@
     background-color: rgba($primary, 0.05);
   }
 
-  button {
-    max-width: 60px;
+  @media (max-width: 400px) {
+    button {
+      max-width: 60px;
+    }
   }
 }
