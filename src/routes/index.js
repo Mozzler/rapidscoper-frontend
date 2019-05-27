@@ -1,10 +1,11 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import SignupRoutes from './signup';
-import helpers from './router-helpers';
 
-import Home from '@/components/pages/dashboard/Home';
-import PastInvoice from '@/components/pages/dashboard/PastInvoice';
+import SignupRoutes from './signup';
+import DashboardRoutes from './dashboard';
+
+import store from "../store";
+import {IS_AUTHENTICATED} from "../store/actions/auth";
 
 Vue.use(Router);
 
@@ -15,20 +16,24 @@ const router = new Router({
       path: '*',
       redirect: '/dashboard/all-projects'
     },
-    {
-      path: '/:section/:name',
-      name: 'dashboard',
-      component: Home,
-      beforeEnter: helpers.ifAuthenticated
-    },
-    {
-      path: '/:section/:name/past-invoice',
-      name: 'past-invoice',
-      component: PastInvoice,
-      beforeEnter: helpers.ifAuthenticated
-    },
+    ...DashboardRoutes,
     ...SignupRoutes
   ]
+});
+
+router.beforeEach((to, from, next) => {
+
+  let authenticated = store.getters[IS_AUTHENTICATED];
+
+  if(to.meta.guest && authenticated) {
+    next('/dashboard');
+  }
+  else if(to.meta.requiresAuth && !authenticated) {
+    next('/sign-up');
+  }
+  else {
+    next();
+  }
 });
 
 export default router;
