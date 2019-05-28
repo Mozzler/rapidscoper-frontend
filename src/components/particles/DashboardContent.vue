@@ -104,7 +104,6 @@ export default {
   },
   methods: {
     showModal() {
-      console.log('test');
       this.showCreateProjectModal = true;
     },
     closeModal() {

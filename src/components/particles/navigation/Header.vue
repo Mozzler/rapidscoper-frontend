@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import LogoRapidScope from './icons/LogoRapidScope';
+import LogoRapidScope from '../icons/LogoRapidScope';
 import * as authConst from '@/store/actions/auth';
 
 export default {

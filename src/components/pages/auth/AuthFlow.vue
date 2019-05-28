@@ -21,7 +21,7 @@ import ForgotPasswordForm from '../../particles/forms/ForgotPasswordForm';
 import ChangePasswordForm from '../../particles/forms/ChangePasswordForm';
 import CreateAccountForm from '../../particles/forms/CreateAccountForm';
 import AcceptInviteForm from '../../particles/forms/AcceptInviteForm';
-import AppHeader from '../../particles/Header';
+import AppHeader from '../../particles/navigation/Header';
 
 export default {
   name: 'AuthDataPage',

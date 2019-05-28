@@ -37,7 +37,7 @@
 import LogoGitHub from '../../particles/icons/LogoGitHub';
 import LogoGoogle from '../../particles/icons/LogoGoogle';
 import AuthForm from '../../particles/forms/AuthForm';
-import AppHeader from '../../particles/Header';
+import AppHeader from '../../particles/navigation/Header';
 
 import * as actionConst from '../../../store/actions/auth';
 

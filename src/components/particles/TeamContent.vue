@@ -20,9 +20,11 @@
         {{ tab }}
       </v-tab>
     </v-tabs>
+
     <tab-projects v-if="activeTab === 'Projects'" />
     <tab-users v-if="activeTab === 'Users'" />
     <tab-billing v-if="activeTab === 'Billing'" />
+    <tab-advanced v-if="activeTab === 'Advanced'" />
 
     <create-project-modal :show="modals.Projects" @close-modal="closeModal" />
     <invite-user-modal :show="modals.Users" @close-modal="closeModal" />
@@ -31,13 +33,17 @@
 
 <script>
 import Navigation from '@/mixins/navigation';
+
 import TabProjects from '@/components/particles/tabs/Projects';
 import TabUsers from '@/components/particles/tabs/Users';
 import TabBilling from '@/components/particles/tabs/Billing';
+import TabAdvanced from '@/components/particles/tabs/Advanced';
+
 import DashboardActionBtn from './buttons/DashboardActionButton';
 
 import InviteUserModal from '@/components/particles/modals/InviteUser';
 import CreateProjectModal from '@/components/particles/modals/CreateProject';
+import DeleteTeamModal from '@/components/particles/modals/DeleteTeam';
 
 export default {
   name: 'TeamContent',
@@ -47,10 +53,12 @@ export default {
   components: {
     InviteUserModal,
     CreateProjectModal,
+    DeleteTeamModal,
     DashboardActionBtn,
     TabProjects,
     TabUsers,
-    TabBilling
+    TabBilling,
+    TabAdvanced
   },
   data () {
     return {
@@ -58,7 +66,8 @@ export default {
       activeTab: 'Projects',
       modals: {
         Projects: false,
-        Users: false
+        Users: false,
+        Advanced: false
       }
     };
   },
