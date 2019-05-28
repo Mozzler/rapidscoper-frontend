@@ -10,13 +10,11 @@
 
 <script>
 import MasterCardIcon from '@/components/particles/icons/MasterCardIcon';
-import DeleteTeamModal from '@/components/particles/modals/DeleteTeam';
 
 export default {
   name: 'Billing',
   components: {
     MasterCardIcon,
-    DeleteTeamModal
   },
   data () {
     return {

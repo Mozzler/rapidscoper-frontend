@@ -4,12 +4,14 @@
       <router-view />
     </v-content>
 
-    <change-plan-modal />
-    <create-project-modal />
-    <delete-team-modal />
-    <downgrade-to-basic-modal />
-    <invite-user-modal />
-    <upgrade-to-premium-modal />
+    <template v-if="authenticated">
+      <change-plan-modal />
+      <create-project-modal />
+      <delete-team-modal />
+      <downgrade-to-basic-modal />
+      <invite-user-modal />
+      <upgrade-to-premium-modal />
+    </template>
   </v-app>
 </template>
 
@@ -39,8 +41,11 @@ export default {
   computed: {
     sidebarMini () {
       return this.$store.state.auth.minified;
+    },
+    authenticated() {
+      return this.$store.state.auth.is_authenticated;
     }
-  }
+  },
 };
 </script>
 

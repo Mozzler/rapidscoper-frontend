@@ -29,7 +29,7 @@ router.beforeEach((to, from, next) => {
     next('/dashboard');
   }
   else if(to.meta.requiresAuth && !authenticated) {
-    next('/sign-up');
+    next('/signup');
   }
   else {
     next();
