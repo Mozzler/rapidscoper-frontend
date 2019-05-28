@@ -17,3 +17,12 @@
   border-radius: 50%;
   background-color: $red;
 }
+
+.header-icon {
+  padding-right: 16px;
+  .v-icon {
+    color: $primary !important;
+    font-size: 32px;
+    margin-top: 2px;
+  }
+}

@@ -27,7 +27,7 @@
               Cancel
             </v-btn>
             <v-btn class="btn-rapid primary" large
-                   @click="closeModal">
+                   @click="showPaymentInfoModal">
               Upgrade
             </v-btn>
           </v-flex>
@@ -47,5 +47,11 @@
       Navigation,
       ModalMixin
     ],
+    methods: {
+      showPaymentInfoModal() {
+        console.log('test');
+        this.$root.$emit('payment-info');
+      }
+    }
   }
 </script>

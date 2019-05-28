@@ -11,6 +11,9 @@
       <downgrade-to-basic-modal />
       <invite-user-modal />
       <upgrade-to-premium-modal />
+      <payment-info-modal />
+      <payment-successfully-modal />
+      <incorrect-data-modal />
     </template>
   </v-app>
 </template>
@@ -24,6 +27,9 @@ import DeleteTeamModal from '@/components/particles/modals/DeleteTeam';
 import ChangePlanModal from '@/components/particles/modals/ChangePlan';
 import DowngradeToBasicModal from '@/components/particles/modals/DowngradeToBasic';
 import UpgradeToPremiumModal from '@/components/particles/modals/UpgradeToPremium';
+import PaymentInfoModal from '@/components/particles/modals/PaymentInfo';
+import PaymentSuccessfullyModal from '@/components/particles/modals/PaymentSuccessfully';
+import IncorrectDataModal from '@/components/particles/modals/IncorrectData';
 
 export default {
   name: 'app',
@@ -33,7 +39,10 @@ export default {
     DeleteTeamModal,
     ChangePlanModal,
     DowngradeToBasicModal,
-    UpgradeToPremiumModal
+    UpgradeToPremiumModal,
+    PaymentInfoModal,
+    PaymentSuccessfullyModal,
+    IncorrectDataModal
   },
   mixins: [
     ResizeMixin
