@@ -75,6 +75,7 @@
       },
       updatePlan() {
         this.active = this.checked;
+        this.$root.$emit('payment-info');
       }
     },
     computed: {

@@ -120,9 +120,6 @@
         this.$root.$emit('incorrect-data');
       }
     },
-    beforeMount() {
-      this.$root.$emit('payment-info');
-    }
   }
 </script>
 
