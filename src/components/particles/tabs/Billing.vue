@@ -37,16 +37,25 @@
           <div class="billing-card__action" @click="goTo">See past invoice</div>
         </template>
       </v-card>
+      <v-card class="billing-card mt-3"
+              :class="{'ml-0': $vuetify.breakpoint.smAndDown, 'ml-3': $vuetify.breakpoint.mdAndUp}">
+        <template>
+          <div class="billing-card__title">Past invoice</div>
+          <past-invoice />
+        </template>
+      </v-card>
     </v-flex>
   </v-layout>
 </template>
 
 <script>
 import MasterCardIcon from '@/components/particles/icons/MasterCardIcon';
+import PastInvoice from "../tables/PastInvoice";
 
 export default {
   name: 'Billing',
   components: {
+    PastInvoice,
     MasterCardIcon,
   },
   data () {

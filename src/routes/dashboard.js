@@ -1,5 +1,4 @@
 import Home from '@/components/pages/dashboard/Home';
-import PastInvoice from '@/components/pages/dashboard/PastInvoice';
 
 export default [
   {
@@ -10,12 +9,4 @@ export default [
       requiresAuth: true
     }
   },
-  {
-    path: '/:section/:name/past-invoice',
-    name: 'past-invoice',
-    component: PastInvoice,
-    meta: {
-      requiresAuth: true
-    }
-  }
 ]
