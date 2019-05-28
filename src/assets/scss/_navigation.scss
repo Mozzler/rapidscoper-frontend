@@ -73,7 +73,7 @@
   }
 
   .sidebar-section {
-    margin: 14px 0 14px 24px;
+    margin: 14px 0 0 24px;
     text-transform: uppercase;
     color: rgba($black, 0.6);
     letter-spacing: 0.05em;
@@ -84,7 +84,7 @@
 
   .sidebar-add {
     margin-top: 12px;
-    margin-left: 15px;
+    margin-left: 24px;
     font-size: 14px;
     cursor: pointer;
     color: $black !important;
@@ -161,6 +161,10 @@
     height: 100%;
     overflow-y: hidden;
     position: relative;
+  }
+
+  .sidebar-add {
+    margin-left: 15px !important;
   }
 }
 

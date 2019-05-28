@@ -46,8 +46,5 @@ export default [
     path: '/accept-invite',
     name: 'accept-invite',
     component: AuthFlow,
-    meta: {
-      guest: true
-    }
   }
 ];
