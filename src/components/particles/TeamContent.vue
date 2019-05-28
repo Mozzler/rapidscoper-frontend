@@ -75,7 +75,7 @@ export default {
         case 'Projects':
           return 'Create new project';
         case 'Users':
-          return 'Invite user';
+          return 'Email to invite user';
         default:
           return null;
       }

@@ -26,7 +26,7 @@
         <template v-if="!paid">
           <div class="billing-card__title">Upgrade to Premium</div>
           <div>Unlock all features of RapidScoper include unlimited projects and export by upgrading to Premium Subscription Plan</div>
-          <v-btn large class="btn-rapid primary mt-4">
+          <v-btn large class="btn-rapid primary mt-4" @click="showUpgradePlanModal">
             Upgrade
           </v-btn>
         </template>
@@ -51,7 +51,7 @@ export default {
   },
   data () {
     return {
-      paid: true,
+      paid: false,
     };
   },
   methods: {
@@ -61,6 +61,9 @@ export default {
     },
     showChangePlanModal() {
       this.$root.$emit('change-plan');
+    },
+    showUpgradePlanModal() {
+      this.$root.$emit('upgrade-to-premium');
     }
   },
   computed: {
