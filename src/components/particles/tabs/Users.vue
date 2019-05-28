@@ -16,13 +16,30 @@
         </td>
         <td>{{ props.item.email }}</td>
         <td>
-          <v-autocomplete
-            ref="role"
-            v-model="props.item.role"
-            :items="roles"
-            placeholder="Select role ..."
-            class="rapid-select"
-          ></v-autocomplete>
+          <v-flex>
+            <v-menu offset-y>
+              <template v-slot:activator="{ on }">
+                {{ props.item.role }}
+                <v-btn icon v-on="on" class="dropdown-action">
+                  <v-icon :ref="'arrow'">arrow_drop_down</v-icon>
+                </v-btn>
+              </template>
+              <div class="dropdown-list">
+                <v-list>
+                  <v-list-tile
+                    v-for="(role, key) in roles" :key="key" class="sidebar__item">
+                    <v-list-tile-content>
+                      <v-list-tile-title>
+                        <v-layout align-center justify-space-between row fill-height>
+                          <span>{{ role }}</span>
+                        </v-layout>
+                      </v-list-tile-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-list>
+              </div>
+            </v-menu>
+          </v-flex>
         </td>
         <td class="text-xs-left">
           <v-icon>delete</v-icon>
@@ -34,8 +51,10 @@
 </template>
 
 <script>
+import AbsoluteMenu from "../menus/AbsoluteMenu";
 export default {
   name: 'Users',
+  components: {AbsoluteMenu},
   data () {
     return {
       roles: [
@@ -76,6 +95,9 @@ export default {
         }
       ],
     };
+  },
+  mounted(){
+    console.log(this.$refs.arrow);
   }
 };
 </script>
