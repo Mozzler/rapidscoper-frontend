@@ -49,7 +49,7 @@
     ],
     methods: {
       showPaymentInfoModal() {
-        console.log('test');
+        this.closeModal();
         this.$root.$emit('payment-info');
       }
     }

@@ -113,10 +113,11 @@
     },
     methods: {
       next() {
+        this.closeModal();
         this.$root.$emit('payment-successfully');
       },
       cancel() {
-        //this.closeModal();
+        this.closeModal();
         this.$root.$emit('incorrect-data');
       }
     },
