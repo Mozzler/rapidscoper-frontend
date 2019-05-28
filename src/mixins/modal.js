@@ -1,19 +1,22 @@
 export default {
-  props: {
-    show: {
-      type: Boolean,
-      default: false
-    },
-  },
   data() {
     return {
-      dialog: this.show
+      dialog: false
     }
   },
-  watch: {
-    show() {
-      this.dialog = this.show;
+  beforeMount() {
+    this.$root.$on(this.$options.name, this.showModal);
+  },
+  methods: {
+    closeModal() {
+      this.dialog = false;
     },
+    showModal() {
+      this.dialog = true;
+    }
+  },
+  beforeDestroy() {
+    this.$root.$off(this.$options.name, this.showModal);
   },
   computed: {
     isMobileDevice() {

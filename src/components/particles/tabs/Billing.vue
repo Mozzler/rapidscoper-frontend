@@ -1,14 +1,12 @@
 <template>
   <v-layout row wrap>
-    <change-plan-modal :show="showChangePlanModal"
-                       @close-modal="() => showChangePlanModal = false" />
     <v-flex xs12 sm12 md7>
       <v-layout column wrap>
         <v-card class="billing-card mt-3">
           <div class="billing-card__title">Your Plan</div>
           <div>You are on a Basic Plan.</div>
           <div class="text-greyed billing-card__text">It's free forever.</div>
-          <div class="billing-card__action" @click="showChangePlanModal = true">Change Plan</div>
+          <div class="billing-card__action" @click="showChangePlanModal">Change Plan</div>
         </v-card>
         <v-card class="billing-card mt-3">
           <div class="billing-card__title">Payment Details</div>
@@ -45,24 +43,24 @@
 
 <script>
 import MasterCardIcon from '@/components/particles/icons/MasterCardIcon';
-import ChangePlanModal from '@/components/particles/modals/ChangePlan';
 
 export default {
   name: 'Billing',
   components: {
     MasterCardIcon,
-    ChangePlanModal
   },
   data () {
     return {
       paid: true,
-      showChangePlanModal: false
     };
   },
   methods: {
     goTo() {
       let path = `${this.$route.path}/past-invoice`;
       this.$router.push(path);
+    },
+    showChangePlanModal() {
+      this.$root.$emit('change-plan');
     }
   },
   computed: {

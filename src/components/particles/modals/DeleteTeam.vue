@@ -5,7 +5,7 @@
 
         <div class="modal-header">
           <h1> Delete team </h1>
-          <v-btn icon class="modal-close-btn" @click="() => $emit('close-modal')">
+          <v-btn icon class="modal-close-btn" @click="closeModal">
             <v-icon>close</v-icon>
           </v-btn>
         </div>
@@ -24,11 +24,11 @@
             'text-xs-right': !isMobileDevice,
             'text-xs-center': isMobileDevice }">
             <v-btn class="btn-rapid mr-3" large outline
-                   @click="() => $emit('close-modal')">
+                   @click="closeModal">
               Cancel
             </v-btn>
             <v-btn class="btn-rapid primary" large
-                   @click="() => $emit('close-modal')">
+                   @click="closeModal">
               Delete
             </v-btn>
           </v-flex>
@@ -40,13 +40,13 @@
 
 <script>
   import Navigation from '@/mixins/navigation';
-  import Modal from '@/mixins/modal';
+  import ModalMixin from '@/mixins/modal';
 
   export default {
-    name: "DeleteTeam",
+    name: "delete-team",
     mixins: [
       Navigation,
-      Modal
+      ModalMixin
     ],
   }
 </script>

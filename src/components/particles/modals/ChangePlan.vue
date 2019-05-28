@@ -5,7 +5,7 @@
 
         <div class="modal-header">
           <h1> Change Plan </h1>
-          <v-btn icon class="modal-close-btn" @click="() => $emit('close-modal')">
+          <v-btn icon class="modal-close-btn" @click="closeModal">
             <v-icon>close</v-icon>
           </v-btn>
         </div>
@@ -39,8 +39,7 @@
           <v-flex shrink mt-4 :class="{
             'text-xs-right': !isMobileDevice,
             'text-xs-center': isMobileDevice }">
-            <v-btn class="btn-rapid mr-3" large outline
-                   @click="() => $emit('close-modal')">
+            <v-btn class="btn-rapid mr-3" large outline @click="closeModal">
               Cancel
             </v-btn>
             <v-btn class="btn-rapid primary" large
@@ -57,17 +56,17 @@
 </template>
 
 <script>
-  import Modal from '@/mixins/modal';
+  import ModalMixin from '@/mixins/modal'
 
   export default {
-    name: 'ChangePlan',
+    name: 'change-plan',
     mixins: [
-      Modal
+      ModalMixin
     ],
     data() {
       return {
         active: 'basic',
-        checked: 'basic'
+        checked: 'basic',
       }
     },
     methods: {

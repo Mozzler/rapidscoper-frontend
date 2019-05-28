@@ -5,7 +5,7 @@
 
         <div class="modal-header">
           <h1> <input v-model="data.title" /> </h1>
-          <v-btn icon class="modal-close-btn" @click="() => $emit('close-modal')">
+          <v-btn icon class="modal-close-btn" @click="closeModal">
             <v-icon>close</v-icon>
           </v-btn>
         </div>
@@ -46,11 +46,11 @@
             'text-xs-right': !isMobileDevice,
             'text-xs-center': isMobileDevice }">
             <v-btn class="btn-rapid mr-3" large outline
-                   @click="() => $emit('close-modal')">
+                   @click="closeModal">
               Cancel
             </v-btn>
             <v-btn class="btn-rapid primary" large
-                   @click="() => $emit('close-modal')">
+                   @click="closeModal">
               {{ isMobileDevice ? 'Create' : 'Create project' }}
             </v-btn>
           </v-flex>
@@ -61,12 +61,12 @@
 </template>
 
 <script>
-  import Modal from '@/mixins/modal';
+  import ModalMixin from '@/mixins/modal';
 
   export default {
-    name: 'CreateProject',
+    name: 'create-project',
     mixins: [
-      Modal
+      ModalMixin
     ],
     data() {
       return {
@@ -76,7 +76,7 @@
         policies: [
           'Private', 'Public'
         ],
-        data: null
+        data: null,
       }
     },
     beforeMount() {

@@ -51,7 +51,7 @@
       </absolute-menu>
       <team-list v-else />
 
-      <div class="sidebar-add" @click="showAddTeamModal = true">
+      <div class="sidebar-add" @click="showAddTeamModal">
         <v-icon>add</v-icon>
         <span v-if="!minified">
           Add team
@@ -63,9 +63,7 @@
       <logo-rapid-scope />
     </div>
 
-    <add-team-modal v-if="showAddTeamModal"
-                    :show="showAddTeamModal = true"
-                    @close-modal="() => showAddTeamModal = false"/>
+    <add-team-modal />
   </v-navigation-drawer>
 </template>
 
@@ -92,7 +90,6 @@ export default {
       drawer: true,
       right: null,
       teamMenu: false,
-      showAddTeamModal: false,
 
       items: [
         {
@@ -122,6 +119,9 @@ export default {
     }
   },
   methods: {
+    showAddTeamModal() {
+      this.$root.$emit('add-team');
+    },
     updateState () {
       new Promise(resolve => {
         this.teamMenu = false;

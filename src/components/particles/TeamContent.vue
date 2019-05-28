@@ -25,9 +25,6 @@
     <tab-users v-if="activeTab === 'Users'" />
     <tab-billing v-if="activeTab === 'Billing'" />
     <tab-advanced v-if="activeTab === 'Advanced'" />
-
-    <create-project-modal :show="modals.Projects" @close-modal="closeModal" />
-    <invite-user-modal :show="modals.Users" @close-modal="closeModal" />
   </v-container>
 </template>
 
@@ -41,19 +38,12 @@ import TabAdvanced from '@/components/particles/tabs/Advanced';
 
 import DashboardActionBtn from './buttons/DashboardActionButton';
 
-import InviteUserModal from '@/components/particles/modals/InviteUser';
-import CreateProjectModal from '@/components/particles/modals/CreateProject';
-import DeleteTeamModal from '@/components/particles/modals/DeleteTeam';
-
 export default {
   name: 'TeamContent',
   mixins: [
     Navigation
   ],
   components: {
-    InviteUserModal,
-    CreateProjectModal,
-    DeleteTeamModal,
     DashboardActionBtn,
     TabProjects,
     TabUsers,
@@ -64,10 +54,10 @@ export default {
     return {
       tabs: ['Projects', 'Users', 'Billing', 'Advanced'],
       activeTab: 'Projects',
+
       modals: {
-        Projects: false,
-        Users: false,
-        Advanced: false
+        Projects: 'create-project',
+        Users: 'invite-user',
       }
     };
   },
@@ -76,11 +66,8 @@ export default {
       this.activeTab = item;
     },
     showModal() {
-      this.modals[this.activeTab] = true;
+      this.$root.$emit(this.modals[this.activeTab]);
     },
-    closeModal() {
-      this.modals[this.activeTab] = false;
-    }
   },
   computed: {
     btnText () {

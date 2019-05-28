@@ -5,7 +5,7 @@
 
         <div class="modal-header">
           <h1> Invite user </h1>
-          <v-btn icon class="modal-close-btn" @click="() => $emit('close-modal')">
+          <v-btn icon class="modal-close-btn" @click="closeModal">
             <v-icon>close</v-icon>
           </v-btn>
         </div>
@@ -33,14 +33,14 @@
 
             <v-flex shrink pl-3 v-if="!isMobileDevice">
               <v-btn class="btn-rapid primary" large
-                     @click="() => $emit('close-modal')">
+                     @click="closeModal">
                 Invite
               </v-btn>
             </v-flex>
           </v-layout>
           <v-flex shrink class="text-xs-right" v-if="isMobileDevice">
             <v-btn class="btn-rapid primary" large
-                   @click="() => $emit('close-modal')">
+                   @click="closeModal">
               Invite
             </v-btn>
           </v-flex>
@@ -51,12 +51,12 @@
 </template>
 
 <script>
-  import Modal from '@/mixins/modal';
+  import ModalMixin from '@/mixins/modal';
 
   export default {
-    name: 'InviteUser',
+    name: 'invite-user',
     mixins: [
-      Modal
+      ModalMixin
     ],
     data() {
       return {
