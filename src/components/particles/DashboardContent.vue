@@ -44,7 +44,6 @@
         <span class="tr-border" />
       </template>
     </v-data-table>
-    <create-project-modal :show="showCreateProjectModal" @close-modal="closeModal" />
   </v-container>
 </template>
 
@@ -104,11 +103,8 @@ export default {
   },
   methods: {
     showModal() {
-      this.showCreateProjectModal = true;
+      this.$root.$emit('create-project');
     },
-    closeModal() {
-      this.showCreateProjectModal = false;
-    }
   }
 };
 </script>
