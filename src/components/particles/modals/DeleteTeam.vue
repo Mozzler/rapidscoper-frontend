@@ -40,33 +40,14 @@
 
 <script>
   import Navigation from '@/mixins/navigation';
+  import Modal from '@/mixins/modal';
 
   export default {
     name: "DeleteTeam",
     mixins: [
-      Navigation
+      Navigation,
+      Modal
     ],
-    props: {
-      show: {
-        type: Boolean,
-        default: false
-      },
-    },
-    data() {
-      return {
-        dialog: this.show
-      }
-    },
-    watch: {
-      show() {
-        this.dialog = this.show;
-      },
-    },
-    computed: {
-      isMobileDevice() {
-        return this.$store.state.auth.isMobileDevice;
-      }
-    },
   }
 </script>
 

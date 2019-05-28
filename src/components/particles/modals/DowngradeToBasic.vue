@@ -4,7 +4,7 @@
       <v-card class="modal-card">
 
         <div class="modal-header">
-          <h1> Create new team </h1>
+          <h1> Downgrade to Basic </h1>
           <v-btn icon class="modal-close-btn" @click="() => $emit('close-modal')">
             <v-icon>close</v-icon>
           </v-btn>
@@ -13,17 +13,10 @@
         <v-card-text class="mt-3 padding-0">
           <v-layout row wrap>
             <v-flex xs12>
-              Name your team.
+              After downgrading, you will lose access to all your projects except the last modified one.
             </v-flex>
-            <v-flex xs12 mt-4>
-              <v-text-field
-                key="team name"
-                name="Team name"
-                placeholder="Team name"
-                v-model="team"
-                :error-messages="errors.first('Team name')"
-                solo
-              ></v-text-field>
+            <v-flex xs12 mt-3>
+              Inaccessible projects will be deleted after 10 days.
             </v-flex>
           </v-layout>
           <v-flex shrink mt-4 :class="{
@@ -35,7 +28,7 @@
             </v-btn>
             <v-btn class="btn-rapid primary" large
                    @click="() => $emit('close-modal')">
-              {{ isMobileDevice ? 'Create' : 'Create team' }}
+              Downgrade
             </v-btn>
           </v-flex>
         </v-card-text>
@@ -45,21 +38,14 @@
 </template>
 
 <script>
+  import Navigation from '@/mixins/navigation';
   import Modal from '@/mixins/modal';
 
   export default {
-    name: "AddTeam",
+    name: "DowngradeToBasic",
     mixins: [
+      Navigation,
       Modal
     ],
-    data() {
-      return {
-        team: null,
-      }
-    },
   }
 </script>
-
-<style scoped>
-
-</style>

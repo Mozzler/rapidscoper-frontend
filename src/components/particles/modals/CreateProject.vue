@@ -61,44 +61,30 @@
 </template>
 
 <script>
-export default {
-  name: 'CreateProject',
-  props: [
-    'show'
-  ],
- data() {
-    return {
-      dialog: this.show,
-      teams: [
-        'The Bumpy Hamsters', 'West World', 'The Ramblers'
-      ],
-      policies: [
-        'Private', 'Public'
-      ],
-      data: null
-    }
- },
-  beforeMount() {
-      this.data = {
-        team: this.teams[0],
-        policy: this.policies[0],
-        title: 'Untitled'
+  import Modal from '@/mixins/modal';
+
+  export default {
+    name: 'CreateProject',
+    mixins: [
+      Modal
+    ],
+    data() {
+      return {
+        teams: [
+          'The Bumpy Hamsters', 'West World', 'The Ramblers'
+        ],
+        policies: [
+          'Private', 'Public'
+        ],
+        data: null
       }
-  },
-  computed: {
-    isMobileDevice() {
-      return this.$store.state.auth.isMobileDevice;
-    }
-  },
-  watch: {
-    show() {
-      this.dialog = this.show;
     },
-  }
-
-};
+    beforeMount() {
+        this.data = {
+          team: this.teams[0],
+          policy: this.policies[0],
+          title: 'Untitled'
+        }
+    },
+  };
 </script>
-
-<style scoped>
-
-</style>

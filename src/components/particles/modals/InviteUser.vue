@@ -51,41 +51,23 @@
 </template>
 
 <script>
-export default {
-  name: 'InviteUser',
-  props: [
-    'show'
-  ],
- data() {
-    return {
-      dialog: false,
-      user: null,
-      roles: [
-        'Manager', 'Full Member', 'Client'
-      ],
-    }
- },
-  beforeMount() {
-    this.dialog = this.show;
-    this.user = {
-      role: 'Full Member',
-      entity: null
-    }
-  },
-  watch: {
-    show() {
-      this.dialog = this.show;
-    }
-  },
-  computed: {
-    isMobileDevice() {
-      return this.$store.state.auth.isMobileDevice;
-    }
-  }
+  import Modal from '@/mixins/modal';
 
-};
+  export default {
+    name: 'InviteUser',
+    mixins: [
+      Modal
+    ],
+    data() {
+      return {
+        user: {
+          role: 'Full Member',
+          entity: null
+        },
+        roles: [
+          'Manager', 'Full Member', 'Client'
+        ],
+      }
+    },
+  };
 </script>
-
-<style scoped>
-
-</style>

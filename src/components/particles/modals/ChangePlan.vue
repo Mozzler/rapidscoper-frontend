@@ -57,51 +57,39 @@
 </template>
 
 <script>
-export default {
-  name: 'ChangePlan',
-  props: [
-    'show'
-  ],
- data() {
-    return {
-      dialog: this.show,
-      active: 'basic',
-      checked: 'basic'
-    }
- },
-  methods: {
-    changePlan(plan) {
-      this.checked = plan;
-    },
-    updatePlan() {
-      this.active = this.checked;
-    }
-  },
-  computed: {
-    btnText() {
-      switch (true) {
-        case this.checked === 'basic' && this.active === 'primary':
-          return 'Downgrade';
-        case this.checked === 'primary' && this.active === 'basic':
-          return 'Upgrade';
-        default:
-          return 'Downgrade';
+  import Modal from '@/mixins/modal';
 
+  export default {
+    name: 'ChangePlan',
+    mixins: [
+      Modal
+    ],
+    data() {
+      return {
+        active: 'basic',
+        checked: 'basic'
       }
     },
-    isMobileDevice() {
-      return this.$store.state.auth.isMobileDevice;
-    }
-  },
-  watch: {
-    show() {
-      this.dialog = this.show;
+    methods: {
+      changePlan(plan) {
+        this.checked = plan;
+      },
+      updatePlan() {
+        this.active = this.checked;
+      }
     },
-  }
+    computed: {
+      btnText() {
+        switch (true) {
+          case this.checked === 'basic' && this.active === 'primary':
+            return 'Downgrade';
+          case this.checked === 'primary' && this.active === 'basic':
+            return 'Upgrade';
+          default:
+            return 'Downgrade';
 
-};
+        }
+      },
+    },
+  };
 </script>
-
-<style scoped>
-
-</style>
