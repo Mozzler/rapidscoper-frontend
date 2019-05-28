@@ -8,6 +8,7 @@
 
   .sidebar__item {
     cursor: pointer;
+    border-left: 2px solid $white;
 
     &:hover {
       border-left: 2px solid $primary;
@@ -31,6 +32,7 @@
   .sidebar__item--active {
     border-left: 2px solid $primary;
     background-color: rgba($primary, 0.05);
+    padding-left: -2px !important;
 
     i {
       color: $primary;
@@ -73,7 +75,7 @@
   }
 
   .sidebar-section {
-    margin: 14px 0 0 24px;
+    margin: 18px 0 -2px 24px;
     text-transform: uppercase;
     color: rgba($black, 0.6);
     letter-spacing: 0.05em;
@@ -83,8 +85,8 @@
   }
 
   .sidebar-add {
-    margin-top: 12px;
-    margin-left: 24px;
+    margin-top: 19px;
+    margin-left: 23px;
     font-size: 14px;
     cursor: pointer;
     color: $black !important;
