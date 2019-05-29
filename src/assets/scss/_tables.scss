@@ -11,6 +11,7 @@
   cursor: default;
   box-shadow: 0 2px 3px rgba(0,0,0, 0.2);
   border-radius: 4px;
+  position: relative;
 
   thead {
     tr {
@@ -20,6 +21,8 @@
   }
 
   tbody {
+    position: relative;
+
     .tr-border {
       width: calc(100% - 48px);
       border-bottom: 1px solid $grey1;

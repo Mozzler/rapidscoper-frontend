@@ -19,7 +19,7 @@
       </div>
       <div class="text-bold">
         Jennifer Foster
-        <dropdown :list="['Account Settings', 'Logout']"
+        <dropdown :list="settings"
                   @update="value => handleDropdown(value)" />
       </div>
     </div>
@@ -96,6 +96,7 @@ export default {
       right: null,
       teamMenu: false,
 
+      settings: ['Account Settings', 'Log out'],
       items: [
         {
           title: 'All projects',
