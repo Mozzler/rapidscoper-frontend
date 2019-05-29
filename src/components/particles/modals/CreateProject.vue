@@ -15,34 +15,22 @@
             <v-flex xs6>
               <div>Team</div>
             </v-flex>
-            <v-flex xs6>
-              <v-autocomplete
-                ref="select"
-                v-model="data.team"
-                :items="teams"
-                placeholder="Select..."
-                required
-                class="rapid-select align-right"
-              ></v-autocomplete>
+            <v-flex xs6 text-xs-right>
+              <dropdown :list="teams" :selected="data.team"
+                        @update="value => data.team = value" />
             </v-flex>
           </v-layout>
-          <v-layout row wrap>
+          <v-layout row wrap mt-3>
             <v-flex xs6>
               <div>Privacy</div>
             </v-flex>
-            <v-flex xs6>
-              <v-autocomplete
-                ref="select"
-                v-model="data.policy"
-                :items="policies"
-                placeholder="Select..."
-                required
-                class="rapid-select align-right"
-              ></v-autocomplete>
+            <v-flex xs6 text-xs-right>
+              <dropdown :list="policies" :selected="data.policy"
+                        @update="value => data.policy = value" />
             </v-flex>
           </v-layout>
 
-          <v-flex shrink mt-4 :class="{
+          <v-flex shrink class="mt-40" :class="{
             'text-xs-right': !isMobileDevice,
             'text-xs-center': isMobileDevice }">
             <v-btn class="btn-rapid mr-3" large outline
@@ -62,11 +50,15 @@
 
 <script>
   import ModalMixin from '@/mixins/modal';
+  import Dropdown from "../menus/Dropdown";
 
   export default {
     name: 'create-project',
+    components: {
+      Dropdown
+    },
     mixins: [
-      ModalMixin
+      ModalMixin,
     ],
     data() {
       return {
@@ -74,17 +66,17 @@
           'The Bumpy Hamsters', 'West World', 'The Ramblers'
         ],
         policies: [
-          'Private', 'Public'
+          'View', 'Edit'
         ],
         data: null,
       }
     },
     beforeMount() {
-        this.data = {
-          team: this.teams[0],
-          policy: this.policies[0],
-          title: 'Untitled'
-        }
+      this.data = {
+        team: this.teams[0],
+        policy: this.policies[0],
+        title: 'Untitled'
+      }
     },
   };
 </script>

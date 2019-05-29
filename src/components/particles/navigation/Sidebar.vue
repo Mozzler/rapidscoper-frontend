@@ -19,6 +19,8 @@
       </div>
       <div class="text-bold">
         Jennifer Foster
+        <dropdown :list="['Account Settings', 'Logout']"
+                  @update="value => handleDropdown(value)" />
       </div>
     </div>
 
@@ -44,11 +46,12 @@
       </v-list>
 
       <absolute-menu v-if="minified"
-                     :x="22" :y="230" :visible="teamMenu">
+        :x="22" :y="230" :visible="teamMenu">
         <template #content>
           <team-list />
         </template>
       </absolute-menu>
+
       <team-list v-else />
 
       <div class="sidebar-add" @click="showAddTeamModal">
@@ -73,6 +76,7 @@ import Navigation from '@/mixins/navigation';
 import TeamList from "../lists/TeamList";
 import AbsoluteMenu from "../menus/AbsoluteMenu";
 import AddTeamModal from "@/components/particles/modals/AddTeam";
+import Dropdown from "../menus/Dropdown";
 
 export default {
   name: 'Sidebar',
@@ -80,7 +84,8 @@ export default {
     AbsoluteMenu,
     TeamList,
     LogoRapidScope,
-    AddTeamModal
+    AddTeamModal,
+    Dropdown
   },
   mixins: [
     Navigation
@@ -129,6 +134,15 @@ export default {
       }).then(() => {
         this.$store.commit('updateSidebarState', !this.minified);
       });
+    },
+    handleDropdown(value) {
+      switch (value) {
+        case 'Logout':
+          this.$store.dispatch('AUTH_LOGOUT')
+            .then(() => {
+              this.$router.push('/');
+            });
+      }
     }
   }
 };

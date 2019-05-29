@@ -170,6 +170,9 @@
   }
 }
 
-.v-menu__content {
-  min-width: 250px !important;
+.sidebar-popup-menu {
+  .v-menu__content {
+    min-width: 250px !important;
+  }
 }
+

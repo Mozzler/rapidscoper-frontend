@@ -65,9 +65,20 @@
       }
     }
 
-    .v-list__tile--active {
+    a.v-list__tile.v-list__tile--link.theme--light {
+      text-indent: 0 !important;
+      margin: 0 !important;
+      padding: 0 28px !important;
+    }
+  }
+
+  .v-list__tile--active {
+    .v-list__tile__content {
+      margin-left: -16px !important;
+    }
+
+    .item-active {
       color: $white !important;
-      background-color: $light-black !important;
 
       &:before {
         content: "\A";
@@ -76,13 +87,9 @@
         border-radius: 50%;
         background: $white;
         display: inline-block;
-        margin-left: -4px;
-      }
-
-      &:hover {
-        background: rgba(0, 0, 0, 0.3) !important;
+        margin-right: 12px;
+        margin-bottom: 3px;
       }
     }
-
   }
 }

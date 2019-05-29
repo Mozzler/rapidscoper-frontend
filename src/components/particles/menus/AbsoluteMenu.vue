@@ -3,7 +3,7 @@
           :position-x="x"
           :position-y="y"
           absolute>
-    <slot name="content" />
+    <slot name="content" class="sidebar-popup-menu" />
   </v-menu>
 </template>
 
