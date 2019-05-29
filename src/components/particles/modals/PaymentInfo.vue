@@ -109,7 +109,7 @@
       },
       errors() {
         return true;
-      }
+      },
     },
     methods: {
       next() {

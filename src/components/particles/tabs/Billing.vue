@@ -14,7 +14,7 @@
             <master-card-icon class="billing-card__logo"/>
             <span class="ml-2">**** **** **** 4149</span>
           </div>
-          <div class="billing-card__action">
+          <div class="billing-card__action" @click="showUpdatePaymentModal">
             {{ !isMobileDevice ? 'Update payment info' : 'Update' }}
           </div>
         </v-card>
@@ -73,6 +73,9 @@ export default {
     },
     showUpgradePlanModal() {
       this.$root.$emit('upgrade-to-premium');
+    },
+    showUpdatePaymentModal() {
+      this.$root.$emit('payment-info');
     }
   },
   computed: {
