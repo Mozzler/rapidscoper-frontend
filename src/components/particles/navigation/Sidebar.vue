@@ -19,8 +19,10 @@
       </div>
       <div class="text-bold">
         Jennifer Foster
-        <dropdown :list="settings"
-                  @update="value => handleDropdown(value)" />
+        <span class="menu-bottom">
+          <dropdown :list="settings"
+                    @update="value => handleDropdown(value)" />
+        </span>
       </div>
     </div>
 

@@ -22,14 +22,18 @@
   padding-right: 16px;
   .v-icon {
     color: $primary !important;
-    font-size: 32px;
     margin-top: 2px;
   }
 }
 
 .dropdown-action {
   padding: 0 !important;
-  margin: -5px 0 0 0!important;
+  margin: -4px 0 0 0 !important;
   width: 20px !important;
   height: 20px !important;
+
+  .v-icon {
+    font-size: 22px !important;
+  };
 }
+

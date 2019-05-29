@@ -1,13 +1,9 @@
 <template>
   <div class="table-container">
-    <v-autocomplete
-      ref="select"
-      v-model="active"
-      :items="dropdown"
-      placeholder="Select..."
-      required
-      class="rapid-select select-bold"
-    ></v-autocomplete>
+    <div class="table-dropdown menu-relative">
+      <dropdown :list="dropdown" :selected="active"
+        @update="value => active = value"/>
+    </div>
 
     <v-data-table
       :headers="headers"
@@ -44,8 +40,10 @@
 </template>
 
 <script>
+import Dropdown from "../menus/Dropdown";
 export default {
   name: 'Projects',
+  components: {Dropdown},
   data () {
     return {
       active: 'Active',

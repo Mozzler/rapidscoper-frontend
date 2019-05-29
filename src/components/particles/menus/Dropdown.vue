@@ -1,7 +1,7 @@
 <template>
   <v-menu offset-y>
     <template v-slot:activator="{ on }">
-      {{ selected }}
+      <span :class="{'text-bold': bold}">{{ selected }}</span>
       <v-btn icon v-on="on" class="dropdown-action">
         <v-icon>arrow_drop_down</v-icon>
       </v-btn>
