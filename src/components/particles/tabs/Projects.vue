@@ -15,7 +15,7 @@
       <template v-slot:items="props">
         <tr @click="props.expanded = !props.expanded">
           <td>
-            {{ props.item.name }}
+            <div @click="() => goTo(props.item.name)">{{ props.item.name }}</div>
             <span class="index" v-if="props.item.index">
               {{ props.item.index }}
             </span>
@@ -41,9 +41,14 @@
 
 <script>
 import Dropdown from "../menus/Dropdown";
+import Navigation from "@/mixins/navigation";
+
 export default {
   name: 'Projects',
   components: {Dropdown},
+  mixins: [
+    Navigation
+  ],
   data () {
     return {
       active: 'Active',
@@ -88,10 +93,16 @@ export default {
         }
       ]
     };
+  },
+  methods: {
+    goTo (item) {
+      this.$router.push({
+        name: 'projects',
+        params: {
+          name: this.itemToParam(item)
+        }
+      });
+    }
   }
 };
 </script>
-
-<style scoped>
-
-</style>

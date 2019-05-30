@@ -49,13 +49,11 @@
 
 <script>
 import DashboardActionBtn from '@/components/particles/buttons/DashboardActionButton';
-import CreateProjectModal from '@/components/particles/modals/CreateProject';
 
 export default {
   name: 'DashboardContent',
   components: {
     DashboardActionBtn,
-    CreateProjectModal
   },
   data () {
     return {

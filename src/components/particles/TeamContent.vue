@@ -15,7 +15,7 @@
         </template>
       </dashboard-action-btn>
     </v-layout>
-    <v-tabs fixed-tabs class="tabs">
+    <v-tabs fixed-tabs class="tabs team-tabs">
       <v-tab v-for="tab in tabs" :key="tab" @click="setTab(tab)">
         {{ tab }}
       </v-tab>
@@ -65,7 +65,7 @@ export default {
     setTab (item) {
       this.activeTab = item;
     },
-    showModal() {
+    showModal () {
       this.$root.$emit(this.modals[this.activeTab]);
     },
   },
