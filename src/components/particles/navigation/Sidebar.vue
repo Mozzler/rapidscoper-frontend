@@ -140,7 +140,7 @@ export default {
     },
     handleDropdown(value) {
       switch (value) {
-        case 'Logout':
+        case 'Log out':
           this.$store.dispatch('AUTH_LOGOUT')
             .then(() => {
               this.$router.push('/');

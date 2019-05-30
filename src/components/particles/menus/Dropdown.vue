@@ -33,6 +33,10 @@
         type: String,
         required: false
       },
+      bold: {
+        type: Boolean,
+        default: false
+      }
     }
   }
 </script>
