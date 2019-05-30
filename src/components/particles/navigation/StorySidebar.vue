@@ -1,6 +1,6 @@
 <template>
-  <div class="l-sidebar">
-    <div>
+  <div class="l-sidebar mini-sidebar">
+    <div class="sidebar-section">
       REQ.
     </div>
 
