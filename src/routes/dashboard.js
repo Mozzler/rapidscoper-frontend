@@ -3,6 +3,14 @@ import UserStories from '@/components/pages/user-stories/UserStories';
 
 export default [
   {
+    path: '/projects/:name',
+    name: 'projects',
+    component: UserStories,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
     path: '/:section/:name',
     name: 'dashboard',
     component: Home,
@@ -10,12 +18,4 @@ export default [
       requiresAuth: true
     }
   },
-  {
-    path: '/projects/:name',
-    name: 'projects',
-    component: UserStories,
-    meta: {
-      requiresAuth: true
-    }
-  }
 ];

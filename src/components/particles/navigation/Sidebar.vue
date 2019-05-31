@@ -29,26 +29,26 @@
     <div class="sidebar-scroll">
       <v-list>
         <v-list-tile v-for="(item, key) in items" :key="key" class="sidebar__item"
-          :class="{'sidebar__item--active': $route.params.name === itemToParam(item.title)}"
-          @click="goTo(item.title, 'dashboard')">
-            <v-list-tile-content>
-              <v-list-tile-title>
-                <v-icon v-if="minified">{{item.icon}}</v-icon>
-                <v-layout v-else align-center justify-space-between row fill-height>
-                    <span>{{ item.title }}</span>
-                    <span class="text-greyed">{{ item.number }}</span>
-                </v-layout>
-              </v-list-tile-title>
-            </v-list-tile-content>
+                     :class="{'sidebar__item--active': $route.params.name === itemToParam(item.title)}"
+                     @click="goTo(item.title, 'dashboard')">
+          <v-list-tile-content>
+            <v-list-tile-title>
+              <v-icon v-if="minified">{{item.icon}}</v-icon>
+              <v-layout v-else align-center justify-space-between row fill-height>
+                <span>{{ item.title }}</span>
+                <span class="text-greyed">{{ item.number }}</span>
+              </v-layout>
+            </v-list-tile-title>
+          </v-list-tile-content>
         </v-list-tile>
-        <div @click="() => teamMenu = !teamMenu" class="sidebar-section"
+        <div @click="() => teamMenu = !teamMenu" class="navigation__title"
              :class="{'text-primary': team && minified}">
           Teams
         </div>
       </v-list>
 
       <absolute-menu v-if="minified"
-        :x="22" :y="230" :visible="teamMenu">
+                     :x="22" :y="230" :visible="teamMenu">
         <template #content>
           <team-list />
         </template>
@@ -73,80 +73,80 @@
 </template>
 
 <script>
-import LogoRapidScope from '../icons/LogoRapidScope';
-import Navigation from '@/mixins/navigation';
-import TeamList from "../lists/TeamList";
-import AbsoluteMenu from "../menus/AbsoluteMenu";
-import AddTeamModal from "@/components/particles/modals/AddTeam";
-import Dropdown from "../menus/Dropdown";
+  import LogoRapidScope from '../icons/LogoRapidScope';
+  import Navigation from '@/mixins/navigation';
+  import TeamList from "../lists/TeamList";
+  import AbsoluteMenu from "../menus/AbsoluteMenu";
+  import AddTeamModal from "@/components/particles/modals/AddTeam";
+  import Dropdown from "../menus/Dropdown";
 
-export default {
-  name: 'Sidebar',
-  components: {
-    AbsoluteMenu,
-    TeamList,
-    LogoRapidScope,
-    AddTeamModal,
-    Dropdown
-  },
-  mixins: [
-    Navigation
-  ],
-  data () {
-    return {
-      drawer: true,
-      right: null,
-      teamMenu: false,
+  export default {
+    name: 'Sidebar',
+    components: {
+      AbsoluteMenu,
+      TeamList,
+      LogoRapidScope,
+      AddTeamModal,
+      Dropdown
+    },
+    mixins: [
+      Navigation
+    ],
+    data () {
+      return {
+        drawer: true,
+        right: null,
+        teamMenu: false,
 
-      settings: ['Account Settings', 'Log out'],
-      items: [
-        {
-          title: 'All projects',
-          number: 24,
-          icon: 'list_alt'
-        },
-        {
-          title: 'Shared with me',
-          number: 4,
-          icon: 'share'
-        },
-        {
-          title: 'Archived',
-          number: 12,
-          icon: 'archive'
+        settings: ['Account Settings', 'Log out'],
+        items: [
+          {
+            title: 'All projects',
+            number: 24,
+            icon: 'list_alt'
+          },
+          {
+            title: 'Shared with me',
+            number: 4,
+            icon: 'share'
+          },
+          {
+            title: 'Archived',
+            number: 12,
+            icon: 'archive'
+          }
+        ]
+      };
+    },
+    computed: {
+      minified () {
+        return this.$store.state.auth.minified;
+      },
+      team () {
+        return this.$route.params.section === 'team';
+      }
+    },
+    methods: {
+      showAddTeamModal() {
+        this.$root.$emit('add-team');
+      },
+      updateState () {
+        new Promise(resolve => {
+          this.teamMenu = false;
+          resolve();
+        }).then(() => {
+          this.$store.commit('updateSidebarState', !this.minified);
+        });
+      },
+      handleDropdown(value) {
+        switch (value) {
+          case 'Log out':
+            this.$store.dispatch('AUTH_LOGOUT')
+              .then(() => {
+                this.$router.push('/');
+              });
         }
-      ]
-    };
-  },
-  computed: {
-    minified () {
-      return this.$store.state.auth.minified;
-    },
-    team () {
-      return this.$route.params.section === 'team';
-    }
-  },
-  methods: {
-    showAddTeamModal() {
-      this.$root.$emit('add-team');
-    },
-    updateState () {
-      new Promise(resolve => {
-        this.teamMenu = false;
-        resolve();
-      }).then(() => {
-        this.$store.commit('updateSidebarState', !this.minified);
-      });
-    },
-    handleDropdown(value) {
-      switch (value) {
-        case 'Log out':
-          this.$store.dispatch('AUTH_LOGOUT')
-            .then(() => {
-              this.$router.push('/');
-            });
       }
     }
-  }
-};
+  };
 </script>

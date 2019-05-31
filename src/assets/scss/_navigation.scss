@@ -108,7 +108,7 @@
 .tabs {
   .theme--light.v-tabs__bar {
     background-color: transparent;
-    border-bottom: 1px solid $grey1;
+    border-bottom: 1px solid $light-grey;
 
     .v-tabs__div {
       margin: 0;
@@ -143,7 +143,7 @@
 .v-navigation-drawer--mini-variant {
   width: 50px !important;
 
-  .sidebar-section {
+  .navigation__title {
     margin: 14px 0 14px 6px;
   }
   .v-list__tile__content {
@@ -180,17 +180,47 @@
   margin-top: 15px;
 }
 
-.sidebar-section {
-  margin: 18px 0 -2px 24px;
+.mini-sidebar {
+  background: $white;
+  box-shadow: 1px 0px 0px rgba(0, 0, 0, 0.1);
+}
+
+.navigation {
+  .v-list__tile {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 40px;
+    text-align: center;
+    cursor: pointer;
+  }
+}
+
+.navigation__title {
   text-transform: uppercase;
   color: rgba($black, 0.6);
   letter-spacing: 0.05em;
   font-weight: 900;
   font-size: 10px;
   cursor: default;
+  width: 100%;
+  line-height: 12px;
 }
 
-.mini-sidebar {
-  background: $white;
-  box-shadow: 1px 0px 0px rgba(0, 0, 0, 0.1);
+.navigation__icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  color: rgba(0, 0, 0, 0.8);
+
+  svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .v-icon {
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.8) !important;
+  }
 }
