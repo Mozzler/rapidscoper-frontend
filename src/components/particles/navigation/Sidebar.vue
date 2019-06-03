@@ -2,9 +2,7 @@
   <v-navigation-drawer
     v-model="drawer"
     :mini-variant="minified"
-    permanent
-    clipped
-    fixed
+    permanent clipped fixed
     class="sidebar"
     app>
 
@@ -27,30 +25,18 @@
     </div>
 
     <div class="sidebar-scroll">
-      <v-list>
-        <v-list-tile v-for="(item, key) in items" :key="key" class="sidebar__item"
-                     :class="{'sidebar__item--active': $route.params.name === itemToParam(item.title)}"
-                     @click="goTo(item.title, 'dashboard')">
-          <v-list-tile-content>
-            <v-list-tile-title>
-              <v-icon v-if="minified">{{item.icon}}</v-icon>
-              <v-layout v-else align-center justify-space-between row fill-height>
-                <span>{{ item.title }}</span>
-                <span class="text-greyed">{{ item.number }}</span>
-              </v-layout>
-            </v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-        <div @click="() => teamMenu = !teamMenu" class="navigation__title"
-             :class="{'text-primary': team && minified}">
-          Teams
-        </div>
-      </v-list>
+      <sidebar-list :list="items" :active="$route.params.name" :minified="minified"
+        title="Teams"  btn="Teams"
+        @update-item="item => goTo(item.title, 'dashboard')"
+        @add="() => teamMenu = !teamMenu" />
 
       <absolute-menu v-if="minified"
                      :x="22" :y="230" :visible="teamMenu">
         <template #content>
-          <team-list />
+          <sidebar-list :list="items" :active="$route.params.name" :minified="minified"
+                        title="Teams"  btn="Teams"
+                        @update-item="item => goTo(item.title, 'dashboard')"
+                        @add="() => teamMenu = !teamMenu" />
         </template>
       </absolute-menu>
 
@@ -79,10 +65,12 @@
   import AbsoluteMenu from "../menus/AbsoluteMenu";
   import AddTeamModal from "@/components/particles/modals/AddTeam";
   import Dropdown from "../menus/Dropdown";
+  import SidebarList from "../lists/SidebarList";
 
   export default {
     name: 'Sidebar',
     components: {
+      SidebarList,
       AbsoluteMenu,
       TeamList,
       LogoRapidScope,
@@ -143,10 +131,10 @@
           case 'Log out':
             this.$store.dispatch('AUTH_LOGOUT')
               .then(() => {
-                this.$router.push('/');
+                this.$router.push('/signup');
               });
         }
-      }
+      },
     }
   };
 </script>

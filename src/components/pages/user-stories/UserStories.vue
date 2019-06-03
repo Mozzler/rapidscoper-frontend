@@ -3,8 +3,8 @@
     <story-header />
     <story-sidebar />
     <story-section />
-    <div class="content"></div>
     <tool-section />
+    <story-content />
   </div>
 </template>
 
@@ -13,6 +13,7 @@ import StoryHeader from "../../particles/navigation/StoryHeader";
 import StorySidebar from "../../particles/navigation/USidebar";
 import StorySection from "../../particles/navigation/StorySection";
 import ToolSection from "../../particles/navigation/ToolSection";
+import StoryContent from "../../particles/layouts/StoryContent";
 
 export default {
   name: "UserStories",
@@ -20,7 +21,8 @@ export default {
     StoryHeader,
     StorySidebar,
     StorySection,
-    ToolSection
+    ToolSection,
+    StoryContent
   },
 }
 </script>

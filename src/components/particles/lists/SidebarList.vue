@@ -1,10 +1,10 @@
 <template>
-  <div class="sidebar-scroll">
+  <div>
     <v-list>
       <v-list-tile
         v-for="(item, key) in list"  :key="key" class="sidebar__item"
-        :class="{'sidebar__item--active': active === item.title }"
-        @click="() => $emit('', item.value)">
+        :class="{'sidebar__item--active': itemToParam(active) === itemToParam(item.title) }"
+        @click="() => $emit('update-item', item.title)">
         <v-list-tile-content>
           <v-list-tile-title>
             <v-layout align-center justify-space-between row fill-height>
@@ -23,8 +23,7 @@
         {{ title }}
       </div>
     </v-list>
-
-    <div class="sidebar-add" @click="showAddTeamModal" v-if="add">
+    <div class="sidebar-add" @click="() => $emit('add')" v-if="add">
       <v-icon>add</v-icon>
       <span v-if="!minified">
           {{ add }}
@@ -34,8 +33,14 @@
 </template>
 
 <script>
+
+import Navigation from '@/mixins/navigation';
+
 export default {
   name: "SidebarList",
+  mixins: [
+    Navigation
+  ],
   props: {
     title: {
       type: String,
@@ -56,11 +61,8 @@ export default {
     },
     add: {
       type: String,
+      default: null
     },
-    clickable: {
-      type: Boolean,
-      default: false
-    }
   }
 };
 </script>

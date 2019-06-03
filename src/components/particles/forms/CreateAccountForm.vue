@@ -1,8 +1,16 @@
 <template>
   <v-container pa-0 class="signup-container">
-    <h1 class="sign-up-header--m47">Create Account</h1>
+    <h1 class="sign-up-header--m43">Create an Account</h1>
     <v-form>
       <v-layout row wrap>
+        <v-flex xs12 class="signup-input">
+          <div>
+            <div class="signup-loader sign-up-header--m43" @click="$refs.inputUpload.click()">
+              <photo-camera />
+            </div>
+            <input v-show="false" ref="inputUpload" type="file" @change="loaded" />
+          </div>
+        </v-flex>
         <v-flex xs12 class="signup-input">
           <v-text-field
             key="first name"
@@ -40,9 +48,13 @@
 <script>
 
 import * as actionConst from '../../../store/actions/auth';
+import PhotoCamera from '../../particles/icons/PhotoCamera';
 
 export default {
   name: 'CreateAccountForm',
+  components: {
+    PhotoCamera
+  },
   data: () => ({
     user: {
       email: null,
@@ -58,13 +70,16 @@ export default {
 
       if (result) {
         this.processing = true;
-        /* this.$store.dispatch(this.action, this.user)
+        this.$store.dispatch(this.action, this.user)
             .then(() => {
-            }); */
+            });
         this.$router.push('/');
       } else {
         this.processing = false;
       }
+    },
+    loaded() {
+      console.log('loaded');
     }
   }
 };

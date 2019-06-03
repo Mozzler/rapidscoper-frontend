@@ -45,6 +45,21 @@
   min-height: 80px;
 }
 
+.signup-loader {
+  display: inline-block;
+  width: 120px;
+  height: 120px;
+  background: $white;
+  border: 1px solid $light-grey;
+  box-sizing: border-box;
+  border-radius: 50%;
+  cursor: pointer !important;
+
+  svg {
+    margin-top: 43px;
+  }
+}
+
 .forgot-link {
   margin-top: 26px;
 }
@@ -69,4 +84,18 @@
 
 .editor {
   border: 1px solid green;
+}
+.user-story__item {
+  &:before {
+    content: '#';
+    margin-right: 7px;
+    color: rgba(0, 0, 0, 0.7);
+  }
+}
+
+.user-story__item--2 {
+  margin-left: 24px;
+}
+.user-story__item--3 {
+  margin-left: 36px;
 }

@@ -41,10 +41,12 @@ export default {
     }
   },
   methods: {
-    async logout (event) {
+    logout (event) {
       event.preventDefault();
-      await this.$store.dispatch(authConst.AUTH_LOGOUT);
-      this.$router.push('/signup');
+      this.$store.dispatch(authConst.AUTH_LOGOUT)
+        .then(() => {
+          this.$router.push('/signup');
+        });
     }
   }
 };
