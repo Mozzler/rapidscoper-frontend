@@ -1,7 +1,7 @@
 export default {
   methods: {
     toTitle (str) {
-      if(str) {
+      if (str) {
         let parts = str.split('-');
 
         parts.forEach((item, index) => {
@@ -14,14 +14,8 @@ export default {
     itemToParam (str) {
       return str.toLowerCase().replace(/ /g, '-');
     },
-    goTo (item, name) {
-      this.$router.push({
-        name: 'dashboard',
-        params: {
-          name: this.itemToParam(item),
-          section: name
-        }
-      });
-    },
+    goTo (path) {
+      this.$router.push(path);
+    }
   }
 };

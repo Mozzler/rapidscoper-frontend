@@ -1,5 +1,11 @@
-.sidebar {
+.dashboard-sidebar {
   width: 272px;
+}
+
+.sidebar {
+  .navigation__title {
+    padding: 8px 0 8px 25px;
+  }
 
   .v-list__tile {
     color: $black !important;

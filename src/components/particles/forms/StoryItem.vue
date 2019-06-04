@@ -7,7 +7,6 @@
         {{ story.description }}
       </div>
       <div class="mt-4">user stories</div>
-
       <div class="user-story">
         <div v-for="item in story.list" contenteditable
              :class="`mt-3 user-story__item user-story__item--${item.level}`"

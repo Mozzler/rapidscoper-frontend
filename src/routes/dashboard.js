@@ -3,6 +3,14 @@ import UserStories from '@/components/pages/user-stories/UserStories';
 
 export default [
   {
+    path: '/projects/:name/user-story/:section',
+    name: 'stories',
+    component: UserStories,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
     path: '/projects/:name',
     name: 'projects',
     component: UserStories,

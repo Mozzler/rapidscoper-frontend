@@ -25,7 +25,7 @@
     .content {
       padding: 48px;
       background-color: $white;
-      box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
       width: 100%;
       margin: 24px 10% 0 10%;
     }
@@ -39,12 +39,12 @@
   .tool-section {
     grid-area: tool-section;
     box-shadow: -1px 0px 1px rgba(0, 0, 0, 0.1);
+    padding: 0 24px;
   }
 
   .story-section, .tool-section {
     background-color: $white;
     z-index: 2;
-    padding: 0 24px;
   }
 }
 

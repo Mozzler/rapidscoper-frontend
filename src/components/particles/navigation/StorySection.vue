@@ -1,35 +1,58 @@
 <template>
-  <div class="story-section pt-4">
-    <div class="navigation__title">
-      user story sections
-    </div>
-    <v-list>
-      <v-list-tile v-for="(item, key) in items" :key="key" class="sidebar__item">
-        <v-list-tile-content>
-          <v-list-tile-title>
-            <v-layout align-center justify-space-between row fill-height>
-              <span>{{ item }}</span>
-            </v-layout>
-          </v-list-tile-title>
-        </v-list-tile-content>
-      </v-list-tile>
-    </v-list>
+  <div class="sidebar story-section pt-4">
+    <sidebar-list
+      title="user story sections"
+      btn="Add section"
+      :list="items"
+      :active="$route.params.section ? $route.params.section : items[0].title"
+      @go="value => goTo(value)"
+      @add="addSection" />
   </div>
 </template>
 
 <script>
+import SidebarList from "../lists/SidebarList";
+import Navigation from '@/mixins/navigation';
+
 export default {
   name: "StorySection",
-  data() {
+  components: {
+    SidebarList,
+  },
+  mixins: [
+    Navigation
+  ],
+  data () {
     return {
       items: [
-        'Mobile Sign Up', 'Login', 'Send Message'
+        {
+          title: 'Mobile Sign Up'
+        },
+        {
+          title: 'Login'
+        },
+        {
+          title: 'Send Message'
+        },
       ]
     }
-  }
+  },
+  beforeMount () {
+
+  },
+  methods: {
+    addSection () {
+
+    },
+    goTo (value) {
+      this.$router.push({
+        name: 'stories',
+        params: {
+          name: this.$route.params.name,
+          section: value
+        }
+      });
+    }
+  },
 }
 </script>
-
-<style scoped>
-
-</style>
