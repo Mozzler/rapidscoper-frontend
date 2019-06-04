@@ -57,6 +57,9 @@ export default {
     btn: {
       type: String
     },
+    icons: {
+      type: Boolean
+    }
   }
 };
 </script>
