@@ -49,7 +49,7 @@
                     solo
                   ></v-text-field>
                 </v-flex>
-                <v-flex xs0 sm0 v-if="!$store.state.auth.isMobileDevice"/>
+                <v-flex xs0 sm0 v-if="!$store.state.system.isMobileDevice"/>
                 <v-flex xs12 sm3>
                   <div class="label">CVV</div>
                   <v-text-field

@@ -5,7 +5,6 @@ import SignupRoutes from './signup';
 import DashboardRoutes from './dashboard';
 
 import store from '../store';
-import { IS_AUTHENTICATED } from '../store/actions/auth';
 
 Vue.use(Router);
 
@@ -23,7 +22,7 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
 
-  let authenticated = store.getters[IS_AUTHENTICATED];
+  let authenticated = store.state.auth.user !== null;
 
   if (to.meta.guest && authenticated) {
     next('/dashboard');

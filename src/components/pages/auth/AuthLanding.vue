@@ -39,8 +39,6 @@ import LogoGoogle from '../../particles/icons/LogoGoogle';
 import AuthForm from '../../particles/forms/AuthForm';
 import AppHeader from '../../particles/navigation/Header';
 
-import * as actionConst from '../../../store/actions/auth';
-
 export default {
   name: 'AuthTypePage',
   components: {
@@ -76,13 +74,13 @@ export default {
             id_token: user.Zi.id_token,
             email: user.w3.U3
           };
-          this.$store.dispatch(actionConst.AUTH_REGISTER, data)
+          /*this.$store.dispatch(actionConst.AUTH_REGISTER, data)
             .then(() => {
               this.$router.push('/');
             })
             .catch(error => {
               console.log();
-            });
+            });*/
         })
         .catch(error => {
           console.log(error);

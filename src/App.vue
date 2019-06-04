@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-content class="theme--rapid" :class="{'padding-left--50': sidebarMini}">
+    <v-content class="theme--rapid">
       <router-view />
     </v-content>
 
@@ -48,11 +48,8 @@ export default {
     ResizeMixin
   ],
   computed: {
-    sidebarMini () {
-      return this.$store.state.auth.minified;
-    },
-    authenticated() {
-      return this.$store.state.auth.is_authenticated;
+    authenticated () {
+      return this.$store.state.user !== null;
     }
   },
 };

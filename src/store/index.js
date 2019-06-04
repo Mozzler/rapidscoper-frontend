@@ -1,15 +1,21 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import VuexPersist from 'vuex-persist';
 
-import auth from './modules/auth';
-import system from './mutations/system';
+import modules from './modules';
 
 Vue.use(Vuex);
 
+const vuexLocalStorage = new VuexPersist({
+  key: 'RapidScoper-service-vuex',
+  storage: localStorage,
+  reducer: state => ({
+    user: state.auth.user
+  })
+});
+
 export default new Vuex.Store({
-  strict: true, // remove for production
-  modules: {
-    auth
-  },
-  mutations: system
+  strict: process.env.NODE_ENV !== 'production',
+  modules: modules,
+  plugins: [vuexLocalStorage.plugin]
 });

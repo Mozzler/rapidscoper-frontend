@@ -44,8 +44,6 @@
 
 <script>
 
-import * as actionConst from '../../../store/actions/auth';
-
 export default {
   name: 'SignupForm',
   props: {
@@ -64,7 +62,7 @@ export default {
   }),
   computed: {
     action () {
-      return this.type === 'Sign Up' ? actionConst.AUTH_REGISTER : actionConst.AUTH_LOGIN;
+      return this.type === 'Sign Up' ? 'signup' : 'login';
     }
   },
   methods: {
@@ -74,12 +72,19 @@ export default {
       let result = await this.$validator.validate();
 
       if (result) {
-        this.processing = true;
-        await this.$store.dispatch(this.action, this.user);
-
+        const result = await this.$store.dispatch(this.action, this.user);
+        this.handleResponse(result);
+      } else {
+        this.processing = false;
+      }
+    },
+    handleResponse (response) {
+      if (!response.error) {
         let route = this.type !== 'Sign Up' ? '/' : 'create-account';
         this.$router.push(route);
-      } else {
+      }
+      else {
+        this.errors.add({ field: 'email', msg: response.error_description });
         this.processing = false;
       }
     }

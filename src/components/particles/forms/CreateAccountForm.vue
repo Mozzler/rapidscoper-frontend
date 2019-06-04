@@ -46,8 +46,6 @@
 </template>
 
 <script>
-
-import * as actionConst from '../../../store/actions/auth';
 import PhotoCamera from '../../particles/icons/PhotoCamera';
 
 export default {

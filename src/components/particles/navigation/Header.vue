@@ -25,7 +25,7 @@
 
 <script>
 import LogoRapidScope from '../icons/LogoRapidScope';
-import * as authConst from '@/store/actions/auth';
+import { mapState } from "vuex";
 
 export default {
   name: 'AppHeader',
@@ -33,17 +33,20 @@ export default {
     LogoRapidScope
   },
   computed: {
+    ...mapState({
+      user: state => state.auth.user
+    }),
     isSignup () {
       return this.$route.name === 'signup';
     },
     isAuthenticated () {
-      return this.$store.getters[authConst.IS_AUTHENTICATED];
+      return this.user;
     }
   },
   methods: {
     logout (event) {
       event.preventDefault();
-      this.$store.dispatch(authConst.AUTH_LOGOUT)
+      this.$store.dispatch('logout')
         .then(() => {
           this.$router.push('/signup');
         });

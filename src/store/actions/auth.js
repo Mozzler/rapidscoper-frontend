@@ -1,5 +1,30 @@
-export const IS_AUTHENTICATED = 'IS_AUTHENTICATED';
-export const CHANGE_AUTHENTICATED = 'CHANGE_AUTHENTICATED';
-export const AUTH_LOGOUT = 'AUTH_LOGOUT';
-export const AUTH_LOGIN = 'AUTH_LOGIN';
-export const AUTH_REGISTER = 'AUTH_REGISTER';
+import config from '@/config';
+
+import Vue from 'vue';
+
+export default {
+  async signup (state, payload) {
+    console.log('signup');
+    /*
+    const response = await Vue.$axios.post('user/create', data);
+    return response.data;
+    */
+  },
+  async login (state, payload) {
+    const data = {
+      username: payload.email,
+      password: payload.password,
+      client_id: config.CLIENT_ID,
+      client_secret: config.CLIENT_SECRET,
+      response_type: 'token',
+      grant_type: 'password'
+    };
+
+    const response = await Vue.$axios.post('user/token', data);
+    return response.data;
+  },
+
+  logout (state) {
+    state.user = null;
+  }
+};

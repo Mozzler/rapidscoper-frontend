@@ -43,8 +43,6 @@
 
 <script>
 
-import * as actionConst from '../../../store/actions/auth';
-
 export default {
   name: 'ForgotPasswordForm',
   data: () => ({
