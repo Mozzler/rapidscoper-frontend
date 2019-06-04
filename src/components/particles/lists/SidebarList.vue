@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="title" class="navigation__title"
+    <div v-if="title" class="sidebar__title"
          @click="() => $emit('menu')">
       {{ title }}
     </div>
@@ -24,7 +24,7 @@
       </v-list-tile>
     </v-list>
     <div v-if="btn"
-      class="sidebar-add"
+      class="sidebar__btn"
       @click="() => $emit('add')">
       <v-icon> add </v-icon>
       <span>

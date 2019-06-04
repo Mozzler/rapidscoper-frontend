@@ -1,10 +1,10 @@
 <template>
-  <div class="navigation">
-    <div class="navigation__title text-xs-center">{{ title }}</div>
+  <div>
+    <div class="sidebar__title sidebar__title--centered">{{ title }}</div>
     <v-list>
       <v-list-tile v-for="(item, key) in list" :key="key">
         <v-list-tile-content>
-          <v-list-tile-title class="navigation__icon"
+          <v-list-tile-title class="sidebar__icon"
                              @click="() => $emit('update')">
             <v-icon v-if="item">{{ key }}</v-icon>
             <component :is="key" v-else />

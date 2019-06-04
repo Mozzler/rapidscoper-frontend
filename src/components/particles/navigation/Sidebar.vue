@@ -5,8 +5,8 @@
     class="sidebar"
     app>
 
-    <div class="sidebar-header">
-      <v-icon class="sidebar-notification">notifications</v-icon>
+    <div class="sidebar__header">
+      <v-icon class="sidebar__notification">notifications</v-icon>
       <div class="sidebar-header__img">
         <img src="@/assets/img/user.png"/>
       </div>
@@ -20,7 +20,7 @@
       </div>
     </div>
 
-    <div class="sidebar-scroll">
+    <div class="sidebar__scroll">
       <sidebar-list
         :list="items"
         :active="$route.params.name"
@@ -35,7 +35,7 @@
         @go="value => goTo(`/team/${value}`)" />
     </div>
 
-    <div class="sidebar-footer">
+    <div class="sidebar__footer">
       <logo-rapid-scope />
     </div>
 
