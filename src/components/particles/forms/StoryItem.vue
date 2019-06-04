@@ -6,12 +6,22 @@
       <div class="mt-3" contenteditable>
         {{ story.description }}
       </div>
-      <div class="mt-4">user stories</div>
+      <div class="sidebar__title mt-4">user stories</div>
       <div class="user-story">
-        <div v-for="item in story.list" contenteditable
+        <div v-for="(item, index) in story.list" contenteditable
+             :key="index"
              :class="`mt-3 user-story__item user-story__item--${item.level}`"
-             @keyup.shift.186="event => pressed(item, event)"
+             @blur="() => hint = false"
+             @click="() => hint = false"
+             @keyup.exact="pressed"
+             @keyup.ctrl.186.exact="event => toMainList(item, event)"
+             @keyup.shift.186.exact="event => toSublist(item, event)"
         > {{ item.value }} </div>
+      </div>
+      <div id="hint" class="hint" v-show="hint">
+        <div v-for="item in sentences" class="hint__item">
+          {{ item }}
+        </div>
       </div>
     </div>
 </template>
@@ -34,30 +44,34 @@ export default {
             value: 'world'
           }
         ]
-      }
+      },
+      sentences: [
+        'As a ...', 'When I...', 'Requires a'
+      ],
+      hint: false
     }
   },
   methods: {
-    pressed (item, event) {
-      switch (true) {
-        case event.altKey && event.shiftKey && item.level < 3:
-          event.target.innerHTML = event.target.innerHTML.slice(0, -1);
-
-          this.story.list.push({
-            level: item.level - 1,
-            value: 'As a'
-          });
-          break;
-        case event.shiftKey && item.level < 3:
-          event.target.innerHTML = event.target.innerHTML.slice(0, -1);
-
-          this.story.list.push({
-            level: item.level + 1,
-            value: 'As a'
-          });
-          break;
-      }
-    }
+    pressed (event) {
+      this.hint = false;
+      const d = document.getElementById('hint');
+      d.style.top = event.srcElement.offsetTop+22 + 'px';
+      d.style.left = event.srcElement.offsetTop + 'px';
+      this.hint = true;
+    },
+    toMainList (item, event) {
+      this.story.list.push({
+        level: item.level - 1,
+        value: 'As a'
+      });
+    },
+    toSublist (item, event) {
+      event.target.innerHTML = event.target.innerHTML.replace(':', '');
+      this.story.list.push({
+        level: item.level + 1,
+        value: 'As a'
+      });
+    },
   }
 };
 </script>
