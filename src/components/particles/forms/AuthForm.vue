@@ -70,22 +70,25 @@ export default {
       this.processing = true;
 
       let result = await this.$validator.validate();
-
-      if (result) {
-        const result = await this.$store.dispatch(this.action, this.user);
-        this.handleResponse(result);
-      } else {
-        this.processing = false;
-      }
+      result ? this.handleRequest() : this.processing = false;
     },
-    handleResponse (response) {
+    async send () {
+      const response = await this.$store.dispatch(this.action, this.user);
+
       if (!response.error) {
-        let route = this.type !== 'Sign Up' ? '/' : 'create-account';
-        this.$router.push(route);
+        this.$router.push('/');
       }
       else {
         this.errors.add({ field: 'email', msg: response.error_description });
         this.processing = false;
+      }
+    },
+    handleRequest () {
+      if (this.type === 'Log In') {
+        this.send();
+      }
+      else {
+        this.$router.push('/create-account');
       }
     }
   },

@@ -9,9 +9,6 @@ Vue.use(Vuex);
 const vuexLocalStorage = new VuexPersist({
   key: 'RapidScoper-service-vuex',
   storage: localStorage,
-  reducer: state => ({
-    user: state.auth.user
-  })
 });
 
 export default new Vuex.Store({

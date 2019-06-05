@@ -4,11 +4,8 @@ import Vue from 'vue';
 
 export default {
   async signup (state, payload) {
-    console.log('signup');
-    /*
-    const response = await Vue.$axios.post('user/create', data);
+    const response = await Vue.$axios.post('user/create', payload);
     return response.data;
-    */
   },
   async login (state, payload) {
     const data = {
@@ -21,10 +18,11 @@ export default {
     };
 
     const response = await Vue.$axios.post('user/token', data);
+    state.commit('authenticate', response.data);
     return response.data;
   },
 
   logout (state) {
-    state.user = null;
+    state.commit('logout', null);
   }
 };

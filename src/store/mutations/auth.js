@@ -1,9 +1,8 @@
 export default {
   authenticate (state, data) {
-    console.log(state, data);
-    //state = data;
+    state.user = data;
   },
   logout (state, data) {
-    state.user = null;
+    state.user = data;
   }
 };
