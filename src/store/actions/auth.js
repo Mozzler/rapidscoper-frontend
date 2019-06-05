@@ -18,7 +18,11 @@ export default {
     };
 
     const response = await Vue.$axios.post('user/token', data);
-    state.commit('authenticate', response.data);
+
+    if (!response.data.error) {
+      state.commit('authenticate', response.data);
+    }
+
     return response.data;
   },
 
