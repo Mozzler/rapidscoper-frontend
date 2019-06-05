@@ -60,7 +60,6 @@ export default {
   },
   methods: {
     showEmailForm ($event) {
-      console.log($event);
       $event.preventDefault();
       this.emailFormVisible = false;
     },
