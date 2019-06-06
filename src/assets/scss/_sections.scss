@@ -37,3 +37,19 @@
   color: rgba(0, 0, 0, 0.7);
   cursor: default;
 }
+
+.user-story__editable {
+  //position: relative;
+}
+
+.user-story__editable--user-type {
+  @include set-bottom-border($light-green);
+}
+
+.user-story__editable--requirement-type {
+  @include set-bottom-border($light-blue);
+}
+
+.user-story__editable--field {
+  @include set-bottom-border($light-red);
+}

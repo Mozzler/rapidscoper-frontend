@@ -1,0 +1,19 @@
+@mixin label-generator() {
+  $colours:
+    "green" $light-green,
+    "blue" $light-blue,
+    "red" $light-red,
+    "yellow" $light-yellow,
+    "grey" $light-grey;
+
+  @each $color in $colours {
+    .label--#{nth($color, 1)} {
+      background-color: nth($color, 2);
+      border: 1px solid nth($color, 2);
+    }
+  }
+}
+
+@mixin set-bottom-border($color) {
+  border-bottom: 2px solid $color;
+}

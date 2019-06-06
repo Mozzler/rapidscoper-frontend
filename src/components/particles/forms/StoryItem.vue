@@ -33,7 +33,7 @@
           </div>
         </v-flex>
         <v-flex grow>
-          <div contenteditable
+          <div contenteditable class="user-story__editable"
                @focus="() => active = index"
                @keyup.exact="pressed"
                @keyup.enter.exact="newSublist"
@@ -44,10 +44,12 @@
       </v-layout>
 
     </div>
-    <div ref="hint" class="hint" v-show="hint.state">
-      <div v-for="(item, index) in hint.list" class="hint__item" :key="index"
+    <div ref="hint" class="hint" v-show="hint.state && hint.list">
+      <div class="hint__item"
+           v-for="(item, index) in completing"
+           :key="index"
            @click="event => complete(event, index)">
-        {{ item | beginning }}
+        {{ item }}
       </div>
     </div>
   </div>
@@ -55,20 +57,18 @@
 
 <script>
 import ToolList from "../lists/ToolList";
+import AutoCompleting from '@/mixins/auto-completing';
+
 export default {
   name: "StoryItem",
   components: {ToolList},
+  mixins: [
+    AutoCompleting
+  ],
   filters: {
     parsed (str) {
       return str !== null ? str.replace('<inserted>', '').replace('</inserted>', '') : '';
     },
-    beginning (str) {
-      if (str && str.indexOf('[') !== -1) {
-        return `${str.split('[')[0]} ...`;
-      }
-
-      return str;
-    }
   },
   data() {
     return {
@@ -78,12 +78,14 @@ export default {
       },
       list: [
         {
-          level: 1,
-          sentence: null,
-          value: null,
+          value: '',
           estimation: 0,
           priority: 2,
-          label: 1
+          label: 1,
+          level: 1,
+
+          sentence: '',
+          replacement: ''
         }
       ],
       active: null,
@@ -92,35 +94,11 @@ export default {
         list: null,
         position: null
       },
-      checked: null
+      checked: null,
+      filtered: null
     }
   },
-  beforeMount () {
-    this.hint.list = this.sentences;
-    //console.log(this.$route.params.tab);
-  },
   computed: {
-    sentences () {
-      return [
-        'As a [user_type] I can [] so that []',
-        'Requires a [requirement_type] called [field]',
-        'When I []'
-      ];
-    },
-    userTypes () {
-      return [
-        'New User'
-      ];
-    },
-    requirementTypes () {
-      return [
-        'Model',
-        'Field',
-        'Page',
-        'API endpoint'
-      ];
-    },
-
     tab () {
       return this.$route.params.tab;
     },
@@ -142,35 +120,33 @@ export default {
     check (index) {
       this.checked = index;
     },
-    updateTab (value) {
-      this.tab = value;
-    },
-    complete (event, index) {
+    pressed (event) {
+      /*
+
+      let cursorPosition = event.view.getSelection().anchorOffset;
+
       const element = this.list[this.active];
 
-      if (!element.sentence || !element.value) {
-        element.value = event.target.outerText.replace('...', ' ');
-        element.sentence = this.sentences[index];
+      if (element.sentence) {
+        const template = element.sentence;
+
+        for (let i = 0; i < element.value.length; i++) {
+          if (template[i] === '[') {
+            let brackets = template.substring(i).split(/[[\]]/).filter(item => !!item);
+            let replacement = brackets[0];
+            let part = element.value.indexOf('</span>', template[i]);
+
+          }
+
+        }
+      }*/
+
+
+      if(!this.list[this.active].sentence) {
+        this.hint.list = this.beginnings;
       }
-      else {
-        element.value += event.target.outerText;
-        element.sentence = `[inserted]this.sentences[index][/inserted]`;
-      }
 
-      this.hint.state = false;
-    },
-    showCompleteDialog (event) {
-      const hint = this.$refs.hint;
 
-      this.hint.position = {
-        top: event.srcElement.offsetTop + 20,
-        left: event.srcElement.offsetLeft
-      };
-
-      Object.assign(hint.style, this.hint.position);
-      this.hint.state = true;
-    },
-    pressed (event) {
       this.hint.state = false;
       const element = this.list[this.active];
 
@@ -181,34 +157,62 @@ export default {
         const brackets = parts[0];
 
         switch (true) {
-          case brackets === '[user_type]':
-            this.hint.list = this.userTypes;
+          case brackets === '[beginning]':
+            this.hint.list = this.beginnings;
+            element.replacement = brackets.replace(/[[\]]/g,'');
             break;
-          case brackets === '[requirement_type]':
-            this.hint.list = this.requirementTypes;
+          case brackets === '[user-type]':
+            this.hint.list = this.users;
+            element.replacement = brackets.replace(/[[\]]/g,'');
+            break;
+          case brackets === '[field]':
+            this.hint.list = this.fields;
+            element.replacement = brackets.replace(/[[\]]/g,'');
+            break;
+          case brackets === '[requirement-type]':
+            this.hint.list = this.requirements;
+            element.replacement = brackets.replace(/[[\]]/g,'');
             break;
           default:
-            return;
+            break;
         }
       }
 
       this.showCompleteDialog(event);
     },
+
     toMainList () {
+      this.hint.state = false;
+
       if (this.active > 0) {
         this.createRow(this.list[this.active].level - 1);
       }
     },
     toSublist (event) {
+      this.hint.state = false;
+
       if (this.active < 3) {
         this.createRow(this.list[this.active].level + 1);
       }
     },
     newSublist (event) {
-      this.list[this.active].value = this.list[this.active].value.replace(/(\r\n|\n|\r|<br>)/g, '');
-      this.createRow(this.list[this.active].level);
+      this.hint.state = false;
+
+      if(this.list[this.active].value) {
+        this.list[this.active].value = this.list[this.active].value
+          .replace(/(\r\n|\n|\r|<br>)/g, '')
+          .replace(/<div>/gi,'<br>')
+          .replace(/<\/div>/gi,'');
+
+        this.createRow(this.list[this.active].level);
+      }
+      else {
+        this.list[this.active].value = null;
+      }
     },
     createRow (level) {
+      this.hint.state = false;
+
       this.list.push({
         level: level,
         value: ''
