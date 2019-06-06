@@ -23,6 +23,7 @@
     z-index: 3;
 
     .content {
+      position: relative;
       padding: 48px;
       background-color: $white;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
@@ -57,14 +58,23 @@
   margin-top: 16px;
 }
 
-.tool-block__label {
+.tool-block__label--base {
   color: $black;
-  padding: 5px 8px;
   text-align: center;
   display: inline-block;
   border-radius: 2px;
   cursor: pointer;
   margin: 0 16px 8px 0;
+}
+
+.tool-block__label {
+  @extend .tool-block__label--base;
+  padding: 5px 8px;
+}
+
+.tool-block__label--minified {
+  @extend .tool-block__label--base;
+  padding: 1px 6px;
 }
 
 .tool-block__file {

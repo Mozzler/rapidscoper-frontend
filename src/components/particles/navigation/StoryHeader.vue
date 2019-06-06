@@ -11,7 +11,7 @@
         </span>
       </v-flex>
       <v-flex>
-        <v-tabs fixed-tabs class="tabs stories-tabs">
+        <v-tabs fixed-tabs class="tabs stories-tabs" v-model="activeTab">
           <v-tab v-for="tab in tabs" :key="tab" @click="setTab(tab)">
             {{ tab }}
           </v-tab>
@@ -35,12 +35,17 @@
 <script>
 import SortIcon from "../icons/Filter";
 import Dropdown from "../menus/Dropdown";
+import Navigation from '@/mixins/navigation';
+
 export default {
   name: "StoryHeader",
   components: {
     SortIcon,
     Dropdown
   },
+  mixins: [
+    Navigation
+  ],
   data () {
     return {
       projects: [
@@ -51,13 +56,33 @@ export default {
       tabs: [
         'Edit', 'Estimates', 'Priorities', 'Labels', 'Comments'
       ],
-      tab: 'Edit'
+      activeTab: null
     };
+  },
+  mounted () {
+    this.activeTab = this.tabs.indexOf(this.tab);
+  },
+  computed: {
+    tab () {
+      return this.toTitle(this.$route.params.tab);
+    }
   },
   methods: {
     setTab (item) {
-      this.tab = item;
-    },
+      this.$router.push({
+        name: this.$route.name,
+        params: {
+          name: this.$route.params.name,
+          section: this.$route.params.section,
+          tab: item.toLowerCase()
+        }
+      });
+    }
+  },
+  watch: {
+    tab () {
+      this.activeTab = this.tabs.indexOf(this.tab);
+    }
   }
 };
 </script>

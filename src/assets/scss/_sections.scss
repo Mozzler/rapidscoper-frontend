@@ -19,3 +19,21 @@
 .dashboard-content {
   margin-top: 24px;
 }
+
+.user-story {
+  border-radius: 4px;
+  margin-bottom: 15px;
+}
+.user-story--active {
+  background-color: $light-grey-1;
+}
+
+
+.user-story__tools {
+  padding: 0 24px;
+}
+
+.user-story__prefix {
+  color: rgba(0, 0, 0, 0.7);
+  cursor: default;
+}

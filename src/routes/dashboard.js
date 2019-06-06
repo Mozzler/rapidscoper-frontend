@@ -3,7 +3,7 @@ import UserStories from '@/components/pages/user-stories/UserStories';
 
 export default [
   {
-    path: '/projects/:name/user-story/:section',
+    path: '/projects/:name/user-story/:section/:tab',
     name: 'stories',
     component: UserStories,
     meta: {

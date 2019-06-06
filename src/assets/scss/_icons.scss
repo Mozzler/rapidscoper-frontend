@@ -37,4 +37,14 @@
   };
 }
 
+.estimation__input {
+  width: 32px;
+  height: 24px;
+  background: $white;
+  border: 1px solid $light-grey;
+  box-sizing: border-box;
+  border-radius: 2px;
+  text-indent: 5px;
+}
+
 

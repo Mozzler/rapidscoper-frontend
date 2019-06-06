@@ -23,18 +23,9 @@
         Priority
       </div>
       <div class="tool-block__text">
-        <div class="tool-block__label label--green">
-          Must have
-        </div>
-        <div class="tool-block__label label--blue label--outline">
-          Should have
-        </div>
-        <div class="tool-block__label label--grey label--outline">
-          Could have
-        </div>
-        <div class="tool-block__label label--red label--outline">
-          Wont have
-        </div>
+        <tool-list
+          :list="labels"
+          :active="label" />
       </div>
     </div>
 
@@ -42,17 +33,9 @@
       <div class="section__title">
         Labels
       </div>
-      <div class="tool-block__text">
-        <div class="tool-block__label label--yellow label--outline">
-          1. Backend
-        </div>
-        <div class="tool-block__label label--blue label--outline">
-          2. Frontend
-        </div>
-        <div class="tool-block__label label--grey label--outline">
-          3. MVP
-        </div>
-      </div>
+      <tool-list
+        :list="priorities"
+        :active="priority" />
     </div>
 
     <div class="tool-block">
@@ -73,9 +56,25 @@
 </template>
 
 <script>
+import ToolList from "../lists/ToolList";
 export default {
   name: "ToolSection",
-}
+  components: {ToolList},
+  data () {
+    return {
+      label: 1,
+      priority: 1
+    }
+  },
+  computed: {
+    labels () {
+      return this.$store.state.story.label;
+    },
+    priorities () {
+      return this.$store.state.story.priority;
+    }
+  },
+};
 </script>
 
 <style scoped>

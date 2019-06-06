@@ -37,9 +37,6 @@ export default {
       ]
     }
   },
-  beforeMount () {
-
-  },
   methods: {
     addSection () {
 
@@ -49,10 +46,11 @@ export default {
         name: 'stories',
         params: {
           name: this.$route.params.name,
-          section: value
+          section: value,
+          tab: this.$route.params.tab
         }
       });
     }
-  },
-}
+  }
+};
 </script>
