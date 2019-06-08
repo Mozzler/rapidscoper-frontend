@@ -19,7 +19,8 @@ export default {
     },
     active: {
       type: [Number, String],
-      required: true
+      default: null,
+      required: false
     },
     labelCls: {
       type: String,

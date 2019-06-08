@@ -1,43 +1,37 @@
 export default {
+  data () {
+    return {
+      dictionary: {
+        'constructions': [
+          '[beginning] [user-type] {I can} ... {so that} ...',
+          '[beginning] [requirement-type] {called} [field]',
+          '[beginning] ...'
+        ],
+        'beginning': [
+          'As a ...',
+          'Requires a ...',
+          'When I ...'
+        ],
+        'requirement-type': [
+          'Model',
+          'Field',
+          'Page',
+          'API endpoint'
+        ],
+        'user-type': [
+          'New User'
+        ],
+        'field': [
+          'Email',
+          'Account',
+          'First Name',
+          'Last Name'
+        ],
+        'custom': []
+      }
+    };
+  },
   computed: {
-    constructions() {
-      return [
-        /*'[beginning] [user-type] I can ... so that ...',
-        '[beginning] [requirement-type] called [field]',
-        '[beginning]'*/
-        'As a [user-type] I can [] so that []',
-        'Requires a [requirement-type] called [field]',
-        'When I []'
-      ];
-    },
-    users() {
-      return [
-        'New User'
-      ];
-    },
-    requirements() {
-      return [
-        'Model',
-        'Field',
-        'Page',
-        'API endpoint'
-      ];
-    },
-    fields() {
-      return [
-        'Email',
-        'Account',
-        'First Name',
-        'Last Name'
-      ];
-    },
-    beginnings() {
-      return [
-        'As a ...',
-        'Requires a ...',
-        'When I ...'
-      ]
-    },
     completing () {
       if(this.active) {
         let element = this.list[this.active];
