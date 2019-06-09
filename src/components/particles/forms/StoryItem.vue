@@ -38,27 +38,20 @@ export default {
       stories: {
         list: [{
           parent: null,
-          text: '',
           estimation: 0,
           priority: 2,
           label: 1,
 
-          list: [{
-            text: '',
-            estimation: 0,
-            priority: 2,
-            label: 1,
-            parent: null,
+          text: '',
+          template: '',
 
-            list: []
-          }]
+          list: []
         }]
       }
     };
   },
   beforeMount () {
     this.stories.list[0].parent = this.stories;
-    this.stories.list[0].list[0].parent = this.stories.list[0];
   },
   methods: {
     updateText (index, text) {

@@ -4,5 +4,36 @@ export default {
   ],
   priority: [
     'Must have', 'Should have', 'Could have', 'Won\'t have'
-  ]
+  ],
+  dictionary: {
+    'constructions': [
+      '[beginning] [user-type] [static-text="I can"] [custom] [static-text="so that"] [custom]',
+      '[beginning] [requirement-type] [static-text="called"] [field]',
+      '[beginning] [custom]',
+      '[custom]'
+    ],
+    'beginning': [
+      'As a ...',
+      'Requires a ...',
+      'When I ...'
+    ],
+    'requirement-type': [
+      'Model',
+      'Field',
+      'Page',
+      'API endpoint'
+    ],
+    'user-type': [
+      'New User'
+    ],
+    'field': [
+      'Email',
+      'Account',
+      'First Name',
+      'Last Name'
+    ],
+    'custom': [
+      'Custom Text'
+    ]
+  },
 };

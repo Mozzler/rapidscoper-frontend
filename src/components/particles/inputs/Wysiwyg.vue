@@ -29,15 +29,16 @@
               </v-layout>
             </div>
           </v-flex>
-          <v-flex grow>
+          <v-flex grow text-xs-left>
             <div contenteditable class="user-story__editable"
                  :ref="`editor-${ index }-${ level }`"
-                 @focus="() => focus(index)"
+                 @focus="($event) => focus($event, index)"
+                 @keydown.exact="pressed"
+                 @keydown.tab.exact="fixStaticText"
                  @keypress.enter.exact="createRow"
                  @keydown.delete.exact="remove"
                  @keydown.186.shift.exact="createSublist"
                  @keydown.tab.shift.exact="decreaseSublistLevel"
-                 @keypress.exact="updateText"
                  v-html="item.text"></div>
           </v-flex>
         </v-layout>
@@ -97,8 +98,8 @@ export default {
     }
   },
   methods: {
-    updateText ($event) {
-      this.$emit('update-text', this.focused, $event.target.innerText);
+    updateText () {
+      this.$emit('update-text', this.focused, this.list[this.focused].text);
     },
     updateChildText (index, text, parentIndex) {
       this.list[parentIndex].list[index].text = text;

@@ -1,7 +1,16 @@
 export default {
+  beforeMount () {
+    this.$root.$on('hint-complete', this.hintComplete);
+  },
+  beforeDestroy () {
+    this.$root.$off('hint-complete');
+  },
   methods: {
-    focus (index) {
+    focus ($event, index) {
       this.focused = index;
+    },
+    pressed ($event) {
+      this.parseContent($event);
     },
     focusEditor (wysiwygEditor, context) {
       context.$refs[wysiwygEditor][0].focus();
@@ -9,10 +18,12 @@ export default {
     addRowToList (parent, text = '') {
       return {
         parent: parent,
-        text: text,
         estimation: null,
         priority: null,
         label: null,
+
+        text: text,
+        template: parent.template,
 
         list: []
       };

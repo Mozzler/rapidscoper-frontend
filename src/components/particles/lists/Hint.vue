@@ -14,27 +14,40 @@ export default {
   name: "Hint",
   data () {
     return {
-      list: [],
+      chapter: null,
       filter: null,
-      visible: false
+      visible: false,
+      input: null
     };
   },
   beforeMount () {
     this.$root.$on('set-hint-state', this.setHintState);
   },
   computed: {
+    dictionary () {
+      return this.$store.state.story.dictionary;
+    },
     items () {
-      let filtered = this.list.filter(item => {
+      let list = this.dictionary[this.chapter];
+      if (!list) {
+        return [];
+      }
+      let filtered = list.filter(item => {
         return item.includes(this.filter);
       });
-      return this.filter ? filtered : this.list;
+      return this.filter ? filtered : list;
     }
   },
   methods: {
-    setHintState (visible, list = [], filter = null) {
+    setHintState (visible, chapter, filter = null, input) {
       this.visible = visible;
-      this.list = list;
+      this.chapter = chapter;
       this.filter = filter;
+      this.input = input;
+    },
+    complete ($event) {
+      this.$root.$emit('hint-complete', this.chapter, $event.target.innerHTML, this.input);
+      this.visible = false;
     }
   },
   beforeDestroy () {
