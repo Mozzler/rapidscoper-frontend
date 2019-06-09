@@ -31,10 +31,11 @@
           </v-flex>
           <v-flex grow>
             <div contenteditable class="user-story__editable"
+                 :ref="`editor-${ index }-${ level }`"
                  @focus="() => focus(index)"
                  @keypress.enter.exact="createRow"
                  @keydown.delete.exact="remove"
-                 @keyup.186.shift.exact="createSublist"
+                 @keydown.186.shift.exact="createSublist"
                  @keydown.tab.shift.exact="decreaseSublistLevel"
                  @keypress.exact="updateText"
                  v-html="item.text"></div>
@@ -43,8 +44,10 @@
       </div>
 
       <wysiwyg
+        :ref="`wysiwyg-child-${ index }-${ level }`"
         :model="item.list"
         :level="level+1"
+        :parentIndex="index"
         @update-text="(i, text) => updateChildText(i, text, index)"/>
     </div>
   </div>
@@ -73,6 +76,10 @@ export default {
     level: {
       type: Number,
       required: true
+    },
+    parentIndex: {
+      type: Number,
+      default: 1
     }
   },
   data () {
