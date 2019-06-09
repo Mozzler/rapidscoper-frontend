@@ -10,18 +10,24 @@
     <div class="sidebar__title mt-4 mb-3 padding-0">
       user stories
     </div>
-    <user-story
-      :model="list" />
+    <wysiwyg
+      :model="stories.list"
+      :level="1"
+      @update-text="updateText"/>
+
+    <hint />
   </div>
 </template>
 
 <script>
-import UserStory from "../inputs/UserStory";
+import Wysiwyg from "../inputs/Wysiwyg";
+import Hint from "../lists/Hint";
 
 export default {
   name: "StoryItem",
   components: {
-    UserStory
+    Wysiwyg,
+    Hint
   },
   data () {
     return {
@@ -29,16 +35,35 @@ export default {
         title: 'Mobile Sign Up',
         description: 'Sign up simply means to register. It could be portal, newsletter or things the like. So when you visit and access anything for the first time, you need to sign up.',
       },
-      list: [
-        {
-          level: 1,
+      stories: {
+        list: [{
+          parent: null,
           text: '',
           estimation: 0,
           priority: 2,
-          label: 1
-        }
-      ]
+          label: 1,
+
+          list: [{
+            text: '',
+            estimation: 0,
+            priority: 2,
+            label: 1,
+            parent: null,
+
+            list: []
+          }]
+        }]
+      }
     };
+  },
+  beforeMount () {
+    this.stories.list[0].parent = this.stories;
+    this.stories.list[0].list[0].parent = this.stories.list[0];
+  },
+  methods: {
+    updateText (index, text) {
+      this.stories.list[index].text = text;
+    }
   }
 };
 </script>
