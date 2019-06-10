@@ -1,5 +1,5 @@
 <template>
-  <div ref="hint" v-show="visible">
+  <div ref="hint" v-show="visible" class="hint">
     <div class="hint__item"
          v-for="(item, index) in items"
          :key="index"

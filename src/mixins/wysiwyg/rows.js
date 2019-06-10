@@ -10,6 +10,9 @@ export default {
       this.focused = index;
     },
     pressed ($event) {
+      let nodes = this.$refs[`editor-${ this.focused }-${ this.level }`][0].childNodes;
+      //let filtered = nodes.filter(item => item.nodeName !== '#text');
+      //console.log(nodes);
       this.parseContent($event);
     },
     focusEditor (wysiwygEditor, context) {
@@ -69,7 +72,13 @@ export default {
         });
       }
     },
-    remove () {
+    remove ($event) {
+      const selection = $event.view.getSelection();
+      const cls = selection.focusNode.parentNode.className;
+
+      if (cls.includes('beginning')) {
+        $event.preventDefault();
+      }
       console.log('delete');
     }
   }
