@@ -5,7 +5,7 @@ export default {
     }
   },
   methods: {
-    hintComplete (chapter, text, el) {
+    hintComplete(chapter, text, el) {
       if (this.$refs[el]) {
         this.$refs[el][0].focus();
         this.list[this.focused].text += this.setStaticText(chapter, text);
@@ -13,65 +13,80 @@ export default {
         this.updateText();
       }
     },
-    setStaticText (type, text, greyed = false) {
-      return `<span class="user-story__editable--${type} ${greyed ? 'text-greyed' : ''}">${text}</span>&nbsp;`;
+    setStaticText(type, text, greyed = false) {
+      return `<span class="user-story__editable--${type}${greyed ? ' text-greyed' : ''}">${text}</span>&nbsp;`;
     },
-    initLine (editor) {
-      return new Promise(resolve => {
-        if (!editor.text.trim()) {
-          if (this.level > 1) {
-            editor.template = this.dictionary.constructions[3];
-          } else {
-            editor.text = this.setStaticText('beginning', 'As a');
-            editor.template = this.dictionary.constructions[0];
-          }
-        }
-        resolve();
-      });
-    },
-    fixStaticText ($event) {
-      $event.preventDefault();
-      this.list[this.focused].text = this.list[this.focused].text.replace(' text-greyed', '');
+    removeSpaces() {
+      const editor = this.list[this.focused];
+
+      editor.text = editor.text
+        .split(/&nbsp;/)
+        .filter(item => !!item)
+        .join('');
+
       this.updateText();
     },
-    parseContent ($event) {
+    classToType(str) {
+      return str
+        .split(' ')
+        .map(item => item.replace('user-story__editable--', ''))[0];
+    },
+    validateFocus ($event, editor) {
+      const selection = $event.view.getSelection();
+      let current = selection.focusNode.parentNode.className;
+
+      if (current === 'user-story__editable') {
+        current = selection.anchorNode.previousSibling.className;
+        //this.removeSpaces();
+
+        if (current.includes('beginning')) {
+          editor.text = editor.text.replace(/ text-greyed/, '');
+          this.updateText();
+        }
+      }
+
+      return this.classToType(current);
+    },
+    getNextSpan (current, editor) {
+      const parts = editor.template
+        .split(/[[(.*)\]]/)
+        .filter(item => !!item.trim());
+
+      const next = parts.indexOf(current) + 1;
+      return parts[next];
+    },
+    getSiblings ($event) {
       const editor = this.list[this.focused];
-      this.initLine(editor)
-        .then(() => {
-          /*const cursorPosition = document.getSelection().anchorOffset;
-          const substr = editor.template.substring(0, cursorPosition);*/
-          const spans = editor.text.split('<span ').filter(item => !!item);
-          const type = spans[spans.length - 1].match(/class="user-story__editable--([^"]*)/).map(item => item.trim());
+      const current = this.validateFocus($event, editor);
+      const next = this.getNextSpan(current, editor);
 
-          const start = editor.template.indexOf(type[1].trim());
-          const end = editor.template.indexOf(']', start);
+      return [editor, current, next];
+    },
+    parseContent ($event) {
+      const [editor, current, next] = this.getSiblings($event);
 
-          const tail = editor.template.substr(end + 2);
-          const remainder = tail
-            .split(/[[(.+?)\]]/g)
-            .filter(item => !!item.trim())[0];
+      if (next.includes('static-text')) {
+        const content = next.replace(/static-text=|"/g, '');
+        editor.tail = this.setStaticText('static-text', ' '+content, true);
+      }
 
-          if (remainder.includes('custom')) {
-            this.list[this.focused].text += this.setStaticText(remainder, this.dictionary[remainder][0], true);
-            this.updateText();
-            return;
-          }
+      editor.text = $event.target.innerHTML;
+      editor.placeholder = editor.text + editor.tail;
+      this.updateText($event);
 
-          if (remainder.includes('static-text')) {
-            const [cls, text] = remainder
-              .split('=')
-              .map(item => item.replace(/[|]|"/g,''));
-            this.list[this.focused].text += this.setStaticText(cls, text, true);
+      if (this.dictionary[next]) {
+        const input = `editor-${this.focused}-${this.level}`;
+        this.$root.$emit('set-hint-state', true, next, '', input);
+      }
+    },
+    fixStaticText ($event) {
+      const [editor, current, next] = this.getSiblings($event);
 
-            this.updateText();
-          } else {
-            const chapter = remainder.replace('text-greyed', '').trim();
-            if (this.dictionary[chapter]) {
-              const input = `editor-${ this.focused }-${ this.level }`;
-              this.$root.$emit('set-hint-state', true, chapter, '', input);
-            }
-          }
-        });
+      const parts = editor.text.split('</span>');
+      const text = parts[parts.length[-1]].trim();
+
+      editor.text += this.setStaticText(next, text);
+      this.updateText();
     }
   }
 };

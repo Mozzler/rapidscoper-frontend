@@ -7,9 +7,9 @@ export default {
   ],
   dictionary: {
     'constructions': [
-      '[beginning] [user-type] [static-text="I can"] [custom] [static-text="so that"] [custom]',
-      '[beginning] [requirement-type] [static-text="called"] [field]',
-      '[beginning] [custom]',
+      '[beginning][user-type][static-text="I can"][custom][static-text="so that"][custom]',
+      '[beginning][requirement-type][static-text="called"][field]',
+      '[beginning][custom]',
       '[custom]'
     ],
     'beginning': [

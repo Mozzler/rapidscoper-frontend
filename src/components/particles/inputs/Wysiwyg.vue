@@ -30,6 +30,7 @@
             </div>
           </v-flex>
           <v-flex grow text-xs-left>
+            <div class="user-story__placeholder" v-html="item.placeholder" readonly></div>
             <div contenteditable class="user-story__editable"
                  :ref="`editor-${ index }-${ level }`"
                  @focus="($event) => focus($event, index)"
@@ -99,7 +100,7 @@ export default {
   },
   methods: {
     updateText () {
-      this.$emit('update-text', this.focused, this.list[this.focused].text);
+      this.$emit('update-text', this.focused, this.list[this.focused]);
     },
     updateChildText (index, text, parentIndex) {
       this.list[parentIndex].list[index].text = text;

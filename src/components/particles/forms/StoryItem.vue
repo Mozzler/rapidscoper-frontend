@@ -11,6 +11,7 @@
       user stories
     </div>
     <wysiwyg
+      :ref="'wysiwyg'"
       :model="stories.list"
       :level="1"
       @update-text="updateText"/>
@@ -44,18 +45,29 @@ export default {
 
           text: '',
           template: '',
+          tail: '',
+          placeholder: '',
 
           list: []
         }]
       }
     };
   },
-  beforeMount () {
+  computed: {
+    dictionary () {
+      return this.$store.state.story.dictionary;
+    }
+  },
+  mounted () {
     this.stories.list[0].parent = this.stories;
+
+    this.stories.list[0].text = this.$refs.wysiwyg.setStaticText('beginning', 'As a', true);
+    this.stories.list[0].template = this.dictionary.constructions[0];
   },
   methods: {
-    updateText (index, text) {
-      this.stories.list[index].text = text;
+    updateText (index, input) {
+      this.stories.list[index].text = input.text;
+      this.stories.list[index].placeholder = input.placeholder;
     }
   }
 };
