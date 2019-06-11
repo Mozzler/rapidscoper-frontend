@@ -11,13 +11,15 @@
       user stories
     </div>
 
-    <wysiwyg
-      :ref="'wysiwyg'"
-      :model="stories.list"
-      :level="1"
-      @update-text="updateText"/>
+    <div>
+      <wysiwyg
+        :ref="'wysiwyg'"
+        :model="stories.list"
+        :level="1"
+        @update-text="updateText"/>
 
-    <hint />
+      <hint />
+    </div>
   </div>
 </template>
 

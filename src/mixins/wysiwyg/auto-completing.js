@@ -38,7 +38,6 @@ export default {
 
       if (current === 'user-story__editable') {
         current = selection.anchorNode.previousSibling.className;
-        //this.removeSpaces();
 
         if (current.includes('beginning')) {
           editor.text = editor.text.replace(/ text-greyed/, '');
@@ -95,7 +94,7 @@ export default {
           const rect = el.getBoundingClientRect();
 
           let position = {
-            top: rect.top - 10,
+            top: rect.top - 70,
             left: el.offsetWidth
           };
 

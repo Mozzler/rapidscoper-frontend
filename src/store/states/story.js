@@ -37,5 +37,9 @@ export default {
       'field': 'Field',
     },
   },
-  custom: ['Custom Text']
+  custom: [
+    'Custom Text',
+    'Registered User',
+    'Admin User'
+  ]
 };
