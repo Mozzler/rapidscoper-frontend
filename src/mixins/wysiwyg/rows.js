@@ -75,6 +75,10 @@ export default {
       const selection = $event.view.getSelection();
       const cls = selection.focusNode.parentNode.className;
 
+      this.list[this.focused].text = $event.target.innerHTML;
+      this.list[this.focused].placeholder = '';
+      this.list[this.focused].tail = '';
+
       if (cls.includes('beginning')) {
         $event.preventDefault();
       }

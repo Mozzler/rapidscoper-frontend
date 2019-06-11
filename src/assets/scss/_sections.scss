@@ -38,11 +38,19 @@
   cursor: default;
 }
 
+.user-story__wysiwyg {
+  position: relative;
+  width: 100%;
+}
+
 .user-story__placeholder {
   position: absolute;
+  width: 100%;
+  color: $white;
 }
 .user-story__editable {
-  //position: relative;
+  position: absolute;
+  width: 100%;
 }
 
 .user-story__editable--user-type {

@@ -30,17 +30,19 @@
             </div>
           </v-flex>
           <v-flex grow text-xs-left>
-            <div class="user-story__placeholder" v-html="item.placeholder" readonly></div>
-            <div contenteditable class="user-story__editable"
-                 :ref="`editor-${ index }-${ level }`"
-                 @focus="($event) => focus($event, index)"
-                 @keydown.exact="pressed"
-                 @keydown.tab.exact="fixStaticText"
-                 @keypress.enter.exact="createRow"
-                 @keydown.delete.exact="remove"
-                 @keydown.186.shift.exact="createSublist"
-                 @keydown.tab.shift.exact="decreaseSublistLevel"
-                 v-html="item.text"></div>
+            <div class="user-story__wysiwyg">
+              <div class="user-story__placeholder" v-html="item.placeholder" readonly></div>
+              <div contenteditable class="user-story__editable"
+                   :ref="`editor-${ index }-${ level }`"
+                   @focus="($event) => focus($event, index)"
+                   @keydown.exact="pressed"
+                   @keydown.tab.exact="fixStaticText"
+                   @keypress.enter.exact="createRow"
+                   @keydown.delete.exact="remove"
+                   @keydown.186.shift.exact="createSublist"
+                   @keydown.tab.shift.exact="decreaseSublistLevel"
+                   v-html="item.text"></div>
+            </div>
           </v-flex>
         </v-layout>
       </div>

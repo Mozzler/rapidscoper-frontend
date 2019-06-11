@@ -10,6 +10,13 @@ export default {
         this.$refs[el][0].focus();
 
         const editor = this.list[this.focused];
+
+        editor.text = editor.text
+          .split('</span>')
+          .filter(item => item.includes('<span'))
+          .map(item => `${item}</span>`)
+          .join();
+
         editor.text += this.setStaticText(chapter, text);
         editor.tail = '';
         editor.placeholder = editor.text + editor.tail;
@@ -19,16 +26,6 @@ export default {
     },
     setStaticText(type, text, greyed = false, editable = true) {
       return `<span class="user-story__editable--${type}${greyed ? ' text-greyed' : ''}" contenteditable="${editable}">${text}</span>&nbsp;`;
-    },
-    removeSpaces() {
-      const editor = this.list[this.focused];
-
-      editor.text = editor.text
-        .split(/&nbsp;/)
-        .filter(item => !!item)
-        .join('');
-
-      this.updateText();
     },
     classToType(str) {
       return str
@@ -45,7 +42,6 @@ export default {
 
         if (current.includes('beginning')) {
           editor.text = editor.text.replace(/ text-greyed/, '');
-          this.updateText();
         }
       }
 
@@ -73,41 +69,49 @@ export default {
     },
     parseContent ($event) {
       const [editor, current, next] = this.getSiblings($event);
-      const content = next.replace(/static-text=|"/g, '');
 
-      if (current !== 'custom' && next.includes('static-text')) {
-        editor.text += this.setStaticText('static-text', content, false, false);
-        editor.tail = '';
-        return;
-      } else {
-        editor.text = $event.target.innerHTML;
-
-        if (this.dictionary.placeholders[next]) {
-          editor.tail = this.dictionary.placeholders[next];
-        }
-        else {
-          editor.tail = '';
-        }
-
-        editor.placeholder = editor.text + editor.tail;
+      if (current === 'beginning') {
+        editor.text = editor.text.replace(' text-greyed', '');
       }
 
-      this.updateText($event);
+      editor.text = $event.target.innerHTML;
+
+      this.initPlaceholder($event, editor, next);
 
       if (this.dictionary[next]) {
         const input = `editor-${this.focused}-${this.level}`;
         this.$root.$emit('set-hint-state', true, next, '', input);
       }
     },
-    fixStaticText ($event) {
-      const [editor, current, next] = this.getSiblings($event);
+    initPlaceholder ($event, editor, next) {
+      let tail = '';
 
-      const parts = editor.text.split('</span>');
-      const text = parts[parts.length[-1]].trim();
+      if (this.dictionary.placeholders[next]) {
+        tail = this.dictionary.placeholders[next];
+      }
+      if (next.includes('static-text')) {
+        tail = next.replace(/static-text=|"/g, '');
+      }
 
-      editor.text += this.setStaticText(next, text);
+      if (tail) {
+        editor.tail = this.setStaticText('static-text', ` ${tail}`, true, false);
+      } else {
+        tail = '';
+      }
 
+      editor.placeholder = editor.text + editor.tail;
       this.updateText();
+    },
+    fixStaticText ($event) {
+      $event.preventDefault();
+
+      const [editor, current, next] = this.getSiblings($event);
+      if (editor.tail && next.includes('static-text')) {
+        const content = next.replace(/static-text=|"/g, '');
+        editor.text += this.setStaticText('static-text', content, false, false);
+        editor.tail = '';
+        editor.placeholder = editor.text;
+      }
     }
   }
 };
