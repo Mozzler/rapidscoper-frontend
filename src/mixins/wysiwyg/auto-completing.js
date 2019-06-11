@@ -5,10 +5,14 @@ export default {
     }
   },
   methods: {
-    hintComplete(chapter, text, el) {
+    hintComplete (chapter, text, el) {
       if (this.$refs[el]) {
         this.$refs[el][0].focus();
-        this.list[this.focused].text += this.setStaticText(chapter, text);
+
+        const editor = this.list[this.focused];
+        editor.text += this.setStaticText(chapter, text);
+        editor.tail = '';
+        editor.placeholder = editor.text + editor.tail;
 
         this.updateText();
       }
@@ -74,12 +78,20 @@ export default {
       if (current !== 'custom' && next.includes('static-text')) {
         editor.text += this.setStaticText('static-text', content, false, false);
         editor.tail = '';
-        this.updateText($event);
         return;
+      } else {
+        editor.text = $event.target.innerHTML;
+
+        if (this.dictionary.placeholders[next]) {
+          editor.tail = this.dictionary.placeholders[next];
+        }
+        else {
+          editor.tail = '';
+        }
+
+        editor.placeholder = editor.text + editor.tail;
       }
 
-      /*editor.text = $event.target.innerHTML;
-      editor.placeholder = editor.text + editor.tail;*/
       this.updateText($event);
 
       if (this.dictionary[next]) {
@@ -94,6 +106,7 @@ export default {
       const text = parts[parts.length[-1]].trim();
 
       editor.text += this.setStaticText(next, text);
+
       this.updateText();
     }
   }

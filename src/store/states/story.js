@@ -34,6 +34,11 @@ export default {
     ],
     'custom': [
       'Custom Text'
-    ]
-  },
+    ],
+    'placeholders': {
+      'user-type': 'User Type',
+      'requirement-type': 'Requirement Type',
+      'field': 'Field'
+    }
+  }
 };
