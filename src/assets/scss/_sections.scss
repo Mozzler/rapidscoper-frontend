@@ -51,6 +51,12 @@
 .user-story__editable {
   position: absolute;
   width: 100%;
+
+  &:focus{
+    outline: none;
+  }
+
+  caret-color: $light-blue;
 }
 
 .user-story__editable--user-type {

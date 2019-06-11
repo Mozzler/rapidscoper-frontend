@@ -35,7 +35,7 @@
               <div contenteditable class="user-story__editable"
                    :ref="`editor-${ index }-${ level }`"
                    @focus="($event) => focus($event, index)"
-                   @keydown.exact="pressed"
+                   @keyup.exact="pressed"
                    @keydown.tab.exact="fixStaticText"
                    @keypress.enter.exact="createRow"
                    @keydown.delete.exact="remove"

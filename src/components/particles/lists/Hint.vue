@@ -3,8 +3,13 @@
     <div class="hint__item"
          v-for="(item, index) in items"
          :key="index"
-         @click="event => complete(event, index)">
-      {{ item }}
+         @click="event => complete(item)">
+      <span class="hint__item-text">{{ item }}</span>
+    </div>
+    <div class="hint__item hint__bordered"
+         v-if="filter"
+         @click="event => complete(filter)">
+      <span class="text-bold">Ctrl + Enter</span> to create "{{ filter }}"
     </div>
   </div>
 </template>
@@ -39,14 +44,19 @@ export default {
     }
   },
   methods: {
-    setHintState (visible, chapter, filter = null, input) {
+    setHintState (visible, chapter, filter = null, input, position) {
+      Object.assign(this.$refs.hint.style, {
+        left: (56 + position.left) + 'px',
+        top: position.top + 'px'
+      });
+
       this.visible = visible;
       this.chapter = chapter;
       this.filter = filter;
       this.input = input;
     },
-    complete ($event) {
-      this.$root.$emit('hint-complete', this.chapter, $event.target.innerHTML, this.input);
+    complete (item) {
+      this.$root.$emit('hint-complete', this.chapter, item, this.input);
       this.visible = false;
     }
   },

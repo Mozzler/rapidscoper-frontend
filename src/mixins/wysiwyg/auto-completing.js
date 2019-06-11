@@ -17,7 +17,7 @@ export default {
           .map(item => `${item}</span>`)
           .join('');
 
-        editor.text += this.setStaticText(chapter, text);
+        editor.text += '&nbsp;' + this.setStaticText(chapter, text);
         editor.tail = '';
         editor.placeholder = editor.text + editor.tail;
 
@@ -85,7 +85,28 @@ export default {
 
       if (this.dictionary[next]) {
         const input = `editor-${this.focused}-${this.level}`;
-        this.$root.$emit('set-hint-state', true, next, '', input);
+
+        const nodes = $event.target.childNodes;
+        nodes.filter = [].filter;
+
+        const el = nodes.filter(item => item.className && item.className.includes(current))[0];
+
+        if (el) {
+          const rect = el.getBoundingClientRect();
+
+          let position = {
+            top: rect.top - 10,
+            left: el.offsetWidth
+          };
+
+          const texts = nodes.filter(item => !item.className);
+          let filter = '';
+          if (texts && texts.length) {
+            filter = texts[0].textContent.trim();
+          }
+
+          this.$root.$emit('set-hint-state', true, next, filter, input, position);
+        }
       }
     },
     initPlaceholder ($event, editor, next) {

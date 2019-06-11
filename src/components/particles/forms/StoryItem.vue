@@ -10,6 +10,7 @@
     <div class="sidebar__title mt-4 mb-3 padding-0">
       user stories
     </div>
+
     <wysiwyg
       :ref="'wysiwyg'"
       :model="stories.list"
