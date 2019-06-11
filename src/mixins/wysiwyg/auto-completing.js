@@ -15,7 +15,7 @@ export default {
           .split('</span>')
           .filter(item => item.includes('<span'))
           .map(item => `${item}</span>`)
-          .join();
+          .join('');
 
         editor.text += this.setStaticText(chapter, text);
         editor.tail = '';
@@ -24,10 +24,10 @@ export default {
         this.updateText();
       }
     },
-    setStaticText(type, text, greyed = false, editable = true) {
+    setStaticText (type, text, greyed = false, editable = true) {
       return `<span class="user-story__editable--${type}${greyed ? ' text-greyed' : ''}" contenteditable="${editable}">${text}</span>&nbsp;`;
     },
-    classToType(str) {
+    classToType (str) {
       return str
         .split(' ')
         .map(item => item.replace('user-story__editable--', ''))[0];
@@ -76,7 +76,12 @@ export default {
 
       editor.text = $event.target.innerHTML;
 
-      this.initPlaceholder($event, editor, next);
+      if ($event.key !== '.' && editor.text.trim().charAt(editor.text.length - 1) !== '.') {
+        this.initPlaceholder($event, editor, next);
+      } else {
+        editor.tail = '';
+        editor.placeholder = '';
+      }
 
       if (this.dictionary[next]) {
         const input = `editor-${this.focused}-${this.level}`;
@@ -85,12 +90,21 @@ export default {
     },
     initPlaceholder ($event, editor, next) {
       let tail = '';
+      let innerText = $event.target.innerText.trim();
+      let lastCharacter = innerText.charAt(innerText.length - 1);
+
+      if (lastCharacter === '.' || lastCharacter === ':') {
+        return;
+      }
 
       if (this.dictionary.placeholders[next]) {
         tail = this.dictionary.placeholders[next];
       }
       if (next.includes('static-text')) {
         tail = next.replace(/static-text=|"/g, '');
+      }
+      if (next === 'custom') {
+        tail = this.$store.state.story.custom[0];
       }
 
       if (tail) {
@@ -99,18 +113,38 @@ export default {
         tail = '';
       }
 
+      const empty = !editor.text
+        .split('</span>')
+        .filter(item => !item.includes('<span'))
+        .join()
+        .replace('&nbsp;', '');
+
+      if (!empty) {
+        editor.tail = '';
+      }
+
       editor.placeholder = editor.text + editor.tail;
       this.updateText();
     },
     fixStaticText ($event) {
       $event.preventDefault();
-
       const [editor, current, next] = this.getSiblings($event);
+
       if (editor.tail && next.includes('static-text')) {
         const content = next.replace(/static-text=|"/g, '');
         editor.text += this.setStaticText('static-text', content, false, false);
         editor.tail = '';
         editor.placeholder = editor.text;
+      }
+
+      if (next === 'custom') {
+        const tail = editor.text
+          .split('</span>')
+          .filter(item => !item.includes('<span'))
+          .join('');
+
+        const origin = editor.text.split(tail)[0];
+        editor.text = origin + this.setStaticText('custom', tail, false, true);
       }
     }
   }

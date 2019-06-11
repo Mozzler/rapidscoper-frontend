@@ -15,9 +15,9 @@ export default {
     focusEditor (wysiwygEditor, context) {
       context.$refs[wysiwygEditor][0].focus();
     },
-    addRowToList (parent, text = '') {
-      return {
-        parent: parent,
+    addRowToList (prototype, text = '', sublist = false) {
+      return  {
+        parent: sublist ? prototype : prototype.parent,
         estimation: null,
         priority: null,
         label: null,
@@ -25,7 +25,7 @@ export default {
         placeholder: '',
 
         text: text,
-        template: parent.template,
+        template: sublist ? '' : prototype.template,
 
         list: []
       };
@@ -33,7 +33,7 @@ export default {
     createRow ($event) {
       $event.preventDefault();
       new Promise(resolve => {
-        const row = this.addRowToList(this.list[this.focused].parent, $event.target.outerHTML);
+        const row = this.addRowToList(this.list[this.focused], $event.target.innerHTML);
         this.list.push(row);
         resolve();
       }).then(() => {

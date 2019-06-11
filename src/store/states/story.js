@@ -10,7 +10,6 @@ export default {
       '[beginning][user-type][static-text="I can"][custom][static-text="so that"][custom]',
       '[beginning][requirement-type][static-text="called"][field]',
       '[beginning][custom]',
-      '[custom]'
     ],
     'beginning': [
       'As a ...',
@@ -32,13 +31,11 @@ export default {
       'First Name',
       'Last Name'
     ],
-    'custom': [
-      'Custom Text'
-    ],
     'placeholders': {
       'user-type': 'User Type',
       'requirement-type': 'Requirement Type',
-      'field': 'Field'
-    }
-  }
+      'field': 'Field',
+    },
+  },
+  custom: ['Custom Text']
 };
