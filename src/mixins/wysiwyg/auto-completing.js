@@ -13,8 +13,8 @@ export default {
         this.updateText();
       }
     },
-    setStaticText(type, text, greyed = false) {
-      return `<span class="user-story__editable--${type}${greyed ? ' text-greyed' : ''}">${text}</span>&nbsp;`;
+    setStaticText(type, text, greyed = false, editable = true) {
+      return `<span class="user-story__editable--${type}${greyed ? ' text-greyed' : ''}" contenteditable="${editable}">${text}</span>&nbsp;`;
     },
     removeSpaces() {
       const editor = this.list[this.focused];
@@ -52,6 +52,11 @@ export default {
         .split(/[[(.*)\]]/)
         .filter(item => !!item.trim());
 
+      if (current === 'static-text') {
+        const html = document.getSelection().focusNode.previousSibling.innerHTML;
+        current += `="${html}"`;
+      }
+
       const next = parts.indexOf(current) + 1;
       return parts[next];
     },
@@ -64,14 +69,17 @@ export default {
     },
     parseContent ($event) {
       const [editor, current, next] = this.getSiblings($event);
+      const content = next.replace(/static-text=|"/g, '');
 
-      if (next.includes('static-text')) {
-        const content = next.replace(/static-text=|"/g, '');
-        editor.tail = this.setStaticText('static-text', ' '+content, true);
+      if (current !== 'custom' && next.includes('static-text')) {
+        editor.text += this.setStaticText('static-text', content, false, false);
+        editor.tail = '';
+        this.updateText($event);
+        return;
       }
 
-      editor.text = $event.target.innerHTML;
-      editor.placeholder = editor.text + editor.tail;
+      /*editor.text = $event.target.innerHTML;
+      editor.placeholder = editor.text + editor.tail;*/
       this.updateText($event);
 
       if (this.dictionary[next]) {
