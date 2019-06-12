@@ -72,15 +72,13 @@ export default {
       }
     },
     remove ($event) {
-      const selection = $event.view.getSelection();
-      const cls = selection.focusNode.parentNode.className;
+      const spans = this.list[this.focused].text.split('</span>');
 
-      this.list[this.focused].text = $event.target.innerHTML;
-      this.list[this.focused].placeholder = '';
-      this.list[this.focused].tail = '';
-
-      if (cls.includes('beginning')) {
+      if (this.level === 1 && spans[1] === '&nbsp;') {
         $event.preventDefault();
+      } else {
+        this.list[this.focused].text = $event.target.innerHTML;
+        this.updateText();
       }
     }
   }

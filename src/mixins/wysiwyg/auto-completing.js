@@ -46,7 +46,8 @@ export default {
     setStaticText (type, text, greyed = false, editable = true) {
       const content = `<span 
         class="user-story__editable--${type}${greyed ? ' text-greyed' : ''}" 
-        contenteditable="${editable}">
+        readonly
+        contenteditable="false">
             ${text}
         </span>&nbsp;`;
       return content;
