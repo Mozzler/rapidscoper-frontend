@@ -77,8 +77,14 @@ export default {
         .filter(item => !!item.trim());
 
       if (current === 'static-text') {
-        const html = document.getSelection().focusNode.previousSibling.innerHTML;
+        const html = document.getSelection().focusNode.previousSibling.innerHTML.trim();
         current += `="${html}"`;
+      }
+
+      if (current === 'custom') {
+        //const matches = document.getSelection().
+        console.log(document.getSelection());
+        //user-story__editable--custom
       }
 
       const next = parts.indexOf(current) + 1;
@@ -138,6 +144,7 @@ export default {
       }
 
       this.checkDictionary($event, focusHint);
+      this.updateText();
     },
     initPlaceholder ($event, editor, next) {
       let tail = '';
@@ -181,7 +188,7 @@ export default {
       $event.preventDefault();
       const [editor, current, next] = this.getSiblings($event);
 
-      if (this.filter) {
+      if (this.filter && this.filter.trim()) {
         this.$root.$emit('complete-hint', this.filter, true);
         return;
       }
@@ -194,14 +201,27 @@ export default {
       }
 
       if (next === 'custom') {
-        const tail = editor.text
+        let origin = editor.text
           .split('</span>')
-          .filter(item => !item.includes('<span'))
+          .filter(item => item.includes('<span'))
+          .map(item => `${item}</span>`)
           .join('');
 
-        const origin = editor.text.split(tail)[0];
-        editor.text = origin + this.setStaticText('custom', tail, false, true);
+        let tail = editor.text
+          .split('</span>')
+          .filter(item => !item.includes('<span'))
+          .join('')
+          .replace('&nbsp;', '')
+          .trim();
+
+        if (!tail) {
+          tail = this.$store.state.story.custom[0];
+        }
+
+        editor.text = origin + this.setStaticText('custom', tail, false, false);
       }
+
+      this.updateText();
     }
   }
 };

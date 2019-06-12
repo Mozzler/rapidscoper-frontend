@@ -33,7 +33,7 @@ export default {
   data () {
     return {
       visible: false,
-      focused: null
+      focused: 0
     };
   },
   mounted () {
