@@ -15,7 +15,7 @@ export default {
     },
     items () {
       const keyword = this.filter ? this.filter.toLowerCase() : '';
-      return this.list.filter(item => item.toLowerCase().includes(keyword));
+      return this.list.filter(item => item.toLowerCase().includes(keyword, 0));
     },
     inList () {
       const filter = this.list.filter(item => item === this.filter.trim());
@@ -23,7 +23,10 @@ export default {
     }
   },
   methods: {
-    complete (item = this.filter) {
+    complete (item = this.filter, first = false) {
+      if (first && this.items) {
+        item = this.items[0];
+      }
       this.visible = false;
       this.$nextTick(() => {
         this.$root.$emit('hint-complete', this.chapter, item, this.input);

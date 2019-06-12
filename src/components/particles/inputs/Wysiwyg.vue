@@ -91,7 +91,10 @@ export default {
     return {
       list: this.model,
       focused: null,
-      filter: null
+      hint: {
+        filter: null,
+        chapter: null
+      }
     };
   },
   computed: {

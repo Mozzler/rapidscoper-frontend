@@ -115,6 +115,7 @@ export default {
           if (texts && texts.length) {
             this.filter = texts[0].textContent.trim();
           }
+          this.chapter = next;
 
           this.$root.$emit('set-hint-state', true, next, this.filter, input, position, focus);
         }
@@ -179,6 +180,11 @@ export default {
     fixStaticText ($event) {
       $event.preventDefault();
       const [editor, current, next] = this.getSiblings($event);
+
+      if (this.filter) {
+        this.$root.$emit('complete-hint', this.filter, true);
+        return;
+      }
 
       if (editor.tail && next.includes('static-text')) {
         const content = next.replace(/static-text=|"/g, '');
