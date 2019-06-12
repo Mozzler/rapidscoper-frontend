@@ -1,8 +1,16 @@
 <template>
-  <div ref="hint" v-show="visible" class="hint">
+  <div ref="hint"
+       v-show="visible"
+       :tabindex="0"
+       @keydown.tab.exact="$event => tabComplete($event, items[focused])"
+       @keydown.up.exact="$event => navigate($event, -1)"
+       @keydown.down.exact="$event => navigate($event, 1)"
+       @keydown.esc.exact="hide"
+       class="hint">
     <div class="hint__item"
          v-for="(item, index) in items"
          :key="index"
+         :class="{'hint__item--active': focused === index}"
          @click="() => complete(item)">
       <span class="hint__item-text">{{ item }}</span>
     </div>
@@ -15,54 +23,66 @@
 </template>
 
 <script>
+import HintMixin from "@/mixins/wysiwyg/hint";
+
 export default {
   name: "Hint",
+  mixins: [
+    HintMixin
+  ],
   data () {
     return {
-      chapter: null,
-      filter: null,
       visible: false,
-      input: null
+      focused: null
     };
   },
-  beforeMount () {
+  mounted () {
     this.$root.$on('set-hint-state', this.setHintState);
-  },
-  computed: {
-    dictionary () {
-      return this.$store.state.story.dictionary;
-    },
-    list () {
-      return this.chapter ? this.dictionary[this.chapter] : [];
-    },
-    items () {
-      const keyword = this.filter ? this.filter.toLowerCase() : '';
-      return this.list.filter(item => item.toLowerCase().includes(keyword));
-    },
-    inList () {
-      const filter = this.list.filter(item => item === this.filter.trim());
-      return Boolean(filter.length);
-    }
+    this.$root.$on('complete-hint', this.complete);
   },
   methods: {
-    setHintState (visible, chapter, filter = null, input, position) {
+    hide ($event) {
+      $event.preventDefault();
+
+      this.visible = false;
+      this.$root.$emit('set-focus-to-input', this.input);
+    },
+    tabComplete ($event, value) {
+      $event.preventDefault();
+      this.complete(value);
+    },
+    setHintState (visible, chapter = null, filter = null, input = null, position = null, focus = false) {
       Object.assign(this.$refs.hint.style, {
-        left: (56 + position.left) + 'px',
-        top: position.top + 'px'
+        left: (position.left + 56) + 'px',
+        top: (position.top - 65) + 'px'
       });
 
       this.visible = visible;
       this.chapter = chapter;
       this.filter = filter;
       this.input = input;
+
+      this.$nextTick(() => {
+        this.$refs.hint.focus();
+      });
     },
-    complete (item) {
-      this.$root.$emit('hint-complete', this.chapter, item, this.input);
-      this.visible = false;
+    navigate ($event, step) {
+      $event.preventDefault();
+      step = this.focused + step;
+
+      if (step === this.items.length) {
+        step = 0;
+      }
+      if (step < 0) {
+        step = this.items.length - 1;
+      }
+
+      this.focused = step;
     }
   },
   beforeDestroy () {
     this.$root.$off('set-hint-state');
+    this.$root.$off('complete-hint');
   }
 };
 </script>

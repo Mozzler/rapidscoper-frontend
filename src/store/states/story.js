@@ -23,7 +23,9 @@ export default {
       'API endpoint'
     ],
     'user-type': [
-      'New User'
+      'New User',
+      'Registered User',
+      'Admin User'
     ],
     'field': [
       'Email',
@@ -39,7 +41,5 @@ export default {
   },
   custom: [
     'Custom Text',
-    'Registered User',
-    'Admin User'
   ]
 };

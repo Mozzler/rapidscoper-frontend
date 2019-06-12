@@ -12,10 +12,10 @@
   cursor: pointer;
   color: $light-black;
   line-height: 30px;
+}
 
-  &:hover {
-    background-color: $light-grey;
-  }
+.hint__item--active {
+  background-color: $light-grey;
 }
 
 .hint__item-text {

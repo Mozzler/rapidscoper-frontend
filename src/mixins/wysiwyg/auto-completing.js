@@ -1,13 +1,32 @@
 export default {
+  beforeMount () {
+    this.$root.$on('set-focus-to-input', this.focusInputFromHint);
+  },
+  beforeDestroy () {
+    this.$root.$off('set-focus-to-input');
+  },
   computed: {
     dictionary () {
       return this.$store.state.story.dictionary;
     }
   },
   methods: {
+    focusInputFromHint (el) {
+      if (this.$refs[el]) {
+        this.$nextTick(() => {
+          this.$refs[el][0].focus();
+        });
+      }
+    },
+    createField ($event) {
+      $event.preventDefault();
+      this.$root.$emit('complete-hint');
+    },
     hintComplete (chapter, text, el) {
       if (this.$refs[el]) {
-        this.$refs[el][0].focus();
+        this.$nextTick(() => {
+          this.$refs[el][0].focus();
+        });
 
         const editor = this.list[this.focused];
 
@@ -25,7 +44,12 @@ export default {
       }
     },
     setStaticText (type, text, greyed = false, editable = true) {
-      return `<span class="user-story__editable--${type}${greyed ? ' text-greyed' : ''}" contenteditable="${editable}">${text}</span>&nbsp;`;
+      const content = `<span 
+        class="user-story__editable--${type}${greyed ? ' text-greyed' : ''}" 
+        contenteditable="${editable}">
+            ${text}
+        </span>&nbsp;`;
+      return content;
     },
     classToType (str) {
       return str
@@ -66,7 +90,36 @@ export default {
 
       return [editor, current, next];
     },
-    parseContent ($event) {
+    checkDictionary ($event, focus = false) {
+      const [editor, current, next] = this.getSiblings($event);
+
+      if (this.dictionary[next]) {
+        const input = `editor-${this.focused}-${this.level}`;
+
+        const nodes = $event.target.childNodes;
+        nodes.filter = [].filter;
+
+        const el = nodes.filter(item => item.className && item.className.includes(current))[0];
+
+        if (el) {
+          const rect = el.getBoundingClientRect();
+
+          let position = {
+            top: rect.top,
+            left: el.offsetWidth
+          };
+
+          const texts = nodes.filter(item => !item.className);
+          this.filter = '';
+          if (texts && texts.length) {
+            this.filter = texts[0].textContent.trim();
+          }
+
+          this.$root.$emit('set-hint-state', true, next, this.filter, input, position, focus);
+        }
+      }
+    },
+    parseContent ($event, focusHint) {
       const [editor, current, next] = this.getSiblings($event);
 
       if (current === 'beginning') {
@@ -82,31 +135,7 @@ export default {
         editor.placeholder = '';
       }
 
-      if (this.dictionary[next]) {
-        const input = `editor-${this.focused}-${this.level}`;
-
-        const nodes = $event.target.childNodes;
-        nodes.filter = [].filter;
-
-        const el = nodes.filter(item => item.className && item.className.includes(current))[0];
-
-        if (el) {
-          const rect = el.getBoundingClientRect();
-
-          let position = {
-            top: rect.top - 70,
-            left: el.offsetWidth
-          };
-
-          const texts = nodes.filter(item => !item.className);
-          this.filter = '';
-          if (texts && texts.length) {
-            this.filter = texts[0].textContent.trim();
-          }
-
-          this.$root.$emit('set-hint-state', true, next, this.filter, input, position);
-        }
-      }
+      this.checkDictionary($event, focusHint);
     },
     initPlaceholder ($event, editor, next) {
       let tail = '';
@@ -166,10 +195,6 @@ export default {
         const origin = editor.text.split(tail)[0];
         editor.text = origin + this.setStaticText('custom', tail, false, true);
       }
-    },
-    createField ($event) {
-      $event.preventDefault();
-      //
     }
   }
 };

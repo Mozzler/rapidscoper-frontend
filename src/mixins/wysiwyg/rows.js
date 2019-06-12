@@ -10,13 +10,13 @@ export default {
       this.focused = index;
     },
     pressed ($event) {
-      this.parseContent($event);
+      this.parseContent($event, $event.key === 'ArrowDown');
     },
     focusEditor (wysiwygEditor, context) {
       context.$refs[wysiwygEditor][0].focus();
     },
     addRowToList (prototype, text = '', sublist = false) {
-      return  {
+      return {
         parent: sublist ? prototype : prototype.parent,
         estimation: null,
         priority: null,
