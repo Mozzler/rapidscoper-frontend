@@ -3,12 +3,12 @@
     <div class="hint__item"
          v-for="(item, index) in items"
          :key="index"
-         @click="event => complete(item)">
+         @click="() => complete(item)">
       <span class="hint__item-text">{{ item }}</span>
     </div>
     <div class="hint__item hint__bordered"
-         v-if="filter"
-         @click="event => complete(filter)">
+         v-if="filter && !inList"
+         @click="() => complete(filter)">
       <span class="text-bold">Ctrl + Enter</span> to create "{{ filter }}"
     </div>
   </div>
@@ -32,15 +32,16 @@ export default {
     dictionary () {
       return this.$store.state.story.dictionary;
     },
+    list () {
+      return this.chapter ? this.dictionary[this.chapter] : [];
+    },
     items () {
-      let list = this.dictionary[this.chapter];
-      if (!list) {
-        return [];
-      }
-      let filtered = list.filter(item => {
-        return item.includes(this.filter);
-      });
-      return this.filter ? filtered : list;
+      const keyword = this.filter ? this.filter.toLowerCase() : '';
+      return this.list.filter(item => item.toLowerCase().includes(keyword));
+    },
+    inList () {
+      const filter = this.list.filter(item => item === this.filter.trim());
+      return Boolean(filter.length);
     }
   },
   methods: {

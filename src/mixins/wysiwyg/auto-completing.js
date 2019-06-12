@@ -99,12 +99,12 @@ export default {
           };
 
           const texts = nodes.filter(item => !item.className);
-          let filter = '';
+          this.filter = '';
           if (texts && texts.length) {
-            filter = texts[0].textContent.trim();
+            this.filter = texts[0].textContent.trim();
           }
 
-          this.$root.$emit('set-hint-state', true, next, filter, input, position);
+          this.$root.$emit('set-hint-state', true, next, this.filter, input, position);
         }
       }
     },
@@ -166,6 +166,10 @@ export default {
         const origin = editor.text.split(tail)[0];
         editor.text = origin + this.setStaticText('custom', tail, false, true);
       }
+    },
+    createField ($event) {
+      $event.preventDefault();
+      //
     }
   }
 };

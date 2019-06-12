@@ -37,6 +37,7 @@
                    @focus="($event) => focus($event, index)"
                    @keyup.exact="pressed"
                    @keydown.tab.exact="fixStaticText"
+                   @keypress.ctrl.enter.exact="createField"
                    @keypress.enter.exact="createRow"
                    @keydown.delete.exact="remove"
                    @keydown.186.shift.exact="createSublist"
@@ -89,7 +90,8 @@ export default {
   data () {
     return {
       list: this.model,
-      focused: null
+      focused: null,
+      filter: null
     };
   },
   computed: {
