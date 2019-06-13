@@ -1,16 +1,10 @@
 export default {
-  beforeMount () {
-    this.$root.$on('hint-complete', this.hintComplete);
-  },
-  beforeDestroy () {
-    this.$root.$off('hint-complete');
-  },
   methods: {
     focus ($event, index) {
       this.focused = index;
     },
     pressed ($event) {
-      this.parseContent($event, $event.key === 'ArrowDown');
+      this.parseContent($event);
     },
     focusEditor (wysiwygEditor, context) {
       context.$refs[wysiwygEditor][0].focus();
@@ -33,9 +27,11 @@ export default {
     createRow ($event) {
       $event.preventDefault();
       new Promise(resolve => {
+        this.finishSentence($event);
+        resolve();
+      }).then(() => {
         const row = this.addRowToList(this.list[this.focused], $event.target.innerHTML);
         this.list.push(row);
-        resolve();
       }).then(() => {
         const wysiwygChild = `editor-${ this.focused + 1 }-${ this.level }`;
         this.focusEditor(wysiwygChild, this);

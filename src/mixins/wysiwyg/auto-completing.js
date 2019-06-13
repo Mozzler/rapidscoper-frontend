@@ -1,227 +1,141 @@
 export default {
+  data () {
+    return {
+      event: null,
+      previous: null,
+      next: null
+    };
+  },
   beforeMount () {
     this.$root.$on('set-focus-to-input', this.focusInputFromHint);
+    this.$root.$on('hint-complete', this.hintComplete);
   },
   beforeDestroy () {
     this.$root.$off('set-focus-to-input');
+    this.$root.$off('hint-complete');
   },
   computed: {
     dictionary () {
       return this.$store.state.story.dictionary;
+    },
+    editor () {
+      return this.focused !== null ? this.list[this.focused] : null;
+    },
+    ref () {
+      return `editor-${this.focused}-${this.level}`;
     }
   },
   methods: {
+    parseContent ($event) {
+      new Promise(resolve => {
+        this.event = $event;
+        this.setSiblings();
+
+        this.editor.text = this.event.target.innerHTML;
+
+        // show hint, if dictionary has next property
+        this.initDictionary();
+
+        // show auto-completion static text
+        this.initStaticText();
+
+        resolve();
+      }).then(() => {
+        this.updateText();
+        this.event = null;
+        [this.previous, this.next] = [null, null];
+      });
+    },
+    initDictionary () {
+      if (!this.dictionary[this.next]) {
+        return;
+      }
+
+      const nodes = this.event.target.childNodes;
+      nodes.filter = [].filter;
+
+      const el = nodes.filter(item => item.className && item.className.includes(this.previous))[0];
+
+      if (el) {
+        const rect = el.getBoundingClientRect();
+        const texts = nodes.filter(item => !item.className);
+        const position = {
+          top: rect.top,
+          left: el.offsetWidth
+        };
+
+        this.filter = '';
+        if (texts && texts.length) {
+          this.filter = texts[0].textContent.trim();
+        }
+
+        this.$root.$emit('set-hint-state', true, this.next, this.filter, this.ref, position);
+      }
+    },
+    initStaticText () {
+      if (!this.next === 'custom') {
+        return;
+      }
+
+      const completion = this.getStaticText();
+
+      if (completion !== null) {
+        const [text, type] = this.getStaticTextByType(completion);
+        this.editor.tail = this.createSpan(text, type, true);
+        this.editor.placeholder = this.editor.text + this.editor.tail;
+      }
+    },
+    setSiblings () {
+      this.previous = this.getCurrentSpan();
+      this.next = this.getNextSpan();
+    },
     focusInputFromHint (el) {
       if (this.$refs[el]) {
         this.$nextTick(() => {
           this.$refs[el][0].focus();
         });
+        return true;
       }
+      return false;
     },
     createField ($event) {
       $event.preventDefault();
       this.$root.$emit('complete-hint');
     },
     hintComplete (chapter, text, el) {
-      if (this.$refs[el]) {
-        this.$nextTick(() => {
-          this.$refs[el][0].focus();
-        });
-
-        const editor = this.list[this.focused];
-
-        editor.text = editor.text
-          .split('</span>')
-          .filter(item => item.includes('<span'))
-          .map(item => `${item}</span>`)
-          .join('');
-
-        editor.text += '&nbsp;' + this.setStaticText(chapter, text);
-        editor.tail = '';
-        editor.placeholder = editor.text + editor.tail;
-
-        this.updateText();
-      }
-    },
-    setStaticText (type, text, greyed = false, editable = true) {
-      const content = `<span 
-        class="user-story__editable--${type}${greyed ? ' text-greyed' : ''}" 
-        readonly
-        contenteditable="false">
-            ${text}
-        </span>&nbsp;`;
-      return content;
-    },
-    classToType (str) {
-      return str
-        .split(' ')
-        .map(item => item.replace('user-story__editable--', ''))[0];
-    },
-    validateFocus ($event, editor) {
-      const selection = $event.view.getSelection();
-      let current = selection.focusNode.parentNode.className;
-
-      if (current === 'user-story__editable') {
-        current = selection.anchorNode.previousSibling.className;
-
-        if (current.includes('beginning')) {
-          editor.text = editor.text.replace(/ text-greyed/, '');
-        }
-      }
-
-      return this.classToType(current);
-    },
-    getNextSpan (current, editor) {
-      const parts = editor.template
-        .split(/[[(.*)\]]/)
-        .filter(item => !!item.trim());
-
-      if (current === 'static-text') {
-        const html = document.getSelection().focusNode.previousSibling.innerHTML.trim();
-        current += `="${html}"`;
-      }
-
-      if (current === 'custom') {
-        //const matches = document.getSelection().
-        console.log(document.getSelection());
-        //user-story__editable--custom
-      }
-
-      const next = parts.indexOf(current) + 1;
-      return parts[next];
-    },
-    getSiblings ($event) {
-      const editor = this.list[this.focused];
-      const current = this.validateFocus($event, editor);
-      const next = this.getNextSpan(current, editor);
-
-      return [editor, current, next];
-    },
-    checkDictionary ($event, focus = false) {
-      const [editor, current, next] = this.getSiblings($event);
-
-      if (this.dictionary[next]) {
-        const input = `editor-${this.focused}-${this.level}`;
-
-        const nodes = $event.target.childNodes;
-        nodes.filter = [].filter;
-
-        const el = nodes.filter(item => item.className && item.className.includes(current))[0];
-
-        if (el) {
-          const rect = el.getBoundingClientRect();
-
-          let position = {
-            top: rect.top,
-            left: el.offsetWidth
-          };
-
-          const texts = nodes.filter(item => !item.className);
-          this.filter = '';
-          if (texts && texts.length) {
-            this.filter = texts[0].textContent.trim();
-          }
-          this.chapter = next;
-
-          this.$root.$emit('set-hint-state', true, next, this.filter, input, position, focus);
-        }
-      }
-    },
-    parseContent ($event, focusHint) {
-      const [editor, current, next] = this.getSiblings($event);
-
-      if (current === 'beginning') {
-        editor.text = editor.text.replace(' text-greyed', '');
-      }
-
-      editor.text = $event.target.innerHTML;
-
-      if ($event.key !== '.' && editor.text.trim().charAt(editor.text.length - 1) !== '.') {
-        this.initPlaceholder($event, editor, next);
-      } else {
-        editor.tail = '';
-        editor.placeholder = '';
-      }
-
-      this.checkDictionary($event, focusHint);
-      this.updateText();
-    },
-    initPlaceholder ($event, editor, next) {
-      let tail = '';
-      let innerText = $event.target.innerText.trim();
-      let lastCharacter = innerText.charAt(innerText.length - 1);
-
-      if (lastCharacter === '.' || lastCharacter === ':') {
+      if (!this.focusInputFromHint(el)) {
         return;
       }
 
-      if (this.dictionary.placeholders[next]) {
-        tail = this.dictionary.placeholders[next];
+      this.editor.text = this.getSpanList() + '&nbsp;' + this.createSpan(chapter, text);
+      this.editor.tail = '';
+      this.editor.placeholder = `&nbsp;${this.editor.text}`;
+
+      this.setCompletion();
+      this.updateText();
+    },
+    setCompletion () {
+      this.next = this.getStaticText();
+
+      if (this.next.includes('static-text')) {
+        const [type, text] = this.getStaticTextByType(this.next);
+        this.editor.text += this.createSpan(type, text, false);
       }
-      if (next.includes('static-text')) {
-        tail = next.replace(/static-text=|"/g, '');
-      }
-      if (next === 'custom') {
-        tail = this.$store.state.story.custom[0];
-      }
+    },
+    finishSentence ($event) {
+      this.event = $event;
+      this.setSiblings();
+      this.setCustomText();
+    },
+    setCustomText () {
+      const origin = this.getSpanList();
+      const tail = this.getTail();
 
       if (tail) {
-        editor.tail = this.setStaticText('static-text', ` ${tail}`, true, false);
-      } else {
-        tail = '';
+        this.editor.text = origin + this.createSpan(this.next, `&nbsp;${tail}`, false, false);
+        this.resetPlaceholder();
+        this.updateText();
       }
-
-      const empty = !editor.text
-        .split('</span>')
-        .filter(item => !item.includes('<span'))
-        .join()
-        .replace('&nbsp;', '');
-
-      if (!empty) {
-        editor.tail = '';
-      }
-
-      editor.placeholder = editor.text + editor.tail;
-      this.updateText();
-    },
-    fixStaticText ($event) {
-      $event.preventDefault();
-      const [editor, current, next] = this.getSiblings($event);
-
-      if (this.filter && this.filter.trim()) {
-        this.$root.$emit('complete-hint', this.filter, true);
-        return;
-      }
-
-      if (editor.tail && next.includes('static-text')) {
-        const content = next.replace(/static-text=|"/g, '');
-        editor.text += this.setStaticText('static-text', content, false, false);
-        editor.tail = '';
-        editor.placeholder = editor.text;
-      }
-
-      if (next === 'custom') {
-        let origin = editor.text
-          .split('</span>')
-          .filter(item => item.includes('<span'))
-          .map(item => `${item}</span>`)
-          .join('');
-
-        let tail = editor.text
-          .split('</span>')
-          .filter(item => !item.includes('<span'))
-          .join('')
-          .replace('&nbsp;', '')
-          .trim();
-
-        if (!tail) {
-          tail = this.$store.state.story.custom[0];
-        }
-
-        editor.text = origin + this.setStaticText('custom', tail, false, false);
-      }
-
-      this.updateText();
     }
   }
 };
