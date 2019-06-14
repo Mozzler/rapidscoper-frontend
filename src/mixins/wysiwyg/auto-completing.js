@@ -1,30 +1,4 @@
 export default {
-  data () {
-    return {
-      event: null,
-      previous: null,
-      next: null
-    };
-  },
-  beforeMount () {
-    this.$root.$on('set-focus-to-input', this.focusInputFromHint);
-    this.$root.$on('hint-complete', this.hintComplete);
-  },
-  beforeDestroy () {
-    this.$root.$off('set-focus-to-input');
-    this.$root.$off('hint-complete');
-  },
-  computed: {
-    dictionary () {
-      return this.$store.state.story.dictionary;
-    },
-    editor () {
-      return this.focused !== null ? this.list[this.focused] : null;
-    },
-    ref () {
-      return `editor-${this.focused}-${this.level}`;
-    }
-  },
   methods: {
     parseContent ($event) {
       new Promise(resolve => {
@@ -73,7 +47,8 @@ export default {
       }
     },
     initStaticText () {
-      if (!this.next === 'custom') {
+      if (this.next === 'custom') {
+        this.resetPlaceholder();
         return;
       }
 
@@ -122,10 +97,21 @@ export default {
         this.editor.text += this.createSpan(type, text, false);
       }
     },
-    finishSentence ($event) {
+    finishSentence ($event, character = '') {
+      $event.preventDefault();
+
+      if (this.editor.text.indexOf(character) !== -1) {
+        return;
+      }
+
       this.event = $event;
+      this.editor.text = (`${this.editor.text}${character}`);
+
       this.setSiblings();
       this.setCustomText();
+
+      this.resetPlaceholder();
+      this.updateText();
     },
     setCustomText () {
       const origin = this.getSpanList();
@@ -133,8 +119,6 @@ export default {
 
       if (tail) {
         this.editor.text = origin + this.createSpan(this.next, `&nbsp;${tail}`, false, false);
-        this.resetPlaceholder();
-        this.updateText();
       }
     }
   }

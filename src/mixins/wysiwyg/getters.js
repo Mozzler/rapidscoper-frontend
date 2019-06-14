@@ -34,7 +34,7 @@ export default {
         .split('</span>')
         .filter(item => !item.includes('<span'))
         .join('')
-        .replace('&nbsp;', '')
+        .replace(/&nbsp;/g, '')
         .trim();
     },
     getStaticTextByType (str) {

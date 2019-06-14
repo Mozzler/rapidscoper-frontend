@@ -37,9 +37,10 @@ export default {
       'user-type': 'User Type',
       'requirement-type': 'Requirement Type',
       'field': 'Field',
-    },
+    }
   },
   custom: [
-    'Custom Text',
-  ]
+    'Custom Text'
+  ],
+  adjustBeginning: []
 };

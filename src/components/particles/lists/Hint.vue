@@ -39,11 +39,18 @@ export default {
     this.$root.$on('complete-hint', this.complete);
   },
   computed: {
+    beginnings () {
+      return this.$store.state.story.adjustBeginning;
+    },
     dictionary () {
       return this.$store.state.story.dictionary;
     },
     list () {
-      return this.chapter ? this.dictionary[this.chapter] : [];
+      if (!this.chapter) {
+        return [];
+      }
+
+      return this.chapter === 'beginning' ? this.beginnings : this.dictionary[this.chapter];
     },
     items () {
       const keyword = this.filter ? this.filter.toLowerCase() : '';
@@ -65,7 +72,7 @@ export default {
       $event.preventDefault();
       this.complete(value);
     },
-    setHintState (visible, chapter = null, filter = null, input = null, position = null) {
+    setHintState (visible, chapter = null, filter = null, input = null, position = null, level) {
       Object.assign(this.$refs.hint.style, {
         left: (position.left + 56) + 'px',
         top: (position.top - 65) + 'px'

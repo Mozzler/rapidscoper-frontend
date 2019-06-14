@@ -9,7 +9,7 @@ export default {
     focusEditor (wysiwygEditor, context) {
       context.$refs[wysiwygEditor][0].focus();
     },
-    addRowToList (prototype, text = '', sublist = false) {
+    addRowToList (prototype, text = '', sublist = false, template) {
       return {
         parent: sublist ? prototype : prototype.parent,
         estimation: null,
@@ -19,13 +19,12 @@ export default {
         placeholder: '',
 
         text: text,
-        template: sublist ? '' : prototype.template,
+        template: sublist ? template : prototype.template,
 
         list: []
       };
     },
     createRow ($event) {
-      $event.preventDefault();
       new Promise(resolve => {
         this.finishSentence($event);
         resolve();
@@ -38,20 +37,28 @@ export default {
       });
     },
     createSublist ($event) {
-      if (this.level < 3) {
-        const index = this.list[this.focused].list.length;
-        new Promise(resolve => {
-          const row = this.addRowToList(this.list[this.focused], '');
-          this.list[this.focused].list.push(row);
-          resolve();
-        }).then(() => {
-          const wysiwygChild = `wysiwyg-child-${ this.focused }-${ this.level }`;
-          const wysiwygEditor = `editor-${ index }-${ this.level + 1 }`;
-          this.focusEditor(wysiwygEditor, this.$refs[wysiwygChild][0]);
-        });
-      } else {
+      if (!(this.level < 3)) {
         $event.preventDefault();
+        return;
       }
+
+      const index = this.list[this.focused].list.length;
+      this.finishSentence($event, ':');
+
+      new Promise(resolve => {
+        const beginnings = this.getAdjusted('beginning');
+        const constructions = this.getAdjusted('constructions');
+
+        const span = this.createSpan('beginning', beginnings[0], true);
+        const row = this.addRowToList(this.list[this.focused], span, true, constructions[0]);
+
+        this.list[this.focused].list.push(row);
+        resolve();
+      }).then(() => {
+        const wysiwygChild = `wysiwyg-child-${ this.focused }-${ this.level }`;
+        const wysiwygEditor = `editor-${ index }-${ this.level + 1 }`;
+        this.focusEditor(wysiwygEditor, this.$refs[wysiwygChild][0]);
+      });
     },
     decreaseSublistLevel ($event) {
       $event.preventDefault();
