@@ -84,9 +84,11 @@ export default {
         $event.preventDefault();
       } else {
         setTimeout(() => {
-          this.editor.text = $event.target.innerHTML;
-          this.updateText();
-          this.resetPlaceholder();
+          if (this.editor.text) {
+            this.editor.text = $event.target.innerHTML;
+            this.updateText();
+            this.resetPlaceholder();
+          }
         }, 10);
       }
     }

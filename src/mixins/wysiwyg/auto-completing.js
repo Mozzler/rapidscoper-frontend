@@ -40,7 +40,12 @@ export default {
       if (!nodes.length) {
         el = this.$refs[this.ref][0];
       } else {
-        el = nodes.filter(item => item.className && item.className.includes(this.previous))[0];
+        let filtered = nodes.filter(item => {
+          let previous = this.previous.split('=')[0];
+          return item.className && item.className.includes(previous);
+        });
+
+        el = filtered[0];
       }
 
       if (el) {
@@ -73,17 +78,19 @@ export default {
     initStaticText () {
       let completion = null;
 
-      if (this.next.includes('static-text')) {
-        completion = this.getStaticText(0);
-      }
-      if (this.next === 'custom') {
-        completion = this.getStaticText(1);
-      }
+      if (this.next !== null) {
+        if (this.next.includes('static-text')) {
+          completion = this.getStaticText(0);
+        }
+        if (this.next === 'custom') {
+          completion = this.getStaticText(1);
+        }
 
-      if (completion !== null) {
-        const [text, type] = this.getStaticTextByType(completion);
-        this.editor.tail = this.createSpan(text, type, true);
-        this.editor.placeholder = this.editor.text + this.editor.tail;
+        if (completion !== null) {
+          const [text, type] = this.getStaticTextByType(completion);
+          this.editor.tail = this.createSpan(text, type, true);
+          this.editor.placeholder = this.editor.text + this.editor.tail;
+        }
       }
     },
     setSiblings () {
