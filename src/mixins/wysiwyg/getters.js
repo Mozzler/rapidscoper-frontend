@@ -11,7 +11,6 @@ export default {
       const templates = this.editor.template
         .split(/(?=\[)/g)
         .map(item => item.replace(/[[\]]/g, ''));
-        //.map(item => item.replace(/="(.*)"/, '').replace(/[[\]]/g, ''));
 
       let i = 0;
       for (; i < classes.length; i++) {
@@ -68,6 +67,9 @@ export default {
 
       const next = parts.indexOf(this.previous) + 1;
       return parts[next];
+    },
+    getLineParticles () {
+      return [this.getSpanList(), this.getTail()];
     }
   }
 };

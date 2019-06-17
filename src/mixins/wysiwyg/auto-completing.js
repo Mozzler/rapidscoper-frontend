@@ -7,6 +7,8 @@ export default {
 
         this.editor.text = this.event.target.innerHTML;
 
+        this.initPlaceholder();
+
         // show hint, if dictionary has next property
         this.initDictionary();
 
@@ -46,7 +48,20 @@ export default {
         this.$root.$emit('set-hint-state', true, this.next, this.filter, this.ref, position);
       }
     },
+    initPlaceholder () {
+      const [line, tail] = this.getLineParticles();
+      const text = this.dictionary.placeholders[this.next];
+
+      if (!tail && text) {
+        this.editor.tail = this.createSpan(this.next, `&nbsp;${text}`, true, false);
+        this.editor.placeholder = line + this.editor.tail;
+      } else {
+        this.editor.tail = '';
+        this.editor.placeholder = this.editor.text;
+      }
+    },
     initStaticText () {
+      /*
       if (this.next === 'custom') {
         this.resetPlaceholder();
         return;
@@ -58,7 +73,7 @@ export default {
         const [text, type] = this.getStaticTextByType(completion);
         this.editor.tail = this.createSpan(text, type, true);
         this.editor.placeholder = this.editor.text + this.editor.tail;
-      }
+      }*/
     },
     setSiblings () {
       this.previous = this.getCurrentSpan();
