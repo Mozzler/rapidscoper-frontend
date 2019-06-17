@@ -1,5 +1,5 @@
 export default {
-  setAdjustBeginning (state, data) {
-    state.adjustBeginning = data;
+  setAdjustConstructions (state, data) {
+    state.adjustConstructions = data;
   }
 };

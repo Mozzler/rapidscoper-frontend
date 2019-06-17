@@ -1,6 +1,6 @@
 export default {
   beforeMount () {
-    this.setBeginnings();
+    this.setConstructions();
   },
   computed: {
     dictionary () {
@@ -18,19 +18,27 @@ export default {
     }
   },
   methods: {
-    getAdjusted (type) {
-      return this.dictionary[type].filter((item, index) => {
+    getAdjusted () {
+      const list = this.dictionary.constructions;
+      const keys = Object.keys(list).filter((item, index) => {
         return eval(index + this.threshold);
       });
+
+      return keys.map((item, index) => {
+        return {
+          key: item,
+          value: list[item]
+        };
+      });
     },
-    setBeginnings () {
-      let beginning = this.getAdjusted('beginning');
-      this.$store.commit('setAdjustBeginning', beginning);
+    setConstructions () {
+      let constructions = this.getAdjusted();
+      this.$store.commit('setAdjustConstructions', constructions);
     }
   },
   watch: {
-    level () {
-      this.setBeginnings();
+    focused () {
+      this.setConstructions();
     }
   }
 };

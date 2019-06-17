@@ -11,7 +11,7 @@
          :key="index"
          :class="{'hint__item--active': focused === index}"
          @click="() => complete(item)">
-      <span class="hint__item-text">{{ item }}</span>
+      <span class="hint__item-text">{{ getStrFromObj(item) }}</span>
     </div>
     <div class="hint__item hint__bordered"
          v-if="filter && !inList"
@@ -40,7 +40,7 @@ export default {
   },
   computed: {
     beginnings () {
-      return this.$store.state.story.adjustBeginning;
+      return this.$store.state.story.adjustConstructions;
     },
     dictionary () {
       return this.$store.state.story.dictionary;
@@ -54,10 +54,12 @@ export default {
     },
     items () {
       const keyword = this.filter ? this.filter.toLowerCase() : '';
-      return this.list.filter(item => item.toLowerCase().includes(keyword, 0));
+      return this.list.filter(item => this.getStrFromObj(item).toLowerCase().includes(keyword, 0));
     },
     inList () {
-      const filter = this.list.filter(item => item === this.filter.trim());
+      const filter = this.list.filter(item => {
+        return this.getStrFromObj(item) === this.filter.trim();
+      });
       return Boolean(filter.length);
     }
   },

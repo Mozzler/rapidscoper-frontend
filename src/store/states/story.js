@@ -6,16 +6,11 @@ export default {
     'Must have', 'Should have', 'Could have', 'Won\'t have'
   ],
   dictionary: {
-    'constructions': [
-      '[beginning][user-type][static-text="I can"][custom][static-text="so that"][custom]',
-      '[beginning][requirement-type][static-text="called"][field]',
-      '[beginning][custom]'
-    ],
-    'beginning': [
-      'As a ...',
-      'Requires a ...',
-      'When I ...'
-    ],
+    'constructions': {
+      'As a ...': '[beginning][user-type][static-text="I can"][custom][static-text="so that"][custom]',
+      'Requires a ...': '[beginning][requirement-type][static-text="called"][field]',
+      'When I ...': '[beginning][custom][static-text="then I"][custom]'
+    },
     'requirement-type': [
       'Model',
       'Field',
@@ -36,11 +31,11 @@ export default {
     'placeholders': {
       'user-type': 'User Type',
       'requirement-type': 'Requirement Type',
-      'field': 'Field',
+      'field': 'Field'
     }
   },
   custom: [
     'Custom Text'
   ],
-  adjustBeginning: []
+  adjustConstructions: {}
 };

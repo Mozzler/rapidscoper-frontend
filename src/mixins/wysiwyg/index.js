@@ -30,8 +30,8 @@ export default {
     this.$root.$off('hint-complete');
   },
   computed: {
-    dictionary () {
-      return this.$store.state.story.dictionary;
+    adjustConstructions () {
+      return this.$store.state.story.adjustConstructions;
     },
     editor () {
       return this.focused !== null ? this.list[this.focused] : null;

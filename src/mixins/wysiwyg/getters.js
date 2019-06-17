@@ -43,9 +43,13 @@ export default {
     },
     getCurrentSpan () {
       const node = this.event.view.getSelection().focusNode;
-      let current = node.parentNode.className.replace(' text-greyed', '');
 
-      console.log(node.previousSibling);
+      if (!this.editor.text || !this.editor.template) {
+        this.editor.template = '';
+        return null;
+      }
+
+      let current = node.parentNode.className.replace(' text-greyed', '');
 
       if (current === 'user-story__editable') {
         current = node.previousSibling.className;
@@ -61,6 +65,10 @@ export default {
       const parts = this.editor.template
         .split(/[[(.*)\]]/)
         .filter(item => !!item.trim());
+
+      if (!this.editor.text || !this.editor.template) {
+        return 'beginning';
+      }
 
       if (this.previous === 'static-text') {
         const html = document.getSelection().focusNode.previousSibling.innerHTML.trim();

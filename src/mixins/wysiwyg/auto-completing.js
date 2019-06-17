@@ -28,14 +28,20 @@ export default {
       });
     },
     initDictionary () {
-      if (!this.dictionary[this.next]) {
+      let el = this.event.target;
+
+      if (!this.dictionary[this.next] && this.next !== 'beginning') {
         return;
       }
 
       const nodes = this.event.target.childNodes;
       nodes.filter = [].filter;
 
-      const el = nodes.filter(item => item.className && item.className.includes(this.previous))[0];
+      if (!nodes.length) {
+        el = this.$refs[this.ref][0];
+      } else {
+        el = nodes.filter(item => item.className && item.className.includes(this.previous))[0];
+      }
 
       if (el) {
         const rect = el.getBoundingClientRect();
@@ -102,6 +108,11 @@ export default {
         return;
       }
 
+      if (chapter === 'beginning') {
+        this.editor.template = text.value;
+        text = text.key;
+      }
+
       this.editor.text = this.getSpanList() + '&nbsp;' + this.createSpan(chapter, text);
       this.editor.tail = '';
       this.editor.placeholder = `&nbsp;${this.editor.text}`;
@@ -112,7 +123,7 @@ export default {
     setCompletion () {
       this.next = this.getStaticText();
 
-      if (this.next.includes('static-text')) {
+      if (this.next && this.next.includes('static-text')) {
         const [type, text] = this.getStaticTextByType();
         this.editor.text += this.createSpan(type, text, false);
       }

@@ -63,9 +63,8 @@ export default {
   },
   mounted () {
     this.stories.list[0].parent = this.stories;
-
     this.stories.list[0].text = this.$refs.wysiwyg.createSpan('beginning', 'As a', true);
-    this.stories.list[0].template = this.dictionary.constructions[0];
+    this.stories.list[0].template = Object.values(this.dictionary.constructions)[0];
   },
   methods: {
     updateText (index, input) {

@@ -4,6 +4,7 @@ export default {
       this.focused = index;
     },
     pressed ($event) {
+      this.$root.$emit('hide-hint');
       this.parseContent($event);
     },
     focusEditor (wysiwygEditor, context, greyed = false) {
@@ -51,11 +52,8 @@ export default {
       this.finishSentence($event, ':');
 
       new Promise(resolve => {
-        const beginnings = this.getAdjusted('beginning');
-        const constructions = this.getAdjusted('constructions');
-
-        const span = this.createSpan('beginning', beginnings[0], true);
-        const row = this.addRowToList(this.list[this.focused], span, true, constructions[0]);
+        const span = this.createSpan('beginning', this.adjustConstructions[0].key, true);
+        const row = this.addRowToList(this.list[this.focused], span, true, this.adjustConstructions[0].value);
 
         this.list[this.focused].list.push(row);
         resolve();
