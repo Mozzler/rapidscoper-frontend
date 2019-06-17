@@ -36,7 +36,7 @@ export default {
         .replace(/&nbsp;/g, '')
         .trim();
     },
-    getStaticTextByType (str) {
+    getStaticTextByType (str = this.next) {
       return str
         .split('=')
         .map(item => item.replace(/"|\]/g, ''));
@@ -70,6 +70,6 @@ export default {
     },
     getLineParticles () {
       return [this.getSpanList(), this.getTail()];
-    }
+    },
   }
 };

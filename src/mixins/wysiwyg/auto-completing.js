@@ -60,14 +60,19 @@ export default {
       }
     },
     initStaticText () {
-      if (this.next.includes('static-text')) {
-        const completion = this.getStaticText(0);
+      let completion = null;
 
-        if (completion !== null) {
-          const [text, type] = this.getStaticTextByType(completion);
-          this.editor.tail = this.createSpan(text, type, true);
-          this.editor.placeholder = this.editor.text + this.editor.tail;
-        }
+      if (this.next.includes('static-text')) {
+        completion = this.getStaticText(0);
+      }
+      if (this.next === 'custom') {
+        completion = this.getStaticText(1);
+      }
+
+      if (completion !== null) {
+        const [text, type] = this.getStaticTextByType(completion);
+        this.editor.tail = this.createSpan(text, type, true);
+        this.editor.placeholder = this.editor.text + this.editor.tail;
       }
     },
     setSiblings () {
@@ -103,7 +108,7 @@ export default {
       this.next = this.getStaticText();
 
       if (this.next.includes('static-text')) {
-        const [type, text] = this.getStaticTextByType(this.next);
+        const [type, text] = this.getStaticTextByType();
         this.editor.text += this.createSpan(type, text, false);
       }
     },
@@ -124,12 +129,12 @@ export default {
       this.updateText();
     },
     setCustomText () {
-      const origin = this.getSpanList();
-      const tail = this.getTail();
+      const [list, tail] = this.getLineParticles();
 
       if (tail) {
-        this.editor.text = origin + this.createSpan(this.next, `&nbsp;${tail}`, false, false);
+        const text = this.createSpan(this.next, `&nbsp;${tail}`, false, false);
+        this.editor.text = list + text;
       }
     }
   }
-}
+};
