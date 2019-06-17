@@ -56,24 +56,19 @@ export default {
         this.editor.tail = this.createSpan(this.next, `&nbsp;${text}`, true, false);
         this.editor.placeholder = line + this.editor.tail;
       } else {
-        this.editor.tail = '';
-        this.editor.placeholder = this.editor.text;
+        this.resetPlaceholder();
       }
     },
     initStaticText () {
-      /*
-      if (this.next === 'custom') {
-        this.resetPlaceholder();
-        return;
+      if (this.next.includes('static-text')) {
+        const completion = this.getStaticText(0);
+
+        if (completion !== null) {
+          const [text, type] = this.getStaticTextByType(completion);
+          this.editor.tail = this.createSpan(text, type, true);
+          this.editor.placeholder = this.editor.text + this.editor.tail;
+        }
       }
-
-      const completion = this.getStaticText();
-
-      if (completion !== null) {
-        const [text, type] = this.getStaticTextByType(completion);
-        this.editor.tail = this.createSpan(text, type, true);
-        this.editor.placeholder = this.editor.text + this.editor.tail;
-      }*/
     },
     setSiblings () {
       this.previous = this.getCurrentSpan();
@@ -137,4 +132,4 @@ export default {
       }
     }
   }
-};
+}

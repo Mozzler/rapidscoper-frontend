@@ -40,13 +40,6 @@ export default {
         this.resetPlaceholder();
       }
 
-      /*
-      if (this.editor.tail && this.next.includes('static-text')) {
-        const content = this.next.replace(/static-text=|"/g, '');
-        this.editor.text += this.editor.tail;//this.createSpan('static-text', content, false, false);
-        this.resetPlaceholder();
-      }*/
-
       this.updateText();
     }
   }
