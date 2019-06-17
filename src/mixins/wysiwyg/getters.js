@@ -45,6 +45,8 @@ export default {
       const node = this.event.view.getSelection().focusNode;
       let current = node.parentNode.className.replace(' text-greyed', '');
 
+      console.log(node.previousSibling);
+
       if (current === 'user-story__editable') {
         current = node.previousSibling.className;
 

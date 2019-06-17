@@ -36,6 +36,7 @@
                    :ref="`editor-${ index }-${ level }`"
                    @focus="($event) => focus($event, index)"
                    @keydown.exact="pressed"
+                   @keydown.esc.exact="hide"
                    @keydown.tab.exact="fixStaticText"
                    @keypress.ctrl.enter.exact="createField"
                    @keydown.enter.exact="createRow"
@@ -111,7 +112,7 @@ export default {
     },
     updateChildText (index, obj, parentIndex) {
       this.list[parentIndex].list[index] = obj;
-    }
+    },
   },
   watch: {
     model: {

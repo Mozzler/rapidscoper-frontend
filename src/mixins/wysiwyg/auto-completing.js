@@ -1,5 +1,8 @@
 export default {
   methods: {
+    hide () {
+      this.$root.$emit('hide-hint');
+    },
     parseContent ($event) {
       new Promise(resolve => {
         this.event = $event;
