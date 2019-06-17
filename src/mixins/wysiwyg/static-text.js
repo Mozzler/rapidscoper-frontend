@@ -27,9 +27,18 @@ export default {
 
       if (this.next === 'custom') {
         this.setCustomText();
+
+        let completion = this.getStaticText(1);
+        if (completion && completion.includes('static-text')) {
+          const [type, text] = this.getStaticTextByType(completion);
+          this.editor.text = this.editor.text + this.createSpan(type, text);
+        }
       }
 
-      this.editor.text += this.getCompletion();
+      if (this.next.includes('static-text')) {
+        const [type, text] = this.getStaticTextByType();
+        this.editor.text += this.createSpan(type, text, false);
+      }
 
       this.resetPlaceholder();
       this.updateText();

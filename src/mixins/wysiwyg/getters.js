@@ -74,7 +74,7 @@ export default {
     getCompletion (greyed = false) {
       let next = this.next;
       let completion = null;
-      let span = '';
+      let span = null;
 
       switch (true) {
         case next === 'custom':

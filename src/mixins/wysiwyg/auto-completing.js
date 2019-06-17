@@ -60,8 +60,20 @@ export default {
       }
     },
     initStaticText () {
-      this.editor.tail = this.getCompletion(true);
-      this.editor.placeholder = this.editor.text + this.editor.tail;
+      let completion = null;
+
+      if (this.next.includes('static-text')) {
+        completion = this.getStaticText(0);
+      }
+      if (this.next === 'custom') {
+        completion = this.getStaticText(1);
+      }
+
+      if (completion !== null) {
+        const [text, type] = this.getStaticTextByType(completion);
+        this.editor.tail = this.createSpan(text, type, true);
+        this.editor.placeholder = this.editor.text + this.editor.tail;
+      }
     },
     setSiblings () {
       this.previous = this.getCurrentSpan();
