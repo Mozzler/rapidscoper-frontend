@@ -71,5 +71,29 @@ export default {
     getLineParticles () {
       return [this.getSpanList(), this.getTail()];
     },
+    getCompletion (greyed = false) {
+      let next = this.next;
+      let completion = null;
+      let span = '';
+
+      switch (true) {
+        case next === 'custom':
+          next = this.getStaticText(1);
+          if (next && next.includes('static-text')) {
+            completion = next;
+          }
+          break;
+        case next.includes('static-text'):
+          completion = next;
+          break;
+      }
+
+      if (completion !== null) {
+        const [type, text] = this.getStaticTextByType(completion);
+        span = this.createSpan(type, text, greyed);
+      }
+
+      return span;
+    }
   }
 };

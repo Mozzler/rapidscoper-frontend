@@ -27,18 +27,9 @@ export default {
 
       if (this.next === 'custom') {
         this.setCustomText();
-
-        let completion = this.getStaticText(1);
-        if (completion && completion.includes('static-text')) {
-          const [type, text] = this.getStaticTextByType(completion);
-          this.editor.text = this.editor.text + this.createSpan(type, text);
-        }
       }
 
-      if (this.next.includes('static-text')) {
-        const [type, text] = this.getStaticTextByType();
-        this.editor.text += this.createSpan(type, text, false, false);
-      }
+      this.editor.text += this.getCompletion();
 
       this.resetPlaceholder();
       this.updateText();
