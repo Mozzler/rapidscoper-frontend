@@ -109,8 +109,8 @@ export default {
     updateText () {
       this.$emit('update-text', this.focused, this.list[this.focused]);
     },
-    updateChildText (index, text, parentIndex) {
-      this.list[parentIndex].list[index].text = text;
+    updateChildText (index, obj, parentIndex) {
+      this.list[parentIndex].list[index] = obj;
     }
   },
   watch: {
