@@ -6,8 +6,13 @@ export default {
     pressed ($event) {
       this.parseContent($event);
     },
-    focusEditor (wysiwygEditor, context) {
-      context.$refs[wysiwygEditor][0].focus();
+    focusEditor (wysiwygEditor, context, greyed = false) {
+      const el = context.$refs[wysiwygEditor][0];
+      el.focus();
+
+      if (greyed) {
+        el.classList.add('text-greyed');
+      }
     },
     addRowToList (prototype, text = '', sublist = false, template) {
       return {
@@ -33,7 +38,7 @@ export default {
         this.list.push(row);
       }).then(() => {
         const wysiwygChild = `editor-${ this.focused + 1 }-${ this.level }`;
-        this.focusEditor(wysiwygChild, this);
+        this.focusEditor(wysiwygChild, this, true);
       });
     },
     createSublist ($event) {

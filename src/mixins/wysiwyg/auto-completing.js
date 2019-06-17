@@ -20,6 +20,8 @@ export default {
         this.updateText();
         this.event = null;
         [this.previous, this.next] = [null, null];
+
+        this.$refs[this.ref][0].classList.remove('text-greyed');
       });
     },
     initDictionary () {
@@ -114,10 +116,6 @@ export default {
     },
     finishSentence ($event, character = '') {
       $event.preventDefault();
-
-      if (this.editor.text.indexOf(character) !== -1) {
-        return;
-      }
 
       this.event = $event;
       this.editor.text = (`${this.editor.text}${character}`);

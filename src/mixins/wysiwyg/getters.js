@@ -43,7 +43,7 @@ export default {
     },
     getCurrentSpan () {
       const node = this.event.view.getSelection().focusNode;
-      let current = node.parentNode.className;
+      let current = node.parentNode.className.replace(' text-greyed', '');
 
       if (current === 'user-story__editable') {
         current = node.previousSibling.className;
