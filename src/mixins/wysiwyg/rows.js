@@ -80,7 +80,8 @@ export default {
         });
       }
     },
-    remove ($event) {
+    remove ($event, index) {
+      this.focused = index;
       const spans = this.editor.text.split('</span>');
 
       if (this.level === 1 && spans[1] === '&nbsp;') {

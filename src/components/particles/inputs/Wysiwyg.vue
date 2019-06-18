@@ -41,7 +41,7 @@
                    @keydown.tab.exact="fixStaticText"
                    @keypress.ctrl.enter.exact="createField"
                    @keydown.enter.exact="createRow"
-                   @keydown.delete.exact="remove"
+                   @keydown.delete.exact="($event) => remove($event, index)"
                    @keydown.186.shift.exact="createSublist"
                    @keydown.tab.shift.exact="decreaseSublistLevel"
                    v-html="item.text"></div>
