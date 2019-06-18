@@ -111,6 +111,7 @@ export default {
     createField ($event) {
       $event.preventDefault();
       this.$root.$emit('complete-hint');
+      this.filter = null;
     },
     hintComplete (chapter, text, el) {
       if (!this.focusInputFromHint(el)) {
