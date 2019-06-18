@@ -89,8 +89,6 @@ export default {
       } else {
         if (this.editor.text) {
           this.editor.text = $event.target.innerHTML;
-          this.updateText();
-          this.resetPlaceholder();
           this.$refs[this.ref][0].classList.remove('text-greyed');
         }
       }

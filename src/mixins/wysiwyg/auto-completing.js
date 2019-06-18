@@ -99,13 +99,13 @@ export default {
       this.next = this.getNextSpan();
     },
     focusInputFromHint (el) {
-      if (this.$refs[el]) {
+      /*if (this.$refs[el]) {
         this.$nextTick(() => {
           this.$refs[el][0].focus();
         });
         return true;
       }
-      return false;
+      return false;*/
     },
     createField ($event) {
       $event.preventDefault();
@@ -113,7 +113,7 @@ export default {
       this.filter = null;
     },
     hintComplete (chapter, text, el) {
-      if (!this.focusInputFromHint(el)) {
+      if (el !== this.ref) {
         return;
       }
 
@@ -124,7 +124,7 @@ export default {
 
       this.editor.text = this.getSpanList() + '&nbsp;' + this.createSpan(chapter, text);
       this.editor.tail = '';
-      this.editor.placeholder = `&nbsp;${this.editor.text}`;
+      this.editor.placeholder = this.editor.text;
 
       this.setCompletion();
       this.updateText();

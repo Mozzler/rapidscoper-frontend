@@ -9,13 +9,11 @@
     <div class="hint__item"
          v-for="(item, index) in items"
          :key="index"
-         :class="{'hint__item--active': focused === index}"
-         @click="() => complete(item)">
+         :class="{'hint__item--active': focused === index}">
       <span class="hint__item-text">{{ getStrFromObj(item) }}</span>
     </div>
     <div class="hint__item hint__bordered"
-         v-if="filter && !inList"
-         @click="() => complete(filter)">
+         v-if="filter && !inList">
       <span class="text-bold">Ctrl + Enter</span> to create "{{ filter }}"
     </div>
   </div>
@@ -66,7 +64,6 @@ export default {
   methods: {
     hide () {
       this.visible = false;
-      this.$root.$emit('set-focus-to-input', this.input);
     },
     tabComplete ($event, value) {
       $event.preventDefault();

@@ -15,4 +15,4 @@ export default {
   beforeDestroy() {
     window.removeEventListener('resize');
   }
-}
+};

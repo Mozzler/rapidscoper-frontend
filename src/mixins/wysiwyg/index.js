@@ -22,11 +22,9 @@ export default {
     };
   },
   beforeMount () {
-    this.$root.$on('set-focus-to-input', this.focusInputFromHint);
     this.$root.$on('hint-complete', this.hintComplete);
   },
   beforeDestroy () {
-    this.$root.$off('set-focus-to-input');
     this.$root.$off('hint-complete');
   },
   computed: {
