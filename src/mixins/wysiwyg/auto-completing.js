@@ -61,8 +61,6 @@ export default {
           this.filter = texts[0].textContent.trim();
         }
 
-        console.log(rect.left, el.offsetLeft);
-
         this.$root.$emit('set-hint-state', true, this.next, this.filter, this.ref, position);
       }
     },

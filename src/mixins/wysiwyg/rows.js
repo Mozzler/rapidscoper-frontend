@@ -52,8 +52,11 @@ export default {
       this.finishSentence($event, ':');
 
       new Promise(resolve => {
-        const span = this.createSpan('beginning', this.adjustConstructions[0].key, true);
-        const row = this.addRowToList(this.list[this.focused], span, true, this.adjustConstructions[0].value);
+        const equation = this.getEquation(this.level + 1);
+        const constructions = this.getAdjusted(equation);
+
+        const span = this.createSpan('beginning', constructions[0].key, true);
+        const row = this.addRowToList(this.list[this.focused], span, true, constructions[0].value);
 
         this.list[this.focused].list.push(row);
         resolve();

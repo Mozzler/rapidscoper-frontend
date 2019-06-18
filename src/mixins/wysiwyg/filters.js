@@ -7,7 +7,12 @@ export default {
       return this.$store.state.story.dictionary;
     },
     threshold () {
-      switch (this.level) {
+      return this.getEquation();
+    }
+  },
+  methods: {
+    getEquation (level = this.level) {
+      switch (level) {
         case 1:
           return '=== 0';
         case 3:
@@ -15,13 +20,11 @@ export default {
         default:
           return '> -1';
       }
-    }
-  },
-  methods: {
-    getAdjusted () {
+    },
+    getAdjusted (threshold = this.threshold) {
       const list = this.dictionary.constructions;
       const keys = Object.keys(list).filter((item, index) => {
-        return eval(index + this.threshold);
+        return eval(index + threshold);
       });
 
       return keys.map((item, index) => {
