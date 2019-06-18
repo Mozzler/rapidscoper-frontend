@@ -52,8 +52,8 @@ export default {
         const rect = el.getBoundingClientRect();
         const texts = nodes.filter(item => !item.className);
         const position = {
-          top: rect.top,
-          left: el.offsetWidth
+          top: rect.top - 64,
+          left: el.offsetLeft + rect.left + 48
         };
 
         this.filter = '';

@@ -74,8 +74,8 @@ export default {
     },
     setHintState (visible, chapter = null, filter = null, input = null, position = null, level) {
       Object.assign(this.$refs.hint.style, {
-        left: (position.left + 56) + 'px',
-        top: (position.top - 65) + 'px'
+        left: position.left + 'px',
+        top: position.top + 'px'
       });
 
       this.visible = visible;

@@ -22,7 +22,7 @@ export default {
         priority: null,
         label: null,
         tail: '',
-        placeholder: '',
+        placeholder: text,
 
         text: text,
         template: sublist ? template : prototype.template,

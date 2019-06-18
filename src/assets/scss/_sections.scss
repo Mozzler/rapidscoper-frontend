@@ -54,7 +54,7 @@
   color: $white;
 }
 .user-story__editable {
-  position: absolute;
+  position: relative;
   width: 100%;
 
   &:focus{
