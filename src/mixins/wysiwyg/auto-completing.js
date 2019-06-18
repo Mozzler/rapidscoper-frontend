@@ -50,15 +50,16 @@ export default {
 
       if (el) {
         const rect = el.getBoundingClientRect();
-        const texts = nodes.filter(item => !item.className);
+        const texts = nodes.filter(item => !item.className && !!item.data.trim());
         const position = {
           top: rect.top + 20,
           left: rect.left + 24
         };
 
         this.filter = '';
+
         if (texts && texts.length) {
-          this.filter = texts[0].textContent.trim();
+          this.filter = texts[texts.length - 1].textContent.trim();
         }
 
         this.$root.$emit('set-hint-state', true, this.next, this.filter, this.ref, position);

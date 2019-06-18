@@ -87,13 +87,12 @@ export default {
       if (this.level === 1 && spans[1] === '&nbsp;') {
         $event.preventDefault();
       } else {
-        setTimeout(() => {
-          if (this.editor.text) {
-            this.editor.text = $event.target.innerHTML;
-            this.updateText();
-            this.resetPlaceholder();
-          }
-        }, 10);
+        if (this.editor.text) {
+          this.editor.text = $event.target.innerHTML;
+          this.updateText();
+          this.resetPlaceholder();
+          this.$refs[this.ref][0].classList.remove('text-greyed');
+        }
       }
     }
   }
