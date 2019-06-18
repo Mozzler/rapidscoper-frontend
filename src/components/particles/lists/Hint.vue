@@ -5,6 +5,7 @@
        @keydown.tab.exact="$event => tabComplete($event, items[focused])"
        @keydown.up.exact="$event => navigate($event, -1)"
        @keydown.down.exact="$event => navigate($event, 1)"
+       @keypress.ctrl.enter.exact="$event => complete()"
        class="hint">
     <div class="hint__item"
          v-for="(item, index) in items"
