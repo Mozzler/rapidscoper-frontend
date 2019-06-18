@@ -31,7 +31,7 @@ export default {
         let completion = this.getStaticText(1);
         if (completion && completion.includes('static-text')) {
           const [type, text] = this.getStaticTextByType(completion);
-          this.editor.text = this.editor.text + this.createSpan(type, `&nbsp;${text}`);
+          this.editor.text = this.editor.text + this.createSpan(type, text);
         }
       }
 

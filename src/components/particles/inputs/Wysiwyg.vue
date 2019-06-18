@@ -32,7 +32,8 @@
           <v-flex grow text-xs-left>
             <div class="user-story__wysiwyg">
               <div class="user-story__placeholder" v-html="item.placeholder" readonly></div>
-              <div contenteditable class="user-story__editable"
+              <div :tabindex="index"
+                   contenteditable class="user-story__editable"
                    :ref="`editor-${ index }-${ level }`"
                    @focus="($event) => focus($event, index)"
                    @keyup.exact="pressed"

@@ -9,11 +9,11 @@ export default {
     },
     focusEditor (wysiwygEditor, context, greyed = false) {
       const el = context.$refs[wysiwygEditor][0];
-      el.focus();
-
       if (greyed) {
         el.classList.add('text-greyed');
       }
+
+      el.focus();
     },
     addRowToList (prototype, text = '', sublist = false, template) {
       return {

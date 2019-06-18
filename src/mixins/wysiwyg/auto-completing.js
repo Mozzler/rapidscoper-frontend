@@ -52,14 +52,16 @@ export default {
         const rect = el.getBoundingClientRect();
         const texts = nodes.filter(item => !item.className);
         const position = {
-          top: rect.top - 64,
-          left: el.offsetLeft + rect.left + 48
+          top: rect.top + 20,
+          left: rect.left + 24
         };
 
         this.filter = '';
         if (texts && texts.length) {
           this.filter = texts[0].textContent.trim();
         }
+
+        console.log(rect.left, el.offsetLeft);
 
         this.$root.$emit('set-hint-state', true, this.next, this.filter, this.ref, position);
       }
