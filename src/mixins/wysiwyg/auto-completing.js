@@ -78,7 +78,7 @@ export default {
     initStaticText () {
       let completion = null;
 
-      if (this.next !== null) {
+      if (this.next) {
         if (this.next.includes('static-text')) {
           completion = this.getStaticText(0);
         }
@@ -88,7 +88,7 @@ export default {
 
         if (completion !== null) {
           const [text, type] = this.getStaticTextByType(completion);
-          this.editor.tail = this.createSpan(text, type, true);
+          this.editor.tail = this.createSpan(text, `&nbsp;${type}`, true);
           this.editor.placeholder = this.editor.text + this.editor.tail;
         }
       }
