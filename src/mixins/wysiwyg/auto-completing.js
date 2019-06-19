@@ -37,7 +37,7 @@ export default {
       const nodes = this.event.target.childNodes;
       nodes.filter = [].filter;
 
-      if (!nodes.length) {
+      if (!nodes.filter(item => typeof item !== 'function').length) {
         el = this.$refs[this.ref][0];
       } else {
         let filtered = nodes.filter(item => {
@@ -122,7 +122,9 @@ export default {
         text = text.key;
       }
 
-      this.editor.text = this.getSpanList() + '&nbsp;' + this.createSpan(chapter, text);
+      const spans = this.getSpanList();
+
+      this.editor.text = `${spans}${!spans ? '' : '&nbsp;'}${this.createSpan(chapter, text)}`;
       this.editor.tail = '';
       this.editor.placeholder = this.editor.text;
 
