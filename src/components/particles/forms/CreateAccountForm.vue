@@ -8,7 +8,7 @@
             <div class="signup-loader sign-up-header--m43" @click="$refs.inputUpload.click()">
               <photo-camera />
             </div>
-            <input v-show="false" ref="inputUpload" type="file" @change="loaded" />
+            <input v-show="false" ref="inputUpload" type="file" />
           </div>
         </v-flex>
         <v-flex xs12 class="signup-input">
@@ -28,7 +28,7 @@
             key="last name"
             name="Last name"
             v-validate="'required|min:6|max:255'"
-            v-model="user.lastLame"
+            v-model="user.lastName"
             placeholder="Last name"
             :error-messages="errors.first('Last name')"
             :disabled="processing"
@@ -37,10 +37,11 @@
         </v-flex>
         <v-flex xs12 class="signup-input">
           <vue-tel-input
+            :enabledCountryCode="true"
+            :disabledFetchingCountry="true"
             wrapperClasses="phone-input"
             v-model="user.phone"
             placeholder="Phone number"
-            v-validate="'required'"
             :disabled="processing"/>
         </v-flex>
         <v-flex xs12>
@@ -70,9 +71,6 @@ export default {
     processing: false
   }),
   methods: {
-    setCountryCode ({name, iso2, dialCode}) {
-      console.log(name, iso2, dialCode);
-    },
     async create () {
       this.processing = true;
 
@@ -81,15 +79,15 @@ export default {
       if (result) {
         this.processing = true;
         this.$store.dispatch('updateUserInfo', this.user)
-            .then(() => {
-            });
+          .then(() => {
+            console.log('test');
+          }).catch(error => {
+            console.log('errror');
+          });
         this.$router.push('/');
       } else {
         this.processing = false;
       }
-    },
-    loaded() {
-      console.log('loaded');
     }
   }
 };

@@ -75,17 +75,18 @@ export default {
       let result = await this.$validator.validate();
       result ? this.send() : this.processing = false;
     },
-    async send () {
-      const response = await this.$store.dispatch(this.action, this.user);
-
-      if (!response.error) {
-        this.$router.push(this.route);
-      }
-      else {
-        this.errors.add({ field: 'email', msg: response.error_description });
-        this.processing = false;
-      }
-    },
+    send () {
+      this.$store.dispatch(this.action, this.user)
+        .then(response => {
+          if (!response.error) {
+            this.$router.push(this.route);
+          }
+          this.processing = false;
+        }).catch(error => {
+          this.errors.add({ field: 'email', msg: error.message });
+          this.processing = false;
+        });
+    }
   },
   watch: {
     action () {

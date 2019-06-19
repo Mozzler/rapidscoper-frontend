@@ -4,15 +4,22 @@ import Vue from 'vue';
 
 export default {
   async signup (state, payload) {
-    const response = await Vue.$axios.post('user/create', payload);
+    try {
+      const response = await Vue.$axios.post('user/create', payload);
 
-    if (!response.data.error) {
-      state.commit('authenticate', response.data);
+      if (!response.data.error) {
+        state.commit('authenticate', response.data.item);
+      }
+
+      return response.data;
+    } catch (error) {
+      const data = error.response.data;
+      if (data[0].field === 'uniqueUsername') {
+        throw new Error('The email address is already in use');
+      }
     }
-
-    return response.data;
   },
-  async login (state, payload) {
+  async login (store, payload) {
     const data = {
       username: payload.email,
       password: payload.password,
@@ -25,23 +32,24 @@ export default {
     const response = await Vue.$axios.post('user/token', data);
 
     if (!response.data.error) {
-      state.commit('authenticate', response.data);
+      store.commit('authenticate', response.data);
     }
 
     return response.data;
   },
-  async updateUserInfo (state, payload) {
-    const id = state.auth.user;
+  async updateUserInfo (store, payload) {
+    const id = store.state.user.id;
     const url = `user/update?id=${id}`;
+    console.log(id, url);
     const response = await Vue.$axios.put(url, payload);
 
     if (!response.data.error) {
-      state.commit('authenticate', response.data);
+      store.commit('authenticate', response.data);
     }
 
     return response.data;
   },
-  logout (state) {
-    state.commit('logout', null);
+  logout (store) {
+    store.commit('logout', null);
   }
 };
