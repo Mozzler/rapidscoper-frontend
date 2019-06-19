@@ -63,6 +63,9 @@ export default {
   computed: {
     action () {
       return this.type === 'Sign Up' ? 'signup' : 'login';
+    },
+    route () {
+      return this.type === 'Sign Up' ? '/create-account' : '/';
     }
   },
   methods: {
@@ -70,27 +73,19 @@ export default {
       this.processing = true;
 
       let result = await this.$validator.validate();
-      result ? this.handleRequest() : this.processing = false;
+      result ? this.send() : this.processing = false;
     },
     async send () {
       const response = await this.$store.dispatch(this.action, this.user);
 
       if (!response.error) {
-        this.$router.push('/');
+        this.$router.push(this.route);
       }
       else {
         this.errors.add({ field: 'email', msg: response.error_description });
         this.processing = false;
       }
     },
-    handleRequest () {
-      if (this.type === 'Log In') {
-        this.send();
-      }
-      else {
-        this.$router.push('/create-account');
-      }
-    }
   },
   watch: {
     action () {

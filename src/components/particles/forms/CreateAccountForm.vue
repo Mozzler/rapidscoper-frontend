@@ -16,7 +16,7 @@
             key="first name"
             name="First name"
             v-validate="'required|min:6|max:255'"
-            v-model="user.firstname"
+            v-model="user.firstName"
             placeholder="First name"
             :error-messages="errors.first('First name')"
             :disabled="processing"
@@ -28,12 +28,20 @@
             key="last name"
             name="Last name"
             v-validate="'required|min:6|max:255'"
-            v-model="user.lastname"
+            v-model="user.lastLame"
             placeholder="Last name"
             :error-messages="errors.first('Last name')"
             :disabled="processing"
             solo
           ></v-text-field>
+        </v-flex>
+        <v-flex xs12 class="signup-input">
+          <vue-tel-input
+            wrapperClasses="phone-input"
+            v-model="user.phone"
+            placeholder="Phone number"
+            v-validate="'required'"
+            :disabled="processing"/>
         </v-flex>
         <v-flex xs12>
           <v-btn class="btn-rapid primary submit-btn mt-5px" block large @click="create">
@@ -55,12 +63,16 @@ export default {
   },
   data: () => ({
     user: {
-      email: null,
-      password: null
+      firstName: null,
+      lastName: null,
+      phone: null
     },
     processing: false
   }),
   methods: {
+    setCountryCode ({name, iso2, dialCode}) {
+      console.log(name, iso2, dialCode);
+    },
     async create () {
       this.processing = true;
 
@@ -68,7 +80,7 @@ export default {
 
       if (result) {
         this.processing = true;
-        this.$store.dispatch(this.action, this.user)
+        this.$store.dispatch('updateUserInfo', this.user)
             .then(() => {
             });
         this.$router.push('/');
