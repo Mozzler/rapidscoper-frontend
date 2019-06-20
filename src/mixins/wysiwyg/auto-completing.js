@@ -123,6 +123,7 @@ export default {
       this.editor.text = `${spans}${!spans ? '' : '&nbsp;'}${this.createSpan(chapter, text)}`;
       this.editor.tail = '';
       this.editor.placeholder = this.editor.text;
+      this.filter = null;
 
       this.setCompletion();
       this.updateText();
