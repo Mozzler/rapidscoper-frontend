@@ -40,7 +40,6 @@ export default {
   async updateUserInfo (store, payload) {
     const id = store.state.user.id;
     const url = `user/update?id=${id}`;
-    console.log(id, url);
     const response = await Vue.$axios.put(url, payload);
 
     if (!response.data.error) {

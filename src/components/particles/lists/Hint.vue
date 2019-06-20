@@ -105,9 +105,7 @@ export default {
         item = this.items[0];
       }
       this.visible = false;
-      this.$nextTick(() => {
-        this.$root.$emit('hint-complete', this.chapter, item, this.input);
-      });
+      this.$root.$emit('hint-complete', this.chapter, item, this.input);
     }
   },
   beforeDestroy () {

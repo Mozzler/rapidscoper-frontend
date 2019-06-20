@@ -6,7 +6,7 @@ export default {
 
       const classes = nodes
         .filter(item => item.nodeName !== '#text')
-        .map(item => item.className.replace('user-story__editable--', ''));
+        .map(item => item.className.replace(/user-story__editable--| text-greyed/gi, ''));
 
       const templates = this.editor.template
         .split(/(?=\[)/g)

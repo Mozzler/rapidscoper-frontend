@@ -100,15 +100,6 @@ export default {
       this.previous = this.getCurrentSpan();
       this.next = this.getNextSpan();
     },
-    focusInputFromHint (el) {
-      /*if (this.$refs[el]) {
-        this.$nextTick(() => {
-          this.$refs[el][0].focus();
-        });
-        return true;
-      }
-      return false;*/
-    },
     createField ($event) {
       $event.preventDefault();
       this.$root.$emit('complete-hint');

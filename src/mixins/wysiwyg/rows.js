@@ -66,6 +66,7 @@ export default {
         const row = this.addRowToList(this.list[this.focused], span, true, constructions[0].value);
 
         this.list[this.focused].list.push(row);
+
         resolve();
       }).then(() => {
         const wysiwygChild = `wysiwyg-child-${ this.focused }-${ this.level }`;
