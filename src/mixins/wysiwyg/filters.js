@@ -15,10 +15,8 @@ export default {
       switch (level) {
         case 1:
           return '=== 0';
-        case 3:
-          return '> 0';
         default:
-          return '> -1';
+          return '> 0';
       }
     },
     getAdjusted (threshold = this.threshold) {
