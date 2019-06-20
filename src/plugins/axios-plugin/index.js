@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { API_URL } from '../../config';
+import store from '@/store';
 
 let VueAxiosPlugin = {};
 
@@ -17,6 +18,7 @@ VueAxiosPlugin.install = (Vue, options) => {
   };
 
   axios.defaults.baseURL = API_URL;
+  axios.defaults.headers.common = {'Authorization': `Bearer ${ store.state.auth.user.access_token }`};
 
   const service = axios.create(initOptions);
 

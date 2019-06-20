@@ -38,7 +38,7 @@ export default {
     return response.data;
   },
   async updateUserInfo (store, payload) {
-    const id = store.state.user.id;
+    const id = store.state.user.user_id;
     const url = `user/update?id=${id}`;
     const response = await Vue.$axios.put(url, payload);
 

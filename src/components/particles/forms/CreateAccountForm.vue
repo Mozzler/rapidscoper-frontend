@@ -81,10 +81,12 @@ export default {
         this.$store.dispatch('updateUserInfo', this.user)
           .then(() => {
             console.log('test');
+            this.processing = false;
+            //this.$router.push('/');
           }).catch(error => {
+            this.processing = false;
             console.log('errror');
           });
-        this.$router.push('/');
       } else {
         this.processing = false;
       }

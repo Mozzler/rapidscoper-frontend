@@ -27,9 +27,11 @@
         ></v-text-field>
       </v-flex>
       <v-flex xs12>
-        <v-btn class="btn-rapid primary submit-btn mt-5px" block large @click="submit">
-          {{ type }} with Email
-        </v-btn>
+        <v-btn class="btn-rapid primary submit-btn mt-5px"
+               block large
+               @click="submit"
+               :disabled="processing"
+        > {{ type }} with Email </v-btn>
       </v-flex>
       <v-flex xs12 v-if="type !== 'Sign Up'">
         <p class="forgot-link">
@@ -75,15 +77,21 @@ export default {
       let result = await this.$validator.validate();
       result ? this.send() : this.processing = false;
     },
-    send () {
-      this.$store.dispatch(this.action, this.user)
+    send (action = this.action) {
+      this.$store.dispatch(action, this.user)
         .then(response => {
           if (!response.error) {
-            this.$router.push(this.route);
+            if (action === 'signup') {
+              this.send('login');
+            } else if (action !== this.action) {
+              this.$router.push('/create-account');
+            } else {
+              this.$router.push('/');
+            }
           }
           this.processing = false;
         }).catch(error => {
-          this.errors.add({ field: 'email', msg: error.message });
+          this.errors.add({field: 'email', msg: error.message});
           this.processing = false;
         });
     }

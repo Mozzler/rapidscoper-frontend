@@ -39,7 +39,7 @@ export default [
     name: 'create-account',
     component: AuthFlow,
     meta: {
-      guest: false
+      requiresAuth: true
     }
   },
   {
