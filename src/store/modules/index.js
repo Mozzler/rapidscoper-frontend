@@ -1,9 +1,11 @@
 import auth from "./auth";
 import system from "./system";
 import story from "./story";
+import team from "./team";
 
 export default {
-  auth,
   system,
-  story
+  story,
+  team,
+  auth,
 };

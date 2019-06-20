@@ -43,7 +43,7 @@ export default {
     const response = await Vue.$axios.put(url, payload);
 
     if (!response.data.error) {
-      store.commit('authenticate', response.data);
+      store.commit('update', response.data.item);
     }
 
     return response.data;

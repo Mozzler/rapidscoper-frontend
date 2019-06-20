@@ -15,7 +15,7 @@
           <v-text-field
             key="first name"
             name="First name"
-            v-validate="'required|min:6|max:255'"
+            v-validate="'required|min:2|max:100'"
             v-model="user.firstName"
             placeholder="First name"
             :error-messages="errors.first('First name')"
@@ -27,7 +27,7 @@
           <v-text-field
             key="last name"
             name="Last name"
-            v-validate="'required|min:6|max:255'"
+            v-validate="'required|min:2|max:100'"
             v-model="user.lastName"
             placeholder="Last name"
             :error-messages="errors.first('Last name')"
@@ -43,6 +43,18 @@
             v-model="user.phone"
             placeholder="Phone number"
             :disabled="processing"/>
+        </v-flex>
+        <v-flex xs12 class="signup-input">
+          <v-text-field
+            key="team name"
+            name="Team name"
+            v-validate="'required|min:2|max:100'"
+            v-model="team"
+            placeholder="Team name"
+            :error-messages="errors.first('Team name')"
+            :disabled="processing"
+            solo
+          ></v-text-field>
         </v-flex>
         <v-flex xs12>
           <v-btn class="btn-rapid primary submit-btn mt-5px" block large @click="create">
@@ -68,9 +80,16 @@ export default {
       lastName: null,
       phone: null
     },
+    team: null,
     processing: false
   }),
   methods: {
+    send () {
+      return Promise.all([
+        this.$store.dispatch('updateUserInfo', this.user),
+        this.$store.dispatch('createTeam', this.team)
+      ]);
+    },
     async create () {
       this.processing = true;
 
@@ -78,14 +97,13 @@ export default {
 
       if (result) {
         this.processing = true;
-        this.$store.dispatch('updateUserInfo', this.user)
-          .then(() => {
-            console.log('test');
+
+        this.send().then(() => {
             this.processing = false;
             //this.$router.push('/');
           }).catch(error => {
             this.processing = false;
-            console.log('errror');
+            console.log(errors);
           });
       } else {
         this.processing = false;

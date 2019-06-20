@@ -5,6 +5,8 @@ import store from '@/store';
 let VueAxiosPlugin = {};
 
 VueAxiosPlugin.install = (Vue, options) => {
+  axios.defaults.baseURL = API_URL;
+
   const defaultOptions = {
     reqHandleFunc: config => config,
     reqErrorFunc: error => Promise.reject(error),
@@ -17,8 +19,16 @@ VueAxiosPlugin.install = (Vue, options) => {
     ...options
   };
 
-  axios.defaults.baseURL = API_URL;
-  axios.defaults.headers.common = {'Authorization': `Bearer ${ store.state.auth.user.access_token }`};
+  const headers = {
+    'Content-Type': 'application/json'
+  };
+
+  const user = store.state.auth.user ? store.state.auth.user : null;
+  if (user) {
+    headers['Authorization'] = `${ user.token_type } ${ user.access_token }`;
+  }
+
+  axios.defaults.headers.common = headers;
 
   const service = axios.create(initOptions);
 
