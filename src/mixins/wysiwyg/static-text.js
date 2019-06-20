@@ -21,7 +21,7 @@ export default {
       this.setSiblings();
 
       if (this.filter && this.filter.trim()) {
-        this.$root.$emit('complete-hint', this.filter, true);
+        this.createField($event);
         return;
       }
 
