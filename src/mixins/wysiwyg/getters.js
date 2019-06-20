@@ -6,20 +6,24 @@ export default {
 
       const classes = nodes
         .filter(item => item.nodeName !== '#text')
-        .map(item => item.className.replace(/user-story__editable--| text-greyed/gi, ''));
+        .map(item => {
+          let value = item.className.replace(/user-story__editable--| text-greyed/gi, '');
+
+          if (value === 'static-text') {
+            value += `="${item.textContent}"`;
+          }
+
+          return value;
+        });
 
       const templates = this.editor.template
         .split(/(?=\[)/g)
         .map(item => item.replace(/[[\]]/g, ''));
 
-      let i = 0;
-      for (; i < classes.length; i++) {
-        if (!templates[i].includes(classes[i])) {
-          break;
-        }
-      }
+      const last = classes.length - 1;
+      const index = templates.indexOf(classes[last]) + 1;
 
-      return i + increments < templates.length ? templates[i + increments] : null;
+      return index + increments < templates.length ? templates[index + increments] : null;
     },
     getSpanList (joined = true) {
       const spans = this.editor.text
