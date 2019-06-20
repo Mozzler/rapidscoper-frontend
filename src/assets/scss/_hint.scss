@@ -4,7 +4,11 @@
   z-index: 999;
   margin: 4px 0;
   width: 210px;
-  box-shadow: 0px 0px 2px 0px rgba(0,0,0,0.75);
+  box-shadow: 0 0 2px 0 rgba(0,0,0,0.75);
+
+  &:focus {
+    outline: none;
+  }
 }
 
 .hint__item {
