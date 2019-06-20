@@ -36,6 +36,7 @@ export default {
     this.$root.$on('set-hint-state', this.setHintState);
     this.$root.$on('complete-hint', this.complete);
     this.$root.$on('hide-hint', this.hide);
+    this.$root.$on('focus-hint', this.setFocus);
   },
   computed: {
     beginnings () {
@@ -80,7 +81,8 @@ export default {
       this.chapter = chapter;
       this.filter = filter;
       this.input = input;
-
+    },
+    setFocus () {
       this.$nextTick(() => {
         this.$refs.hint.focus();
       });

@@ -62,7 +62,9 @@ export default {
           this.filter = texts[texts.length - 1].textContent.trim();
         }
 
-        this.$root.$emit('set-hint-state', true, this.next, this.filter, this.ref, position);
+        this.$nextTick(() => {
+          this.$root.$emit('set-hint-state', true, this.next, this.filter, this.ref, position);
+        });
       }
     },
     initPlaceholder () {
@@ -111,6 +113,9 @@ export default {
       $event.preventDefault();
       this.$root.$emit('complete-hint');
       this.filter = null;
+    },
+    focusHint () {
+      this.$root.$emit('focus-hint');
     },
     hintComplete (chapter, text, el) {
       if (el !== this.ref) {

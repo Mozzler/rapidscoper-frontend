@@ -4,7 +4,6 @@ export default {
       this.focused = index;
     },
     pressed ($event) {
-      this.$root.$emit('hide-hint');
       this.parseContent($event);
     },
     focusEditor (wysiwygEditor, context, greyed = false) {

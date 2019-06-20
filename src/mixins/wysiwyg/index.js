@@ -22,7 +22,7 @@ export default {
     };
   },
   beforeMount () {
-    console.log('remount');
+
     this.$root.$on('hint-complete', this.hintComplete);
   },
   beforeDestroy () {
