@@ -1,7 +1,7 @@
 <template>
   <div ref="hint"
-       v-show="visible"
        :tabindex="0"
+       v-show="visible"
        @keydown.tab.exact="$event => tabComplete($event, items[focused])"
        @keydown.up.exact="$event => navigate($event, -1)"
        @keydown.down.exact="$event => navigate($event, 1)"
@@ -10,6 +10,7 @@
     <div class="hint__item"
          v-for="(item, index) in items"
          :key="index"
+         :ref="`hint-item-${index}`"
          :class="{'hint__item--active': focused === index}">
       <span class="hint__item-text">{{ getStrFromObj(item) }}</span>
     </div>
@@ -26,7 +27,7 @@ export default {
   data () {
     return {
       visible: false,
-      focused: 0,
+      focused: null,
       chapter: null,
       filter: null,
       input: null
@@ -71,7 +72,7 @@ export default {
       $event.preventDefault();
       this.complete(value);
     },
-    setHintState (visible, chapter = null, filter = null, input = null, position = null, level) {
+    setHintState (visible, chapter = null, filter = null, input = null, position = null) {
       Object.assign(this.$refs.hint.style, {
         left: position.left + 'px',
         top: position.top + 'px'
@@ -83,6 +84,9 @@ export default {
       this.input = input;
     },
     setFocus () {
+      if (this.focused === null) {
+        this.focused = 0;
+      }
       this.$nextTick(() => {
         this.$refs.hint.focus();
       });
@@ -106,6 +110,7 @@ export default {
       }
       this.visible = false;
       this.$root.$emit('hint-complete', this.chapter, item, this.input);
+      this.focused = null;
     }
   },
   beforeDestroy () {
