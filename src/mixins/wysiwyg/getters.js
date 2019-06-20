@@ -21,12 +21,13 @@ export default {
 
       return i + increments < templates.length ? templates[i + increments] : null;
     },
-    getSpanList () {
-      return this.editor.text
+    getSpanList (joined = true) {
+      const spans = this.editor.text
         .split('</span>')
         .filter(item => item.includes('<span'))
-        .map(item => `${item}</span>`)
-        .join('');
+        .map(item => `${item}</span>`);
+
+      return !joined ? spans : spans.join('');
     },
     getTail () {
       return this.editor.text

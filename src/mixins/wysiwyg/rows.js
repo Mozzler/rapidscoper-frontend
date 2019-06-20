@@ -16,6 +16,14 @@ export default {
       el.focus();
     },
     addRowToList (prototype, text = '', sublist = false, template) {
+
+      if (!sublist) {
+        const number = this.level === 1 ? 3 : 1;
+        const data = this.getSpanList(false).slice(0, number);
+
+        text = data.join('');
+      }
+
       return {
         parent: sublist ? prototype : prototype.parent,
         estimation: null,
