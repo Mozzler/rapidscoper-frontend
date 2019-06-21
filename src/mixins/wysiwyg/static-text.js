@@ -25,7 +25,11 @@ export default {
         return;
       }
 
-      if (this.next === 'custom') {
+      if (!this.next) {
+        return;
+      }
+
+      if (this.next && this.next.includes('custom')) {
         this.setCustomText();
 
         let completion = this.getStaticText(1);

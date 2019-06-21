@@ -81,19 +81,21 @@ export default {
     initStaticText () {
       let completion = null;
 
-      if (this.next) {
-        if (this.next.includes('static-text')) {
-          completion = this.getStaticText(0);
-        }
-        if (this.next === 'custom') {
-          completion = this.getStaticText(1);
-        }
+      if (!this.next) {
+        return;
+      }
 
-        if (completion !== null) {
-          const [text, type] = this.getStaticTextByType(completion);
-          this.editor.tail = this.createSpan(text, `&nbsp;${type}`, true);
-          this.editor.placeholder = this.editor.text + this.editor.tail;
-        }
+      if (this.next.includes('static-text')) {
+        completion = this.getStaticText(0);
+      }
+      if (this.next.includes('custom')) {
+        completion = this.getStaticText(1);
+      }
+
+      if (completion !== null) {
+        const [text, type] = this.getStaticTextByType(completion);
+        this.editor.tail = this.createSpan(text, `&nbsp;${type}`, true);
+        this.editor.placeholder = this.editor.text + this.editor.tail;
       }
     },
     setSiblings () {
