@@ -74,12 +74,16 @@ export default {
         this.focusEditor(wysiwygEditor, this.$refs[wysiwygChild][0]);
       });
     },
+    removeRow () {
+      this.list.splice(this.focused, 1);
+    },
     decreaseSublistLevel ($event) {
       this.hide();
 
       $event.preventDefault();
 
       if (this.level === 1) {
+        this.removeRow($event);
         return;
       }
 
