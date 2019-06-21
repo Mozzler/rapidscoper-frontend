@@ -37,7 +37,8 @@ export default {
       const nodes = this.event.target.childNodes;
       nodes.filter = [].filter;
 
-      if (!nodes.filter(item => typeof item !== 'function').length) {
+      const items = nodes.filter(item => typeof item !== 'function');
+      if (!items.length || !this.getSpanList()) {
         el = this.$refs[this.ref][0];
       } else {
         let filtered = nodes.filter(item => {
@@ -140,6 +141,10 @@ export default {
     },
     finishSentence ($event, character = '') {
       $event.preventDefault();
+
+      if (!this.getSpanList()) {
+        return false;
+      }
 
       this.event = $event;
       this.editor.text = (`${this.editor.text}${character}`);

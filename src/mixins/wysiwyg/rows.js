@@ -38,16 +38,16 @@ export default {
       };
     },
     createRow ($event) {
-      new Promise(resolve => {
-        this.finishSentence($event);
-        resolve();
+      new Promise((resolve, reject) => {
+        const finished = this.finishSentence($event);
+        finished !== false ? resolve() : reject(new Error('invalid sentence construction'));
       }).then(() => {
         const row = this.addRowToList(this.list[this.focused], `$event.target.innerHTML`);
         this.list.push(row);
       }).then(() => {
         const wysiwygChild = `editor-${ this.focused + 1 }-${ this.level }`;
         this.focusEditor(wysiwygChild, this, true);
-      });
+      }).catch(() => {});
     },
     createSublist ($event) {
       if (!(this.level < 3)) {
