@@ -8,7 +8,14 @@ VueAxiosPlugin.install = (Vue, options) => {
   axios.defaults.baseURL = API_URL;
 
   const defaultOptions = {
-    reqHandleFunc: config => config,
+    reqHandleFunc: config => {
+      const user = store.state.auth.user;
+      if (user !== null) {
+        config.headers.authorization = `${ user.token_type } ${ user.access_token }`;
+      }
+      config.headers['Content-Type'] = 'application/json';
+      return config;
+    },
     reqErrorFunc: error => Promise.reject(error),
     resHandleFunc: response => response,
     resErrorFunc: error => Promise.reject(error)
@@ -19,21 +26,10 @@ VueAxiosPlugin.install = (Vue, options) => {
     ...options
   };
 
-  const headers = {
-    'Content-Type': 'application/json'
-  };
-
-  const user = store.state.auth.user ? store.state.auth.user : null;
-  if (user) {
-    headers['Authorization'] = `${ user.token_type } ${ user.access_token }`;
-  }
-
-  axios.defaults.headers.common = headers;
-
   const service = axios.create(initOptions);
 
   service.interceptors.request.use(
-    config => initOptions.reqHandleFunc(config),
+    (config) => initOptions.reqHandleFunc(config),
     error => initOptions.reqErrorFunc(error)
   );
 
@@ -54,3 +50,4 @@ VueAxiosPlugin.install = (Vue, options) => {
 };
 
 export default VueAxiosPlugin;
+

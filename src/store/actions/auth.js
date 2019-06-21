@@ -1,11 +1,9 @@
 import config from '@/config';
 
-import Vue from 'vue';
-
 export default {
   async signup (state, payload) {
     try {
-      const response = await Vue.$axios.post('user/create', payload);
+      const response = await this._vm.$axios.post('user/create', payload);
 
       if (!response.data.error) {
         state.commit('authenticate', response.data.item);
@@ -29,7 +27,7 @@ export default {
       grant_type: 'password'
     };
 
-    const response = await Vue.$axios.post('user/token', data);
+    const response = await this._vm.$axios.post('user/token', data);
 
     if (!response.data.error) {
       store.commit('authenticate', response.data);
@@ -40,7 +38,7 @@ export default {
   async updateUserInfo (store, payload) {
     const id = store.state.user.user_id;
     const url = `user/update?id=${id}`;
-    const response = await Vue.$axios.put(url, payload);
+    const response = await this._vm.$axios.put(url, payload);
 
     if (!response.data.error) {
       store.commit('update', response.data.item);
