@@ -38,16 +38,20 @@ export default {
       };
     },
     createRow ($event) {
-      new Promise((resolve, reject) => {
-        const finished = this.finishSentence($event);
-        finished !== false ? resolve() : reject(new Error('invalid sentence construction'));
-      }).then(() => {
-        const row = this.addRowToList(this.list[this.focused], `$event.target.innerHTML`);
-        this.list.push(row);
-      }).then(() => {
-        const wysiwygChild = `editor-${ this.focused + 1 }-${ this.level }`;
-        this.focusEditor(wysiwygChild, this, true);
-      }).catch(() => {});
+      if (this.dictionary[this.next]) {
+        this.fixStaticText($event);
+      } else {
+        new Promise((resolve, reject) => {
+          const finished = this.finishSentence($event);
+          finished !== false ? resolve() : reject(new Error('invalid sentence construction'));
+        }).then(() => {
+          const row = this.addRowToList(this.list[this.focused], `$event.target.innerHTML`);
+          this.list.push(row);
+        }).then(() => {
+          const wysiwygChild = `editor-${ this.focused + 1 }-${ this.level }`;
+          this.focusEditor(wysiwygChild, this, true);
+        }).catch(() => {});
+      }
     },
     createSublist ($event) {
       if (!(this.level < 3)) {
@@ -87,6 +91,15 @@ export default {
     remove ($event, index) {
       this.focused = index;
       const spans = this.editor.text.split('</span>');
+
+      if (this.level > 1 && !this.getSpanList() && !this.getTail()) {
+        //this.increaseSublistLevel();
+        console.log('increase');
+      }
+
+      if (this.level === 1 && !this.getSpanList() && !this.getTail()) {
+        console.log('empty');
+      }
 
       if (this.level === 1 && spans[1] === '&nbsp;') {
         $event.preventDefault();

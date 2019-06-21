@@ -3,8 +3,19 @@ export default {
     hide () {
       this.$root.$emit('hide-hint');
     },
+    resetContent () {
+      return new Promise(resolve => {
+        this.updateText();
+        this.event = null;
+        [this.previous, this.next] = [null, null];
+
+        this.$refs[this.ref][0].classList.remove('text-greyed');
+
+        resolve();
+      });
+    },
     parseContent ($event) {
-      new Promise(resolve => {
+      this.resetContent().then(() => {
         this.event = $event;
         this.setSiblings();
 
@@ -17,14 +28,6 @@ export default {
 
         // show auto-completion static text
         this.initStaticText();
-
-        resolve();
-      }).then(() => {
-        this.updateText();
-        this.event = null;
-        [this.previous, this.next] = [null, null];
-
-        this.$refs[this.ref][0].classList.remove('text-greyed');
       });
     },
     initDictionary () {
