@@ -12,11 +12,13 @@
          v-for="(item, index) in items"
          :key="index"
          :ref="`hint-item-${index}`"
-         :class="{'hint__item--active': focused === index}">
+         :class="{'hint__item--active': focused === index}"
+         @click="$event => tabComplete($event, item)">
       <span class="hint__item-text">{{ getStrFromObj(item) }}</span>
     </div>
     <div class="hint__item hint__bordered"
-         v-if="(filter && !inList) && this.chapter !== 'beginning'">
+         v-if="(filter && !inList) && this.chapter !== 'beginning'"
+        @click="$event => complete()">
       <span class="text-bold">Ctrl + Enter</span> to create "{{ filter }}"
     </div>
   </div>

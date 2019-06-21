@@ -22,7 +22,6 @@ export default {
     };
   },
   beforeMount () {
-
     this.$root.$on('hint-complete', this.hintComplete);
   },
   beforeDestroy () {

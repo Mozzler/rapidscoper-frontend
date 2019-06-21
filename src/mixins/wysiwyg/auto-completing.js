@@ -116,6 +116,10 @@ export default {
         return;
       }
 
+      this.$nextTick(() => {
+        this.$refs[el][0].focus();
+      });
+
       if (chapter === 'beginning') {
         this.editor.template = text.value;
         text = text.key;
