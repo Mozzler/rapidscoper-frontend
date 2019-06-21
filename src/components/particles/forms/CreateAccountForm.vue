@@ -49,7 +49,7 @@
             key="team name"
             name="Team name"
             v-validate="'required|min:2|max:100'"
-            v-model="team"
+            v-model="team.name"
             placeholder="Team name"
             :error-messages="errors.first('Team name')"
             :disabled="processing"
@@ -80,7 +80,9 @@ export default {
       lastName: null,
       phone: null
     },
-    team: null,
+    team: {
+      name: null
+    },
     processing: false
   }),
   methods: {
@@ -99,12 +101,19 @@ export default {
         this.processing = true;
 
         this.send().then(() => {
-            this.processing = false;
-            //this.$router.push('/');
-          }).catch(error => {
-            this.processing = false;
-            console.log(errors);
-          });
+          this.$router.push('/');
+          this.processing = false;
+        }).catch(error => {
+          error = error.response.data;
+
+          if (error[0].field === 'uniqueUrlStub') {
+            this.errors.add({
+              field: 'Team name',
+              msg: 'The team name is already used'
+            });
+          }
+          this.processing = false;
+        });
       } else {
         this.processing = false;
       }

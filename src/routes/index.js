@@ -22,15 +22,18 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
 
-  let authenticated = store.state.auth.user !== null;
+  const user = store.state.auth.user;
+  const authenticated = user !== null;
 
-  if (to.meta.guest && authenticated) {
-    next('/dashboard');
-  }
-  else if (to.meta.requiresAuth && !authenticated) {
+  if (authenticated && user.firstName && to.name === 'create-account') {
+    next('/');
+  } else if (authenticated && !user.firstName && to.name !== 'create-account') {
+    next('/create-account');
+  } else if (to.meta.guest && authenticated) {
+    next('/');
+  } else if (to.meta.requiresAuth && !authenticated) {
     next('/signup');
-  }
-  else {
+  } else {
     next();
   }
 });

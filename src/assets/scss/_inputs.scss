@@ -90,4 +90,8 @@
 
 .phone-input {
   @include rapid-input;
+
+  &:focus-within {
+    border-color: $primary !important;
+  }
 }

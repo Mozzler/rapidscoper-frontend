@@ -31,6 +31,8 @@ export default {
 
     if (!response.data.error) {
       store.commit('authenticate', response.data);
+    } else {
+      throw new Error(response.data.error_description);
     }
 
     return response.data;
