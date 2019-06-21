@@ -75,30 +75,43 @@ export default {
       });
     },
     decreaseSublistLevel ($event) {
+      this.hide();
+
       $event.preventDefault();
-      if (this.level > 1) {
-        new Promise(resolve => {
-          const node = Object.assign({}, this.list[this.focused]);
-          const list = node.parent.parent.list;
-          list.splice(this.parentIndex + 1, 0, node);
-          node.parent = node.parent.parent;
-          resolve();
-        }).then(() => {
-          this.list.splice(this.focused, 1);
-        });
+
+      if (this.level === 1) {
+        return;
       }
+
+      new Promise(resolve => {
+        if (this.level - 1 === 1) {
+          const equation = this.getEquation(this.level - 1);
+          const constructions = this.getAdjusted(equation);
+
+          this.list[this.focused].text = this.createSpan('beginning', constructions[0].key, true);
+          this.list[this.focused].template = constructions[0].value;
+        }
+
+        const node = Object.assign({}, this.list[this.focused]);
+        const list = node.parent.parent.list;
+
+        list.splice(this.parentIndex + 1, 0, node);
+        node.parent = node.parent.parent;
+        resolve();
+      }).then(() => {
+        this.list.splice(this.focused, 1);
+      });
     },
     remove ($event, index) {
       this.focused = index;
       const spans = this.editor.text.split('</span>');
 
       if (this.level > 1 && !this.getSpanList() && !this.getTail()) {
-        //this.increaseSublistLevel();
-        console.log('increase');
+        this.decreaseSublistLevel($event);
       }
 
       if (this.level === 1 && !this.getSpanList() && !this.getTail()) {
-        console.log('empty');
+        console.log('remove');
       }
 
       if (this.level === 1 && spans[1] === '&nbsp;') {
