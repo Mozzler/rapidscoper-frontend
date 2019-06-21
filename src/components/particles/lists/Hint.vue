@@ -3,6 +3,7 @@
        :tabindex="0"
        v-show="visible"
        @keydown.tab.exact="$event => tabComplete($event, items[focused])"
+       @keydown.enter.exact="$event => tabComplete($event, items[focused])"
        @keydown.up.exact="$event => navigate($event, -1)"
        @keydown.down.exact="$event => navigate($event, 1)"
        @keypress.ctrl.enter.exact="$event => complete()"
