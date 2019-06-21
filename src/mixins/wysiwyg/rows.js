@@ -20,7 +20,7 @@ export default {
         const number = this.level === 1 ? 3 : 1;
         const data = this.getSpanList(false).slice(0, number);
 
-        text = data.join('');
+        text = `${data.join('')}&nbsp;`;
       }
 
       return {
@@ -42,7 +42,7 @@ export default {
         this.finishSentence($event);
         resolve();
       }).then(() => {
-        const row = this.addRowToList(this.list[this.focused], $event.target.innerHTML);
+        const row = this.addRowToList(this.list[this.focused], `$event.target.innerHTML`);
         this.list.push(row);
       }).then(() => {
         const wysiwygChild = `editor-${ this.focused + 1 }-${ this.level }`;
