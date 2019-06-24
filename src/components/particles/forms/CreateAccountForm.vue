@@ -105,7 +105,7 @@ export default {
 
       if (result) {
         this.processing = true;
-/*
+
         this.send().then(() => {
           this.$router.push('/');
           this.processing = false;
@@ -119,7 +119,7 @@ export default {
             });
           }
           this.processing = false;
-        });*/
+        });
       } else {
         this.processing = false;
       }
