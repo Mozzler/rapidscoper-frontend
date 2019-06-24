@@ -94,4 +94,9 @@
   &:focus-within {
     border-color: $primary !important;
   }
+
+  .dropdown {
+    border-radius: 4px;
+    outline: none;
+  }
 }
