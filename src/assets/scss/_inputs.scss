@@ -95,6 +95,10 @@
     border-color: $primary !important;
   }
 
+  input {
+    padding: 0 !important;
+  }
+
   .dropdown {
     border-radius: 4px;
     outline: none;
