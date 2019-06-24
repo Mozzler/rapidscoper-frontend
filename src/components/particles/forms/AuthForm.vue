@@ -1,5 +1,5 @@
 <template>
-  <v-form class="signup-with-email">
+  <v-form class="signup-with-email" @keyup.native.enter="submit">
     <v-layout row wrap>
       <v-flex xs12 class="signup-input">
         <v-text-field
