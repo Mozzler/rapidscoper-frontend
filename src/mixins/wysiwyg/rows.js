@@ -6,7 +6,7 @@ export default {
     pressed ($event) {
       this.parseContent($event);
     },
-    focusEditor (wysiwygEditor, context, greyed = false) {
+    focusEditor (wysiwygEditor, context = this, greyed = false) {
       const el = context.$refs[wysiwygEditor][0];
       if (greyed) {
         el.classList.add('text-greyed');
@@ -75,7 +75,32 @@ export default {
       });
     },
     removeRow () {
+      if (this.level === 1 && this.list.length === 1) {
+        return;
+      }
+
+      const next = {
+        level: this.level,
+        focused: this.list.length - 1
+      };
+
+/*
+      let finder = (list, level) => {
+        next = {
+          level: level,
+          focused: list.length - 1
+        };
+
+        return list.parent.parent.list.length ? finder (list.parent.parent.list, level + 1) : next;
+      };
+
+      finder(this.list, this.level);
+*/
+      this.hide();
       this.list.splice(this.focused, 1);
+
+      let editor = `editor-${ next.focused - 1 }-${ next.level }`;
+      this.focusEditor(editor);
     },
     decreaseSublistLevel ($event) {
       this.hide();
@@ -118,8 +143,9 @@ export default {
         this.decreaseSublistLevel($event);
       }
 
-      if (this.level === 1 && !this.getSpanList() && !this.getTail()) {
-        console.log('remove');
+      const spanList = this.getSpanList(false);
+      if (this.level === 1 && spanList.length === 1 && !this.getTail()) {
+        this.removeRow();
       }
 
       if (this.level === 1 && spans[1] === '&nbsp;') {

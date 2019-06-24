@@ -22,7 +22,9 @@ export default {
     };
   },
   beforeMount () {
-    this.$root.$on('hint-complete', this.hintComplete);
+    if (!this.$listeners['hint-complete']) {
+      this.$root.$on('hint-complete', this.hintComplete);
+    }
   },
   beforeDestroy () {
     //this.$root.$off('hint-complete');
