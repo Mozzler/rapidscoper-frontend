@@ -39,7 +39,7 @@
                    @keyup.exact="pressed"
                    @keydown.esc.exact="hide"
                    @keydown.tab.exact="fixStaticText"
-                   @keypress.ctrl.enter.exact="($event) => createField($event, next === 'beginning')"
+                   @keypress.ctrl.enter.exact="createField"
                    @keydown.enter.exact="createRow"
                    @keydown.delete.exact="($event) => remove($event, index)"
                    @keydown.186.shift.exact="createSublist"

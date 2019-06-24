@@ -38,7 +38,7 @@ export default {
       };
     },
     createRow ($event) {
-      if (this.dictionary[this.next]) {
+      if (this.dictionary[this.next] || this.next === 'beginning') {
         this.fixStaticText($event);
       } else {
         new Promise((resolve, reject) => {
