@@ -25,7 +25,7 @@ export default {
     this.$root.$on('hint-complete', this.hintComplete);
   },
   beforeDestroy () {
-    this.$root.$off('hint-complete');
+    //this.$root.$off('hint-complete');
   },
   computed: {
     adjustConstructions () {

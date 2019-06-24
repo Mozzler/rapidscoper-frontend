@@ -105,6 +105,7 @@ export default {
       }).then(() => {
         this.list.splice(this.focused, 1);
       }).then(() => {
+        this.focused = null;
         const editor = `editor-${ this.parentIndex + 1 }-${ this.level - 1 }`;
         this.focusEditor(editor, this.$parent, false);
       });
