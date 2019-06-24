@@ -16,9 +16,9 @@ export default {
           return value;
         });
 
-      const templates = this.editor.template
+      const templates = this.editor.template ? this.editor.template
         .split(/(?=\[)/g)
-        .map(item => item.replace(/[[\]]/g, ''));
+        .map(item => item.replace(/[[\]]/g, '')) : [];
 
       const last = classes.length - 1;
       const index = templates.indexOf(classes[last]) + 1;

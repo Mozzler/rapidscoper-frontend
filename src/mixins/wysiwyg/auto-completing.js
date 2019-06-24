@@ -106,9 +106,9 @@ export default {
       this.previous = this.getCurrentSpan();
       this.next = this.getNextSpan();
     },
-    createField ($event) {
+    createField ($event, first = false) {
       $event.preventDefault();
-      this.$root.$emit('complete-hint');
+      this.$root.$emit('complete-hint', this.filter, first);
       this.filter = null;
     },
     focusHint () {

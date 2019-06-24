@@ -21,7 +21,7 @@ export default {
       this.setSiblings();
 
       if (this.filter && this.filter.trim()) {
-        this.createField($event);
+        this.createField($event, true);
         return;
       }
 

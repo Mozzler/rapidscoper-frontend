@@ -14,7 +14,7 @@ export default {
 
       el.focus();
     },
-    addRowToList (prototype, text = '', sublist = false, template) {
+    addRowToList (prototype, text = '', sublist = false, template = '') {
 
       if (!sublist) {
         const number = this.level === 1 ? 3 : 1;
@@ -83,6 +83,7 @@ export default {
       $event.preventDefault();
 
       if (this.level === 1) {
+        console.log($event);
         this.removeRow($event);
         return;
       }

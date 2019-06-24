@@ -108,9 +108,14 @@ export default {
       this.focused = step;
     },
     complete (item = this.filter, first = false) {
-      if (first && this.items) {
+      if (first && !this.items.length) {
+        return;
+      }
+
+      if (first && this.items.length) {
         item = this.items[0];
       }
+
       this.visible = false;
       this.$root.$emit('hint-complete', this.chapter, item, this.input);
       this.focused = null;
