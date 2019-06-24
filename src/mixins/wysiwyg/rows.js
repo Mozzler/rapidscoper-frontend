@@ -78,28 +78,36 @@ export default {
       if (this.level === 1 && this.list.length === 1) {
         return;
       }
-
-      const next = {
-        level: this.level,
-        focused: this.list.length - 1
-      };
-
 /*
-      let finder = (list, level) => {
+      let next = {};
+      let finder = (list, level, focused) => {
         next = {
           level: level,
-          focused: list.length - 1
+          focused: focused
         };
 
-        return list.parent.parent.list.length ? finder (list.parent.parent.list, level + 1) : next;
+        let current = list[focused].parent.list;
+
+        if (current.length) {
+          let parent = current[current.length - 1].list;
+          return parent.length ? finder (parent, level + 1,parent.length - 1) : next;
+        }
+
+        return next;
+      };*/
+
+      //next = finder(this.list, this.level, this.focused);
+
+      let next = {
+        level: this.level,
+        focused: this.focused
       };
 
-      finder(this.list, this.level);
-*/
       this.hide();
       this.list.splice(this.focused, 1);
 
-      let editor = `editor-${ next.focused - 1 }-${ next.level }`;
+      let editor = `editor-${ next.focused }-${ next.level }`;
+
       this.focusEditor(editor);
     },
     decreaseSublistLevel ($event) {
