@@ -83,7 +83,6 @@ export default {
       $event.preventDefault();
 
       if (this.level === 1) {
-        console.log($event);
         this.removeRow($event);
         return;
       }
@@ -105,6 +104,9 @@ export default {
         resolve();
       }).then(() => {
         this.list.splice(this.focused, 1);
+      }).then(() => {
+        const editor = `editor-${ this.parentIndex + 1 }-${ this.level - 1 }`;
+        this.focusEditor(editor, this.$parent, false);
       });
     },
     remove ($event, index) {
