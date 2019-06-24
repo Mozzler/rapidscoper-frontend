@@ -98,5 +98,12 @@
   .dropdown {
     border-radius: 4px;
     outline: none;
+
+    .country-code {
+      font-size: 14px;
+      font-family: 'Lato';
+      color: rgba(0,0,0,.87);
+      font-weight: 400;
+    }
   }
 }

@@ -37,6 +37,8 @@
         </v-flex>
         <v-flex xs12 class="signup-input">
           <vue-tel-input
+            @input="formatPhone"
+            :disabledFormatting="true"
             :enabledCountryCode="true"
             :disabledFetchingCountry="true"
             wrapperClasses="phone-input"
@@ -92,6 +94,10 @@ export default {
         this.$store.dispatch('createTeam', this.team)
       ]);
     },
+    formatPhone (data) {
+      let formatted = data.replace(/ /g, '');
+      this.user.phone = formatted.replace(/(.{4})/g,'$1 ');
+    },
     async create () {
       this.processing = true;
 
@@ -99,7 +105,7 @@ export default {
 
       if (result) {
         this.processing = true;
-
+/*
         this.send().then(() => {
           this.$router.push('/');
           this.processing = false;
@@ -113,7 +119,7 @@ export default {
             });
           }
           this.processing = false;
-        });
+        });*/
       } else {
         this.processing = false;
       }
