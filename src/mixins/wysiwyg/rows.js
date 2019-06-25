@@ -97,11 +97,17 @@ export default {
       eval(chain).focus();
     },
     increaseSublistLevel () {
-      if (this.level === 3) {
+      if (this.level === 3 || (this.level === 1 && this.focused === 0)) {
         return;
       }
 
       this.hideHint();
+      if (this.level === 1) {
+        this.editor.text = '';
+        this.editor.placeholder = '';
+        this.editor.tail = '';
+        this.editor.template = '';
+      }
 
       const node = Object.assign({}, this.list[this.focused]);
       node.parent = this.list[this.focused - 1];
