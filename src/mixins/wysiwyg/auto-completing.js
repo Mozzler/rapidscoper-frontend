@@ -160,16 +160,16 @@ export default {
       this.editor.text = (`${this.editor.text}${character}`);
 
       this.setSiblings();
-      this.setCustomText();
+      this.setCustomText(true);
 
       this.resetPlaceholder();
       this.updateText();
     },
-    setCustomText () {
+    setCustomText (editable = false) {
       const [list, tail] = this.getLineParticles();
 
       if (tail) {
-        const text = this.createSpan(this.next, `&nbsp;${tail}`, false, false);
+        const text = this.createSpan(this.next, `&nbsp;${tail}`, false, editable);
         this.editor.text = list + text;
       }
     }

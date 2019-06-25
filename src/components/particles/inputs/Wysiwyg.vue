@@ -123,8 +123,10 @@ export default {
           this.list = this.model;
           resolve();
         }).then(() => {
-          document.execCommand('selectAll', false, null);
-          document.getSelection().collapseToEnd();
+          if (!this.isEditable(this.event)) {
+            document.execCommand('selectAll', false, null);
+            document.getSelection().collapseToEnd();
+          }
         });
       }
     }

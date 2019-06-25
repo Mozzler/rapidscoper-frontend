@@ -5,9 +5,9 @@ export default {
     }
   },
   methods: {
-    createSpan (type, text, greyed = false) {
+    createSpan (type, text, greyed = false, editable = false) {
       const cls = `user-story__editable--${type}${greyed ? ' text-greyed' : ''}`;
-      const props = `readonly contenteditable="false"`;
+      const props = `readonly contenteditable="${editable}"`;
 
       return `<span class="${cls}" ${props}>${ this.$options.filters.withoutDots(text) }</span>&nbsp;`;
     },
@@ -30,7 +30,7 @@ export default {
       }
 
       if (this.next && this.next.includes('custom')) {
-        this.setCustomText();
+        this.setCustomText(true);
 
         let completion = this.getStaticText(1);
         if (completion && completion.includes('static-text')) {

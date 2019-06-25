@@ -3,8 +3,18 @@ export default {
     focus ($event, index) {
       this.focused = index;
     },
+    isEditable (event) {
+      if (!event) {
+        return false;
+      }
+
+      const node = event.view.getSelection().focusNode.parentElement;
+      return node && node.className.includes('custom');
+    },
     pressed ($event) {
-      this.parseContent($event);
+      if (!this.isEditable($event)) {
+        this.parseContent($event);
+      }
     },
     focusEditor (wysiwygEditor, context = this, greyed = false) {
       const el = context.$refs[wysiwygEditor][0];
@@ -144,6 +154,10 @@ export default {
       });
     },
     remove ($event, index) {
+      if (this.isEditable($event)) {
+        return;
+      }
+
       this.focused = index;
       const spans = this.editor.text.split('</span>');
 
