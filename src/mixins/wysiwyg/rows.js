@@ -8,7 +8,8 @@ export default {
         return false;
       }
 
-      const node = event.view.getSelection().focusNode.parentElement;
+      const focused = event.view.getSelection().focusNode;
+      const node = focused ? event.view.getSelection().focusNode.parentElement : null;
       return node && node.className.includes('custom');
     },
     pressed ($event) {
@@ -88,37 +89,12 @@ export default {
       if (this.level === 1 && this.list.length === 1) {
         return;
       }
-/*
-      let next = {};
-      let finder = (list, level, focused) => {
-        next = {
-          level: level,
-          focused: focused
-        };
-
-        let current = list[focused].parent.list;
-
-        if (current.length) {
-          let parent = current[current.length - 1].list;
-          return parent.length ? finder (parent, level + 1,parent.length - 1) : next;
-        }
-
-        return next;
-      };*/
-
-      //next = finder(this.list, this.level, this.focused);
-
-      let next = {
-        level: this.level,
-        focused: this.focused
-      };
 
       this.hideHint();
       this.list.splice(this.focused, 1);
 
-      let editor = `editor-${ next.focused }-${ next.level }`;
-
-      this.focusEditor(editor);
+      let chain = this.getElementToFocus(this.list[this.focused - 1], 1, this.focused - 1);
+      eval(chain).focus();
     },
     decreaseSublistLevel ($event) {
       this.hideHint();
@@ -154,6 +130,7 @@ export default {
       });
     },
     remove ($event, index) {
+      // allow to remove characters from editable div
       if (this.isEditable($event)) {
         return;
       }

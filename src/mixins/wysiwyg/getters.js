@@ -85,6 +85,20 @@ export default {
     },
     getLineParticles () {
       return [this.getSpanList(), this.getTail()];
+    },
+    getElementToFocus (item, level, index, path = 'this') {
+      const length = item.list.length;
+
+      let start = 'editor';
+      let end = `${index}-${level}`;
+      if (length) {
+        start = `wysiwyg-child`;
+      }
+
+      path += `.$refs['${start}-${end}'][0]`;
+
+      const list = length ? item.list[length - 1] : null;
+      return list ? this.getElementToFocus(list, ++level, length - 1, path) : path;
     }
   }
 };
