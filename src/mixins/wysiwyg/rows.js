@@ -96,6 +96,27 @@ export default {
       let chain = this.getElementToFocus(this.list[this.focused - 1], 1, this.focused - 1);
       eval(chain).focus();
     },
+    increaseSublistLevel () {
+      if (this.level === 3) {
+        return;
+      }
+
+      this.hideHint();
+
+      const node = Object.assign({}, this.list[this.focused]);
+      node.parent = this.list[this.focused - 1];
+
+      const parent = this.list[this.focused - 1].list;
+      parent.push(node);
+      this.list.splice(this.focused, 1);
+
+      const content = this.$refs[`wysiwyg-child-${ this.focused - 1 }-${ this.level }`][0];
+      const editor = `editor-${ parent.length - 1 }-${ this.level + 1 }`;
+
+      this.$nextTick(() => {
+        content.$refs[editor][0].focus();
+      });
+    },
     decreaseSublistLevel ($event) {
       this.hideHint();
 
