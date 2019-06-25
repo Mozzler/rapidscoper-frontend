@@ -5,7 +5,7 @@ export default {
     }
   },
   methods: {
-    createSpan (type, text, greyed = false, editable = false) {
+    createSpan (type, text, greyed = false, editable = false, clickable = false) {
       const cls = `user-story__editable--${type}${greyed ? ' text-greyed' : ''}`;
       const props = `readonly contenteditable="${editable}"`;
 

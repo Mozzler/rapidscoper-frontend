@@ -25,4 +25,5 @@
 
 @mixin set-bottom-border($color) {
   border-bottom: 2px solid $color;
+  cursor: pointer;
 }

@@ -113,7 +113,7 @@ export default {
         focused: this.focused
       };
 
-      this.hide();
+      this.hideHint();
       this.list.splice(this.focused, 1);
 
       let editor = `editor-${ next.focused }-${ next.level }`;
@@ -121,7 +121,7 @@ export default {
       this.focusEditor(editor);
     },
     decreaseSublistLevel ($event) {
-      this.hide();
+      this.hideHint();
 
       $event.preventDefault();
 

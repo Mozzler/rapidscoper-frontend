@@ -4,6 +4,7 @@ import StaticText from "./static-text";
 import AutoCompleting from "./auto-completing";
 import Rows from "./rows";
 import Filters from "./filters";
+import Hint from "./hint";
 
 export default {
   mixins: [
@@ -12,7 +13,8 @@ export default {
     StaticText,
     AutoCompleting,
     Rows,
-    Filters
+    Filters,
+    Hint
   ],
   data () {
     return {

@@ -85,6 +85,6 @@ export default {
     },
     getLineParticles () {
       return [this.getSpanList(), this.getTail()];
-    },
+    }
   }
 };

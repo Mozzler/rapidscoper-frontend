@@ -1,8 +1,5 @@
 export default {
   methods: {
-    hide () {
-      this.$root.$emit('hide-hint');
-    },
     resetContent () {
       return new Promise(resolve => {
         this.updateText();
@@ -53,22 +50,14 @@ export default {
       }
 
       if (el) {
-        const rect = el.getBoundingClientRect();
-        const texts = nodes.filter(item => !item.className && !!item.data.trim());
-        const position = {
-          top: rect.top + 20,
-          left: rect.left + 24
-        };
-
         this.filter = '';
 
+        const texts = nodes.filter(item => !item.className && !!item.data.trim());
         if (texts && texts.length) {
           this.filter = texts[texts.length - 1].textContent.trim();
         }
 
-        this.$nextTick(() => {
-          this.$root.$emit('set-hint-state', true, this.next, this.filter, this.ref, position);
-        });
+        this.showHint(el, this.next);
       }
     },
     initPlaceholder () {
@@ -118,6 +107,8 @@ export default {
       this.$root.$emit('focus-hint');
     },
     hintComplete (chapter, text, el) {
+      let clickable = false;
+
       if (el !== this.ref) {
         return;
       }
@@ -129,16 +120,30 @@ export default {
       if (chapter === 'beginning') {
         this.editor.template = text.value;
         text = text.key;
+        clickable = false;
       }
 
-      const spans = this.getSpanList();
+      const spans = this.getSpanList(false);
 
-      this.editor.text = `${spans}${!spans ? '' : '&nbsp;'}${this.createSpan(chapter, text)}`;
+      let index = null;
+      spans.forEach((item, i) => {
+        if (item.includes(`user-story__editable--${chapter}`)) {
+          index = i;
+        }
+      });
+
+      if (index !== null) {
+        spans[index] = this.createSpan(chapter, text, false, clickable);
+        this.editor.text = spans.map(item => item.replace(/&nbsp;/gi, '')).join('&nbsp;');
+      } else {
+        let t = spans.join('');
+        this.editor.text = `${t}${!t ? '' : '&nbsp;'}${this.createSpan(chapter, text, false, clickable)}`;
+        this.setCompletion();
+      }
+
+      this.filter = null;
       this.editor.tail = '';
       this.editor.placeholder = this.editor.text;
-      this.filter = null;
-
-      this.setCompletion();
       this.updateText();
     },
     setCompletion () {

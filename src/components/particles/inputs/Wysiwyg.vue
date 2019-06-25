@@ -34,10 +34,11 @@
               <div class="user-story__placeholder" v-html="item.placeholder" readonly></div>
               <div contenteditable class="user-story__editable"
                    :ref="`editor-${ index }-${ level }`"
+                   @click="checkHint"
                    @focus="($event) => focus($event, index)"
                    @keydown.down.exact="focusHint"
                    @keyup.exact="pressed"
-                   @keydown.esc.exact="hide"
+                   @keydown.esc.exact="hideHint"
                    @keydown.tab.exact="fixStaticText"
                    @keypress.ctrl.enter.exact="createField"
                    @keydown.enter.exact="createRow"

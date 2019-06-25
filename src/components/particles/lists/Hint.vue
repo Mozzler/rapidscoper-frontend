@@ -39,7 +39,7 @@ export default {
   mounted () {
     this.$root.$on('set-hint-state', this.setHintState);
     this.$root.$on('complete-hint', this.complete);
-    this.$root.$on('hide-hint', this.hide);
+    this.$root.$on('hideHint-hint', this.hideHint);
     this.$root.$on('focus-hint', this.setFocus);
   },
   computed: {
@@ -68,7 +68,7 @@ export default {
     }
   },
   methods: {
-    hide () {
+    hideHint () {
       this.visible = false;
     },
     tabComplete ($event, value) {
