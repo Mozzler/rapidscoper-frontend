@@ -25,11 +25,11 @@ router.beforeEach((to, from, next) => {
   const user = store.state.auth.user;
   const authenticated = user !== null;
 
-  if (authenticated && user.firstName && to.name === 'create-account') {
+  /*if (authenticated && user.firstName && to.name === 'create-account') {
     next('/');
   } else if (authenticated && !user.firstName && to.name !== 'create-account') {
     next('/create-account');
-  } else if (to.meta.guest && authenticated) {
+  } else */if (to.meta.guest && authenticated) {
     next('/');
   } else if (to.meta.requiresAuth && !authenticated) {
     next('/signup');
