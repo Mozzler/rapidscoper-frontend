@@ -12,7 +12,7 @@
         <v-list-tile-content>
           <v-list-tile-title>
             <v-layout align-center justify-space-between row fill-height>
-              <span> {{ item.title }}
+              <span> {{ item.title || item.name }}
                 <div v-if="item.marker" class="red-circle" />
               </span>
               <span class="text-greyed" v-if="item.number">

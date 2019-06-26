@@ -84,24 +84,14 @@ export default {
           number: 12,
           icon: 'archive'
         }
-      ],
-      teams: [
-        {
-          title: 'The Bumpy Hamsters',
-          number: 16,
-          marker: true
-        },
-        {
-          title: 'West World',
-          number: 3,
-          marker: true
-        },
-        {
-          title: 'The Ramblers',
-          number: 1
-        }
       ]
     };
+  },
+  computed: {
+    teams () {
+      return this.$store.state.team.teams ?
+        this.$store.state.team.teams : [];
+    }
   },
   methods: {
     showAddTeamModal () {

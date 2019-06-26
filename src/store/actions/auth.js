@@ -42,10 +42,6 @@ export default {
     const url = `user/update?id=${id}`;
     const response = await this._vm.$axios.put(url, payload);
 
-    if (!response.data.error) {
-      store.commit('update', response.data.item);
-    }
-
     return response.data;
   },
   logout (store) {

@@ -47,11 +47,32 @@ export default {
   mixins: [
     ResizeMixin
   ],
-  computed: {
-    authenticated () {
-      return this.$store.state.user !== null;
+  beforeMount () {
+    if (this.authenticated) {
+      this.initSocket();
     }
   },
+  computed: {
+    authenticated () {
+      return this.$store.state.auth.user !== null;
+    }
+  },
+  methods: {
+    initSocket () {
+      this.$socket.init();
+      this.$socket.connect('user');
+      this.$socket.connect('team');
+    }
+  },
+  watch: {
+    authenticated () {
+      if (this.authenticated) {
+        this.initSocket();
+      } else {
+        this.$socket.close();
+      }
+    }
+  }
 };
 </script>
 
