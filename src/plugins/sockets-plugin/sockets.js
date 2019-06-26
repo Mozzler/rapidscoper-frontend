@@ -31,6 +31,10 @@ class MongoSockets {
         store.commit('updateTeam', data.item);
       }
     });
+
+    this.io.on('mongo_data', ({ operationType, fullDocument, model }) => {
+      store.commit(`${operationType}team`, fullDocument);
+    });
   }
 }
 

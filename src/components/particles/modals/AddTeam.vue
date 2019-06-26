@@ -20,7 +20,8 @@
                 key="team name"
                 name="Team name"
                 placeholder="Team name"
-                v-model="team"
+                v-model="data.name"
+                v-validate="'required|min:2|max:100'"
                 :error-messages="errors.first('Team name')"
                 solo
               ></v-text-field>
@@ -34,7 +35,7 @@
               Cancel
             </v-btn>
             <v-btn class="btn-rapid primary" large
-                   @click="closeModal">
+                   @click="submit">
               {{ isMobileDevice ? 'Create' : 'Create team' }}
             </v-btn>
           </v-flex>
@@ -45,21 +46,42 @@
 </template>
 
 <script>
-  import ModalMixin from '@/mixins/modal';
+import ModalMixin from '@/mixins/modal';
 
-  export default {
-    name: "add-team",
-    mixins: [
-      ModalMixin
-    ],
-    data() {
-      return {
-        team: null,
+export default {
+  name: "add-team",
+  mixins: [
+    ModalMixin
+  ],
+  data () {
+    return {
+      data: {
+        name: null
+      },
+      processing: false
+    }
+  },
+  methods: {
+    async submit () {
+      this.processing = true;
+
+      const result = await this.$validator.validate();
+
+      if (result) {
+        this.$store.dispatch('createTeam', this.data)
+          .then(data => {
+            this.processing = false;
+            this.closeModal();
+            console.log(data);
+          })
+          .catch(error => {
+            this.processing = false;
+            console.log(error);
+          });
+      } else {
+        this.processing = false;
       }
-    },
+    }
   }
+};
 </script>
-
-<style scoped>
-
-</style>
