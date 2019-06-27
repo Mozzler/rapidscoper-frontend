@@ -59,7 +59,8 @@ export default {
         name: null
       },
       processing: false,
-    }
+      show: false
+    };
   },
   beforeMount () {
     this.data.name = null;
@@ -82,6 +83,14 @@ export default {
           });
       } else {
         this.processing = false;
+      }
+    }
+  },
+  watch: {
+    dialog () {
+      if (this.dialog) {
+        this.data.name = null;
+        this.$validator.reset();
       }
     }
   }
