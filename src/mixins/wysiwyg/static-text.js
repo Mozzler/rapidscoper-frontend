@@ -28,7 +28,7 @@ export default {
       }
 
       if (this.filter && this.filter.trim()) {
-        this.createField($event, true);
+        this.createField($event, $event.key !== 'Tab');
         return;
       }
 

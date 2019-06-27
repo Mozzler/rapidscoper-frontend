@@ -16,9 +16,16 @@ export default {
       });
     },
     checkHint ($event) {
+      this.event = $event;
+
       let property = $event.target.className.replace('user-story__editable--', '');
 
       if (this.dictionary[property]) {
+        /*if ($event.type === 'dblclick') {
+          $event.target.contentEditable = true;
+          $event.target.innerText = '';
+        }*/
+
         this.hideHint();
         this.showHint($event.target, property, '');
       }
