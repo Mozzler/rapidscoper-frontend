@@ -11,7 +11,7 @@
         <img src="@/assets/img/user.png"/>
       </div>
       <div class="text-bold">
-        {{ user.firstName }} {{ user.lastName }}
+        {{ user.firstName ? user.firstName : ''}} {{ user.lastName ? user.lastName : '' }}
         <span class="menu-bottom">
           <dropdown
             :list="settings"
@@ -88,6 +88,7 @@ export default {
     };
   },
   beforeMount () {
+    this.$store.dispatch('auth/getInfo');
     this.$store.dispatch('team/getList');
   },
   computed: {

@@ -49,7 +49,6 @@ export default {
   ],
   beforeMount () {
     if (this.authenticated) {
-      this.$store.dispatch('auth/getInfo');
       //this.initSocket();
     }
   },
