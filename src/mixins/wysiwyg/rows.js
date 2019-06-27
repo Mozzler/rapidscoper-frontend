@@ -79,7 +79,7 @@ export default {
           const row = this.addRowToList(this.list[this.focused], `$event.target.innerHTML`);
           this.list.push(row);
         }).then(() => {
-          const wysiwygChild = `editor-${ this.focused + 1 }-${ this.level }`;
+          const wysiwygChild = `editor-${ this.list.length - 1 }-${ this.level }`;
           this.focusEditor(wysiwygChild, this, true);
         }).catch(() => {});
       }
