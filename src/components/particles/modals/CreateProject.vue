@@ -91,8 +91,12 @@ export default {
       };
     },
     send () {
-      console.log(this.data);
-      //this.submit('project/create');
+      const data = {
+        name: this.data.title,
+        teamId: this.data.team.id
+      };
+
+      this.submit('project/create', data);
     }
   }
 };
