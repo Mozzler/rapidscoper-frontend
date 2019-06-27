@@ -49,7 +49,12 @@ export default {
       };
     },
     createRow ($event) {
-      if (this.dictionary[this.next] || this.next === 'beginning') {
+      if (this.dictionary[this.next]) {
+        this.createField($event);
+        return;
+      }
+
+      if (this.next === 'beginning') {
         this.fixStaticText($event);
       } else {
         new Promise((resolve, reject) => {

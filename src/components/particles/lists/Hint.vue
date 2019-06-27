@@ -3,10 +3,9 @@
        :tabindex="0"
        v-show="visible"
        @keydown.tab.exact="$event => tabComplete($event, items[focused])"
-       @keydown.enter.exact="$event => tabComplete($event, items[focused])"
+       @keydown.enter.exact.prevent="$event => complete(filter)"
        @keydown.up.exact="$event => navigate($event, -1)"
        @keydown.down.exact="$event => navigate($event, 1)"
-       @keypress.ctrl.enter.exact="$event => complete()"
        class="hint">
     <div class="hint__item"
          v-for="(item, index) in items"
@@ -19,7 +18,7 @@
     <div class="hint__item hint__bordered"
          v-if="(filter && !inList) && this.chapter !== 'beginning'"
         @click="$event => complete()">
-      <span class="text-bold">Ctrl + Enter</span> to create "{{ filter }}"
+      <span class="text-bold">Enter</span> to create "{{ filter }}"
     </div>
   </div>
 </template>
@@ -108,6 +107,10 @@ export default {
       this.focused = step;
     },
     complete (item = this.filter, first = false) {
+      if (!item) {
+        return;
+      }
+
       if (first && !this.items.length) {
         return;
       }

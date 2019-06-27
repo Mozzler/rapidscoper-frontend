@@ -97,7 +97,7 @@ export default {
     },
     createField ($event, first = false) {
       $event.preventDefault();
-      if ($event.ctrlKey && $event.code === 'Enter' && this.next === 'beginning') {
+      if ($event.code === 'Enter' && this.next === 'beginning') {
         return;
       }
       this.$root.$emit('complete-hint', this.filter, first);
