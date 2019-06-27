@@ -11,7 +11,7 @@
         <img src="@/assets/img/user.png"/>
       </div>
       <div class="text-bold">
-        Jennifer Foster
+        {{ user.firstName }} {{ user.lastName }}
         <span class="menu-bottom">
           <dropdown
             :list="settings"
@@ -93,6 +93,9 @@ export default {
   computed: {
     teams () {
       return this.$store.getters['team/items'];
+    },
+    user () {
+      return this.$store.state.auth.user;
     }
   },
   methods: {
