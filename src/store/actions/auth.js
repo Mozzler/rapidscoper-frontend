@@ -55,5 +55,27 @@ export default {
     store.commit('update', response.data.items[0]);
 
     return response.data;
-  }
+  },
+
+  async refreshToken (store, payload) {
+    const user = store.state.user;
+    const data = {
+      username: user.username,
+      refresh_token: user.refresh_token,
+      client_id: config.CLIENT_ID,
+      client_secret: config.CLIENT_SECRET,
+      response_type: 'token',
+      grant_type: 'refresh_token'
+    };
+
+    const response = await this._vm.$axios.post('user/token', data);
+
+    if (!response.data.error) {
+      store.commit('update', response.data);
+    } else {
+      throw new Error(response.data.error_description);
+    }
+
+    return response.data;
+  },
 };

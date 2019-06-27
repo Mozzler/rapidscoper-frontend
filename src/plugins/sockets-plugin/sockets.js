@@ -1,40 +1,47 @@
 import io from 'socket.io-client';
-import config from '../../config';
+import config from './../../config';
 import store from '../../store';
 
 class MongoSockets {
-  constructor () {
+  constructor() {
     this.io = null;
     this.streams = [];
   }
 
-  init () {
+  init() {
     this.io = io.connect(config.SOCKETS_URL);
   }
 
-  close () {
+  close() {
     if (this.io) {
       this.io.close();
       this.io = null;
     }
   }
 
-  connect (model) {
-    let user = store.state.auth.user;
-    let [ id, token ] = [ user.user_id, user.access_token ];
+  connect (model, filter, cb) {
+    const user = store.state.auth.user;
+    let token = user.access_token;
 
-    this.io.emit('subscribe', { model, id, token }, async ({ data, error }) => {
-      if (model === 'user') {
-        store.commit('update', data.item);
-      }
-      if (model === 'team') {
-        store.commit('updateTeam', data.item);
+    this.io.emit('join_collection', {model, filter, token}, async ({streamId, error}) => {
+      if (streamId) {
+        console.log(streamId);
+        this.streams.push(streamId);
+        cb(streamId);
+      } else if (error) {
+        const isSuccessfull = await store.dispatch('auth/refreshToken');
+
+        if (isSuccessfull) {
+          this.connect(model, filter, cb);
+        }
       }
     });
+  }
 
-    this.io.on('mongo_data', ({ operationType, fullDocument, model }) => {
-      store.commit(`${operationType}team`, fullDocument);
-    });
+  disconnect(streamId) {
+    if (this.streams.includes(streamId)) {
+      this.io.emit('left_collection', streamId);
+    }
   }
 }
 

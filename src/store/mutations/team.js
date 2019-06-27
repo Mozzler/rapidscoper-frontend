@@ -17,5 +17,5 @@ export default {
         state.teams[index] = Object.create(data);
       }
     });
-  }
+  },
 };

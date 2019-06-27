@@ -20,6 +20,7 @@
 
 <script>
 import ResizeMixin from '@/mixins/resize';
+import SocketMixin from '@/mixins/socket';
 
 import InviteUserModal from '@/components/particles/modals/InviteUser';
 import CreateProjectModal from '@/components/particles/modals/CreateProject';
@@ -45,34 +46,9 @@ export default {
     IncorrectDataModal
   },
   mixins: [
-    ResizeMixin
-  ],
-  beforeMount () {
-    if (this.authenticated) {
-      //this.initSocket();
-    }
-  },
-  computed: {
-    authenticated () {
-      return this.$store.state.auth.user !== null;
-    }
-  },
-  methods: {
-    initSocket () {
-      this.$socket.init();
-      this.$socket.connect('user');
-      this.$socket.connect('team');
-    }
-  },
-  watch: {
-    authenticated () {
-      /*if (this.authenticated) {
-        this.initSocket();
-      } else {
-        this.$socket.close();
-      }*/
-    }
-  }
+    ResizeMixin,
+    SocketMixin
+  ]
 };
 </script>
 
