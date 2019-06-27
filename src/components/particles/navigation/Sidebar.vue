@@ -90,6 +90,7 @@ export default {
   beforeMount () {
     this.$store.dispatch('auth/getInfo');
     this.$store.dispatch('team/getList');
+    this.$store.dispatch('project/getList');
   },
   computed: {
     teams () {
