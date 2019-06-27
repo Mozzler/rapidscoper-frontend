@@ -4,7 +4,7 @@
       <v-card class="modal-card">
 
         <div class="modal-header">
-          <h1> <input v-model="data.title" /> </h1>
+          <h1> <input v-model="data.title" :disabled="processing" /> </h1>
           <v-btn icon class="modal-close-btn" @click="closeModal">
             <v-icon>close</v-icon>
           </v-btn>
@@ -16,7 +16,9 @@
               <div>Team</div>
             </v-flex>
             <v-flex xs6 text-xs-right>
-              <dropdown :list="teams" :selected="data.team"
+              <dropdown :list="teams"
+                        :selected="data.team"
+                        :disabled="processing"
                         @update="value => data.team = value" />
             </v-flex>
           </v-layout>
@@ -25,7 +27,9 @@
               <div>Privacy</div>
             </v-flex>
             <v-flex xs6 text-xs-right>
-              <dropdown :list="policies" :selected="data.policy"
+              <dropdown :list="policies"
+                        :disabled="processing"
+                        :selected="data.policy"
                         @update="value => data.policy = value" />
             </v-flex>
           </v-layout>
@@ -34,11 +38,13 @@
             'text-xs-right': !isMobileDevice,
             'text-xs-center': isMobileDevice }">
             <v-btn class="btn-rapid mr-3" large outline
+                   :disabled="processing"
                    @click="closeModal">
               Cancel
             </v-btn>
             <v-btn class="btn-rapid primary" large
-                   @click="closeModal">
+                   :disabled="processing"
+                   @click="send">
               {{ isMobileDevice ? 'Create' : 'Create project' }}
             </v-btn>
           </v-flex>
@@ -49,34 +55,45 @@
 </template>
 
 <script>
-  import ModalMixin from '@/mixins/modal';
-  import Dropdown from "../menus/Dropdown";
+import ModalMixin from '@/mixins/modal';
+import Dropdown from "../menus/Dropdown";
 
-  export default {
-    name: 'create-project',
-    components: {
-      Dropdown
-    },
-    mixins: [
-      ModalMixin,
-    ],
-    data() {
-      return {
-        teams: [
-          'The Bumpy Hamsters', 'West World', 'The Ramblers'
-        ],
-        policies: [
-          'View', 'Edit'
-        ],
-        data: null,
-      }
-    },
-    beforeMount() {
+export default {
+  name: 'create-project',
+  components: {
+    Dropdown
+  },
+  mixins: [
+    ModalMixin
+  ],
+  data () {
+    return {
+      policies: [
+        'View', 'Edit'
+      ],
+      data: null
+    }
+  },
+  computed: {
+    teams () {
+      return this.$store.getters['team/items'];
+    }
+  },
+  beforeMount () {
+    this.initData();
+  },
+  methods: {
+    initData () {
       this.data = {
         team: this.teams[0],
         policy: this.policies[0],
         title: 'Untitled'
-      }
+      };
     },
-  };
+    send () {
+      console.log(this.data);
+      //this.submit('project/create');
+    }
+  }
+};
 </script>

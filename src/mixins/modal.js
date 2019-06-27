@@ -1,26 +1,54 @@
 export default {
-  data() {
+  data () {
     return {
-      dialog: false
-    }
+      dialog: false,
+      processing: false,
+    };
   },
-  beforeMount() {
+  beforeMount () {
     this.$root.$on(this.$options.name, this.showModal);
   },
   methods: {
-    closeModal() {
+    closeModal () {
       this.dialog = false;
     },
-    showModal() {
+    showModal () {
       this.dialog = true;
+    },
+    async submit (url, data = this.data) {
+      this.processing = true;
+
+      const result = await this.$validator.validate();
+
+      if (result) {
+        this.$store.dispatch(url, data)
+          .then(data => {
+            this.processing = false;
+            this.closeModal();
+          })
+          .catch(error => {
+            this.processing = false;
+            console.log(error);
+          });
+      } else {
+        this.processing = false;
+      }
     }
   },
-  beforeDestroy() {
+  beforeDestroy () {
     this.$root.$off(this.$options.name, this.showModal);
   },
   computed: {
-    isMobileDevice() {
+    isMobileDevice () {
       return this.$store.state.system.isMobileDevice;
     }
   },
-}
+  watch: {
+    dialog () {
+      if (this.dialog) {
+        this.initData();
+        this.$validator.reset();
+      }
+    }
+  }
+};

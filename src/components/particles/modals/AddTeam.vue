@@ -22,6 +22,7 @@
                 placeholder="Team name"
                 v-model="data.name"
                 v-validate="'required|min:2|max:100'"
+                :disabled="processing"
                 :error-messages="errors.first('Team name')"
                 solo
               ></v-text-field>
@@ -35,7 +36,8 @@
               Cancel
             </v-btn>
             <v-btn class="btn-rapid primary" large
-                   @click="submit">
+                   :disabled="processing"
+                   @click="() => submit('team/create')">
               {{ isMobileDevice ? 'Create' : 'Create team' }}
             </v-btn>
           </v-flex>
@@ -57,41 +59,15 @@ export default {
     return {
       data: {
         name: null
-      },
-      processing: false,
-      show: false
+      }
     };
   },
   beforeMount () {
     this.data.name = null;
   },
   methods: {
-    async submit () {
-      this.processing = true;
-
-      const result = await this.$validator.validate();
-
-      if (result) {
-        this.$store.dispatch(`team/create`, this.data)
-          .then(data => {
-            this.processing = false;
-            this.closeModal();
-          })
-          .catch(error => {
-            this.processing = false;
-            console.log(error);
-          });
-      } else {
-        this.processing = false;
-      }
-    }
-  },
-  watch: {
-    dialog () {
-      if (this.dialog) {
-        this.data.name = null;
-        this.$validator.reset();
-      }
+    initData () {
+      this.data.name = null;
     }
   }
 };
