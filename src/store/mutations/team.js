@@ -1,11 +1,21 @@
 export default {
-  createTeam (state, data) {
-    state.teams = Object.assign(state.teams, data);
+  setList (state, data) {
+    state.teams = data;
   },
-  updateTeam (state, data) {
-    state.teams = Object.assign(state.teams, data);
+  create (state, data) {
+    const existed = state.teams.items.filter(item => {
+      return item.id === data.id;
+    });
+
+    if (!existed.length) {
+      state.teams.items.push(data);
+    }
   },
-  insertteam (state, data) {
-    state.teams.push(data);
+  update (state, data) {
+    state.teams.items.forEach((item, index) => {
+      if (item.id === data.id) {
+        state.teams[index] = Object.create(data);
+      }
+    });
   }
 };

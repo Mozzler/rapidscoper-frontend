@@ -49,7 +49,7 @@ export default {
   ],
   beforeMount () {
     if (this.authenticated) {
-      this.initSocket();
+      //this.initSocket();
     }
   },
   computed: {
@@ -66,11 +66,11 @@ export default {
   },
   watch: {
     authenticated () {
-      if (this.authenticated) {
+      /*if (this.authenticated) {
         this.initSocket();
       } else {
         this.$socket.close();
-      }
+      }*/
     }
   }
 };

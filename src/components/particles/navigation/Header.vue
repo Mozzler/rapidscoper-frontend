@@ -46,7 +46,7 @@ export default {
   methods: {
     logout (event) {
       event.preventDefault();
-      this.$store.dispatch('logout')
+      this.$store.dispatch('auth/logout')
         .then(() => {
           this.$router.push('/signup');
         });

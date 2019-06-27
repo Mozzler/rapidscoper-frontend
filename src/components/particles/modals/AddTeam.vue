@@ -58,8 +58,11 @@ export default {
       data: {
         name: null
       },
-      processing: false
+      processing: false,
     }
+  },
+  beforeMount () {
+    this.data.name = null;
   },
   methods: {
     async submit () {
@@ -68,11 +71,10 @@ export default {
       const result = await this.$validator.validate();
 
       if (result) {
-        this.$store.dispatch('createTeam', this.data)
+        this.$store.dispatch(`team/create`, this.data)
           .then(data => {
             this.processing = false;
             this.closeModal();
-            console.log(data);
           })
           .catch(error => {
             this.processing = false;

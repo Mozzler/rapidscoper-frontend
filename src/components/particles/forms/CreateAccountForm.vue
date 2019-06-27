@@ -90,8 +90,8 @@ export default {
   methods: {
     send () {
       return Promise.all([
-        this.$store.dispatch('updateUserInfo', this.user),
-        this.$store.dispatch('createTeam', this.team)
+        this.$store.dispatch('auth/update', this.user),
+        this.$store.dispatch('team/create', this.team)
       ]);
     },
     formatPhone (data) {

@@ -34,7 +34,7 @@ export default {
     },
     setConstructions () {
       let constructions = this.getAdjusted();
-      this.$store.commit('setAdjustConstructions', constructions);
+      this.$store.commit('story/setAdjustConstructions', constructions);
     }
   },
   watch: {

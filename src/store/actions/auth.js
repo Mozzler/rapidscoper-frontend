@@ -37,7 +37,7 @@ export default {
 
     return response.data;
   },
-  async updateUserInfo (store, payload) {
+  async update (store, payload) {
     const id = store.state.user.user_id;
     const url = `user/update?id=${id}`;
     const response = await this._vm.$axios.put(url, payload);

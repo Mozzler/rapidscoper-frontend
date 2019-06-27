@@ -1,3 +1,5 @@
 export default {
-  teams: []
+  teams: {
+    items: []
+  }
 };

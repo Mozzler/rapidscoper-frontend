@@ -87,10 +87,12 @@ export default {
       ]
     };
   },
+  beforeMount () {
+    this.$store.dispatch('team/getList');
+  },
   computed: {
     teams () {
-      return this.$store.state.team.teams ?
-        this.$store.state.team.teams : [];
+      return this.$store.getters['team/items'];
     }
   },
   methods: {
@@ -100,7 +102,7 @@ export default {
     handleDropdown (value) {
       switch (value) {
         case 'Log out':
-          this.$store.dispatch('logout')
+          this.$store.dispatch('auth/logout')
             .then(() => {
               this.$router.push('/signup');
             });

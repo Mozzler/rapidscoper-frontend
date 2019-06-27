@@ -78,7 +78,7 @@ export default {
       result ? this.send() : this.processing = false;
     },
     send (action = this.action) {
-      this.$store.dispatch(action, this.user)
+      this.$store.dispatch(`auth/${action}`, this.user)
         .then(response => {
           if (!response.error) {
             if (action === 'signup') {

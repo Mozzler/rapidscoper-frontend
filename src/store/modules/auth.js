@@ -3,6 +3,7 @@ import actions from '../actions/auth.js';
 import mutations from '../mutations/auth.js';
 
 export default {
+  namespaced: true,
   state,
   actions,
   mutations
