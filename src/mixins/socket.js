@@ -15,6 +15,9 @@ export default {
       this.$socket.connect('team', [], (streamId) => {
         this.stream_id = streamId;
       });
+      this.$socket.connect('user', [], (streamId) => {
+        this.stream_id = streamId;
+      });
       this.initSocketListener();
     },
     initSocketListener () {
@@ -24,10 +27,12 @@ export default {
           case 'delete':
             this.getPageData(this.page);
             break;
+          case 'update':
           case 'insert':
             const record = data.fullDocument;
             record.id = record._id;
-            this.$store.commit(`${data.model}/create`, data.fullDocument);
+            const action = data.model === 'user' ? 'auth/update' : `${data.model}/create`;
+            this.$store.commit(action, data.fullDocument);
             break;
           case 'replace':
             //this[`change`](this.mapMongoData(data.fullDocument));
