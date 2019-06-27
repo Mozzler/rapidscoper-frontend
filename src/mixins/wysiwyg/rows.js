@@ -48,7 +48,22 @@ export default {
         list: []
       };
     },
+    rowIsEmpty () {
+      const spans = this.getSpanList(false);
+      const tail = this.getTail();
+
+      const main = this.level === 1 && spans.length === 1 && !tail;
+      const sub = this.level !== 1 && !spans.length && !tail;
+
+      return main || sub;
+    },
     createRow ($event) {
+      if (this.rowIsEmpty()) {
+        $event.preventDefault();
+        this.decreaseSublistLevel($event);
+        return;
+      }
+
       if (this.dictionary[this.next]) {
         this.createField($event);
         return;

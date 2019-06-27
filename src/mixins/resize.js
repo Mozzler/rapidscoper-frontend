@@ -1,18 +1,18 @@
 export default {
-  beforeCreate() {
-    window.addEventListener('resize', () => {
-      this.$nextTick(this.updateDevice);
-    });
+  beforeCreate () {
+    window.addEventListener('resize', this.updateDevice);
   },
-  beforeMount() {
+  beforeMount () {
     this.updateDevice();
   },
   methods: {
-    updateDevice() {
-      this.$store.commit('updateDevice', window.innerWidth < 767);
+    updateDevice () {
+      this.$nextTick(() => {
+        this.$store.commit('updateDevice', window.innerWidth < 767);
+      });
     }
   },
-  beforeDestroy() {
-    window.removeEventListener('resize');
+  beforeDestroy () {
+    window.removeEventListener('resize', this.updateDevice);
   }
 };

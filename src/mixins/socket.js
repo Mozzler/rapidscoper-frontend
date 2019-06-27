@@ -24,9 +24,9 @@ export default {
       this.$socket.io.on('mongo_data', (data) => {
         console.log('MONGO DATA: ', data);
         switch(data.operationType) {
-          case 'delete':
+          /*case 'delete':
             this.getPageData(this.page);
-            break;
+            break;*/
           case 'update':
           case 'insert':
             const record = data.fullDocument;

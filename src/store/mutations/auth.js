@@ -3,7 +3,6 @@ export default {
     state.user = data;
   },
   update (state, data) {
-    console.log(data, 'user-data');
     state.user = Object.assign(state.user, data);
   },
   logout (state, data) {
