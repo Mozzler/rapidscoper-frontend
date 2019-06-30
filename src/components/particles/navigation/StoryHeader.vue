@@ -2,11 +2,13 @@
   <div class="header">
     <v-layout align-center justify-space-between row fill-height>
       <v-flex>
-        <v-btn icon class="text-size--18">
+        <v-btn icon class="text-size--18"
+          @click="() => $router.push(`/team/${$route.params.team}`)">
           <v-icon>arrow_back</v-icon>
         </v-btn>
         <span class="text-size--16">
-          <dropdown :list="projects" selected="Skellorbit"
+          <dropdown :list="projects"
+                    selected="Skellorbit"
                     @update="value => project = value" />
         </span>
       </v-flex>
@@ -69,13 +71,12 @@ export default {
   },
   methods: {
     setTab (item) {
+      let params = this.$route.params;
+      params.tab = item.toLowerCase();
+
       this.$router.push({
         name: this.$route.name,
-        params: {
-          name: this.$route.params.name,
-          section: this.$route.params.section,
-          tab: item.toLowerCase()
-        }
+        params: params
       });
     }
   },

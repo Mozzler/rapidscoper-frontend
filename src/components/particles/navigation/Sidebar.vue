@@ -3,6 +3,7 @@
     v-model="drawer"
     permanent clipped fixed
     class="sidebar"
+    width="272"
     app>
 
     <div class="sidebar__header">

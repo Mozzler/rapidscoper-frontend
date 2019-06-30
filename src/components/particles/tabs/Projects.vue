@@ -15,7 +15,9 @@
       <template v-slot:items="props">
         <tr @click="props.expanded = !props.expanded">
           <td>
-            <div @click="() => goTo(props.item.name)">{{ props.item.name }}</div>
+            <div @click="() => goTo(props.item.name)" class="cursor-pointer">
+              {{ props.item.name }}
+            </div>
             <span class="index" v-if="props.item.index">
               {{ props.item.index }}
             </span>
@@ -96,12 +98,11 @@ export default {
   },
   methods: {
     goTo (item) {
-      this.$router.push({
-        name: 'projects',
-        params: {
-          name: this.itemToParam(item)
-        }
-      });
+      const team = `teams/${this.$route.params.name}`;
+      const project = `projects/${this.itemToParam(item)}`;
+      const story = `user-story/mobile-sign-up/edit`;
+
+      this.$router.push(`/${team}/${project}/${story}`);
     }
   }
 };

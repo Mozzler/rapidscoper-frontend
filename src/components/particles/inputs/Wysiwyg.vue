@@ -15,13 +15,11 @@
               :class="`user-story__item user-story__item--${ level }`">
               <v-layout fill-height>
                 <v-flex shrink mr-1>
-                  <template #estimate>
-                    <input
-                      class="estimation__input"
-                      v-if="tab === 'estimates'"
-                      v-model="item.estimation"
-                    />
-                  </template>
+                  <input
+                    class="estimation__input"
+                    v-if="tab === 'estimates'"
+                    v-model="item.estimation"
+                  />
                 </v-flex>
                 <v-flex grow>
                   <div class="user-story__prefix"> # </div>
@@ -113,7 +111,7 @@ export default {
     },
     updateChildText (index, obj, parentIndex) {
       this.list[parentIndex].list[index] = obj;
-    },
+    }
   },
   watch: {
     model: {
