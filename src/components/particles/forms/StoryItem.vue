@@ -43,7 +43,7 @@ export default {
         list: [{
           parent: null,
           estimation: 0,
-          priority: 2,
+          priority: 0,
           label: 1,
 
           text: '',

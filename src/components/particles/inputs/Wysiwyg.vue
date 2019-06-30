@@ -1,12 +1,15 @@
 <template>
   <div>
-    <div v-for="(item, index) in list" :key="`wysiwyg-${ index }-${ level }`">
+    <div v-for="(item, index) in list"
+         :key="`wysiwyg-${ index }-${ level }`">
+
       <div class="user-story">
-        <div class="user-story__tools"
-             v-if="collection">
+        <div class="user-story__tools" v-if="collection">
           <tool-list
+            :active="item[tab]"
             :list="collection"
-            :label-cls="'tool-block__label--minified'" />
+            :label-cls="'tool-block__label--minified'"
+            @update="value => item[tab] = value"/>
         </div>
 
         <v-layout row fill-height>
@@ -18,9 +21,9 @@
                   <input
                     tabindex="1"
                     class="user-story__input"
-                    v-if="tab === 'estimates'"
+                    v-if="tab === 'estimate'"
                     v-model="item.estimation"
-                    @change="updateText"
+                    @change="$event => item.estimation = $event.target.value"
                   />
                 </v-flex>
                 <v-flex grow>
@@ -102,7 +105,11 @@ export default {
   },
   computed: {
     tab () {
-      return this.$route.params.tab;
+      let key = this.$route.params.tab.slice(0, -1);
+      if (key.slice(-2) === 'ie') {
+        key = `${key.slice(0, -2)}y`;
+      }
+      return key;
     },
     collection () {
       return this.$store.state.story[this.tab];

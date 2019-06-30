@@ -1,8 +1,11 @@
 <template>
   <div class="tool-block__text">
-    <div :class="`${labelCls} label--${type(item)} ${outline(index)}`"
-         v-for="(item, index) in list" :key="index">
-      {{ item }}
+    <div v-for="(item, index) in list"
+         :class="`${labelCls} label--${type(item)} ${outline(index)}`"
+         :key="index"
+         @click="() => $emit('update', index)">
+      <span class="text-underlined">{{ item.charAt(0) }}</span>
+      <span>{{ item.slice(1) }}</span>
     </div>
   </div>
 </template>
