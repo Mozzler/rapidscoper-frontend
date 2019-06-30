@@ -14,11 +14,13 @@
             <div
               :class="`user-story__item user-story__item--${ level }`">
               <v-layout fill-height>
-                <v-flex shrink mr-1>
+                <v-flex shrink mr-2>
                   <input
-                    class="estimation__input"
+                    tabindex="1"
+                    class="user-story__input"
                     v-if="tab === 'estimates'"
                     v-model="item.estimation"
+                    @change="updateText"
                   />
                 </v-flex>
                 <v-flex grow>
@@ -32,6 +34,7 @@
               <div class="user-story__placeholder" v-html="item.placeholder" readonly></div>
               <div contenteditable class="user-story__editable"
                    :ref="`editor-${ index }-${ level }`"
+                   tabindex="2"
                    @click="checkHint"
                    @focus="($event) => focus($event, index)"
                    @keydown.down.exact="focusHint"

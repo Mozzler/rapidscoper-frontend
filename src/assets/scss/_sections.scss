@@ -48,20 +48,36 @@
   width: 100%;
 }
 
+.user-story__input {
+  width: 32px;
+  height: 24px;
+  background: $white;
+  border: 1px solid $light-grey;
+  box-sizing: border-box;
+  border-radius: 2px;
+  text-indent: 5px;
+}
+
 .user-story__placeholder {
   position: absolute;
   width: 100%;
   color: $white;
 }
+
 .user-story__editable {
   position: relative;
   width: 100%;
+}
 
-  &:focus{
+.user-story__editable, .user-story__input {
+  caret-color: $light-blue;
+
+  &:focus {
     outline: none;
   }
-
-  caret-color: $light-blue;
+  &::selection {
+    background-color: $light-primary;
+  }
 }
 
 .user-story__editable--user-type {
