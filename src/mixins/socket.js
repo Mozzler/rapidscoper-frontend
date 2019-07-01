@@ -12,10 +12,13 @@ export default {
   methods: {
     initSocket () {
       this.$socket.init();
+      this.$socket.connect('user', [], (streamId) => {
+        this.stream_id = streamId;
+      });
       this.$socket.connect('team', [], (streamId) => {
         this.stream_id = streamId;
       });
-      this.$socket.connect('user', [], (streamId) => {
+      this.$socket.connect('project', [], (streamId) => {
         this.stream_id = streamId;
       });
       this.initSocketListener();
@@ -45,10 +48,7 @@ export default {
     },
     fetchData () {
       this.$store.dispatch('auth/getInfo');
-
-      ['team', 'project'].forEach(item => {
-        this.$store.dispatch('entity/getList', { entity: item });
-      });
+      this.$store.dispatch('entity/getList', { entity: 'team' });
     }
   },
   watch: {

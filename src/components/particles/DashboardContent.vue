@@ -15,7 +15,7 @@
     </v-layout>
     <v-data-table
         :headers="headers"
-        :items="items"
+        :items="projects"
         item-key="name"
         :hide-actions="true"
         class="dashboard-table">
@@ -33,7 +33,7 @@
               <img src="@/assets/img/user.png" v-for="i in 3" :key="i"/>
             </v-layout>
           </td>
-          <td>{{ props.item.last_changes }}</td>
+          <td>{{ props.item.updatedAt | toDate }}</td>
           <td>
             <v-layout align-center justify-space-between row fill-height>
               <v-icon>share</v-icon>
@@ -80,7 +80,7 @@ export default {
           value: 'actions'
         }
       ],
-      items: [
+      /*items: [
         {
           name: 'Skellorbit',
           index: 4,
@@ -96,13 +96,21 @@ export default {
           index: null,
           last_changes: 'a day ago'
         }
-      ]
+      ]*/
     };
+  },
+  beforeMount () {
+    this.$store.dispatch('entity/getList', { entity: 'projects' });
   },
   methods: {
     showModal() {
       this.$root.$emit('create-project');
     },
+  },
+  computed: {
+    projects () {
+      return this.$store.getters['entity/items']('projects');
+    }
   }
 };
 </script>

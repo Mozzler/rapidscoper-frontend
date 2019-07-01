@@ -25,7 +25,6 @@ class MongoSockets {
 
     this.io.emit('join_collection', {model, filter, token}, async ({streamId, error}) => {
       if (streamId) {
-        console.log(streamId);
         this.streams.push(streamId);
         cb(streamId);
       } else if (error) {

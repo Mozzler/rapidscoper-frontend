@@ -1,4 +1,5 @@
 import * as _ from 'underscore';
+import * as moment from 'moment';
 
 import Vue from 'vue';
 import VueTelInput from 'vue-tel-input';
@@ -16,6 +17,7 @@ Vue.component('vue-tel-input', VueTelInput);
 
 Vue.config.productionTip = false;
 window._ = _;
+window.moment = moment;
 
 Vue.mixin(ConverterMixin);
 
