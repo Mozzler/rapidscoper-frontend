@@ -82,23 +82,6 @@ export default {
         }
       ],
       loading: true
-      /*items: [
-        {
-          name: 'Skellorbit',
-          index: 4,
-          last_changes: 'a day ago'
-        },
-        {
-          name: 'Skellorbit',
-          index: 4,
-          last_changes: '2 days ago'
-        },
-        {
-          name: 'Skellorbit',
-          index: null,
-          last_changes: 'a day ago'
-        }
-      ]*/
     };
   },
   beforeMount () {
