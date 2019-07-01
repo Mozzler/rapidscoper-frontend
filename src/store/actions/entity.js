@@ -2,7 +2,10 @@ export default {
   async getList (store, payload) {
     const response = await this._vm.$axios.get(payload.entity, payload.data);
 
-    let [entity, data] = [payload.entity+'s', response.data];
+    let [entity, data] = [payload.entity, response.data];
+    if (entity !== 'projects') {
+      entity += 's';
+    }
     store.commit('setList', { entity, data });
 
     return response.data;
