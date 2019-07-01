@@ -32,6 +32,8 @@ export default {
               entity: `${response.model}s`,
               data: response.fullDocument
             };
+            payload.data.id = payload.data._id;
+
             const action = payload.entity === 'user' ? 'auth/update' : `entity/create`;
             this.$store.commit(action, payload);
             break;
