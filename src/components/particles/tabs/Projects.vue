@@ -6,6 +6,7 @@
     </div>
 
     <v-data-table
+      :loading="loading"
       :headers="headers"
       :items="projects"
       item-key="name"
@@ -76,12 +77,12 @@ export default {
           sortable: false,
           value: 'actions'
         }
-      ]
+      ],
+      loading: true
     };
   },
   beforeMount () {
-    let filter = { teamId: null };
-    this.$store.dispatch('entity/getList', { entity: 'projects', ...filter });
+    this.fetchProjects();
   },
   methods: {
     goTo (item) {
@@ -90,11 +91,34 @@ export default {
       const story = `user-story/mobile-sign-up/edit`;
 
       this.$router.push(`/${team}/${project}/${story}`);
+    },
+    fetchProjects () {
+      this.loading = true;
+      let filters = {
+        teamId: this.activeTeamId
+      };
+      this.$store.dispatch('entity/getList', {
+        entity: 'projects',
+        params: filters
+      }).then(() => {
+        this.loading = false;
+      }).catch(error => {
+        this.loading = false;
+        console.log(error);
+      });
     }
   },
   computed: {
     projects () {
       return this.$store.getters['entity/items']('projects');
+    },
+    activeTeamId () {
+      return this.$store.state.entity.activeTeamId;
+    }
+  },
+  watch: {
+    activeTeamId () {
+      this.fetchProjects();
     }
   }
 };

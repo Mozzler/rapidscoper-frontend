@@ -57,12 +57,9 @@ export default {
 
       modals: {
         Projects: 'create-project',
-        Users: 'invite-user',
-      }
+        Users: 'invite-user'
+      },
     };
-  },
-  beforeMount () {
-    this.fetchProjects();
   },
   methods: {
     setTab (item) {
@@ -70,15 +67,6 @@ export default {
     },
     showModal () {
       this.$root.$emit(this.modals[this.activeTab]);
-    },
-    fetchProjects () {
-      let filters = {
-        teamId: this.activeTeamId
-      };
-      this.$store.dispatch('entity/getList', {
-        entity: 'projects',
-        params: filters
-      });
     }
   },
   computed: {
@@ -91,14 +79,6 @@ export default {
         default:
           return null;
       }
-    },
-    activeTeamId () {
-      return this.$store.state.entity.activeTeamId;
-    }
-  },
-  watch: {
-    activeTeamId () {
-      this.fetchProjects();
     }
   }
 };

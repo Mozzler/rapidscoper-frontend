@@ -18,6 +18,7 @@
         :items="projects"
         item-key="name"
         :hide-actions="true"
+        :loading="loading"
         class="dashboard-table">
 
       <template v-slot:items="props">
@@ -80,6 +81,7 @@ export default {
           value: 'actions'
         }
       ],
+      loading: true
       /*items: [
         {
           name: 'Skellorbit',
@@ -100,7 +102,14 @@ export default {
     };
   },
   beforeMount () {
-    this.$store.dispatch('entity/getList', { entity: 'projects' });
+    this.loading = true;
+    this.$store.dispatch('entity/getList', { entity: 'projects' })
+      .then(() => {
+        this.loading = false;
+      }).catch(errors => {
+        this.loading = false;
+        console.log(errors);
+      });
   },
   methods: {
     showModal() {
