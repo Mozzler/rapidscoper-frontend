@@ -1,6 +1,6 @@
 export default {
   async getList (store, payload) {
-    const response = await this._vm.$axios.get(payload.entity, payload.data);
+    const response = await this._vm.$axios.get(payload.entity, { params: payload.params });
 
     let [entity, data] = [payload.entity, response.data];
     if (entity !== 'projects') {

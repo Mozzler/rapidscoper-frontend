@@ -7,7 +7,7 @@
 
     <v-data-table
       :headers="headers"
-      :items="items"
+      :items="projects"
       item-key="name"
       :hide-actions="true"
       class="dashboard-table projects-table">
@@ -27,7 +27,7 @@
               <img src="@/assets/img/user.png" v-for="i in 3" :key="i"/>
             </v-layout>
           </td>
-          <td>{{ props.item.last_changes }}</td>
+          <td>{{ props.item.updatedAt | toDate }}</td>
           <td>
             <v-layout align-center justify-space-between row fill-height>
               <v-icon>share</v-icon>
@@ -76,25 +76,12 @@ export default {
           sortable: false,
           value: 'actions'
         }
-      ],
-      items: [
-        {
-          name: 'Skellorbit',
-          index: 4,
-          last_changes: 'a day ago'
-        },
-        {
-          name: 'Skellorbit',
-          index: 4,
-          last_changes: '2 days ago'
-        },
-        {
-          name: 'Skellorbit',
-          index: null,
-          last_changes: 'a day ago'
-        }
       ]
     };
+  },
+  beforeMount () {
+    let filter = { teamId: null };
+    this.$store.dispatch('entity/getList', { entity: 'projects', ...filter });
   },
   methods: {
     goTo (item) {
@@ -103,6 +90,11 @@ export default {
       const story = `user-story/mobile-sign-up/edit`;
 
       this.$router.push(`/${team}/${project}/${story}`);
+    }
+  },
+  computed: {
+    projects () {
+      return this.$store.getters['entity/items']('projects');
     }
   }
 };

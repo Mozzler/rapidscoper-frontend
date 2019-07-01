@@ -8,7 +8,7 @@ export default {
     });
 
     if (!existed.length) {
-      state[payload.entity].items.push(payload.data);
+      state[payload.entity].items.unshift(payload.data);
     }
   },
   update (state, payload) {
@@ -18,4 +18,7 @@ export default {
       }
     });
   },
+  setActiveId (state, payload) {
+    state.activeTeamId = payload;
+  }
 };

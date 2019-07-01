@@ -8,7 +8,7 @@
       <v-list-tile
         v-for="(item, key) in list"  :key="key" class="sidebar__item"
         :class="{'sidebar__item--active ': active === itemToParam(item.title || item.name) }"
-        @click="() => $emit('go', itemToParam(item.title || item.name))">
+        @click="() => $emit('go', itemToParam(item.title || item.name), item.id)">
         <v-list-tile-content>
           <v-list-tile-title>
             <v-layout align-center justify-space-between row fill-height>

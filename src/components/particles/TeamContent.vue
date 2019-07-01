@@ -61,6 +61,9 @@ export default {
       }
     };
   },
+  beforeMount () {
+    this.fetchProjects();
+  },
   methods: {
     setTab (item) {
       this.activeTab = item;
@@ -68,6 +71,15 @@ export default {
     showModal () {
       this.$root.$emit(this.modals[this.activeTab]);
     },
+    fetchProjects () {
+      let filters = {
+        teamId: this.activeTeamId
+      };
+      this.$store.dispatch('entity/getList', {
+        entity: 'projects',
+        params: filters
+      });
+    }
   },
   computed: {
     btnText () {
@@ -79,6 +91,14 @@ export default {
         default:
           return null;
       }
+    },
+    activeTeamId () {
+      return this.$store.state.entity.activeTeamId;
+    }
+  },
+  watch: {
+    activeTeamId () {
+      this.fetchProjects();
     }
   }
 };

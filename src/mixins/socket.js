@@ -7,6 +7,7 @@ export default {
   beforeMount () {
     if (this.authenticated) {
       this.initSocket();
+      this.fetchData();
     }
   },
   methods: {
@@ -59,7 +60,7 @@ export default {
       } else {
         this.$socket.close();
       }
-    }
+    },
   },
   beforeDestroy() {
     if (this.$socket.io) {

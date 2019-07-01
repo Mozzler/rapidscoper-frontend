@@ -33,7 +33,7 @@
         :list="teams"
         :active="$route.params.name"
         @add="showAddTeamModal"
-        @go="value => goTo(`/team/${value}`)" />
+        @go="toTeams" />
     </div>
 
     <div class="sidebar__footer">
@@ -97,6 +97,10 @@ export default {
     }
   },
   methods: {
+    toTeams (value, id) {
+      this.$store.commit('entity/setActiveId', id);
+      this.goTo(`/team/${value}`);
+    },
     showAddTeamModal () {
       this.$root.$emit('add-team');
     },

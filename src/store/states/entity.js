@@ -8,5 +8,6 @@ export default {
     items: [],
     _links: null,
     _meta: null
-  }
+  },
+  activeTeamId: null
 };
