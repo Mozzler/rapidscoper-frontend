@@ -37,7 +37,7 @@
             </v-btn>
             <v-btn class="btn-rapid primary" large
                    :disabled="processing"
-                   @click="() => submit('team/create')">
+                   @click="() => submit('entity/create', { entity: 'team', data: data })">
               {{ isMobileDevice ? 'Create' : 'Create team' }}
             </v-btn>
           </v-flex>

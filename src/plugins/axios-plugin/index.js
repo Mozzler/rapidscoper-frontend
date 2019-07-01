@@ -50,4 +50,3 @@ VueAxiosPlugin.install = (Vue, options) => {
 };
 
 export default VueAxiosPlugin;
-

@@ -89,9 +89,14 @@ export default {
   }),
   methods: {
     send () {
+      const payload = {
+        data: this.team,
+        entity: 'team'
+      };
+
       return Promise.all([
         this.$store.dispatch('auth/update', this.user),
-        this.$store.dispatch('team/create', this.team)
+        this.$store.dispatch('entity/create', payload)
       ]);
     },
     formatPhone (data) {

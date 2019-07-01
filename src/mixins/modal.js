@@ -15,14 +15,14 @@ export default {
     showModal () {
       this.dialog = true;
     },
-    async submit (url, data = this.data) {
+    async submit (url, data) {
       this.processing = true;
 
       const result = await this.$validator.validate();
 
       if (result) {
         this.$store.dispatch(url, data)
-          .then(data => {
+          .then(() => {
             this.processing = false;
             this.closeModal();
           })

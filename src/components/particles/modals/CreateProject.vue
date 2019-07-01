@@ -76,7 +76,7 @@ export default {
   },
   computed: {
     teams () {
-      return this.$store.getters['team/items'];
+      return this.$store.getters['entity/items']('teams');
     }
   },
   beforeMount () {
@@ -91,12 +91,15 @@ export default {
       };
     },
     send () {
-      const data = {
-        name: this.data.title,
-        teamId: this.data.team.id
+      const payload = {
+        entity: 'project',
+        data: {
+          name: this.data.title,
+          teamId: this.data.team.id
+        }
       };
 
-      this.submit('project/create', data);
+      this.submit('entity/create', payload);
     }
   }
 };

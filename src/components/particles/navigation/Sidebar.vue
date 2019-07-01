@@ -88,14 +88,9 @@ export default {
       ]
     };
   },
-  beforeMount () {
-    this.$store.dispatch('auth/getInfo');
-    this.$store.dispatch('team/getList');
-    this.$store.dispatch('project/getList');
-  },
   computed: {
     teams () {
-      return this.$store.getters['team/items'];
+      return this.$store.getters['entity/items']('teams');
     },
     user () {
       return this.$store.state.auth.user;

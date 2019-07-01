@@ -21,29 +21,38 @@ export default {
       this.initSocketListener();
     },
     initSocketListener () {
-      this.$socket.io.on('mongo_data', (data) => {
-        console.log('MONGO DATA: ', data);
-        switch(data.operationType) {
+      this.$socket.io.on('mongo_data', (response) => {
+        switch(response.operationType) {
           /*case 'delete':
             this.getPageData(this.page);
             break;*/
           case 'update':
           case 'insert':
-            const record = data.fullDocument;
-            record.id = record._id;
-            const action = data.model === 'user' ? 'auth/update' : `${data.model}/create`;
-            this.$store.commit(action, data.fullDocument);
+            const payload = {
+              entity: `${response.model}s`,
+              data: response.fullDocument
+            };
+            const action = payload.entity === 'user' ? 'auth/update' : `entity/create`;
+            this.$store.commit(action, payload);
             break;
           case 'replace':
             //this[`change`](this.mapMongoData(data.fullDocument));
             break;
         }
       });
+    },
+    fetchData () {
+      this.$store.dispatch('auth/getInfo');
+
+      ['team', 'project'].forEach(item => {
+        this.$store.dispatch('entity/getList', { entity: item });
+      });
     }
   },
   watch: {
     authenticated () {
       if (this.authenticated) {
+        this.fetchData();
         this.initSocket();
       } else {
         this.$socket.close();
