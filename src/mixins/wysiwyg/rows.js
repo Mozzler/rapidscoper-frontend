@@ -77,9 +77,9 @@ export default {
           finished !== false ? resolve() : reject(new Error('invalid sentence construction'));
         }).then(() => {
           const row = this.addRowToList(this.list[this.focused], `$event.target.innerHTML`);
-          this.list.push(row);
+          this.list.splice(this.focused + 1, 0, row);
         }).then(() => {
-          const wysiwygChild = `editor-${ this.list.length - 1 }-${ this.level }`;
+          const wysiwygChild = `editor-${ this.focused + 1 }-${ this.level }`;
           this.focusEditor(wysiwygChild, this, true);
         }).catch(() => {});
       }
