@@ -2,7 +2,9 @@
   <div class="content-container">
     <v-layout align-start justify-center row fill-height>
       <div class="content">
-        <story-item />
+        <story-item v-for="(story, index) in sections"
+          :model="story"
+          :key="index" />
       </div>
     </v-layout>
   </div>
@@ -15,10 +17,29 @@ export default {
   name: "StoryContent",
   components: {
     StoryItem
+  },
+  beforeMount () {
+    this.$root.$on('create-new-section', this.createSection);
+  },
+  beforeDestroy () {
+    this.$root.$off('create-new-section');
+  },
+  computed: {
+    sections () {
+      return this.$store.getters['entity/items']('sections');
+    }
+  },
+  methods: {
+    createSection () {
+      const item = {
+        name: 'Untitled',
+        description: ''
+      };
+      this.$store.commit('entity/create', {
+        entity: 'sections',
+        data: item
+      });
+    }
   }
-}
+};
 </script>
-
-<style scoped>
-
-</style>

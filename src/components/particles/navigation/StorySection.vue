@@ -3,8 +3,8 @@
     <sidebar-list
       title="user story sections"
       btn="Add section"
-      :list="items"
-      :active="$route.params.section ? $route.params.section : items[0].title"
+      :list="sections"
+      :active="$route.params.section ? $route.params.section : sections[0].name"
       @go="value => goTo(value)"
       @add="addSection" />
   </div>
@@ -22,24 +22,14 @@ export default {
   mixins: [
     Navigation
   ],
-  data () {
-    return {
-      items: [
-        {
-          title: 'Mobile Sign Up'
-        },
-        {
-          title: 'Login'
-        },
-        {
-          title: 'Send Message'
-        },
-      ]
+  computed: {
+    sections () {
+      return this.$store.getters['entity/items']('sections');
     }
   },
   methods: {
     addSection () {
-
+      this.$root.$emit('create-new-section');
     },
     goTo (value) {
       this.$router.push({

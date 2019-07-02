@@ -9,6 +9,11 @@ export default {
     _links: null,
     _meta: null
   },
+  sections: {
+    items: [],
+    _links: null,
+    _meta: null
+  },
   activeTeamId: null,
   activeProjectId: null
 };

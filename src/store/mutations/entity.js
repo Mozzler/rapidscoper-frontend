@@ -10,7 +10,7 @@ export default {
     const teamId = (state.activeTeamId === payload.data.teamId) || (state.activeTeamId === null);
     const allowedTeamId = payload.entity === 'projects' ? teamId : true;
 
-    if (!existed.length && allowedTeamId) {
+    if ((!existed.length && allowedTeamId) || !payload.data.id) {
      // const strategy = payload.entity === 'projects' ? 'unshift' : 'push';
       state[payload.entity].items['push'](payload.data);
     }
@@ -25,5 +25,5 @@ export default {
   setActiveId (state, payload) {
     let [type, value] = payload;
     state[`active${type}Id`] = value;
-  }
+  },
 };

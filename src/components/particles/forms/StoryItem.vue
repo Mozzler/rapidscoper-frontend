@@ -1,11 +1,17 @@
 <template>
   <div>
+    <button @click="saveStory"></button>
     <h1>
-      <input
-        v-model="story.title" />
+      <input v-model="name" />
     </h1>
-    <div class="mt-3" contenteditable>
-      {{ story.description }}
+    <div class="mt-3 user-story__wysiwyg">
+      <div class="user-story__placeholder text-greyed">
+        {{ !description ? 'Describe this section' : '' }}
+      </div>
+      <div contenteditable class="user-story__editable"
+           v-html="description"
+           @input="updateDescription">
+      </div>
     </div>
     <div class="sidebar__title mt-4 mb-3 padding-0">
       user stories
@@ -33,12 +39,16 @@ export default {
     Wysiwyg,
     Hint
   },
+  props: {
+    model: {
+      type: Object,
+      required: true
+    }
+  },
   data () {
     return {
-      story: {
-        title: 'Mobile Sign Up',
-        description: 'Sign up simply means to register. It could be portal, newsletter or things the like. So when you visit and access anything for the first time, you need to sign up.',
-      },
+      name: this.model.name,
+      description: this.model.description,
       stories: {
         list: [{
           parent: null,
@@ -70,6 +80,15 @@ export default {
     updateText (index, input) {
       this.stories.list[index].text = input.text;
       this.stories.list[index].placeholder = input.placeholder;
+    },
+    updateDescription (event) {
+      this.description = event.target.innerText;
+
+      document.execCommand('selectAll', false, null);
+      document.getSelection().collapseToEnd();
+    },
+    saveStory () {
+      //this.$store.dispatch('entity/createStory', this.story);
     }
   }
 };
