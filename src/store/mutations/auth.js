@@ -3,7 +3,8 @@ export default {
     state.user = data;
   },
   update (state, data) {
-    state.user = Object.assign(state.user, data);
+    const obj = data.data ? data.data : data;
+    state.user = Object.assign(state.user, obj);
   },
   logout (state, data) {
     state.user = data;

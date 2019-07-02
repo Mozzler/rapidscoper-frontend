@@ -32,13 +32,7 @@ export default {
             break;*/
           case 'update':
           case 'insert':
-            const payload = {
-              entity: `${response.model}s`,
-              data: response.fullDocument
-            };
-            payload.data.id = payload.data._id;
-
-            const action = payload.entity === 'user' ? 'auth/update' : `entity/create`;
+            const [action, payload] = this.formatResponse(response.model, response.fullDocument);
             this.$store.commit(action, payload);
             break;
           case 'replace':
@@ -46,6 +40,20 @@ export default {
             break;
         }
       });
+    },
+    formatResponse (model, data) {
+      switch (model) {
+        case 'user':
+          data.id = data._id;
+          return ['auth/update', data];
+        default:
+          const payload = {
+            entity: `${model}s`,
+            data: data
+          };
+          payload.data.id = payload.data._id;
+          return ['entity/create', payload]
+      }
     },
     fetchData () {
       this.$store.dispatch('auth/getInfo');
