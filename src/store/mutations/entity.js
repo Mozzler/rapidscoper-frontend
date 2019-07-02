@@ -23,6 +23,7 @@ export default {
     });
   },
   setActiveId (state, payload) {
-    state.activeTeamId = payload;
+    let [type, value] = payload;
+    state[`active${type}Id`] = value;
   }
 };

@@ -25,8 +25,6 @@ router.beforeEach((to, from, next) => {
   const user = store.state.auth.user;
   const authenticated = user !== null;
 
-  console.log(authenticated && user.firstName && to.name === 'create-account');
-
   /*if (authenticated && user.firstName && to.name === 'create-account') {
     next('/');
   } else if (authenticated && !user.firstName && to.name !== 'create-account') {

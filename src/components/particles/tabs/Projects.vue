@@ -16,7 +16,7 @@
       <template v-slot:items="props">
         <tr @click="props.expanded = !props.expanded">
           <td>
-            <div @click="() => goTo(props.item.name)" class="cursor-pointer">
+            <div @click="() => goTo(props.item.name, props.item.id)" class="cursor-pointer">
               {{ props.item.name }}
             </div>
             <span class="index" v-if="props.item.index">
@@ -85,15 +85,16 @@ export default {
     this.fetchProjects();
   },
   beforeDestroy () {
-    this.$store.commit('entity/setActiveId', null);
+    /*this.$store.commit('entity/setActiveId', ['Project', null]);
+    this.$store.commit('entity/setActiveId', ['Team', null]);*/
   },
   methods: {
-    goTo (item) {
-      const team = `teams/${this.$route.params.name}`;
+    goTo (item, id) {
       const project = `projects/${this.itemToParam(item)}`;
       const story = `user-story/mobile-sign-up/edit`;
 
-      this.$router.push(`/${team}/${project}/${story}`);
+      this.$store.commit('entity/setActiveId', ['Project', id]);
+      this.$router.push(`/${project}/${story}`);
     },
     fetchProjects () {
       this.loading = true;

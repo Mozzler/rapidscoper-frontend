@@ -45,7 +45,7 @@ export default {
       this.$router.push({
         name: 'stories',
         params: {
-          name: this.$route.params.name,
+          project: this.$route.params.project,
           section: value,
           tab: this.$route.params.tab
         }

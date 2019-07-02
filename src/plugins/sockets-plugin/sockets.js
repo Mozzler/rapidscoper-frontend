@@ -3,16 +3,16 @@ import config from './../../config';
 import store from '../../store';
 
 class MongoSockets {
-  constructor() {
+  constructor () {
     this.io = null;
     this.streams = [];
   }
 
-  init() {
+  init () {
     this.io = io.connect(config.SOCKETS_URL);
   }
 
-  close() {
+  close () {
     if (this.io) {
       this.io.close();
       this.io = null;
@@ -37,7 +37,7 @@ class MongoSockets {
     });
   }
 
-  disconnect(streamId) {
+  disconnect (streamId) {
     if (this.streams.includes(streamId)) {
       this.io.emit('left_collection', streamId);
     }

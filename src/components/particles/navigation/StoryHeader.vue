@@ -3,13 +3,13 @@
     <v-layout align-center justify-space-between row fill-height>
       <v-flex>
         <v-btn icon class="text-size--18"
-          @click="() => $router.push(`/team/${$route.params.team}`)">
+          @click="toDashboard">
           <v-icon>arrow_back</v-icon>
         </v-btn>
         <span class="text-size--16">
           <dropdown :list="projects"
-                    selected="Skellorbit"
-                    @update="value => project = value" />
+                    :selected="currentProject"
+                    @update="item => goToProject(item.name, item.id)" />
         </span>
       </v-flex>
       <v-flex>
@@ -50,9 +50,6 @@ export default {
   ],
   data () {
     return {
-      projects: [
-        'Skellorbit', 'Antares', 'Vega'
-      ],
       project: 'Skellorbit',
 
       tabs: [
@@ -67,6 +64,15 @@ export default {
   computed: {
     tab () {
       return this.toTitle(this.$route.params.tab);
+    },
+    projects () {
+      return this.$store.getters['entity/items']('projects');
+    },
+    activeProjectId () {
+      return this.$store.state.entity.activeProjectId;
+    },
+    currentProject () {
+      return this.projects.find(item => item.id === this.activeProjectId);
     }
   },
   methods: {
@@ -78,6 +84,16 @@ export default {
         name: this.$route.name,
         params: params
       });
+    },
+    goToProject (name, id) {
+      const project = `projects/${this.itemToParam(name)}`;
+      const story = `user-story/mobile-sign-up/edit`;
+
+      this.$store.commit('entity/setActiveId', ['Project', id]);
+      this.$router.push(`/${project}/${story}`);
+    },
+    toDashboard () {
+      this.$router.push('/');
     }
   },
   watch: {
