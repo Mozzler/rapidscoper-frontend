@@ -51,8 +51,9 @@ export default {
             entity: `${model}s`,
             data: data
           };
+
           payload.data.id = payload.data._id;
-          return ['entity/create', payload]
+          return ['entity/create', payload];
       }
     },
     fetchData () {

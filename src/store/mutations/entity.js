@@ -7,8 +7,12 @@ export default {
       return item.id === payload.data.id;
     });
 
-    if (!existed.length) {
-      state[payload.entity].items.unshift(payload.data);
+    const teamId = (state.activeTeamId === payload.data.teamId) || (state.activeTeamId === null);
+    const allowedTeamId = payload.entity === 'projects' ? teamId : true;
+
+    if (!existed.length && allowedTeamId) {
+     // const strategy = payload.entity === 'projects' ? 'unshift' : 'push';
+      state[payload.entity].items['push'](payload.data);
     }
   },
   update (state, payload) {

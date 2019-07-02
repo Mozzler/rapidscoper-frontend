@@ -84,6 +84,9 @@ export default {
   beforeMount () {
     this.fetchProjects();
   },
+  beforeDestroy () {
+    this.$store.commit('entity/setActiveId', null);
+  },
   methods: {
     goTo (item) {
       const team = `teams/${this.$route.params.name}`;
@@ -95,7 +98,8 @@ export default {
     fetchProjects () {
       this.loading = true;
       let filters = {
-        teamId: this.activeTeamId
+        teamId: this.activeTeamId,
+        sort: '-createdAt'
       };
       this.$store.dispatch('entity/getList', {
         entity: 'projects',
