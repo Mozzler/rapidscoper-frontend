@@ -11,7 +11,7 @@
       <div class="sidebar-header__img">
         <img src="@/assets/img/user.png"/>
       </div>
-      <div class="text-bold">
+      <div class="text-bold" v-if="user">
         {{ user.firstName ? user.firstName : ''}} {{ user.lastName ? user.lastName : '' }}
         <span class="menu-bottom">
           <dropdown
