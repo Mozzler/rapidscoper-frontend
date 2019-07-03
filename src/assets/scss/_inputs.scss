@@ -111,3 +111,17 @@
     }
   }
 }
+
+.input-without-border {
+  .v-input__slot {
+    border: none !important;
+    padding: 0 !important;
+
+    input {
+      font-size: 24px !important;
+      line-height: 29px !important;
+      color: $black !important;
+      font-weight: bold;
+    }
+  }
+}

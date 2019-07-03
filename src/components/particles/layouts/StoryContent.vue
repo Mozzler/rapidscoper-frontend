@@ -24,6 +24,9 @@ export default {
   beforeDestroy () {
     this.$root.$off('create-new-section');
   },
+  mounted () {
+    this.scrollToActiveSection();
+  },
   computed: {
     sections () {
       return this.$store.getters['entity/items']('sections');
@@ -42,12 +45,15 @@ export default {
         entity: 'sections',
         data: item
       });
+    },
+    scrollToActiveSection() {
+      const el = document.getElementById(this.activeSectionId);
+      el.scrollIntoView();
     }
   },
   watch: {
     activeSectionId () {
-      const el = document.getElementById(this.activeSectionId);
-      el.scrollIntoView();
+      this.scrollToActiveSection();
     }
   }
 };

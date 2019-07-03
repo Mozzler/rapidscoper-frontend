@@ -1,4 +1,9 @@
+import ErrorHandlerMixin from "@/mixins/error-handler";
+
 export default {
+  mixins: [
+    ErrorHandlerMixin
+  ],
   data () {
     return {
       dialog: false,
@@ -20,19 +25,20 @@ export default {
 
       const result = await this.$validator.validate();
 
-      if (result) {
-        this.$store.dispatch(url, data)
-          .then(() => {
-            this.processing = false;
-            this.closeModal();
-          })
-          .catch(error => {
-            this.processing = false;
-            console.log(error);
-          });
-      } else {
+      if (!result) {
         this.processing = false;
+        return;
       }
+
+      this.$store.dispatch(url, data)
+        .then(() => {
+          this.processing = false;
+          this.closeModal();
+        })
+        .catch(error => {
+          this.processing = false;
+          this.handleErrors(error);
+        });
     }
   },
   beforeDestroy () {

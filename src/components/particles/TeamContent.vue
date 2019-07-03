@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-layout align-center justify-space-between row fill-height>
-      <h1>{{ toTitle($route.params.name) }}</h1>
+      <h1>{{ team.name }}</h1>
       <dashboard-action-btn
         v-if="btnText"
         :text="btnText"
@@ -67,7 +67,13 @@ export default {
     },
     showModal () {
       this.$root.$emit(this.modals[this.activeTab]);
-    }
+    },
+  },
+  beforeMount () {
+    this.$store.commit('entity/setActiveId', ['Team', this.activeTeamId]);
+  },
+  beforeDestroy () {
+    this.$store.commit('entity/setActiveId', ['Team', null]);
   },
   computed: {
     btnText () {
@@ -79,6 +85,21 @@ export default {
         default:
           return null;
       }
+    },
+    activeTeamId () {
+      return this.$route.params.name;
+    },
+    teams () {
+      return this.$store.getters['entity/items']('teams');
+    },
+    team () {
+      const filtered = this.teams.filter(item => item.id === this.activeTeamId);
+      return filtered[0];
+    }
+  },
+  watch: {
+    activeTeamId () {
+      this.$store.commit('entity/setActiveId', ['Team', this.activeTeamId]);
     }
   }
 };

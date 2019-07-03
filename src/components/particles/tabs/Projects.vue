@@ -84,10 +84,6 @@ export default {
   beforeMount () {
     this.fetchProjects();
   },
-  beforeDestroy () {
-    /*this.$store.commit('entity/setActiveId', ['Project', null]);
-    this.$store.commit('entity/setActiveId', ['Team', null]);*/
-  },
   methods: {
     goTo (item, id) {
       const url = `/projects/${id}/user-story/mobile-sign-up/edit`;
@@ -115,7 +111,7 @@ export default {
       return this.$store.getters['entity/items']('projects');
     },
     activeTeamId () {
-      return this.$store.state.entity.activeTeamId;
+      return this.$route.params.name;
     }
   },
   watch: {

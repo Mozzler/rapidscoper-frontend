@@ -4,13 +4,21 @@
       <v-card class="modal-card">
 
         <div class="modal-header">
-          <h1> <input v-model="data.title" :disabled="processing" /> </h1>
+        <v-text-field
+          name="Team Title"
+          v-validate="'required|min:2|max:100'"
+          v-model="data.title"
+          :error-messages="errors.first('Team Title')"
+          :disabled="processing"
+          solo
+          class="input-without-border"
+        ></v-text-field>
           <v-btn icon class="modal-close-btn" @click="closeModal">
             <v-icon>close</v-icon>
           </v-btn>
         </div>
 
-        <v-card-text class="mt-4 padding-0">
+        <v-card-text class="mt-3 padding-0">
           <v-layout row wrap>
             <v-flex xs6>
               <div>Team</div>
@@ -90,7 +98,7 @@ export default {
         title: 'Untitled'
       };
     },
-    send () {
+    async send () {
       const payload = {
         entity: 'project',
         data: {

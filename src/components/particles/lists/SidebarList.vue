@@ -7,7 +7,7 @@
     <v-list v-if="list.length">
       <v-list-tile
         v-for="(item, key) in list"  :key="key" class="sidebar__item"
-        :class="{'sidebar__item--active ': active === itemToParam(item.title || item.name) }"
+        :class="{'sidebar__item--active ': active === item.id }"
         @click="() => $emit('go', itemToParam(item.title || item.name), item.id)">
         <v-list-tile-content>
           <v-list-tile-title>

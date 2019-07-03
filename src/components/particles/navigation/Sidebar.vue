@@ -98,8 +98,7 @@ export default {
   },
   methods: {
     toTeams (value, id) {
-      this.$store.commit('entity/setActiveId', ['Team', id]);
-      this.goTo(`/team/${value}`);
+      this.goTo(`/team/${id}`);
     },
     showAddTeamModal () {
       this.$root.$emit('add-team');
