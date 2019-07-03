@@ -17,7 +17,7 @@
         <v-text-field
           :key="`${action}-password`"
           name="password"
-          v-validate="'required|min:6|max:255'"
+          v-validate="'required|min:6|max:30'"
           v-model="user.password"
           placeholder="Password"
           :error-messages="errors.first('password')"
