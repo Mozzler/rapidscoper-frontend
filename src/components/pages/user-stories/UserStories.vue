@@ -27,13 +27,5 @@ export default {
   beforeMount () {
     this.$store.dispatch('entity/getList', { entity: 'section' });
   },
-  computed: {
-    activeProjectId () {
-      return this.$store.state.entity.activeProjectId;
-    },
-    activeTeamId () {
-      return this.$store.state.entity.activeTeamId;
-    }
-  }
 };
 </script>

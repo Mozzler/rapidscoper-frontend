@@ -90,11 +90,8 @@ export default {
   },
   methods: {
     goTo (item, id) {
-      const project = `projects/${this.itemToParam(item)}`;
-      const story = `user-story/mobile-sign-up/edit`;
-
-      this.$store.commit('entity/setActiveId', ['Project', id]);
-      this.$router.push(`/${project}/${story}`);
+      const url = `/projects/${id}/user-story/mobile-sign-up/edit`;
+      this.$router.push(url);
     },
     fetchProjects () {
       this.loading = true;

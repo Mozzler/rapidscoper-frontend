@@ -68,11 +68,11 @@ export default {
     projects () {
       return this.$store.getters['entity/items']('projects');
     },
-    activeProjectId () {
-      return this.$store.state.entity.activeProjectId;
+    currentProjectId () {
+      return this.$route.params.projectId;
     },
     currentProject () {
-      return this.projects.find(item => item.id === this.activeProjectId);
+      return this.projects.find(item => item.id === this.currentProjectId);
     }
   },
   methods: {
@@ -86,11 +86,8 @@ export default {
       });
     },
     goToProject (name, id) {
-      const project = `projects/${this.itemToParam(name)}`;
-      const story = `user-story/mobile-sign-up/edit`;
-
-      this.$store.commit('entity/setActiveId', ['Project', id]);
-      this.$router.push(`/${project}/${story}`);
+      const url = `/projects/${id}/user-story/mobile-sign-up/edit`;
+      this.$router.push(url);
     },
     toDashboard () {
       this.$router.push('/');
