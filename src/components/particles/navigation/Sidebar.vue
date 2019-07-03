@@ -25,6 +25,7 @@
       <sidebar-list
         :list="items"
         :active="$route.params.name"
+        :indicator="'title'"
         @go="value => goTo(`/dashboard/${value}`)" />
 
       <sidebar-list
