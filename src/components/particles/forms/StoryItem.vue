@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :id="model.id">
     <button @click="saveStory"></button>
     <h1>
       <input v-model="name" />
@@ -69,7 +69,7 @@ export default {
   computed: {
     dictionary () {
       return this.$store.state.story.dictionary;
-    }
+    },
   },
   mounted () {
     this.stories.list[0].parent = this.stories;

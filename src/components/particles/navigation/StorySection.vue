@@ -4,8 +4,8 @@
       title="user story sections"
       btn="Add section"
       :list="sections"
-      :active="$route.params.section ? $route.params.section : sections[0].name"
-      @go="value => goTo(value)"
+      :active="$route.params.section ? $route.params.section : sections[0].id"
+      @go="(value, id) => goTo(id)"
       @add="addSection" />
   </div>
 </template>
@@ -31,12 +31,12 @@ export default {
     addSection () {
       this.$root.$emit('create-new-section');
     },
-    goTo (value) {
+    goTo (id) {
       this.$router.push({
         name: 'stories',
         params: {
           project: this.$route.params.project,
-          section: value,
+          section: id,
           tab: this.$route.params.tab
         }
       });

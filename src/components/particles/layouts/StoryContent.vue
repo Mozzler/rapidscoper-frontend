@@ -27,6 +27,9 @@ export default {
   computed: {
     sections () {
       return this.$store.getters['entity/items']('sections');
+    },
+    activeSectionId () {
+      return this.$route.params.section;
     }
   },
   methods: {
@@ -39,6 +42,12 @@ export default {
         entity: 'sections',
         data: item
       });
+    }
+  },
+  watch: {
+    activeSectionId () {
+      const el = document.getElementById(this.activeSectionId);
+      el.scrollIntoView();
     }
   }
 };

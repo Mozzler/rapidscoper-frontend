@@ -29,6 +29,12 @@
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
       width: 100%;
       margin: 24px 10% 0 10%;
+
+      overflow-x: hidden;
+      overflow-y: auto;
+      height: calc(100% - 50px);
+
+      @include rapid-scroll;
     }
   }
 
