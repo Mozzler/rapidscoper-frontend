@@ -1,13 +1,18 @@
 export default {
   computed: {
+    user () {
+      return this.$store.state.auth.user;
+    },
     authenticated () {
-      return this.$store.state.auth.user !== null;
+      return this.user !== null;
+    },
+    token () {
+      return this.authenticated && this.user.access_token;
     }
   },
   beforeMount () {
-    if (this.authenticated) {
+    if (this.token) {
       this.initSocket();
-      this.fetchData();
     }
   },
   methods: {
@@ -55,29 +60,17 @@ export default {
           payload.data.id = payload.data._id;
           return ['entity/create', payload];
       }
-    },
-    fetchData () {
-      this.$store.dispatch('auth/getInfo');
-      this.$store.dispatch('entity/getList', { entity: 'team' });
     }
   },
   watch: {
-    authenticated () {
-      if (this.authenticated) {
-        this.fetchData();
-        this.initSocket();
-      } else {
-        this.$socket.close();
-      }
-    },
+    token () {
+      this.token ? this.initSocket() : this.$socket.close();
+    }
   },
-  beforeDestroy() {
+  beforeDestroy () {
     if (this.$socket.io) {
       this.$socket.io.off('mongo_data');
-    }
-
-    if (this.stream_id) {
       this.$socket.disconnect(this.stream_id);
     }
-  },
+  }
 };

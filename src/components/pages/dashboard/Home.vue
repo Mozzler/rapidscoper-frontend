@@ -20,6 +20,10 @@ export default {
     TeamContent,
     Sidebar
   },
+  beforeMount () {
+    this.$store.dispatch('auth/getInfo');
+    this.$store.dispatch('entity/getList', { entity: 'team' });
+  },
   computed: {
     route () {
       return this.$route.params.section;
