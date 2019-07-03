@@ -48,7 +48,7 @@ export default {
   mixins: [
     ResizeMixin,
     SocketMixin
-  ],
+  ]
 };
 </script>
 

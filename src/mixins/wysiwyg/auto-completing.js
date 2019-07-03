@@ -100,7 +100,7 @@ export default {
       if ($event.code === 'Enter' && this.next === 'beginning') {
         return;
       }
-      this.$root.$emit('complete-hint', this.filter, first);
+      this.$root.$emit('complete-hint', this.filter, first, this.next === 'beginning');
       this.filter = null;
     },
     focusHint () {

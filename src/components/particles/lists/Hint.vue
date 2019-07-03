@@ -90,7 +90,9 @@ export default {
         this.focused = 0;
       }
       this.$nextTick(() => {
-        this.$refs.hint.focus();
+        if (this.$refs.hint) {
+          this.$refs.hint.focus();
+        }
       });
     },
     navigate ($event, step) {
@@ -106,12 +108,12 @@ export default {
 
       this.focused = step;
     },
-    complete (item = this.filter, first = false) {
+    complete (item = this.filter, first = false, beginning = false) {
       if (!item) {
         return;
       }
 
-      if (first && !this.items.length) {
+      if (beginning) {
         return;
       }
 

@@ -56,7 +56,6 @@ export default {
 
     return response.data;
   },
-
   async refreshToken (store, payload) {
     const user = store.state.user;
     const data = {
