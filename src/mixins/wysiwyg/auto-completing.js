@@ -175,7 +175,7 @@ export default {
 
       if (tail) {
         const text = this.createSpan(this.next, `&nbsp;${tail}`, false, editable);
-        this.editor.text = list + text;
+        this.editor.text = list + (this.next ? text : ':');
       }
     }
   }
