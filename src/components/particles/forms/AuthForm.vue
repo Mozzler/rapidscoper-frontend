@@ -68,6 +68,9 @@ export default {
     },
     route () {
       return this.type === 'Sign Up' ? '/create-account' : '/';
+    },
+    authorized () {
+      return this.$store.state.auth.user;
     }
   },
   methods: {
@@ -81,17 +84,24 @@ export default {
       this.$store.dispatch(`auth/${action}`, this.user)
         .then(response => {
           if (!response.error) {
-            if (action === 'signup') {
-              this.send('login');
-            } else if (action !== this.action) {
-              this.$router.push('/create-account');
-            } else {
-              this.$router.push('/');
-            }
+            action === 'login' ? this.login() : this.send('login');
           }
+        }).catch(error => {
+          const msg = { field: 'email', msg: error.message };
+          this.errors.add(msg);
+          this.processing = false;
+        });
+    },
+    login () {
+      this.$store.dispatch('auth/getInfo')
+        .then(() => {
+          const props = this.authorized.firstName && this.authorized.lastName;
+          const url = !props ? '/create-account' : '/';
+
+          this.$router.push(url);
           this.processing = false;
         }).catch(error => {
-          this.errors.add({field: 'email', msg: error.message});
+          console.log(error);
           this.processing = false;
         });
     }

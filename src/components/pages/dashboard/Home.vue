@@ -21,7 +21,6 @@ export default {
     Sidebar
   },
   beforeMount () {
-    this.$store.dispatch('auth/getInfo');
     this.$store.dispatch('entity/getList', { entity: 'team' });
   },
   computed: {

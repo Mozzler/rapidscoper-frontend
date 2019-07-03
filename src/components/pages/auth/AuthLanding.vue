@@ -1,4 +1,4 @@
-<template>
+npm run ser<template>
   <div>
     <app-header/>
     <div class="signup-section">
