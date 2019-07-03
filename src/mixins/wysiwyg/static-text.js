@@ -22,6 +22,7 @@ export default {
 
       const tail = this.getTail().replace(/&nbsp;/gi, '');
       const spans = this.getSpanList(false).length;
+
       if ((spans === 1 || spans === 0) && !tail) {
         this.increaseSublistLevel($event);
         return;

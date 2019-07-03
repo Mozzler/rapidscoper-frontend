@@ -17,16 +17,15 @@ export default {
   },
   methods: {
     initSocket () {
+      const collections = ['team', 'project', 'user', 'section'];
       this.$socket.init();
-      this.$socket.connect('user', [], (streamId) => {
-        this.stream_id = streamId;
+
+      collections.forEach(item => {
+        this.$socket.connect(item, [], (streamId) => {
+          this.stream_id = streamId;
+        });
       });
-      this.$socket.connect('team', [], (streamId) => {
-        this.stream_id = streamId;
-      });
-      this.$socket.connect('project', [], (streamId) => {
-        this.stream_id = streamId;
-      });
+
       this.initSocketListener();
     },
     initSocketListener () {
