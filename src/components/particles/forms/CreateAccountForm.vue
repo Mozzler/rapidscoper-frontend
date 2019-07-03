@@ -5,7 +5,8 @@
       <v-layout row wrap>
         <v-flex xs12 class="signup-input">
           <div>
-            <div class="signup-loader sign-up-header--m43" @click="$refs.inputUpload.click()">
+            <div class="signup-loader sign-up-header--m43"
+                 @click="$refs.inputUpload.click()">
               <photo-camera />
             </div>
             <input v-show="false" ref="inputUpload" type="file" />
@@ -59,7 +60,9 @@
           ></v-text-field>
         </v-flex>
         <v-flex xs12>
-          <v-btn class="btn-rapid primary submit-btn mt-5px" block large @click="create">
+          <v-btn class="btn-rapid primary submit-btn mt-5px" block large
+                 :disabled="processing"
+                 @click="create">
             Create
           </v-btn>
         </v-flex>
@@ -112,7 +115,7 @@ export default {
         this.processing = true;
 
         this.send().then(() => {
-          this.$router.push('/');
+          this.$router.push('/dashboard/all-projects');
           this.processing = false;
         }).catch(error => {
           error = error.response.data;
