@@ -18,7 +18,8 @@ export default {
   update (state, payload) {
     state[payload.entity].items.forEach((item, index) => {
       if (item.id === payload.data.id) {
-        state[payload.entity][index] = Object.create(payload.data);
+        let obj = state[payload.entity].items[index];
+        Object.assign(obj, payload.data);
       }
     });
   },

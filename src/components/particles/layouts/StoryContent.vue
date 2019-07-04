@@ -65,7 +65,7 @@ export default {
             name: 'stories',
             params: {
               project: this.projectId,
-              section: this.sections[this.sections.length-1].id,
+              section: this.sections[this.sections.length - 1].id,
               tab: this.$route.params.tab
             }
           });

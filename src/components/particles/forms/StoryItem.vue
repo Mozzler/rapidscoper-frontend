@@ -1,8 +1,8 @@
 <template>
   <div :id="model.id">
-    <button @click="saveStory"></button>
     <h1>
-      <input v-model="name" />
+      <input v-model="name"
+             @blur="() => updateStory('name')" />
     </h1>
     <div class="mt-3 user-story__wysiwyg">
       <div class="user-story__placeholder text-greyed">
@@ -10,7 +10,8 @@
       </div>
       <div contenteditable class="user-story__editable"
            v-html="description"
-           @input="updateDescription">
+           @input="event => updateSection('description', event)"
+           @blur="() => updateStory('description')">
       </div>
     </div>
     <div class="sidebar__title mt-4 mb-3 padding-0">
@@ -81,14 +82,22 @@ export default {
       this.stories.list[index].text = input.text;
       this.stories.list[index].placeholder = input.placeholder;
     },
-    updateDescription (event) {
-      this.description = event.target.innerText;
+    updateSection (item, event) {
+      this[item] = event.target.innerText;
 
       document.execCommand('selectAll', false, null);
       document.getSelection().collapseToEnd();
     },
-    saveStory () {
-      //this.$store.dispatch('entity/createStory', this.story);
+    updateStory (item) {
+      this.$store.dispatch('entity/update', {
+        entity: 'section',
+        data: {
+          [item]: this[item]
+        },
+        params: {
+          id: this.model.id
+        }
+      });
     }
   }
 };
