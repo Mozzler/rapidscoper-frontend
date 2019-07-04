@@ -1,7 +1,6 @@
 <template>
   <div>
-    <div v-if="title" class="sidebar__title"
-         @click="() => $emit('menu')">
+    <div v-if="title" class="sidebar__title" @click="() => $emit('menu')">
       {{ title }}
     </div>
     <v-list v-if="list.length">

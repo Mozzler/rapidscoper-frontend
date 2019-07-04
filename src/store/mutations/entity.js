@@ -11,7 +11,7 @@ export default {
     const allowedTeamId = payload.entity === 'projects' ? teamId : true;
 
     if ((!existed.length && allowedTeamId) || !payload.data.id) {
-     // const strategy = payload.entity === 'projects' ? 'unshift' : 'push';
+      // const strategy = payload.entity === 'projects' ? 'unshift' : 'push';
       state[payload.entity].items['push'](payload.data);
     }
   },

@@ -2,6 +2,7 @@
   <div :id="model.id">
     <h1>
       <input v-model="name"
+             @input="updateSectionName"
              @blur="() => updateStory('name')" />
     </h1>
     <div class="mt-3 user-story__wysiwyg">
@@ -70,7 +71,7 @@ export default {
   computed: {
     dictionary () {
       return this.$store.state.story.dictionary;
-    },
+    }
   },
   mounted () {
     this.stories.list[0].parent = this.stories;
@@ -87,6 +88,15 @@ export default {
 
       document.execCommand('selectAll', false, null);
       document.getSelection().collapseToEnd();
+    },
+    updateSectionName () {
+      this.$store.commit('entity/update', {
+        entity: 'sections',
+        data: {
+          name: this.name,
+          id: this.model.id
+        }
+      });
     },
     updateStory (item) {
       this.$store.dispatch('entity/update', {

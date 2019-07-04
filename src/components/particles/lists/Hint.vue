@@ -75,6 +75,8 @@ export default {
       this.complete(value);
     },
     setHintState (visible, chapter = null, filter = null, input = null, position = null) {
+
+
       Object.assign(this.$refs.hint.style, {
         left: position.left + 'px',
         top: position.top + 'px'

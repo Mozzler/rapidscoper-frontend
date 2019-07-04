@@ -36,6 +36,7 @@
             <div class="user-story__wysiwyg">
               <div class="user-story__placeholder" v-html="item.placeholder" readonly></div>
               <div contenteditable class="user-story__editable"
+                   :id="uuid()"
                    :ref="`editor-${ index }-${ level }`"
                    tabindex="2"
                    @click="checkHint"
