@@ -59,7 +59,17 @@ export default {
         }
       };
 
-      this.$store.dispatch('entity/create', section);
+      this.$store.dispatch('entity/create', section)
+        .then(response => {
+          this.$router.push({
+            name: 'stories',
+            params: {
+              project: this.projectId,
+              section: this.sections[this.sections.length-1].id,
+              tab: this.$route.params.tab
+            }
+          });
+        });
     },
     scrollToActiveSection () {
       const el = document.getElementById(this.activeSectionId);

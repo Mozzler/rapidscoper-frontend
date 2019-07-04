@@ -24,8 +24,21 @@ export default {
     ToolSection,
     StoryContent
   },
-  beforeMount () {
-    this.$store.dispatch('entity/getList', { entity: 'section' });
+  computed: {
+    sections () {
+      return this.$store.getters['entity/items']('sections');
+    }
   },
+  beforeMount () {
+    this.$store.dispatch('entity/getList', { entity: 'section' })
+      .then(response => {
+        const stub = this.$route.params === 'section';
+
+        if (this.sections.length && stub) {
+          const url = this.$route.params.replace('section', this.sections[0].id);
+          this.$router.push(url);
+        }
+      });
+  }
 };
 </script>

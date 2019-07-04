@@ -86,7 +86,7 @@ export default {
   },
   methods: {
     goTo (item, id) {
-      const url = `/projects/${id}/user-story/mobile-sign-up/edit`;
+      const url = `/projects/${id}/user-story/section/edit`;
       this.$router.push(url);
     },
     fetchProjects () {

@@ -1,7 +1,7 @@
 <template>
   <v-container pa-0 class="signup-container">
     <h1 class="sign-up-header--m43">Create an Account</h1>
-    <v-form>
+    <v-form @keyup.native.enter="create">
       <v-layout row wrap>
         <v-flex xs12 class="signup-input">
           <div>
