@@ -4,8 +4,10 @@
       <div class="content">
         <story-item v-for="(story, index) in sections"
           :model="story"
-          :key="index" />
+          :key="index"
+          @show-error="value => message = value"/>
       </div>
+      <alert :message="message" />
     </v-layout>
   </div>
 </template>
@@ -17,6 +19,11 @@ export default {
   name: "StoryContent",
   components: {
     StoryItem
+  },
+  data () {
+    return {
+      message: null
+    };
   },
   beforeMount () {
     this.$root.$on('create-new-section', this.createSection);

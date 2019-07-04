@@ -5,10 +5,6 @@
     <story-section />
     <tool-section />
     <story-content />
-
-    <div class="rapid-alert">
-      This is a success alert.
-    </div>
   </div>
 </template>
 
@@ -43,6 +39,6 @@ export default {
           this.$router.push(url);
         }
       });
-  }
+  },
 };
 </script>

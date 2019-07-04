@@ -34,6 +34,7 @@
 <script>
 import Wysiwyg from "../inputs/Wysiwyg";
 import Hint from "../lists/Hint";
+import ErrorHandler from "@/mixins/error-handler";
 
 export default {
   name: "StoryItem",
@@ -41,6 +42,9 @@ export default {
     Wysiwyg,
     Hint
   },
+  mixins: [
+    ErrorHandler
+  ],
   props: {
     model: {
       type: Object,
@@ -90,16 +94,18 @@ export default {
       document.getSelection().collapseToEnd();
     },
     updateSectionName () {
+      const data = {
+        name: this.name,
+        id: this.model.id
+      };
+
       this.$store.commit('entity/update', {
         entity: 'sections',
-        data: {
-          name: this.name,
-          id: this.model.id
-        }
+        data: data
       });
     },
     updateStory (item) {
-      this.$store.dispatch('entity/update', {
+      const data = {
         entity: 'section',
         data: {
           [item]: this[item]
@@ -107,7 +113,13 @@ export default {
         params: {
           id: this.model.id
         }
-      });
+      };
+      this.$store.dispatch('entity/update', data)
+        .then(() => {})
+        .catch(error => {
+          const msg = this.handleErrors(error, true);
+          this.$emit('show-error', msg);
+        });
     }
   }
 };

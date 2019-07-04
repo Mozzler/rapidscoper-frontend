@@ -4,6 +4,7 @@ import v4 from 'uuid';
 
 import Vue from 'vue';
 import VueTelInput from 'vue-tel-input';
+import Alert from '@/components/particles/alerts/alert';
 
 import './plugins';
 
@@ -15,6 +16,7 @@ import App from './App.vue';
 import ConverterMixin from '@/mixins/converter';
 
 Vue.component('vue-tel-input', VueTelInput);
+Vue.component('alert', Alert);
 
 Vue.config.productionTip = false;
 window._ = _;
