@@ -74,8 +74,12 @@ export default {
       $event.preventDefault();
       this.complete(value);
     },
-    setHintState (visible, chapter = null, filter = null, input = null, position = null) {
-
+    setHintState (visible, chapter = null, filter = null, input = null, position = null, addresserId = null) {
+      console.log(addresserId);
+      const selectedElId = document.getSelection().focusNode.id;
+      if (addresserId !== selectedElId) {
+        return;
+      }
 
       Object.assign(this.$refs.hint.style, {
         left: position.left + 'px',

@@ -14,7 +14,7 @@ export default {
     _links: null,
     _meta: null
   },
-  dictionarys: {
+  dictionary: {
     items: [],
     _links: null,
     _meta: null

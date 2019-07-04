@@ -12,7 +12,8 @@ export default {
       };
 
       this.$nextTick(() => {
-        this.$root.$emit('set-hint-state', true, chapter, filter, this.ref, position);
+        const addresserId = this.$refs[this.ref][0].id;
+        this.$root.$emit('set-hint-state', true, chapter, filter, this.ref, position, addresserId);
       });
     },
     checkHint ($event) {

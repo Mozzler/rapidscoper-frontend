@@ -7,6 +7,7 @@
           :key="index"
           @show-error="value => message = value"/>
       </div>
+      <hint />
       <alert :message="message" />
     </v-layout>
   </div>
@@ -14,11 +15,13 @@
 
 <script>
 import StoryItem from '../../particles/forms/StoryItem';
+import Hint from "../lists/Hint";
 
 export default {
   name: "StoryContent",
   components: {
-    StoryItem
+    StoryItem,
+    Hint
   },
   data () {
     return {

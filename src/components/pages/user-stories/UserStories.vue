@@ -31,7 +31,7 @@ export default {
   },
   beforeMount () {
     this.$store.dispatch('entity/getList', { entity: 'section' })
-      .then(response => {
+      .then(() => {
         const stub = this.$route.params === 'section';
 
         if (this.sections.length && stub) {
@@ -39,6 +39,7 @@ export default {
           this.$router.push(url);
         }
       });
-  },
+    this.$store.dispatch('entity/getList', { entity: 'dictionary' });
+  }
 };
 </script>

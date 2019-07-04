@@ -25,22 +25,18 @@
         :model="stories.list"
         :level="1"
         @update-text="updateText"/>
-
-      <hint />
     </div>
   </div>
 </template>
 
 <script>
 import Wysiwyg from "../inputs/Wysiwyg";
-import Hint from "../lists/Hint";
 import ErrorHandler from "@/mixins/error-handler";
 
 export default {
   name: "StoryItem",
   components: {
-    Wysiwyg,
-    Hint
+    Wysiwyg
   },
   mixins: [
     ErrorHandler

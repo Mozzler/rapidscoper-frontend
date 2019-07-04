@@ -7,8 +7,8 @@ export default {
   ],
   dictionary: {
     'constructions': {
-      'As a ...': '[beginning][user-type][static-text="I can"][custom-1][static-text="so that"][custom-2]',
-      'Requires a ...': '[beginning][requirement-type][static-text="called"][field]',
+      'As a ...': '[beginning][actor][static-text="I can"][custom-1][static-text="so that"][custom-2]',
+      'Requires a ...': '[beginning][requirement][static-text="called"][field]',
       'When I ...': '[beginning][custom-1][static-text="then I"][custom-2]'
     },
     'requirement-type': [
@@ -17,7 +17,7 @@ export default {
       'Page',
       'API endpoint'
     ],
-    'user-type': [
+    'actor': [
       'New User',
       'Registered User',
       'Admin User'
@@ -29,7 +29,7 @@ export default {
       'Last Name'
     ],
     'placeholders': {
-      'user-type': 'User Type',
+      'actor': 'User Type',
       'requirement-type': 'Requirement Type',
       'field': 'Field'
     }

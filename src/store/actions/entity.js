@@ -1,5 +1,5 @@
 function filter (entity, data) {
-  if (entity !== 'projects') {
+  if (entity !== 'projects' && entity !== 'dictionary') {
     entity += 's';
   }
   return { entity, data };
