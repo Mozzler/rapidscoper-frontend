@@ -49,8 +49,6 @@ export default {
       const untitled = this.sections.filter(item => item.name.includes('Untitled'));
       const number = untitled.length;
 
-      console.log(this.projects);
-
       const section = {
         entity: 'section',
         data: {
