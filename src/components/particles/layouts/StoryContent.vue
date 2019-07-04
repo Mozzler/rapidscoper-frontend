@@ -33,20 +33,37 @@ export default {
     },
     activeSectionId () {
       return this.$route.params.section;
+    },
+    projectId () {
+      return this.$route.params.projectId;
+    },
+    projects () {
+      return this.$store.getters['entity/items']('projects');
+    },
+    activeProject () {
+      return this.projects.find(item => item.id === this.projectId);
     }
   },
   methods: {
     createSection () {
-      const item = {
-        name: 'Untitled',
-        description: ''
+      const untitled = this.sections.filter(item => item.name.includes('Untitled'));
+      const number = untitled.length;
+
+      console.log(this.projects);
+
+      const section = {
+        entity: 'section',
+        data: {
+          name: `Untitled${number ? ' ' + number : ''}`,
+          description: '',
+          projectId: this.activeProject.id,
+          teamId: this.activeProject.teamId
+        }
       };
-      this.$store.commit('entity/create', {
-        entity: 'sections',
-        data: item
-      });
+
+      this.$store.dispatch('entity/create', section);
     },
-    scrollToActiveSection() {
+    scrollToActiveSection () {
       const el = document.getElementById(this.activeSectionId);
       if (el) {
         el.scrollIntoView();
