@@ -12,7 +12,10 @@ export default {
       }
     },
     itemToParam (str) {
-      return str.toLowerCase().replace(/ /g, '-');
+      if (str) {
+        str = str.toLowerCase().replace(/ /g, '-');
+      }
+      return str;
     },
     goTo (path) {
       this.$router.push(path);

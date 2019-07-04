@@ -48,7 +48,9 @@ export default {
     },
     scrollToActiveSection() {
       const el = document.getElementById(this.activeSectionId);
-      el.scrollIntoView();
+      if (el) {
+        el.scrollIntoView();
+      }
     }
   },
   watch: {
