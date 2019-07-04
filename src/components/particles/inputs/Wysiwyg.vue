@@ -39,7 +39,7 @@
                    :id="uuid()"
                    :ref="`editor-${ index }-${ level }`"
                    tabindex="2"
-                   @click="checkHint"
+                   @click="($event) => checkHint($event, index)"
                    @focus="($event) => focus($event, index)"
                    @keydown.down.exact="focusHint"
                    @keyup.exact="pressed"

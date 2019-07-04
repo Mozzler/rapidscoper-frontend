@@ -11,7 +11,7 @@ export default {
       'Requires a ...': '[beginning][requirement][static-text="called"][field]',
       'When I ...': '[beginning][custom-1][static-text="then I"][custom-2]'
     },
-    'requirement-type': [
+    'requirement': [
       'Model',
       'Field',
       'Page',
@@ -30,7 +30,7 @@ export default {
     ],
     'placeholders': {
       'actor': 'User Type',
-      'requirement-type': 'Requirement Type',
+      'requirement': 'Requirement Type',
       'field': 'Field'
     }
   },

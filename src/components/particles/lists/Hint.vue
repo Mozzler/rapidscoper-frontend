@@ -75,9 +75,9 @@ export default {
       this.complete(value);
     },
     setHintState (visible, chapter = null, filter = null, input = null, position = null, addresserId = null) {
-      console.log(addresserId);
-      const selectedElId = document.getSelection().focusNode.id;
-      if (addresserId !== selectedElId) {
+      const selection = document.getSelection().focusNode;
+      this.focusedElId = selection.id || selection.parentNode.offsetParent.id;
+      if (addresserId !== this.focusedElId) {
         return;
       }
 
@@ -128,7 +128,7 @@ export default {
       }
 
       this.visible = false;
-      this.$root.$emit('hint-complete', this.chapter, item, this.input);
+      this.$root.$emit('hint-complete', this.chapter, item, this.focusedElId);
       this.focused = null;
     }
   },

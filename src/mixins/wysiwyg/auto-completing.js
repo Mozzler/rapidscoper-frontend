@@ -106,15 +106,16 @@ export default {
     focusHint () {
       this.$root.$emit('focus-hint');
     },
-    hintComplete (chapter, text, el) {
+    hintComplete (chapter, text, addresserId) {
       let clickable = false;
 
-      if (el !== this.ref) {
+      const refs = this.$refs[`editor-${this.focused}-${this.level}`];
+      if (!refs || !refs.length || addresserId !== refs[0].id) {
         return;
       }
 
       this.$nextTick(() => {
-        this.$refs[el][0].focus();
+        refs[0].focus();
       });
 
       if (chapter === 'beginning') {

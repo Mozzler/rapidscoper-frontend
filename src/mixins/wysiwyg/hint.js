@@ -3,7 +3,7 @@ export default {
     hideHint () {
       this.$root.$emit('hideHint-hint');
     },
-    showHint (el, chapter, filter = this.filter) {
+    showHint (el, chapter, filter = this.filter, addresserId) {
       const rect = el.getBoundingClientRect();
 
       const position = {
@@ -12,11 +12,11 @@ export default {
       };
 
       this.$nextTick(() => {
-        const addresserId = this.$refs[this.ref][0].id;
+        addresserId = addresserId || this.$refs[this.ref][0].id;
         this.$root.$emit('set-hint-state', true, chapter, filter, this.ref, position, addresserId);
       });
     },
-    checkHint ($event) {
+    checkHint ($event, index) {
       this.event = $event;
 
       let property = $event.target.className.replace('user-story__editable--', '');
@@ -27,8 +27,14 @@ export default {
           $event.target.innerText = '';
         }*/
 
+        const refs = this.$refs[`editor-${this.focused}-${this.level}`];
+        this.$nextTick(() => {
+          refs[0].focus();
+        });
+
+        const addresserId = $event.target.parentElement.id;
         this.hideHint();
-        this.showHint($event.target, property, '');
+        this.showHint($event.target, property, '', addresserId);
       }
     }
   }
