@@ -70,7 +70,7 @@ export default {
   },
   computed: {
     dictionary () {
-      return this.$store.state.story.dictionary;
+      return this.$store.getters['story/dictionary'];
     }
   },
   mounted () {

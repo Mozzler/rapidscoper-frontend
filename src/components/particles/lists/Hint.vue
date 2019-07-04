@@ -46,7 +46,7 @@ export default {
       return this.$store.state.story.adjustConstructions;
     },
     dictionary () {
-      return this.$store.state.story.dictionary;
+      return this.$store.getters['story/dictionary'];
     },
     list () {
       if (!this.chapter) {

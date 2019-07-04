@@ -29,6 +29,7 @@ export default {
     };
   },
   beforeMount () {
+    console.log(this.vocabulary);
     this.$root.$on('create-new-section', this.createSection);
   },
   beforeDestroy () {
@@ -52,7 +53,7 @@ export default {
     },
     activeProject () {
       return this.projects.find(item => item.id === this.projectId);
-    }
+    },
   },
   methods: {
     createSection () {
@@ -70,7 +71,7 @@ export default {
       };
 
       this.$store.dispatch('entity/create', section)
-        .then(response => {
+        .then(() => {
           this.$router.push({
             name: 'stories',
             params: {
