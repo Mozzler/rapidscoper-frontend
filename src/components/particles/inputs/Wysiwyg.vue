@@ -36,9 +36,10 @@
             <div class="user-story__wysiwyg">
               <div class="user-story__placeholder" v-html="item.placeholder" readonly></div>
               <div contenteditable class="user-story__editable"
-                   :id="uuid()"
+                   :id="storyId"
                    :ref="`editor-${ index }-${ level }`"
                    tabindex="2"
+                   @blur="saveStory"
                    @click="($event) => checkHint($event, index)"
                    @focus="($event) => focus($event, index)"
                    @keydown.down.exact="focusHint"
@@ -56,11 +57,12 @@
       </div>
 
       <wysiwyg
+        :sectionId="sectionId"
         :ref="`wysiwyg-child-${ index }-${ level }`"
         :model="item.list"
         :level="level+1"
         :parentIndex="index"
-        @update-text="(i, text) => updateChildText(i, text, index)"/>
+        @update-text="(i, text) => updateChildText(i, text, index)" />
     </div>
   </div>
 </template>
@@ -92,6 +94,10 @@ export default {
     parentIndex: {
       type: Number,
       default: 1
+    },
+    sectionId: {
+      type: String,
+      default: null
     }
   },
   data () {
@@ -112,6 +118,9 @@ export default {
       }
       return key;
     },
+    storyId () {
+      return this.model.storyId ? this.model.storyId : this.uuid();
+    },
     collection () {
       return this.$store.state.story[this.tab];
     }
@@ -122,6 +131,21 @@ export default {
     },
     updateChildText (index, obj, parentIndex) {
       this.list[parentIndex].list[index] = obj;
+    },
+    saveStory () {
+      const story = {
+        entity: 'story',
+        data: {
+          type: 'user',
+          sectionId: this.sectionId,
+          teamId: this.activeProject.teamId,
+          projectId: this.activeProject.id,
+          level: this.level - 1,
+          markup: this.editor.text
+        }
+      };
+
+      this.$store.dispatch('entity/create', story);
     }
   },
   watch: {

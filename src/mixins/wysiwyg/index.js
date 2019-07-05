@@ -42,7 +42,7 @@ export default {
       return `editor-${this.focused}-${this.level}`;
     },
     projects () {
-      return this.$store.getters['entity/items']('projects')
+      return this.$store.getters['entity/items']('projects');
     },
     activeProject () {
       return this.projects.find(item => item.id === this.activeProjectId);
@@ -50,5 +50,5 @@ export default {
     activeProjectId () {
       return this.$route.params.projectId;
     }
-  }
+  },
 };

@@ -21,6 +21,7 @@
 
     <div>
       <wysiwyg
+        :sectionId="model.id"
         :ref="'wysiwyg'"
         :model="stories.list"
         :level="1"

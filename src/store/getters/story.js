@@ -18,7 +18,13 @@ export default {
         'actor': 'User Type',
         'requirement': 'Requirement Type',
         'field': 'Field'
-      }
+      },
+      types: [
+        'user',
+        'requirement',
+        'acceptance',
+        'other'
+      ]
     };
 
     types.forEach(key => {

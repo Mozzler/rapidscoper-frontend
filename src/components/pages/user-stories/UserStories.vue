@@ -30,8 +30,24 @@ export default {
     }
   },
   beforeMount () {
-    this.$store.dispatch('entity/getList', { entity: 'section' })
-      .then(() => {
+    this.fetchData();
+  },
+  methods: {
+    getQuerySet () {
+      const entities = ['section', 'dictionary', 'story'];
+      const queries = entities.map(entity => {
+        return this.$store.dispatch('entity/getList', {
+          entity: entity,
+          params: {
+            projectId: this.$route.params.projectId
+          }
+        });
+      });
+
+      return Promise.all(queries);
+    },
+    fetchData () {
+      this.getQuerySet().then(() => {
         const stub = this.$route.params === 'section';
 
         if (this.sections.length && stub) {
@@ -39,7 +55,12 @@ export default {
           this.$router.push(url);
         }
       });
-    this.$store.dispatch('entity/getList', { entity: 'dictionary' });
+    }
+  },
+  watch: {
+    '$route.params' () {
+      this.fetchData();
+    }
   }
 };
 </script>
