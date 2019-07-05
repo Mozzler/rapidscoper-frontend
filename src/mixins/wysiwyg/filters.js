@@ -8,7 +8,7 @@ export default {
     },
     threshold () {
       return this.getEquation();
-    }
+    },
   },
   methods: {
     getEquation (level = this.level) {
@@ -28,7 +28,7 @@ export default {
       return keys.map((item, index) => {
         return {
           key: item,
-          value: list[item]
+          value: list[item].structure
         };
       });
     },

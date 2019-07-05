@@ -106,6 +106,22 @@ export default {
     focusHint () {
       this.$root.$emit('focus-hint');
     },
+    submitField (chapter, text) {
+      if (typeof text !== 'string') {
+        return;
+      }
+
+      this.$store.dispatch('entity/create', {
+        entity: 'dictionary',
+        data: {
+          projectId: this.activeProject.id,
+          teamId: this.activeProject.teamId,
+          type: chapter,
+          name: text,
+          description: text
+        }
+      });
+    },
     hintComplete (chapter, text, addresserId) {
       let clickable = false;
 
@@ -123,20 +139,7 @@ export default {
         text = text.key;
         clickable = false;
       } else {
-        if (typeof text === 'string') {
-          this.$store.dispatch('entity/create', {
-            entity: 'dictionary',
-            data: {
-              projectId: this.activeProject.id,
-              teamId: this.activeProject.teamId,
-              type: chapter,
-              name: text,
-              description: text
-            }
-          }).then(response => {
-            text = response.item.name;
-          });
-        }
+        this.submitField(chapter, text);
       }
 
       const spans = this.getSpanList(false);

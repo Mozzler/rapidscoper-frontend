@@ -33,6 +33,7 @@
 <script>
 import Wysiwyg from "../inputs/Wysiwyg";
 import ErrorHandler from "@/mixins/error-handler";
+import StoryInitializer from "@/mixins/wysiwyg/story-initializer";
 
 export default {
   name: "StoryItem",
@@ -40,7 +41,8 @@ export default {
     Wysiwyg
   },
   mixins: [
-    ErrorHandler
+    ErrorHandler,
+    StoryInitializer
   ],
   props: {
     model: {
@@ -51,33 +53,8 @@ export default {
   data () {
     return {
       name: this.model.name,
-      description: this.model.description,
-      stories: {
-        list: [{
-          parent: null,
-          estimation: 0,
-          priority: 0,
-          label: 1,
-
-          text: '',
-          template: '',
-          tail: '',
-          placeholder: '',
-
-          list: []
-        }]
-      }
+      description: this.model.description
     };
-  },
-  computed: {
-    dictionary () {
-      return this.$store.getters['story/dictionary'];
-    }
-  },
-  mounted () {
-    this.stories.list[0].parent = this.stories;
-    this.stories.list[0].text = this.$refs.wysiwyg.createSpan('beginning', 'As a', true);
-    this.stories.list[0].template = Object.values(this.dictionary.constructions)[0];
   },
   methods: {
     updateText (index, input) {

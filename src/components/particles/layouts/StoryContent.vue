@@ -52,7 +52,7 @@ export default {
     },
     activeProject () {
       return this.projects.find(item => item.id === this.projectId);
-    },
+    }
   },
   methods: {
     createSection () {

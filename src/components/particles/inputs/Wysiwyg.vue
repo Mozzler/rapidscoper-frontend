@@ -39,7 +39,7 @@
                    :id="storyId"
                    :ref="`editor-${ index }-${ level }`"
                    tabindex="2"
-                   @blur="saveStory"
+                   @blur="() => saveStory(item.id)"
                    @click="($event) => checkHint($event, index)"
                    @focus="($event) => focus($event, index)"
                    @keydown.down.exact="focusHint"
@@ -123,7 +123,7 @@ export default {
     },
     collection () {
       return this.$store.state.story[this.tab];
-    }
+    },
   },
   methods: {
     updateText () {
@@ -132,7 +132,8 @@ export default {
     updateChildText (index, obj, parentIndex) {
       this.list[parentIndex].list[index] = obj;
     },
-    saveStory () {
+    saveStory (id) {
+      let action = 'entity/create';
       const story = {
         entity: 'story',
         data: {
@@ -145,7 +146,11 @@ export default {
         }
       };
 
-      this.$store.dispatch('entity/create', story);
+      if (id) {
+        action = 'entity/update';
+        story.params = { 'id': id };
+      }
+      this.$store.dispatch(action, story);
     }
   },
   watch: {

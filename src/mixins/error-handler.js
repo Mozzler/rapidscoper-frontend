@@ -2,7 +2,7 @@ export default {
   data () {
     return {
       translator: {
-        'uniqueNameTeamAndVersion': 'Team Title',
+        'uniqueNameTeamAndVersion': 'Team Title'
       }
     };
   },

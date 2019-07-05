@@ -1,3 +1,20 @@
+function getConstructions () {
+  return {
+    'As a ...': {
+      type: 'user',
+      structure: '[beginning][actor][static-text="I can"][custom-1][static-text="so that"][custom-2]'
+    },
+    'Requires a ...': {
+      type: 'requirement',
+      structure: '[beginning][requirement][static-text="called"][field]'
+    },
+    'When I ...': {
+      type: 'acceptance',
+      structure: '[beginning][custom-1][static-text="then I"][custom-2]'
+    }
+  };
+}
+
 export default {
   dictionary (state, getters, rootState) {
     const types = [
@@ -9,22 +26,12 @@ export default {
       'model'
     ];
     const dictionary = {
-      constructions: {
-        'As a ...': '[beginning][actor][static-text="I can"][custom-1][static-text="so that"][custom-2]',
-        'Requires a ...': '[beginning][requirement][static-text="called"][field]',
-        'When I ...': '[beginning][custom-1][static-text="then I"][custom-2]'
-      },
+      constructions: getConstructions(),
       placeholders: {
         'actor': 'User Type',
         'requirement': 'Requirement Type',
         'field': 'Field'
-      },
-      types: [
-        'user',
-        'requirement',
-        'acceptance',
-        'other'
-      ]
+      }
     };
 
     types.forEach(key => {
@@ -37,5 +44,33 @@ export default {
     });
 
     return dictionary;
+  },
+  content (state, getters, rootState) {
+    const constructions = getConstructions();
+
+    return id => {
+      const entities = rootState.entity.story.items.filter(item => item.sectionId === id);
+
+      return entities.map(entity => {
+        const key = Object.keys(constructions).filter(k => {
+          return constructions[k].type === entity.type;
+        });
+
+        return {
+          id: entity.id,
+          parent: null,
+          estimation: entity.estimate,
+          priority: entity.priority,
+          label: 1,
+
+          text: entity.markup,
+          template: constructions[key].structure,
+          tail: '',
+          placeholder: entity.markup,
+
+          list: []
+        };
+      });
+    };
   }
 };
