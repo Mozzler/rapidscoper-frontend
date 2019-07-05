@@ -21,7 +21,7 @@ export default {
     Sidebar
   },
   beforeMount () {
-    this.$store.dispatch('entity/getList', { entity: 'team' });
+    this.$store.dispatch('entity/read', { entity: 'team' });
   },
   computed: {
     route () {

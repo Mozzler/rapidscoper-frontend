@@ -115,6 +115,12 @@ export default {
 
       let chain = this.getElementToFocus(this.list[this.focused - 1], 1, this.focused - 1);
       eval(chain).focus();
+
+      const data = {
+        entity: 'story',
+        id: this.list[this.focused].id
+      };
+      this.$store.dispatch('entity/delete', data);
     },
     increaseSublistLevel () {
       if (this.level === 3 || (this.level === 1 && this.focused === 0)) {

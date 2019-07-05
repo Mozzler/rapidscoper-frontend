@@ -86,7 +86,7 @@ export default {
   },
   beforeMount () {
     this.loading = true;
-    this.$store.dispatch('entity/getList', { entity: 'projects' })
+    this.$store.dispatch('entity/read', { entity: 'projects' })
       .then(() => {
         this.loading = false;
       }).catch(errors => {

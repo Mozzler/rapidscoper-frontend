@@ -95,7 +95,7 @@ export default {
         teamId: this.activeTeamId,
         sort: '-createdAt'
       };
-      this.$store.dispatch('entity/getList', {
+      this.$store.dispatch('entity/read', {
         entity: 'projects',
         params: filters
       }).then(() => {

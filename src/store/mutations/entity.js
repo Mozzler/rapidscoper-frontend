@@ -23,8 +23,9 @@ export default {
       }
     });
   },
-  setActiveId (state, payload) {
-    let [type, value] = payload;
-    state[`active${type}Id`] = value;
-  },
+  delete (state, payload) {
+    state[payload.entity].items = state[payload.entity].items.filter((item) => {
+      return item.id !== payload.id;
+    });
+  }
 };

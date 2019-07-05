@@ -36,7 +36,7 @@ export default {
     getQuerySet () {
       const entities = ['section', 'dictionary', 'story'];
       const queries = entities.map(entity => {
-        return this.$store.dispatch('entity/getList', {
+        return this.$store.dispatch('entity/read', {
           entity: entity,
           params: {
             projectId: this.$route.params.projectId

@@ -67,7 +67,7 @@ export default {
     },
     showModal () {
       this.$root.$emit(this.modals[this.activeTab]);
-    },
+    }
   },
   beforeMount () {
     this.$store.commit('entity/setActiveId', ['Team', this.activeTeamId]);

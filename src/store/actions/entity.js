@@ -8,7 +8,7 @@ function filter (entity, data) {
 }
 
 export default {
-  async getList (store, payload) {
+  async read (store, payload) {
     const response = await this._vm.$axios.get(
       payload.entity, {
         params: { 'per-page': 500, ...payload.params }
@@ -31,6 +31,11 @@ export default {
     const data = filter(payload.entity, response.data.item);
 
     store.commit('update', data);
+    return response.data;
+  },
+  async delete (store, payload) {
+    const response = await this._vm.$axios.delete(`${payload.entity}/delete`, null, { params: payload });
+    store.commit('delete', payload);
     return response.data;
   }
 };
