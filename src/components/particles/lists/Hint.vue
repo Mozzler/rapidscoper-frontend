@@ -57,7 +57,10 @@ export default {
     },
     items () {
       const keyword = this.filter ? this.filter.toLowerCase() : '';
-      return this.list.filter(item => this.getStrFromObj(item).toLowerCase().includes(keyword, 0));
+      return this.list.filter(item => {
+        const data = this.getStrFromObj(item);
+        return data.toLowerCase().includes(keyword, 0);
+      });
     },
     inList () {
       const filter = this.list.filter(item => {

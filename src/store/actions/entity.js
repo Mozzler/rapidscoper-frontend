@@ -1,5 +1,7 @@
 function filter (entity, data) {
-  if (entity !== 'projects' && entity !== 'dictionary') {
+  const exceptions = ['story', 'projects', 'dictionary'];
+
+  if (!exceptions.includes(entity)) {
     entity += 's';
   }
   return { entity, data };

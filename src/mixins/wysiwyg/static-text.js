@@ -1,7 +1,8 @@
 export default {
   filters: {
     withoutDots (str) {
-      return str ? str.replace(/\.../g, '') : str;
+      const s = str ? (typeof str === 'string' ? str : str.name) : str;
+      return s ? s.replace(/\.../g, '') : s;
     }
   },
   methods: {

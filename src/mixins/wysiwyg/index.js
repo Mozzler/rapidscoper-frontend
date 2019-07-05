@@ -40,6 +40,15 @@ export default {
     },
     ref () {
       return `editor-${this.focused}-${this.level}`;
+    },
+    projects () {
+      return this.$store.getters['entity/items']('projects')
+    },
+    activeProject () {
+      return this.projects.find(item => item.id === this.activeProjectId);
+    },
+    activeProjectId () {
+      return this.$route.params.projectId;
     }
   }
 };

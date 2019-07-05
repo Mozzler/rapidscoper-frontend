@@ -122,6 +122,21 @@ export default {
         this.editor.template = text.value;
         text = text.key;
         clickable = false;
+      } else {
+        if (typeof text === 'string') {
+          this.$store.dispatch('entity/create', {
+            entity: 'dictionary',
+            data: {
+              projectId: this.activeProject.id,
+              teamId: this.activeProject.teamId,
+              type: chapter,
+              name: text,
+              description: text
+            }
+          }).then(response => {
+            text = response.item.name;
+          });
+        }
       }
 
       const spans = this.getSpanList(false);

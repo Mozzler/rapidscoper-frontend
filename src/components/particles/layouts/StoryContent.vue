@@ -29,7 +29,6 @@ export default {
     };
   },
   beforeMount () {
-    console.log(this.vocabulary);
     this.$root.$on('create-new-section', this.createSection);
   },
   beforeDestroy () {
