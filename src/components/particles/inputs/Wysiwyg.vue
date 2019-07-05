@@ -123,7 +123,7 @@ export default {
     },
     collection () {
       return this.$store.state.story[this.tab];
-    },
+    }
   },
   methods: {
     updateText () {
@@ -150,7 +150,10 @@ export default {
         action = 'entity/update';
         story.params = { 'id': id };
       }
-      this.$store.dispatch(action, story);
+      this.$store.dispatch(action, story)
+        .then(response => {
+          this.list[this.focused] = response;
+        });
     }
   },
   watch: {

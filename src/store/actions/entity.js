@@ -34,8 +34,14 @@ export default {
     return response.data;
   },
   async delete (store, payload) {
-    const response = await this._vm.$axios.delete(`${payload.entity}/delete`, null, { params: payload });
-    store.commit('delete', payload);
+    const params = {
+      params: {
+        id: payload.id
+      }
+    };
+
+    const response = await this._vm.$axios.delete(`${payload.entity}/delete`, params);
+    store.commit('delete', payload.id);
     return response.data;
   }
 };

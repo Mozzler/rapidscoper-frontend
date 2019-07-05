@@ -25,7 +25,11 @@ export default {
   },
   delete (state, payload) {
     state[payload.entity].items = state[payload.entity].items.filter((item) => {
-      return item.id !== payload.id;
+      return item.id !== payload.zid;
     });
+  },
+  setActiveId (state, payload) {
+    let [type, value] = payload;
+    state[`active${type}Id`] = value;
   }
 };

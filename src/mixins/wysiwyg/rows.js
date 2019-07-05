@@ -120,6 +120,7 @@ export default {
         entity: 'story',
         id: this.list[this.focused].id
       };
+
       this.$store.dispatch('entity/delete', data);
     },
     increaseSublistLevel () {

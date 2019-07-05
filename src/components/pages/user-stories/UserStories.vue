@@ -39,7 +39,8 @@ export default {
         return this.$store.dispatch('entity/read', {
           entity: entity,
           params: {
-            projectId: this.$route.params.projectId
+            projectId: this.$route.params.projectId,
+            sort: '-createdAt'
           }
         });
       });

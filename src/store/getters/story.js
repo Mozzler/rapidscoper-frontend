@@ -15,6 +15,24 @@ function getConstructions () {
   };
 }
 
+function createEntity (entity, constructions, key) {
+  return {
+    id: entity.id,
+    parent: null,
+    estimation: entity.estimate,
+    priority: entity.priority,
+    label: 1,
+
+    text: entity.markup,
+    template: constructions[key].structure,
+    tail: '',
+    placeholder: entity.markup,
+    parentId: entity.parentId,
+
+    list: []
+  };
+}
+
 export default {
   dictionary (state, getters, rootState) {
     const types = [
@@ -50,27 +68,24 @@ export default {
 
     return id => {
       const entities = rootState.entity.story.items.filter(item => item.sectionId === id);
+      const data = [];
 
-      return entities.map(entity => {
+      entities.forEach(entity => {
         const key = Object.keys(constructions).filter(k => {
           return constructions[k].type === entity.type;
         });
 
-        return {
-          id: entity.id,
-          parent: null,
-          estimation: entity.estimate,
-          priority: entity.priority,
-          label: 1,
+        const e = createEntity(entity, constructions, key);
 
-          text: entity.markup,
-          template: constructions[key].structure,
-          tail: '',
-          placeholder: entity.markup,
-
-          list: []
-        };
+        if (e.parentId) {
+          let obj = data.find(i => i.id === entity.parentId);
+          obj.list.push(e);
+        } else {
+          data.push(e);
+        }
       });
+
+      return data;
     };
   }
 };
