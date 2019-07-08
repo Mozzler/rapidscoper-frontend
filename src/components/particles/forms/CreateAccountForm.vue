@@ -73,12 +73,16 @@
 
 <script>
 import PhotoCamera from '../../particles/icons/PhotoCamera';
+import UserSockets from '@/mixins/sockets/user';
 
 export default {
   name: 'CreateAccountForm',
   components: {
     PhotoCamera
   },
+  mixins: [
+    UserSockets
+  ],
   data: () => ({
     user: {
       firstName: null,

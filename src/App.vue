@@ -20,7 +20,6 @@
 
 <script>
 import ResizeMixin from '@/mixins/resize';
-import SocketMixin from '@/mixins/socket';
 
 import InviteUserModal from '@/components/particles/modals/InviteUser';
 import CreateProjectModal from '@/components/particles/modals/CreateProject';
@@ -46,9 +45,25 @@ export default {
     IncorrectDataModal
   },
   mixins: [
-    ResizeMixin,
-    SocketMixin
-  ]
+    ResizeMixin
+  ],
+  created () {
+    this.$socket.init();
+  },
+  computed: {
+    user () {
+      return this.$store.state.auth.user;
+    },
+    authenticated () {
+      return this.user !== null;
+    }
+  },
+  beforeMount () {
+    if (this.$socket.io) {
+      this.$socket.io.off('mongo_data');
+      this.$socket.disconnect();
+    }
+  }
 };
 </script>
 

@@ -39,7 +39,7 @@
                    :id="storyId"
                    :ref="`editor-${ index }-${ level }`"
                    tabindex="2"
-                   @blur="() => saveStory(item.id)"
+                   @blur="() => saveStory(item.id, storyId)"
                    @click="($event) => checkHint($event, index)"
                    @focus="($event) => focus($event, index)"
                    @keydown.down.exact="focusHint"
@@ -104,10 +104,7 @@ export default {
     return {
       list: this.model,
       focused: null,
-      hint: {
-        filter: null,
-        chapter: null
-      }
+      hintEditor: null
     };
   },
   computed: {
@@ -132,7 +129,11 @@ export default {
     updateChildText (index, obj, parentIndex) {
       this.list[parentIndex].list[index] = obj;
     },
-    saveStory (id) {
+    saveStory (id, editorUUID) {
+      if (editorUUID === this.hintEditor) {
+        return;
+      }
+
       let action = 'entity/create';
       const story = {
         entity: 'story',

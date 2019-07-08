@@ -123,14 +123,15 @@ export default {
       });
     },
     hintComplete (chapter, text, addresserId) {
-      let clickable = false;
-
-      const refs = this.$refs[`editor-${this.focused}-${this.level}`];
-      if (!refs || !refs.length || addresserId !== refs[0].id) {
+      if (addresserId !== this.hintEditor) {
         return;
       }
 
+      let clickable = false;
+
       this.$nextTick(() => {
+        this.hintEditor = null;
+        const refs = this.$refs[`editor-${this.focused}-${this.level}`];
         refs[0].focus();
       });
 
