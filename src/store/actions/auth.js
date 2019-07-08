@@ -47,15 +47,6 @@ export default {
   logout (store) {
     store.commit('logout', null);
   },
-  async getInfo (store, payload) {
-    const id = store.state.user.user_id;
-    const url = `user?id=${id}`;
-    const response = await this._vm.$axios.get(url, payload);
-
-    store.commit('update', response.data.items[0]);
-
-    return response.data;
-  },
   async refreshToken (store, payload) {
     const user = store.state.user;
     const data = {

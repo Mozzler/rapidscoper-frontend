@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import UserSockets from '@/mixins/sockets/user';
+import UserSocketMixin from '@/mixins/sockets/user';
 
 export default {
   name: 'SignupForm',
@@ -57,7 +57,7 @@ export default {
     }
   },
   mixins: [
-    UserSockets
+    UserSocketMixin
   ],
   data: () => ({
     user: {
@@ -72,6 +72,9 @@ export default {
     },
     route () {
       return this.type === 'Sign Up' ? '/create-account' : '/';
+    },
+    authorized () {
+      return this.$store.state.auth.user;
     }
   },
   methods: {
@@ -95,7 +98,11 @@ export default {
     },
     login () {
       new Promise(resolve => {
-        this.connect();
+        const filter = {
+          '_id': this.authorized.user_id || this.authorized.id
+        };
+
+        this.connect('user', filter, 'auth/update');
         resolve();
       }).then(() => {
         const props = this.authorized.firstName && this.authorized.lastName;
