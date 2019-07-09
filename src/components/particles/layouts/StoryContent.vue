@@ -84,7 +84,7 @@ export default {
     scrollToActiveSection () {
       const el = document.getElementById(this.activeSectionId);
       if (el) {
-        el.scrollIntoView();
+        el.scrollIntoView({ behavior: "smooth" });
       }
     }
   },

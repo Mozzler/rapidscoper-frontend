@@ -29,5 +29,18 @@
   grid-row: 1;
 }
 
+.loader-shadow {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $light-grey-rgb;
+  width: calc(100% - 56px);
+  height: calc(100% - 64px);
+  left: 56px;
+  top: 64px;
+  z-index: 999;
+  color: $light-primary;
+}
 
 

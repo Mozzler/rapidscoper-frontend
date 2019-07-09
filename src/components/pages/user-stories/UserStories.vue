@@ -2,6 +2,13 @@
   <div class="stories-container">
     <story-header />
     <story-sidebar />
+    <div class="loader-shadow" v-if="processing">
+      <v-progress-circular
+        :size="70"
+        :width="7"
+        indeterminate
+      ></v-progress-circular>
+    </div>
     <story-section />
     <tool-section />
     <story-content />
@@ -24,6 +31,11 @@ export default {
     ToolSection,
     StoryContent
   },
+  data () {
+    return {
+      processing: false
+    };
+  },
   computed: {
     sections () {
       return this.$store.getters['entity/items']('sections');
@@ -34,6 +46,7 @@ export default {
   },
   methods: {
     getQuerySet () {
+      this.processing = true;
       const entities = ['section', 'dictionary', 'story'];
       const queries = entities.map(entity => {
         return this.$store.dispatch('entity/read', {
@@ -49,6 +62,7 @@ export default {
     },
     fetchData () {
       this.getQuerySet().then(() => {
+        this.processing = false;
         const stub = this.$route.params === 'section';
 
         if (this.sections.length && stub) {
@@ -56,10 +70,23 @@ export default {
           this.$router.push(url);
         }
       });
+    },
+    resetData () {
+      this.processing = true;
+      const entities = ['sections', 'story', 'dictionary'];
+      entities.forEach(item => {
+        this.$store.commit('entity/resetList', {
+          entity: item
+        });
+        this.processing = false;
+      });
     }
   },
+  beforeDestroy () {
+    this.resetData();
+  },
   watch: {
-    '$route.params' () {
+    '$route.params.projectId' () {
       this.fetchData();
     }
   }

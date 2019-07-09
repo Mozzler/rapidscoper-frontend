@@ -31,5 +31,12 @@ export default {
   setActiveId (state, payload) {
     let [type, value] = payload;
     state[`active${type}Id`] = value;
+  },
+  resetList (state, payload) {
+    state[payload.entity] = {
+      items: [],
+      _links: null,
+      _meta: null
+    };
   }
 };
