@@ -172,15 +172,25 @@ export default {
         return;
       }
 
+      this.editor.id = response.id;
+
       const entity = this.level === 1 ? 'section' : 'story';
       const id = this.level === 1 ? this.sectionId : response.parentStoryId;
 
       let storyOrder = this.section.storyOrder;
+      let order = [ response.id ];
 
       if (entity === 'story') {
         storyOrder = this.$store.getters['entity/items']('story')
           .find(item => item.id === response.parentStoryId)
           .storyOrder;
+      }
+
+      if (storyOrder) {
+        const ids = [...storyOrder];
+        const index = ids.indexOf(response.id);
+        ids.splice(index, 0, response.id);
+        order = ids;
       }
 
       const data = {
@@ -189,14 +199,11 @@ export default {
           id: id
         },
         data: {
-          storyOrder: storyOrder ? [...storyOrder, ...[response.id]] : [ response.id ]
+          storyOrder: order
         }
       };
 
       this.$store.dispatch('entity/update', data);
-
-
-      //this.list[this.focused] = response;
     }
   },
   watch: {
