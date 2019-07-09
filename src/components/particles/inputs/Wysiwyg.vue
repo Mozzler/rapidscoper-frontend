@@ -125,7 +125,10 @@ export default {
     },
     collection () {
       return this.$store.state.story[this.tab];
-    }
+    },
+    section () {
+      return this.$store.getters['entity/items']('sections').find(item => item.id === this.sectionId);
+    },
   },
   methods: {
     updateText () {
@@ -143,7 +146,7 @@ export default {
       const story = {
         entity: 'story',
         data: {
-          type: 'user',
+          type: this.editor.type,
           sectionId: this.sectionId,
           teamId: this.activeProject.teamId,
           projectId: this.activeProject.id,
@@ -152,7 +155,7 @@ export default {
         }
       };
 
-      if (this.level > 1) {
+      if (this.level > 1 && action === 'entity/create') {
         story.data.parentStoryId = this.parentStoryId;
       }
 
@@ -160,10 +163,40 @@ export default {
         action = 'entity/update';
         story.params = { 'id': id };
       }
+
       this.$store.dispatch(action, story)
-        .then(response => {
-          this.list[this.focused] = response;
-        });
+        .then(response => this.updateOrder(response.item, action));
+    },
+    updateOrder (response, action) {
+      if (action === 'entity/update') {
+        return;
+      }
+
+      const entity = this.level === 1 ? 'section' : 'story';
+      const id = this.level === 1 ? this.sectionId : response.parentStoryId;
+
+      let storyOrder = this.section.storyOrder;
+
+      if (entity === 'story') {
+        storyOrder = this.$store.getters['entity/items']('story')
+          .find(item => item.id === response.parentStoryId)
+          .storyOrder;
+      }
+
+      const data = {
+        entity: entity,
+        params: {
+          id: id
+        },
+        data: {
+          storyOrder: storyOrder ? [...storyOrder, ...[response.id]] : [ response.id ]
+        }
+      };
+
+      this.$store.dispatch('entity/update', data);
+
+
+      //this.list[this.focused] = response;
     }
   },
   watch: {

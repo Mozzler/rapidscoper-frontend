@@ -27,19 +27,26 @@ function findParent (data, parentStoryId) {
   });
 }
 
-function createEntity (entity, constructions, key) {
+function createNode (entity, parent = null) {
+  const constructions = getConstructions();
+  const key = Object.keys(constructions).filter(k => {
+    return constructions[k].type === entity.type;
+  });
+
   return {
     id: entity.id,
-    parent: null,
+    parent: parent,
     estimation: entity.estimate,
     priority: entity.priority,
     label: 1,
+    parentStoryId: entity.parentStoryId,
 
     text: entity.markup,
     template: constructions[key].structure,
     tail: '',
     placeholder: entity.markup,
-    parentId: entity.parentId,
+    parentId: entity.parentStoryId,
+    storyOrder: entity.storyOrder,
 
     list: []
   };
@@ -76,28 +83,37 @@ export default {
     return dictionary;
   },
   content (state, getters, rootState) {
-    const constructions = getConstructions();
-
     return id => {
-      const entities = rootState.entity.story.items.filter(item => item.sectionId === id);
-      const data = [];
+      const stories = rootState.entity.story.items;
+      const primaryOrder = rootState.entity.sections.items
+        .find(item => item.id === id)
+        .storyOrder;
 
-      entities.forEach(entity => {
-        const key = Object.keys(constructions).filter(k => {
-          return constructions[k].type === entity.type;
-        });
-
-        const e = createEntity(entity, constructions, key);
-
-        if (entity.parentStoryId) {
-          let obj = findParent(data, entity.parentStoryId);
-          obj.list.push(e);
-        } else {
-          data.push(e);
-        }
+      const firstLevel = stories.filter(item => primaryOrder.includes(item.id));
+      const items = firstLevel.map(node => {
+        return createNode(node);
       });
 
-      return data;
+      items.forEach(item => {
+        item.storyOrder.forEach(id => {
+          const story = stories.find(s => s.id === id);
+          const storyNode = createNode(story, item);
+          item.list.push(storyNode);
+        });
+      });
+
+
+
+      /*
+      const thirdLevel = secondLevel.map(item => {
+        item.storyOrder.forEach(id => {
+          const story = stories.find(item => item.parentStoryId === id);
+          const storyNode = createNode(story);
+          item.list.push(storyNode);
+        });
+      });*/
+
+      return items;
     };
   }
 };

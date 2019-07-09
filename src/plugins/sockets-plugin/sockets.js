@@ -71,14 +71,12 @@ class MongoSockets {
 
   setListeners () {
     this.io.on('mongo_data', (response) => {
-      console.log('responsed', response);
       switch (response.operationType) {
         /*case 'delete':
           this.getPageData(this.page);
           break;*/
         case 'update':
         case 'insert':
-          console.log(response);
           const [action, payload] = this.formatResponse(response.model, response.fullDocument);
           store.commit(action, payload);
           break;
