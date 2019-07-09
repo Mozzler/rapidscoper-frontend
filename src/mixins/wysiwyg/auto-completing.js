@@ -137,6 +137,7 @@ export default {
 
       if (chapter === 'beginning') {
         this.editor.template = text.value;
+        this.editor.type = text.type;
         text = text.key;
         clickable = false;
       } else {

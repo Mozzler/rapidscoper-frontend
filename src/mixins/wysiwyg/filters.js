@@ -4,11 +4,11 @@ export default {
   },
   computed: {
     dictionary () {
-      return this.$store.state.story.dictionary;
+      return this.$store.getters['story/dictionary'];
     },
     threshold () {
       return this.getEquation();
-    },
+    }
   },
   methods: {
     getEquation (level = this.level) {
@@ -28,7 +28,8 @@ export default {
       return keys.map((item, index) => {
         return {
           key: item,
-          value: list[item].structure
+          value: list[item].structure,
+          type: list[item].type
         };
       });
     },
