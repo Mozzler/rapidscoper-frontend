@@ -1,5 +1,5 @@
 <template>
-  <div :id="model.id">
+  <div :id="model.id" class="user-story__block">
     <h1>
       <input v-model="name"
              @input="updateSectionName"
