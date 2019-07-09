@@ -73,16 +73,12 @@
 
 <script>
 import PhotoCamera from '../../particles/icons/PhotoCamera';
-import UserSocketMixin from '@/mixins/sockets/user';
 
 export default {
   name: 'CreateAccountForm',
   components: {
     PhotoCamera
   },
-  mixins: [
-    UserSocketMixin
-  ],
   data: () => ({
     user: {
       firstName: null,
@@ -100,11 +96,7 @@ export default {
     }
   },
   beforeMount () {
-    const filter = {
-      '_id': this.authorized.user_id || this.authorized.id
-    };
-
-    this.connect('user', filter, 'auth/update');
+    this.connect('user', [], 'auth/update');
   },
   methods: {
     send () {

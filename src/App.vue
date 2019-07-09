@@ -58,9 +58,8 @@ export default {
       return this.user !== null;
     }
   },
-  beforeMount () {
+  beforeDestroy () {
     if (this.$socket.io) {
-      this.$socket.io.off('mongo_data');
       this.$socket.disconnect();
     }
   }

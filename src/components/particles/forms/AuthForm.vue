@@ -45,8 +45,6 @@
 </template>
 
 <script>
-import UserSocketMixin from '@/mixins/sockets/user';
-
 export default {
   name: 'SignupForm',
   props: {
@@ -56,9 +54,6 @@ export default {
       required: true
     }
   },
-  mixins: [
-    UserSocketMixin
-  ],
   data: () => ({
     user: {
       email: null,
@@ -98,11 +93,7 @@ export default {
     },
     login () {
       new Promise(resolve => {
-        const filter = {
-          '_id': this.authorized.user_id || this.authorized.id
-        };
-
-        this.connect('user', filter, 'auth/update');
+        this.connect('user', [], 'auth/update');
         resolve();
       }).then(() => {
         const props = this.authorized.firstName && this.authorized.lastName;

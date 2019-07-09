@@ -21,7 +21,7 @@ export default {
     Sidebar
   },
   beforeMount () {
-    this.$store.dispatch('entity/read', { entity: 'team' });
+    this.connect('user', [], 'auth/update');
   },
   computed: {
     route () {

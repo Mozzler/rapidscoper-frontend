@@ -57,6 +57,7 @@
       </div>
 
       <wysiwyg
+        :parentStoryId="item.id"
         :sectionId="sectionId"
         :ref="`wysiwyg-child-${ index }-${ level }`"
         :model="item.list"
@@ -98,6 +99,10 @@ export default {
     sectionId: {
       type: String,
       default: null
+    },
+    parentStoryId: {
+      type: String,
+      default: null
     }
   },
   data () {
@@ -116,7 +121,7 @@ export default {
       return key;
     },
     storyId () {
-      return this.model.storyId ? this.model.storyId : this.uuid();
+      return (this.model.storyId || this.model.id) ? (this.model.id || this.model.storyId) : this.uuid();
     },
     collection () {
       return this.$store.state.story[this.tab];
@@ -146,6 +151,10 @@ export default {
           markup: this.editor.text
         }
       };
+
+      if (this.level > 1) {
+        story.data.parentStoryId = this.parentStoryId;
+      }
 
       if (id) {
         action = 'entity/update';

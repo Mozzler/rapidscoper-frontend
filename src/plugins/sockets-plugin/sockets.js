@@ -5,7 +5,7 @@ import store from '../../store';
 class MongoSockets {
   constructor () {
     this.io = null;
-    this.streams = [];
+    this.streams = {};
   }
 
   init () {
@@ -23,9 +23,9 @@ class MongoSockets {
     const user = store.state.auth.user;
     let token = user.access_token;
 
-    this.io.emit('join_collection', {model, filter, token}, async ({streamId, snapshot, error}) => {
+    this.io.emit('join_collection', { model, filter, token }, async ({ streamId, snapshot, error }) => {
       if (streamId) {
-        this.streams.push(streamId);
+        this.streams[model] = streamId;
         cb(streamId, snapshot);
       } else if (error) {
         const isSuccessfull = await store.dispatch('auth/refreshToken');
@@ -39,28 +39,46 @@ class MongoSockets {
     this.setListeners();
   }
 
-  disconnect (streamId = null) {
-    if (streamId === null) {
-      this.streams.forEach(item => {
-        this.io.emit('left_collection', item);
-      });
+  disconnect (streamId = null, model = null) {
+    const userId = store.state.auth.user.id;
 
-      return;
-    }
+    switch (true) {
+      case !!model:
+        this.io.emit('left_collection', {
+          user_id: userId,
+          stream_id: this.streams[model]
+        });
+        return;
+      case !!streamId:
+        const property = Object.keys(this.streams).filter(key => this.streams[key] === streamId);
+        this.io.emit('left_collection', {
+          user_id: userId,
+          stream_id: this.streams[property]
+        });
+        return;
+      case !model && !streamId:
+        Object.keys(this.streams).forEach(key => {
+          this.io.emit('left_collection', {
+            user_id: userId,
+            stream_id: this.streams[key]
+          });
+        });
+        this.streams = {};
 
-    if (this.streams.includes(streamId)) {
-      this.io.emit('left_collection', streamId);
+        this.io.off('mongo_data');
     }
   }
 
   setListeners () {
     this.io.on('mongo_data', (response) => {
-      switch(response.operationType) {
+      console.log('responsed', response);
+      switch (response.operationType) {
         /*case 'delete':
           this.getPageData(this.page);
           break;*/
         case 'update':
         case 'insert':
+          console.log(response);
           const [action, payload] = this.formatResponse(response.model, response.fullDocument);
           store.commit(action, payload);
           break;

@@ -89,6 +89,9 @@ export default {
       ]
     };
   },
+  created () {
+    this.connect('team', [], 'entity/setList');
+  },
   computed: {
     teams () {
       return this.$store.getters['entity/items']('teams');

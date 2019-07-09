@@ -37,7 +37,7 @@
             </v-btn>
             <v-btn class="btn-rapid primary" large
                    :disabled="processing"
-                   @click="() => submit('entity/create', { entity: 'team', data: data })">
+                   @click="handleClick">
               {{ isMobileDevice ? 'Create' : 'Create team' }}
             </v-btn>
           </v-flex>
@@ -68,6 +68,18 @@ export default {
   methods: {
     initData () {
       this.data.name = null;
+    },
+    handleClick () {
+      new Promise((resolve) => {
+        this.$socket.disconnect(null, 'team');
+        this.submit('entity/create', {
+          entity: 'team',
+          data: this.data
+        });
+        resolve();
+      }).then(() => {
+        this.connect('team', [], 'entity/setList');
+      });
     }
   }
 };

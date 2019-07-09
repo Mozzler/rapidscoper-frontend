@@ -15,6 +15,18 @@ function getConstructions () {
   };
 }
 
+function findParent (data, parentStoryId) {
+  return data.find(i => {
+    if (i.id === parentStoryId) {
+      return i;
+    } else {
+      if (i.list.length) {
+        return findParent(i, parentStoryId);
+      }
+    }
+  });
+}
+
 function createEntity (entity, constructions, key) {
   return {
     id: entity.id,
@@ -77,8 +89,8 @@ export default {
 
         const e = createEntity(entity, constructions, key);
 
-        if (e.parentId) {
-          let obj = data.find(i => i.id === entity.parentId);
+        if (entity.parentStoryId) {
+          let obj = findParent(data, entity.parentStoryId);
           obj.list.push(e);
         } else {
           data.push(e);

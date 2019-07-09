@@ -50,16 +50,12 @@
 
 <script>
 import DashboardActionBtn from '@/components/particles/buttons/DashboardActionButton';
-import UserSocketMixin from '@/mixins/sockets/user';
 
 export default {
   name: 'DashboardContent',
   components: {
     DashboardActionBtn
   },
-  mixins: [
-    UserSocketMixin
-  ],
   data () {
     return {
       showCreateProjectModal: false,
@@ -90,6 +86,7 @@ export default {
   },
   beforeMount () {
     this.loading = true;
+
 
 
     /*this.$store.dispatch('entity/read', { entity: 'projects' })
