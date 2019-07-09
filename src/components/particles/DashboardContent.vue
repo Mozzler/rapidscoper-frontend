@@ -85,22 +85,25 @@ export default {
     };
   },
   beforeMount () {
-    this.loading = true;
-
-
-
-    /*this.$store.dispatch('entity/read', { entity: 'projects' })
-      .then(() => {
-        this.loading = false;
-      }).catch(errors => {
-        this.loading = false;
-        console.log(errors);
-      });*/
+    this.fetchData();
   },
   methods: {
-    showModal() {
+    showModal () {
       this.$root.$emit('create-project');
     },
+    fetchData () {
+      this.$store.commit('entity/resetList', {
+        entity: 'projects'
+      });
+      this.loading = true;
+      this.$store.dispatch('entity/read', { entity: 'projects' })
+        .then(() => {
+          this.loading = false;
+        }).catch(errors => {
+        this.loading = false;
+        console.log(errors);
+      });
+    }
   },
   computed: {
     projects () {

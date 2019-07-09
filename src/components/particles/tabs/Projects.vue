@@ -90,6 +90,9 @@ export default {
       this.$router.push(url);
     },
     fetchProjects () {
+      this.$store.commit('entity/resetList', {
+        entity: 'projects'
+      });
       this.loading = true;
       let filters = {
         teamId: this.activeTeamId,
