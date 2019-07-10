@@ -102,16 +102,15 @@ export default {
         });
       });
 
-
-
-      /*
-      const thirdLevel = secondLevel.map(item => {
-        item.storyOrder.forEach(id => {
-          const story = stories.find(item => item.parentStoryId === id);
-          const storyNode = createNode(story);
-          item.list.push(storyNode);
+      items.forEach(item => {
+        item.list.forEach(i => {
+          i.storyOrder.forEach(id => {
+            const story = stories.find(s => s.id === id);
+            const storyNode = createNode(story, i);
+            i.list.push(storyNode);
+          });
         });
-      });*/
+      });
 
       return items;
     };
