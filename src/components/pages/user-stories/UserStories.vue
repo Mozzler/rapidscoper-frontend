@@ -2,13 +2,10 @@
   <div class="stories-container">
     <story-header />
     <story-sidebar />
-    <div class="loader-shadow" v-if="processing">
-      <v-progress-circular
-        :size="70"
-        :width="7"
-        indeterminate
-      ></v-progress-circular>
-    </div>
+    <circular-loader
+      cls="loader-shadow"
+      :visible="processing"
+    />
     <story-section />
     <tool-section />
     <story-content />
@@ -21,6 +18,7 @@ import StorySidebar from "../../particles/navigation/USidebar";
 import StorySection from "../../particles/navigation/StorySection";
 import ToolSection from "../../particles/navigation/ToolSection";
 import StoryContent from "../../particles/layouts/StoryContent";
+import CircularLoader from "../../particles/loaders/Circular";
 
 export default {
   name: "UserStories",
@@ -29,7 +27,8 @@ export default {
     StorySidebar,
     StorySection,
     ToolSection,
-    StoryContent
+    StoryContent,
+    CircularLoader
   },
   data () {
     return {

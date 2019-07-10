@@ -37,7 +37,6 @@
   background-color: $light-grey-1;
 }
 
-
 .user-story__tools {
   padding: 0 24px;
 }
@@ -82,6 +81,13 @@
   &::selection {
     background-color: $light-primary;
   }
+}
+
+.user-story__loader {
+  color: $light-primary;
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 
 .user-story__editable--actor {

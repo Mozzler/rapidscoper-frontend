@@ -34,12 +34,16 @@
           </v-flex>
           <v-flex grow text-xs-left>
             <div class="user-story__wysiwyg">
-              <div class="user-story__placeholder" v-html="item.placeholder" readonly></div>
-              <div contenteditable class="user-story__editable"
+              <div class="user-story__placeholder"
+                   v-html="item.placeholder"
+                   readonly></div>
+              <div :contenteditable="(processing !== `${storyId}-${index}`)"
+                   class="user-story__editable"
                    :id="storyId"
                    :ref="`editor-${ index }-${ level }`"
+                   :disabled="processing"
                    tabindex="2"
-                   @blur="() => saveStory(item.id, storyId)"
+                   @blur="() => saveStory(item.id, storyId, index)"
                    @click="($event) => checkHint($event, index)"
                    @focus="($event) => focus($event, index)"
                    @keydown.down.exact="focusHint"
@@ -51,6 +55,12 @@
                    @keydown.186.shift.exact="createSublist"
                    @keydown.tab.shift.exact="decreaseSublistLevel"
                    v-html="item.text"></div>
+              <circular-loader
+                cls="user-story__loader"
+                :size="10"
+                :width="7"
+                :visible="processing === `${storyId}-${index}`"
+              />
             </div>
           </v-flex>
         </v-layout>
@@ -71,6 +81,7 @@
 <script>
 import ToolList from "../lists/ToolList";
 import Wysiwyg from "./Wysiwyg";
+import CircularLoader from "../../particles/loaders/Circular";
 
 import WysiwygMixin from "@/mixins/wysiwyg";
 
@@ -78,7 +89,8 @@ export default {
   name: "Wysiwyg",
   components: {
     ToolList,
-    Wysiwyg
+    Wysiwyg,
+    CircularLoader
   },
   mixins: [
     WysiwygMixin
@@ -109,7 +121,8 @@ export default {
     return {
       list: this.model,
       focused: null,
-      hintEditor: null
+      hintEditor: null,
+      processing: false
     };
   },
   computed: {
@@ -137,10 +150,12 @@ export default {
     updateChildText (index, obj, parentIndex) {
       this.list[parentIndex].list[index] = obj;
     },
-    saveStory (id, editorUUID) {
+    saveStory (id, editorUUID, index) {
       if (editorUUID === this.hintEditor) {
         return;
       }
+
+      this.processing = `${editorUUID}-${index}`;
 
       let action = 'entity/create';
       const story = {
@@ -169,6 +184,7 @@ export default {
     },
     updateOrder (response, action) {
       if (action === 'entity/update') {
+        this.processing = false;
         return;
       }
 
@@ -203,7 +219,10 @@ export default {
         }
       };
 
-      this.$store.dispatch('entity/update', data);
+      this.$store.dispatch('entity/update', data)
+        .then(() => {
+          this.processing = false;
+        });
     }
   },
   watch: {
