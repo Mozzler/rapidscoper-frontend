@@ -36,7 +36,7 @@
             <div class="user-story__wysiwyg">
               <div class="user-story__placeholder"
                    v-html="item.placeholder"
-                   readonly></div>
+                   readonly />
               <div :contenteditable="(processing !== `${storyId}-${index}`)"
                    class="user-story__editable"
                    :id="storyId"
@@ -54,13 +54,12 @@
                    @keydown.delete.exact="($event) => remove($event, index)"
                    @keydown.186.shift.exact="createSublist"
                    @keydown.tab.shift.exact="decreaseSublistLevel"
-                   v-html="item.text"></div>
+                   v-html="item.text" />
               <circular-loader
                 cls="user-story__loader"
                 :size="10"
                 :width="7"
-                :visible="processing === `${storyId}-${index}`"
-              />
+                :visible="processing === `${storyId}-${index}`" />
             </div>
           </v-flex>
         </v-layout>
