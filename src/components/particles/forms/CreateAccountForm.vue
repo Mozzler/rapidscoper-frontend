@@ -116,8 +116,14 @@ export default {
       ]);
     },
     formatPhone (data) {
-      let formatted = data.replace(/ /g, '');
-      this.user.phone = formatted.replace(/(.{4})/g,'$1 ');
+      let formatted = data.replace(/ |[^0-9]/g, '');
+      this.$nextTick(() => {
+        this.user.phone = formatted.replace(/(.{4})/g, '$1 ');
+
+        if (data.length < this.user.phone.length) {
+          this.user.phone =  this.user.phone.slice(0, -1);
+        }
+      });
     },
     async create () {
       this.processing = true;
