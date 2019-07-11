@@ -38,28 +38,30 @@ class MongoSockets {
     });
   }
 
-  disconnect (streamId = null) {
+  disconnect (streamId = []) {
     if (!store.state.auth.user) {
       return;
     }
     const userId = store.state.auth.user.id;
 
-    if (streamId) {
-      this.io.emit('left_collection', {
-        user_id: userId,
-        stream_id: streamId
+    if (!streamId.length) {
+      this.streams.forEach(item => {
+        this.io.emit('left_collection', {
+          user_id: userId,
+          stream_id: item
+        });
       });
-      this.streams = this.streams.filter(item => item !== streamId);
+      this.streams = [];
       return;
     }
 
-    this.streams.forEach(item => {
+    streamId.forEach(item => {
       this.io.emit('left_collection', {
         user_id: userId,
         stream_id: item
       });
+      this.streams = this.streams.filter(item => item !== streamId);
     });
-    this.streams = [];
   }
 
   setListeners () {

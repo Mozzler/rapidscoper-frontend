@@ -20,9 +20,15 @@ export default {
     TeamContent,
     Sidebar
   },
-  beforeMount () {
-    //this.connect('user', [], 'auth/update');
-    //this.connect('team', [], 'entity/setList');
+  data () {
+    return {
+      streamIdUser: null,
+      streamIdTeam: null
+    };
+  },
+  created () {
+    this.connect('user', [], 'auth/update');
+    this.connect('team', [], 'entity/setList');
   },
   computed: {
     route () {
