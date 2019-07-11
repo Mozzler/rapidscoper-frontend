@@ -15,6 +15,7 @@ import App from './App.vue';
 
 import ConverterMixin from '@/mixins/converter';
 import SocketMixin from '@/mixins/socket';
+import ErrorHandler from '@/mixins/error-handler';
 
 Vue.component('vue-tel-input', VueTelInput);
 Vue.component('alert', Alert);
@@ -25,6 +26,7 @@ window.moment = moment;
 
 Vue.mixin(ConverterMixin);
 Vue.mixin(SocketMixin);
+Vue.mixin(ErrorHandler);
 
 Vue.prototype.uuid = v4;
 

@@ -11,6 +11,8 @@ export default {
     state.user = Object.assign(state.user, obj);
   },
   logout (state, data) {
-    state.user = data;
+    this._vm.$socket.disconnect();
+    state.user = null;
+    this.commit('entity/resetList');
   }
 };

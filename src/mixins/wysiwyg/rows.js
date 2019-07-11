@@ -118,10 +118,12 @@ export default {
 
       const data = {
         entity: 'story',
-        id: this.list[this.focused].id
+        id: this.list[this.focused].id,
+        parentStoryId: this.list[this.focused].parentStoryId
       };
 
-      this.$store.dispatch('entity/delete', data);
+      this.$store.dispatch('entity/delete', data)
+        .then(() => this.updateOrder(data, 'entity/delete'));
     },
     increaseSublistLevel () {
       if (this.level === 3 || (this.level === 1 && this.focused === 0)) {
@@ -150,6 +152,16 @@ export default {
         content.$refs[editor][0].focus();
       });
     },
+    changeOrderList (oldParent, newParent, id, newLevel) {
+      let index = oldParent.storyOrder.indexOf(id);
+      oldParent.storyOrder.splice(index, 1);
+
+      if (newLevel === 1) {
+        this.$store.dispatch('entity/create')
+      }
+      let parentIndex = newParent.storyOrder.indexOf(newParent.id);
+      newParent.storyOrder.splice(parentIndex, 1, id);
+    },
     decreaseSublistLevel ($event) {
       this.hideHint();
 
@@ -174,8 +186,9 @@ export default {
 
         list.splice(this.parentIndex + 1, 0, node);
         node.parent = node.parent.parent;
-        resolve();
-      }).then(() => {
+        resolve(node.parent);
+      }).then((parent) => {
+        this.changeOrderList(this.list[this.focused].parent, parent, this.list[this.focused].id);
         this.list.splice(this.focused, 1);
       }).then(() => {
         this.focused = null;

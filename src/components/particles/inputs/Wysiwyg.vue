@@ -195,7 +195,7 @@ export default {
       let storyOrder = this.section.storyOrder;
       let order = [ response.id ];
 
-      if (entity === 'story') {
+      if (entity === 'story' && action === 'entity/create') {
         storyOrder = this.$store.getters['entity/items']('story')
           .find(item => item.id === response.parentStoryId)
           .storyOrder;
@@ -204,7 +204,14 @@ export default {
       if (storyOrder) {
         const ids = [...storyOrder];
         const index = ids.indexOf(response.id);
-        ids.splice(index, 0, response.id);
+
+        if (action === 'entity/create') {
+          ids.splice(index, 0, response.id);
+        }
+        if (action === 'entity/delete') {
+          ids.splice(index, 1);
+        }
+
         order = ids;
       }
 

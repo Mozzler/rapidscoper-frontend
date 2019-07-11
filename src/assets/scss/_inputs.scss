@@ -125,3 +125,11 @@
     }
   }
 }
+
+.error-message {
+  color: $error;
+  font-size: 12px;
+  margin-top: 5px;
+  text-align: left !important;
+  font-weight: bold;
+}

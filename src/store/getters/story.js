@@ -62,6 +62,7 @@ export default {
       'label',
       'model'
     ];
+
     const dictionary = {
       constructions: getConstructions(),
       placeholders: {

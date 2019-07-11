@@ -5,11 +5,12 @@ import store from '../../store';
 class MongoSockets {
   constructor () {
     this.io = null;
-    this.streams = {};
+    this.streams = [];
   }
 
   init () {
     this.io = io.connect(config.SOCKETS_URL);
+    this.setListeners();
   }
 
   close () {
@@ -25,7 +26,7 @@ class MongoSockets {
 
     this.io.emit('join_collection', { model, filter, token }, async ({ streamId, snapshot, error }) => {
       if (streamId) {
-        this.streams[model] = streamId;
+        this.streams.push(streamId);
         cb(streamId, snapshot);
       } else if (error) {
         const isSuccessfull = await store.dispatch('auth/refreshToken');
@@ -35,38 +36,30 @@ class MongoSockets {
         }
       }
     });
-
-    this.setListeners();
   }
 
-  disconnect (streamId = null, model = null) {
+  disconnect (streamId = null) {
+    if (!store.state.auth.user) {
+      return;
+    }
     const userId = store.state.auth.user.id;
 
-    switch (true) {
-      case !!model:
-        this.io.emit('left_collection', {
-          user_id: userId,
-          stream_id: this.streams[model]
-        });
-        return;
-      case !!streamId:
-        const property = Object.keys(this.streams).filter(key => this.streams[key] === streamId);
-        this.io.emit('left_collection', {
-          user_id: userId,
-          stream_id: this.streams[property]
-        });
-        return;
-      case !model && !streamId:
-        Object.keys(this.streams).forEach(key => {
-          this.io.emit('left_collection', {
-            user_id: userId,
-            stream_id: this.streams[key]
-          });
-        });
-        this.streams = {};
-
-        this.io.off('mongo_data');
+    if (streamId) {
+      this.io.emit('left_collection', {
+        user_id: userId,
+        stream_id: streamId
+      });
+      this.streams = this.streams.filter(item => item !== streamId);
+      return;
     }
+
+    this.streams.forEach(item => {
+      this.io.emit('left_collection', {
+        user_id: userId,
+        stream_id: item
+      });
+    });
+    this.streams = [];
   }
 
   setListeners () {
@@ -79,6 +72,7 @@ class MongoSockets {
         case 'insert':
           const [action, payload] = this.formatResponse(response.model, response.fullDocument);
           store.commit(action, payload);
+          console.log('update', action, payload);
           break;
         case 'replace':
           //this[`change`](this.mapMongoData(data.fullDocument));

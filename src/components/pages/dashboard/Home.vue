@@ -21,7 +21,9 @@ export default {
     Sidebar
   },
   beforeMount () {
+    console.log('dashboard');
     this.connect('user', [], 'auth/update');
+    //this.connect('team', [], 'entity/setList');
   },
   computed: {
     route () {

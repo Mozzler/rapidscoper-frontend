@@ -33,10 +33,19 @@ export default {
     state[`active${type}Id`] = value;
   },
   resetList (state, payload) {
-    state[payload.entity] = {
+    const empty = {
       items: [],
       _links: null,
       _meta: null
     };
+
+    if (payload) {
+      state[payload.entity] = empty;
+    } else {
+      Object.keys(state).forEach(key => {
+        state[key] = empty;
+        console.log(key);
+      });
+    }
   }
 };

@@ -90,7 +90,7 @@ export default {
       this.$router.push(url);
     },
     fetchProjects () {
-      this.$store.commit('entity/resetList', {
+      /*this.$store.commit('entity/resetList', {
         entity: 'projects'
       });
       this.loading = true;
@@ -106,7 +106,7 @@ export default {
       }).catch(error => {
         this.loading = false;
         console.log(error);
-      });
+      });*/
     }
   },
   computed: {

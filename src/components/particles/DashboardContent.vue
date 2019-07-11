@@ -96,13 +96,15 @@ export default {
         entity: 'projects'
       });
       this.loading = true;
+      //this.connect('team', [], 'entity/setList');
+      /*
       this.$store.dispatch('entity/read', { entity: 'projects' })
         .then(() => {
           this.loading = false;
         }).catch(errors => {
-        this.loading = false;
-        console.log(errors);
-      });
+          this.loading = false;
+          console.log(errors);
+        });*/
     }
   },
   computed: {

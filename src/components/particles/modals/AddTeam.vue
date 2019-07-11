@@ -78,7 +78,7 @@ export default {
         });
         resolve();
       }).then(() => {
-        this.connect('team', [], 'entity/setList');
+        //this.connect('team', [], 'entity/setList');
       });
     }
   }

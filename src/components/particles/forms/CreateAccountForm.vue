@@ -44,8 +44,11 @@
             :disabledFetchingCountry="true"
             wrapperClasses="phone-input"
             v-model="user.phone"
+            v-validate="'required|min:9|max:30'"
+            name="phone"
             placeholder="Phone number"
             :disabled="processing"/>
+          <error-message :msg="errors.first('phone')" />
         </v-flex>
         <v-flex xs12 class="signup-input">
           <v-text-field
@@ -73,11 +76,13 @@
 
 <script>
 import PhotoCamera from '../../particles/icons/PhotoCamera';
+import ErrorMessage from '../../particles/alerts/error-message';
 
 export default {
   name: 'CreateAccountForm',
   components: {
-    PhotoCamera
+    PhotoCamera,
+    ErrorMessage
   },
   data: () => ({
     user: {
@@ -95,7 +100,7 @@ export default {
       return this.$store.state.auth.user;
     }
   },
-  beforeMount () {
+  mounted () {
     this.connect('user', [], 'auth/update');
   },
   methods: {
@@ -126,14 +131,7 @@ export default {
           this.$router.push('/dashboard/all-projects');
           this.processing = false;
         }).catch(error => {
-          error = error.response.data;
-
-          if (error[0].field === 'uniqueUrlStub') {
-            this.errors.add({
-              field: 'Team name',
-              msg: 'The team name is already used'
-            });
-          }
+          this.handleErrors(error);
           this.processing = false;
         });
       } else {

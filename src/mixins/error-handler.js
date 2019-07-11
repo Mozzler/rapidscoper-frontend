@@ -2,7 +2,8 @@ export default {
   data () {
     return {
       translator: {
-        'uniqueNameTeamAndVersion': 'Team Title'
+        'uniqueNameTeamAndVersion': 'Team Title',
+        'uniqueUrlStub': 'Team name'
       }
     };
   },
@@ -17,7 +18,7 @@ export default {
         }
 
         const field = this.translator[error.field];
-        const msg = { field: field || 'other', msg: error.message };
+        const msg = { field: field || error.field, msg: error.message };
         this.errors.add(msg);
       }
     }
