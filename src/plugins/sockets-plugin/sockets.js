@@ -72,7 +72,6 @@ class MongoSockets {
         case 'insert':
           const [action, payload] = this.formatResponse(response.model, response.fullDocument);
           store.commit(action, payload);
-          console.log('update', action, payload);
           break;
         case 'replace':
           //this[`change`](this.mapMongoData(data.fullDocument));

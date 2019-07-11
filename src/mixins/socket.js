@@ -8,7 +8,6 @@ export default {
     connect (model, filter, commit) {
       this.$socket.connect(model, filter, (streamId, data) => {
         this.streamId = streamId;
-        console.log(this.streamId);
         data.entity = model;
         this.$store.commit(commit, data);
       });

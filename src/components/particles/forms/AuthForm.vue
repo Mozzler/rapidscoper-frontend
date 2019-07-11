@@ -92,19 +92,13 @@ export default {
         });
     },
     login () {
-      new Promise(resolve => {
-        this.connect('user', [], 'auth/update');
-        resolve();
-      }).then(() => {
-        const props = this.authorized.firstName && this.authorized.lastName;
-        const url = !props ? '/create-account' : '/';
+      const props = this.authorized.firstName && this.authorized.lastName;
+      const url = !props ? '/create-account' : '/';
 
-        this.$router.push(url);
-        this.processing = false;
-      });
+      this.$router.push(url);
+      this.processing = false;
     }
   },
-
   watch: {
     action () {
       this.user = {

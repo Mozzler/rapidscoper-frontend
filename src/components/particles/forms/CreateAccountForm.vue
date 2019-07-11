@@ -44,7 +44,7 @@
             :disabledFetchingCountry="true"
             wrapperClasses="phone-input"
             v-model="user.phone"
-            v-validate="'required|min:9|max:30'"
+            v-validate="'required|min:10|max:30'"
             name="phone"
             placeholder="Phone number"
             :disabled="processing"/>
@@ -100,7 +100,7 @@ export default {
       return this.$store.state.auth.user;
     }
   },
-  mounted () {
+  created () {
     this.connect('user', [], 'auth/update');
   },
   methods: {
