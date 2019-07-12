@@ -1,5 +1,9 @@
 export default {
   setList (state, payload) {
+    payload.data.items = payload.data.items.map(item => {
+      item.id = item._id ? item._id : item.id;
+      return item;
+    });
     state[payload.entity] = payload.data;
   },
   create (state, payload) {

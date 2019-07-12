@@ -6,7 +6,7 @@
     </div>
 
     <v-data-table
-      :loading="loading"
+      :loading="initialization"
       :headers="headers"
       :items="projects"
       item-key="name"
@@ -90,23 +90,16 @@ export default {
       this.$router.push(url);
     },
     fetchProjects () {
-      /*this.$store.commit('entity/resetList', {
+      this.$store.commit('entity/resetList', {
         entity: 'projects'
       });
-      this.loading = true;
-      let filters = {
-        teamId: this.activeTeamId,
-        sort: '-createdAt'
+
+      const filter = {
+        $or: [
+          { 'fullDocument.teamId': { '$in': [this.activeTeamId] } }
+        ]
       };
-      this.$store.dispatch('entity/read', {
-        entity: 'projects',
-        params: filters
-      }).then(() => {
-        this.loading = false;
-      }).catch(error => {
-        this.loading = false;
-        console.log(error);
-      });*/
+      this.connect('project', 'entity/setList', 'projects', filter);
     }
   },
   computed: {
