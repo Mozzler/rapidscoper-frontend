@@ -94,7 +94,7 @@ export default {
       this.$store.commit('entity/resetList', {
         entity: 'projects'
       });
-      this.connect('project', 'entity/setList', 'projects', this.projects);
+      this.connect('project', 'entity/setList', 'projects');
     }
   },
   computed: {

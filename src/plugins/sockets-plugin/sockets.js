@@ -20,11 +20,11 @@ class MongoSockets {
     }
   }
 
-  connect (model, filter, cb) {
+  connect (model, filter, snapshotFlag, cb) {
     const user = store.state.auth.user;
     let token = user.access_token;
 
-    this.io.emit('join_collection', { model, filter, token }, async ({ streamId, snapshot, error }) => {
+    this.io.emit('join_collection', { model, filter, token }, snapshotFlag, async ({ streamId, snapshot, error }) => {
       if (!error) {
         this.streams[model] = streamId;
         cb(snapshot);
