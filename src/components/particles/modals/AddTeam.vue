@@ -70,15 +70,15 @@ export default {
       this.data.name = null;
     },
     handleClick () {
+      this.$socket.disconnect(['team']);
       new Promise((resolve) => {
-        this.$socket.disconnect(null, 'team');
         this.submit('entity/create', {
           entity: 'team',
           data: this.data
         });
         resolve();
       }).then(() => {
-        //this.connect('team', [], 'entity/setList');
+        this.connect('team', 'entity/setList');
       });
     }
   }

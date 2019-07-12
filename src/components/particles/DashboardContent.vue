@@ -95,16 +95,8 @@ export default {
       this.$store.commit('entity/resetList', {
         entity: 'projects'
       });
-      this.loading = true;
-      //this.connect('team', [], 'entity/setList');
-      /*
-      this.$store.dispatch('entity/read', { entity: 'projects' })
-        .then(() => {
-          this.loading = false;
-        }).catch(errors => {
-          this.loading = false;
-          console.log(errors);
-        });*/
+      this.connect('project', 'projects', 'entity/setList', this.projects);
+      //this.loading = true;
     }
   },
   computed: {

@@ -101,7 +101,7 @@ export default {
     }
   },
   created () {
-    this.connect('user', [], 'auth/update');
+    this.connect('user', 'auth/update');
   },
   methods: {
     send () {

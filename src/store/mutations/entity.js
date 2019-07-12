@@ -1,5 +1,6 @@
 export default {
   setList (state, payload) {
+    console.log('setList', payload);
     state[payload.entity] = payload.data;
   },
   create (state, payload) {
@@ -44,7 +45,6 @@ export default {
     } else {
       Object.keys(state).forEach(key => {
         state[key] = empty;
-        console.log(key);
       });
     }
   }

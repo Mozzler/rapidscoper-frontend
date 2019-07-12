@@ -1,20 +1,34 @@
 export default {
   data () {
     return {
-      streamId: []
+      streams: []
     };
   },
   methods: {
-    connect (model, filter, commit) {
-      this.$socket.connect(model, filter, (streamId, data) => {
-        this.streamId.push(streamId);
-        data.entity = model;
-        this.$store.commit(commit, data);
+    connect (model, entity, commit, collection = null) {
+      const filter = this.setFilter(collection);
+      this.$socket.connect(model, filter, (snapshot) => {
+        this.streams.push(model);
+        this.$store.commit(commit, {
+          entity: entity,
+          data: snapshot
+        });
       });
+    },
+    setFilter (data) {
+      if (!data) {
+        return null;
+      }
+
+      const idConditions = _.map(data, entity => ({
+        'documentKey._id': entity.id
+      }));
+
+      return idConditions.length ? { $or: idConditions } : null;
     }
   },
   beforeDestroy () {
-    this.$socket.disconnect(this.streamId);
-    this.streamId = [];
+    this.$socket.disconnect(this.streams);
+    this.streams = [];
   }
 };
