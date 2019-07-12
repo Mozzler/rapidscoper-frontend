@@ -21,8 +21,8 @@ export default {
     Sidebar
   },
   created () {
-    /*this.connect('user', 'auth/update');
-    this.connect('team', 'entity/setList');*/
+    this.connect('team', 'entity/setList', 'teams');
+    this.connect('user', 'auth/update', 'user');
   },
   computed: {
     route () {

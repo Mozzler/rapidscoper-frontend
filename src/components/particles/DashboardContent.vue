@@ -18,7 +18,7 @@
         :items="projects"
         item-key="name"
         :hide-actions="true"
-        :loading="loading"
+        :loading="initialization"
         class="dashboard-table">
 
       <template v-slot:items="props">
@@ -80,8 +80,7 @@ export default {
           sortable: false,
           value: 'actions'
         }
-      ],
-      loading: true
+      ]
     };
   },
   beforeMount () {
@@ -95,8 +94,7 @@ export default {
       this.$store.commit('entity/resetList', {
         entity: 'projects'
       });
-      this.connect('project', 'projects', 'entity/setList', this.projects);
-      //this.loading = true;
+      this.connect('project', 'entity/setList', 'projects', this.projects);
     }
   },
   computed: {

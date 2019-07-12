@@ -1,11 +1,14 @@
 export default {
   data () {
     return {
-      streams: []
+      streams: [],
+      initialization: false
     };
   },
   methods: {
-    connect (model, entity, commit, collection = null) {
+    connect (model, commit, entity, collection = null) {
+      this.initialization = true;
+
       const filter = this.setFilter(collection);
       this.$socket.connect(model, filter, (snapshot) => {
         this.streams.push(model);
@@ -13,6 +16,8 @@ export default {
           entity: entity,
           data: snapshot
         });
+
+        this.initialization = false;
       });
     },
     setFilter (data) {

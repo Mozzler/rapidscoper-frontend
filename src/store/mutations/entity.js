@@ -1,6 +1,5 @@
 export default {
   setList (state, payload) {
-    console.log('setList', payload);
     state[payload.entity] = payload.data;
   },
   create (state, payload) {

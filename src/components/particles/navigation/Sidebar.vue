@@ -27,14 +27,14 @@
         :active="$route.params.name"
         :indicator="'title'"
         @go="value => goTo(`/dashboard/${value}`)" />
-<!--
+
       <sidebar-list
         title="Teams"
         btn="Add team"
         :list="teams"
         :active="$route.params.name"
         @add="showAddTeamModal"
-        @go="toTeams" />-->
+        @go="toTeams" />
     </div>
 
     <div class="sidebar__footer">
