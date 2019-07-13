@@ -6,7 +6,7 @@
 
     <template v-if="authenticated">
       <change-plan-modal />
-      <!--<create-project-modal />-->
+      <create-project-modal />
       <delete-team-modal />
       <downgrade-to-basic-modal />
       <invite-user-modal />

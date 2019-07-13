@@ -38,11 +38,14 @@ class MongoSockets {
     });
   }
 
-  disconnect (socketModels = []) {
-    if (!store.state.auth.user) {
-      return;
-    }
+  recreateWatchers (model) {
+    this.io.emit('recreate_watcher', {
+      model: model,
+      token: store.state.auth.user.access_token
+    });
+  }
 
+  disconnect (socketModels = []) {
     if (!socketModels.length) {
       const models = Object.keys(this.streams);
       return this.deleteStream(models);
@@ -52,15 +55,13 @@ class MongoSockets {
   }
 
   deleteStream (arr) {
-    const userId = store.state.auth.user.id;
-
     arr.forEach(item => {
       this.io.emit('left_collection', {
-        user_id: userId,
+        user_id: store.state.auth.user.id,
         stream_id: this.streams[item]
       });
 
-      delete this.streams[item];
+      this.streams = this.streams.filter(model => model !== item)
     });
   }
 
@@ -79,6 +80,14 @@ class MongoSockets {
           //this[`change`](this.mapMongoData(data.fullDocument));
           break;
       }
+    });
+    this.io.on('update_dataset', ({ list, model }) => {
+      const payload = {
+        entity: `${model}s`,
+        data: list
+      };
+
+      store.commit('entity/setList', payload);
     });
   }
 

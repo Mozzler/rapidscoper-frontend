@@ -107,7 +107,12 @@ export default {
         }
       };
 
-      this.submit('entity/create', payload);
+      new Promise((resolve) => {
+        this.submit('entity/create', payload);
+        resolve();
+      }).then(() => {
+        this.$socket.recreateWatchers('project');
+      });
     }
   }
 };

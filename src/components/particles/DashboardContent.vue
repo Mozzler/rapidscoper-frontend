@@ -101,6 +101,10 @@ export default {
     projects () {
       return this.$store.getters['entity/items']('projects');
     }
+  },
+  beforeDestroy () {
+    this.$socket.disconnect(['project']);
+    this.streams = this.streams.filter(item => (item !== 'project'));
   }
 };
 </script>

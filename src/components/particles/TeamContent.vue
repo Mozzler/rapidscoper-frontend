@@ -58,7 +58,7 @@ export default {
       modals: {
         Projects: 'create-project',
         Users: 'invite-user'
-      },
+      }
     };
   },
   methods: {
@@ -67,13 +67,7 @@ export default {
     },
     showModal () {
       this.$root.$emit(this.modals[this.activeTab]);
-    },
-  },
-  beforeMount () {
-    this.$store.commit('entity/setActiveId', ['Team', this.activeTeamId]);
-  },
-  beforeDestroy () {
-    this.$store.commit('entity/setActiveId', ['Team', null]);
+    }
   },
   computed: {
     btnText () {
@@ -95,11 +89,6 @@ export default {
     team () {
       const filtered = this.teams.filter(item => item.id === this.activeTeamId);
       return filtered[0];
-    }
-  },
-  watch: {
-    activeTeamId () {
-      this.$store.commit('entity/setActiveId', ['Team', this.activeTeamId]);
     }
   }
 };

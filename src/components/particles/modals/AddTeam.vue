@@ -70,7 +70,6 @@ export default {
       this.data.name = null;
     },
     handleClick () {
-      this.$socket.disconnect(['team']);
       new Promise((resolve) => {
         this.submit('entity/create', {
           entity: 'team',
@@ -78,7 +77,7 @@ export default {
         });
         resolve();
       }).then(() => {
-        this.connect('team', 'entity/setList');
+        this.$socket.recreateWatchers('team');
       });
     }
   }

@@ -20,10 +20,6 @@ export default {
 
         this.initialization = false;
       });
-    },
+    }
   },
-  beforeDestroy () {
-    this.$socket.disconnect(this.streams);
-    this.streams = [];
-  }
 };

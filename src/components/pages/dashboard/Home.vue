@@ -28,6 +28,10 @@ export default {
     route () {
       return this.$route.params.section;
     }
+  },
+  beforeDestroy () {
+    this.$socket.disconnect(['team', 'user']);
+    this.streams = this.streams.filter(item => (item !== 'user' && item !== 'team'));
   }
 };
 </script>

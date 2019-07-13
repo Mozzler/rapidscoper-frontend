@@ -103,6 +103,10 @@ export default {
   created () {
     this.connect('user', 'auth/update', '', null, false);
   },
+  beforeDestroy () {
+    this.$socket.disconnect(['user']);
+    this.streams = this.streams.filter(item => item !== 'user');
+  },
   methods: {
     send () {
       const payload = {
