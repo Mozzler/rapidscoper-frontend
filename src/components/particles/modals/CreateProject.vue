@@ -52,7 +52,7 @@
             </v-btn>
             <v-btn class="btn-rapid primary" large
                    :disabled="processing"
-                   @click="send">
+                   @click="submit">
               {{ isMobileDevice ? 'Create' : 'Create project' }}
             </v-btn>
           </v-flex>
@@ -80,15 +80,12 @@ export default {
         'View', 'Edit'
       ],
       data: null
-    }
+    };
   },
   computed: {
     teams () {
       return this.$store.getters['entity/items']('teams');
     }
-  },
-  beforeMount () {
-    this.initData();
   },
   methods: {
     initData () {
@@ -98,21 +95,16 @@ export default {
         title: 'Untitled'
       };
     },
-    async send () {
-      const payload = {
+    getPayload () {
+      return {
         entity: 'project',
+        action: 'entity/create',
+        recreate: true,
         data: {
           name: this.data.title,
           teamId: this.data.team.id
         }
       };
-
-      new Promise((resolve) => {
-        this.submit('entity/create', payload);
-        resolve();
-      }).then(() => {
-        this.$socket.recreateWatchers('project');
-      });
     }
   }
 };

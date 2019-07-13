@@ -7,11 +7,14 @@ export default {
   data () {
     return {
       dialog: false,
-      processing: false,
+      processing: false
     };
   },
   beforeMount () {
     this.$root.$on(this.$options.name, this.showModal);
+    if (typeof this.initData === 'function') {
+      this.initData();
+    }
   },
   methods: {
     closeModal () {
@@ -20,7 +23,7 @@ export default {
     showModal () {
       this.dialog = true;
     },
-    async submit (url, data) {
+    async submit () {
       this.processing = true;
 
       const result = await this.$validator.validate();
@@ -30,7 +33,14 @@ export default {
         return;
       }
 
-      this.$store.dispatch(url, data)
+      const params = this.getPayload();
+
+      this.$store.dispatch(params.action, params)
+        .then(() => {
+          if (params.recreate) {
+            this.$socket.recreateWatchers(params.entity);
+          }
+        })
         .then(() => {
           this.processing = false;
           this.closeModal();

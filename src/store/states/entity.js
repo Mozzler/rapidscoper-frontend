@@ -18,5 +18,10 @@ export default {
     items: [],
     _links: null,
     _meta: null
+  },
+  projectUsers: {
+    items: [],
+    _links: null,
+    _meta: null
   }
 };

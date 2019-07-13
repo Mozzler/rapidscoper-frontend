@@ -37,7 +37,7 @@
             </v-btn>
             <v-btn class="btn-rapid primary" large
                    :disabled="processing"
-                   @click="handleClick">
+                   @click="submit">
               {{ isMobileDevice ? 'Create' : 'Create team' }}
             </v-btn>
           </v-flex>
@@ -62,23 +62,17 @@ export default {
       }
     };
   },
-  beforeMount () {
-    this.data.name = null;
-  },
   methods: {
     initData () {
       this.data.name = null;
     },
-    handleClick () {
-      new Promise((resolve) => {
-        this.submit('entity/create', {
-          entity: 'team',
-          data: this.data
-        });
-        resolve();
-      }).then(() => {
-        this.$socket.recreateWatchers('team');
-      });
+    getPayload () {
+      return {
+        entity: 'team',
+        action: 'entity/create',
+        recreate: true,
+        data: this.data
+      };
     }
   }
 };
