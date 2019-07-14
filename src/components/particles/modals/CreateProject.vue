@@ -96,11 +96,14 @@ export default {
       };
     },
     getPayload () {
+      const anotherTeam = this.$route.params.name !== this.data.team.id;
+      const commonSection = this.$route.params.name === 'all-projects';
+
       return {
         entity: 'project',
         action: 'entity/create',
         recreate: true,
-        cancelCommit: this.$route.params.name !== this.data.team.id,
+        cancelCommit: (anotherTeam && !commonSection),
         data: {
           name: this.data.title,
           teamId: this.data.team.id

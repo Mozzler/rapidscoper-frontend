@@ -61,7 +61,7 @@ class MongoSockets {
   deleteStream (arr) {
     arr.forEach(item => {
       this.io.emit('left_collection', {
-        user_id: store.state.auth.user.id,
+        user_id: store.state.auth.user.user_id,
         stream_id: this.streams[item]
       });
 
