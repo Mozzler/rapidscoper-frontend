@@ -84,7 +84,7 @@ export default {
       return this.$route.params.name;
     },
     teams () {
-      return this.$store.getters['entity/items']('teams');
+      return this.$store.getters['entity/items']('team');
     },
     team () {
       const filtered = this.teams.filter(item => item.id === this.activeTeamId);

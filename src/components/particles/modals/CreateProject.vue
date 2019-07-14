@@ -84,7 +84,7 @@ export default {
   },
   computed: {
     teams () {
-      return this.$store.getters['entity/items']('teams');
+      return this.$store.getters['entity/items']('team');
     }
   },
   methods: {
@@ -100,6 +100,7 @@ export default {
         entity: 'project',
         action: 'entity/create',
         recreate: true,
+        cancelCommit: this.$route.params.name !== this.data.team.id,
         data: {
           name: this.data.title,
           teamId: this.data.team.id

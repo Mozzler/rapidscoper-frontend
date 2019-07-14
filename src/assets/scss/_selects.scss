@@ -11,7 +11,12 @@
   float: right !important;
 }
 
+.v-menu__content {
+  @include rapid-scroll;
+}
 .dropdown-list {
+  max-height: 200px;
+
   .theme--light.v-list {
     border-radius: 2px;
     background-color: $light-black;

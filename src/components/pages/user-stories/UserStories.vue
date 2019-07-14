@@ -4,7 +4,7 @@
     <story-sidebar />
     <circular-loader
       cls="loader-shadow"
-      :visible="processing"
+      :visible="processing || initialization"
     />
     <story-section />
     <tool-section />
@@ -37,58 +37,52 @@ export default {
   },
   computed: {
     sections () {
-      return this.$store.getters['entity/items']('sections');
+      return this.$store.getters['entity/items']('section');
+    },
+    activeProjectId () {
+      return this.$route.params.projectId;
     }
   },
   beforeMount () {
     this.fetchData();
   },
   methods: {
-    getQuerySet () {
-      this.processing = true;
-      const entities = ['section', 'dictionary', 'story'];
-      const queries = entities.map(entity => {
-        return this.$store.dispatch('entity/read', {
-          entity: entity,
-          params: {
-            projectId: this.$route.params.projectId,
-            sort: '-createdAt'
-          }
-        }).then(response => {
-          console.log(response);
-        });
-      });
-
-      return Promise.all(queries);
-    },
     fetchData () {
-      this.getQuerySet().then(() => {
-        this.processing = false;
-        const stub = this.$route.params === 'section';
+      const filter = {
+        $or: [
+          { 'fullDocument.projectId': { '$in': [this.activeProjectId] } }
+        ]
+      };
 
-        if (this.sections.length && stub) {
-          const url = this.$route.params.replace('section', this.sections[0].id);
-          this.$router.push(url);
-        }
+      const entities = ['section', 'dictionary', 'story'];
+      entities.forEach(entity => {
+        this.connect(entity, 'entity/setList', filter);
       });
     },
     resetData () {
       this.processing = true;
-      const entities = ['sections', 'story', 'dictionary'];
-      entities.forEach(item => {
-        this.$store.commit('entity/resetList', {
-          entity: item
-        });
-        this.processing = false;
+      const entities = ['section', 'story', 'dictionary'];
+      entities.forEach(entity => {
+        this.$store.commit('entity/resetList', entity);
       });
+      this.processing = false;
     }
   },
   beforeDestroy () {
     this.resetData();
   },
   watch: {
-    '$route.params.projectId' () {
+    activeProjectId () {
       this.fetchData();
+    },
+    initialization () {
+      if (!this.initialization) {
+        const stub = this.$route.params === 'section';
+        if (this.sections.length && stub) {
+          const url = this.$route.params.replace('section', this.sections[0].id);
+          this.$router.push(url);
+        }
+      }
     }
   }
 };

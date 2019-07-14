@@ -90,21 +90,19 @@ export default {
       this.$router.push(url);
     },
     fetchProjects () {
-      this.$store.commit('entity/resetList', {
-        entity: 'projects'
-      });
+      this.$store.commit('entity/resetList', 'project');
 
       const filter = {
         $or: [
           { 'fullDocument.teamId': { '$in': [this.activeTeamId] } }
         ]
       };
-      this.connect('project', 'entity/setList', 'projects', filter);
+      this.connect('project', 'entity/setList', filter);
     }
   },
   computed: {
     projects () {
-      return this.$store.getters['entity/items']('projects');
+      return this.$store.getters['entity/items']('project');
     },
     activeTeamId () {
       return this.$route.params.name;

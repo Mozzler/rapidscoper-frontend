@@ -91,15 +91,13 @@ export default {
       this.$root.$emit('create-project');
     },
     fetchData () {
-      this.$store.commit('entity/resetList', {
-        entity: 'projects'
-      });
-      this.connect('project', 'entity/setList', 'projects');
+      this.$store.commit('entity/resetList', 'project');
+      this.connect('project', 'entity/setList');
     }
   },
   computed: {
     projects () {
-      return this.$store.getters['entity/items']('projects');
+      return this.$store.getters['entity/items']('project');
     }
   }
 };

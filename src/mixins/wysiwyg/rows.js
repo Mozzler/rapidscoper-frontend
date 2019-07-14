@@ -157,7 +157,7 @@ export default {
       oldParent.storyOrder.splice(index, 1);
 
       if (newLevel === 1) {
-        this.$store.dispatch('entity/create')
+        //this.$store.dispatch('entity/create')
       }
       let parentIndex = newParent.storyOrder.indexOf(newParent.id);
       newParent.storyOrder.splice(parentIndex, 1, id);

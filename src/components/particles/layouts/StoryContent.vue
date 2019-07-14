@@ -39,7 +39,7 @@ export default {
   },
   computed: {
     sections () {
-      return this.$store.getters['entity/items']('sections');
+      return this.$store.getters['entity/items']('section');
     },
     activeSectionId () {
       return this.$route.params.section;
@@ -48,7 +48,7 @@ export default {
       return this.$route.params.projectId;
     },
     projects () {
-      return this.$store.getters['entity/items']('projects');
+      return this.$store.getters['entity/items']('project');
     },
     activeProject () {
       return this.projects.find(item => item.id === this.projectId);

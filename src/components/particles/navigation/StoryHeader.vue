@@ -66,7 +66,7 @@ export default {
       return this.toTitle(this.$route.params.tab);
     },
     projects () {
-      return this.$store.getters['entity/items']('projects');
+      return this.$store.getters['entity/items']('project');
     },
     currentProjectId () {
       return this.$route.params.projectId;

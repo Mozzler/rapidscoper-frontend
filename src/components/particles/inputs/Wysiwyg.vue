@@ -139,7 +139,7 @@ export default {
       return this.$store.state.story[this.tab];
     },
     section () {
-      return this.$store.getters['entity/items']('sections').find(item => item.id === this.sectionId);
+      return this.$store.getters['entity/items']('section').find(item => item.id === this.sectionId);
     },
   },
   methods: {

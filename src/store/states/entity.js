@@ -1,27 +1,17 @@
 export default {
-  teams: {
-    items: [],
-    _links: null,
-    _meta: null
+  team: {
+    items: []
   },
-  projects: {
-    items: [],
-    _links: null,
-    _meta: null
+  project: {
+    items: []
   },
-  sections: {
-    items: [],
-    _links: null,
-    _meta: null
+  section: {
+    items: []
   },
   dictionary: {
-    items: [],
-    _links: null,
-    _meta: null
+    items: []
   },
-  projectUsers: {
-    items: [],
-    _links: null,
-    _meta: null
+  projectUser: {
+    items: []
   }
 };

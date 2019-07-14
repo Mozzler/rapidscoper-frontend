@@ -72,42 +72,30 @@ class MongoSockets {
   setListeners () {
     this.io.on('mongo_data', (response) => {
       switch (response.operationType) {
-        /*case 'delete':
-          this.getPageData(this.page);
-          break;*/
         case 'update':
         case 'insert':
-          const [action, payload] = this.formatResponse(response.model, response.fullDocument);
-          store.commit(action, payload);
-          break;
-        case 'replace':
-          //this[`change`](this.mapMongoData(data.fullDocument));
+          const commit = this.getCommitType(response.model);
+          store.commit(commit, {
+            entity: response.model,
+            data: response.fullDocument
+          });
           break;
       }
     });
     this.io.on('update_dataset', ({ list, model }) => {
-      const payload = {
-        entity: `${model}s`,
+      store.commit('entity/setList', {
+        entity: model,
         data: list
-      };
-
-      store.commit('entity/setList', payload);
+      });
     });
   }
 
-  formatResponse (model, data) {
+  getCommitType (model) {
     switch (model) {
       case 'user':
-        data.id = data._id;
-        return ['auth/update', data];
+        return 'auth/update';
       default:
-        const payload = {
-          entity: `${model}s`,
-          data: data
-        };
-
-        payload.data.id = payload.data._id;
-        return ['entity/create', payload];
+        return 'entity/create';
     }
   }
 }

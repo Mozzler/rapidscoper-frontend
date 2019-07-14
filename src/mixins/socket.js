@@ -6,14 +6,14 @@ export default {
     };
   },
   methods: {
-    connect (model, commit, entity = '', filter = null, snapshotFlag = true) {
+    connect (model, commit, filter = null, snapshotFlag = true) {
       this.initialization = true;
       this.$socket.connect(model, filter, snapshotFlag, (snapshot) => {
         this.streams.push(model);
 
-        if (snapshotFlag) {
+        if (snapshotFlag && commit) {
           this.$store.commit(commit, {
-            entity: entity,
+            entity: model,
             data: snapshot
           });
         }

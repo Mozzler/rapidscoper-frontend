@@ -91,7 +91,7 @@ export default {
   },
   computed: {
     teams () {
-      return this.$store.getters['entity/items']('teams');
+      return this.$store.getters['entity/items']('team');
     },
     user () {
       return this.$store.state.auth.user;

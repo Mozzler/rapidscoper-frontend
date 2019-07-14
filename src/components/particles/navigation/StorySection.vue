@@ -24,7 +24,7 @@ export default {
   ],
   computed: {
     sections () {
-      return this.$store.getters['entity/items']('sections');
+      return this.$store.getters['entity/items']('section');
     }
   },
   methods: {

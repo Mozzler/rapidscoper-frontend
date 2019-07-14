@@ -1,53 +1,48 @@
-export default {
-  setList (state, payload) {
-    payload.data.items = payload.data.items.map(item => {
+function normalizeId (data) {
+  if (_.isArray(data)) {
+    return _.map(data, item => {
       item.id = item._id ? item._id : item.id;
       return item;
     });
+  }
+  if (_.isObject(data)) {
+    data.id = data._id ? data._id : data.id;
+    return data;
+  }
+}
+
+export default {
+  setList (state, payload) {
+    payload.data.items = normalizeId(payload.data.items);
     state[payload.entity] = payload.data;
   },
   create (state, payload) {
-    const existed = state[payload.entity].items.filter(item => {
-      return item.id === payload.data.id;
-    });
+    payload.data = normalizeId(payload.data);
+    const existed = _.filter(state[payload.entity].items, item => item.id === payload.data.id);
 
-    const teamId = (state.activeTeamId === payload.data.teamId) || (state.activeTeamId === null);
-    const allowedTeamId = payload.entity === 'projects' ? teamId : true;
-
-    if ((!existed.length && allowedTeamId) || !payload.data.id) {
-      // const strategy = payload.entity === 'projects' ? 'unshift' : 'push';
+    if (!existed.length) {
       state[payload.entity].items['push'](payload.data);
     }
   },
   update (state, payload) {
-    state[payload.entity].items.forEach((item, index) => {
+    payload.data = normalizeId(payload.data);
+
+    _.each(state[payload.entity].items, (item, index) => {
       if (item.id === payload.data.id) {
-        let obj = state[payload.entity].items[index];
-        Object.assign(obj, payload.data);
+        _.assign(state[payload.entity].items[index], payload.data);
       }
     });
   },
   delete (state, payload) {
-    state[payload.entity].items = state[payload.entity].items.filter((item) => {
-      return item.id !== payload.zid;
-    });
+    state[payload.entity].items = _.filter(state[payload.entity].items,
+        item => item.id !== payload.id);
   },
-  setActiveId (state, payload) {
-    let [type, value] = payload;
-    state[`active${type}Id`] = value;
-  },
-  resetList (state, payload) {
-    const empty = {
-      items: [],
-      _links: null,
-      _meta: null
-    };
-
-    if (payload) {
-      state[payload.entity] = empty;
+  resetList (state, entity) {
+    if (entity) {
+      state[entity].items = [];
     } else {
-      Object.keys(state).forEach(key => {
-        state[key] = empty;
+      _.each(state, (val, key) => {
+        state[key].items = [];
       });
     }
   }
