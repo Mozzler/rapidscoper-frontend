@@ -21,7 +21,7 @@ function findParent (data, parentStoryId) {
       return i;
     } else {
       if (i.list.length) {
-        return findParent(i, parentStoryId);
+        return findParent(i.list, parentStoryId);
       }
     }
   });
@@ -36,17 +36,17 @@ function createNode (entity, parent = null) {
   return {
     id: entity.id,
     parent: parent,
+    parentStoryId: entity.parentStoryId,
+
     estimation: entity.estimate,
     priority: entity.priority,
     label: 1,
-    parentStoryId: entity.parentStoryId,
+    type: constructions[key].type,
 
     text: entity.markup,
     template: constructions[key].structure,
     tail: '',
     placeholder: entity.markup,
-    parentId: entity.parentStoryId,
-    storyOrder: entity.storyOrder,
 
     list: []
   };
@@ -85,7 +85,11 @@ export default {
   },
   content (state, getters, rootState) {
     return id => {
-      const stories = _.filter(rootState.entity.story.items, item => item.sectionId === id);
+      const stories = _.chain(rootState.entity.story.items)
+        .filter(item => item.sectionId === id)
+        .sortBy(item => item.parentStoryId || '')
+        .value();
+
       const items = [];
 
       _.each(stories, item => {
@@ -93,7 +97,7 @@ export default {
         let list = items;
 
         if (item.parentStoryId) {
-          parent = findParent(items, item.parentStoryId);
+          parent = findParent(list, item.parentStoryId);
           list = parent.list;
         }
 
@@ -101,7 +105,7 @@ export default {
         list.push(node);
       });
 
-      return items;
+      return items.reverse();
     };
   }
 };

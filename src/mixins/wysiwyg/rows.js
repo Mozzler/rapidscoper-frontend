@@ -35,13 +35,16 @@ export default {
       }
 
       return {
+        id: null,
+        parentStoryId: sublist ? prototype.id : prototype.parentStoryId,
         parent: sublist ? prototype : prototype.parent,
+
         estimation: null,
         priority: null,
         label: null,
+
         tail: '',
         placeholder: text,
-
         text: text,
         template: sublist ? template : prototype.template,
 
@@ -76,12 +79,14 @@ export default {
           const finished = this.finishSentence($event);
           finished !== false ? resolve() : reject(new Error('invalid sentence construction'));
         }).then(() => {
-          const row = this.addRowToList(this.list[this.focused], `$event.target.innerHTML`);
+          const row = this.addRowToList(this.list[this.focused], $event.target.innerHTML);
           this.list.splice(this.focused + 1, 0, row);
         }).then(() => {
           const wysiwygChild = `editor-${ this.focused + 1 }-${ this.level }`;
           this.focusEditor(wysiwygChild, this, true);
-        }).catch(() => {});
+        }).then(() => {
+          this.saveStory(null, this.focused);
+        });
       }
     },
     createSublist ($event) {
@@ -95,14 +100,14 @@ export default {
 
       new Promise(resolve => {
         const row = this.addRowToList(this.list[this.focused], '', true, '');
-
         this.list[this.focused].list.push(row);
-
         resolve();
       }).then(() => {
         const wysiwygChild = `wysiwyg-child-${ this.focused }-${ this.level }`;
         const wysiwygEditor = `editor-${ index }-${ this.level + 1 }`;
         this.focusEditor(wysiwygEditor, this.$refs[wysiwygChild][0]);
+      }).then(() => {
+        this.saveStory(null, this.focused);
       });
     },
     removeRow () {

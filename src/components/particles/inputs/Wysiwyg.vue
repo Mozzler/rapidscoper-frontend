@@ -43,7 +43,7 @@
                    :ref="`editor-${ index }-${ level }`"
                    :disabled="processing"
                    tabindex="2"
-                   @blur="() => saveStory(item.id, storyId, index)"
+                   @blur="() => saveStory(item.id, index)"
                    @click="($event) => checkHint($event, index)"
                    @focus="($event) => focus($event, index)"
                    @keydown.down.exact="focusHint"
@@ -149,29 +149,28 @@ export default {
     updateChildText (index, obj, parentIndex) {
       this.list[parentIndex].list[index] = obj;
     },
-    saveStory (id, editorUUID, index) {
-      if (editorUUID === this.hintEditor) {
+    saveStory (id, index) {
+      if (this.storyId === this.hintEditor) {
         return;
       }
 
-      this.processing = `${editorUUID}-${index}`;
+      this.processing = `${this.storyId}-${index}`;
 
       let action = 'entity/create';
       const story = {
         entity: 'story',
         data: {
+          id: id,
           type: this.editor.type,
           sectionId: this.sectionId,
+          parentStoryId: this.list[index].parentStoryId,
           teamId: this.activeProject.teamId,
           projectId: this.activeProject.id,
           level: this.level - 1,
-          markup: this.editor.text
+          markup: this.editor.text,
+          afterStoryId: this.list.length > 0 && this.list[index - 1] ? this.list[index - 1].id : 0
         }
       };
-
-      if (this.level > 1 && action === 'entity/create') {
-        story.data.parentStoryId = this.parentStoryId;
-      }
 
       if (id) {
         action = 'entity/update';
@@ -179,55 +178,10 @@ export default {
       }
 
       this.$store.dispatch(action, story)
-        .then(response => this.updateOrder(response.item, action));
-    },
-    updateOrder (response, action) {
-      if (action === 'entity/update') {
-        this.processing = false;
-        return;
-      }
-
-      this.editor.id = response.id;
-
-      const entity = this.level === 1 ? 'section' : 'story';
-      const id = this.level === 1 ? this.sectionId : response.parentStoryId;
-
-      let storyOrder = this.section.storyOrder;
-      let order = [ response.id ];
-
-      if (entity === 'story' && action === 'entity/create') {
-        storyOrder = this.$store.getters['entity/items']('story')
-          .find(item => item.id === response.parentStoryId)
-          .storyOrder;
-      }
-
-      if (storyOrder) {
-        const ids = [...storyOrder];
-        const index = ids.indexOf(response.id);
-
-        if (action === 'entity/create') {
-          ids.splice(index, 0, response.id);
-        }
-        if (action === 'entity/delete') {
-          ids.splice(index, 1);
-        }
-
-        order = ids;
-      }
-
-      const data = {
-        entity: entity,
-        params: {
-          id: id
-        },
-        data: {
-          storyOrder: order
-        }
-      };
-
-      this.$store.dispatch('entity/update', data)
-        .then(() => {
+        .then(response => {
+          this.list[index].id = response.item.id;
           this.processing = false;
+          this.$socket.recreateWatchers('story');
         });
     }
   },
