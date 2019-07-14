@@ -58,7 +58,6 @@ export default {
     createSection () {
       const untitled = this.sections.filter(item => item.name.includes('Untitled'));
       const number = untitled.length;
-
       const section = {
         entity: 'section',
         data: {

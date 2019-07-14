@@ -36,7 +36,7 @@ function createNode (entity, parent = null) {
   return {
     id: entity.id,
     parent: parent,
-    parentStoryId: entity.parentStoryId,
+    parentStoryId: parent ? parent.id : null,
 
     estimation: entity.estimate,
     priority: entity.priority,
