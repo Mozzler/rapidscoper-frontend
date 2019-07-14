@@ -85,32 +85,20 @@ export default {
   },
   content (state, getters, rootState) {
     return id => {
-      const stories = rootState.entity.story.items;
-      const primaryOrder = rootState.entity.sections.items
-        .find(item => item.id === id)
-        .storyOrder;
+      const stories = _.filter(rootState.entity.story.items, item => item.sectionId === id);
+      const items = [];
 
-      const firstLevel = stories.filter(item => primaryOrder.includes(item.id));
-      const items = firstLevel.map(node => {
-        return createNode(node);
-      });
+      _.each(stories, item => {
+        let parent = null;
+        let list = items;
 
-      items.forEach(item => {
-        item.storyOrder.forEach(id => {
-          const story = stories.find(s => s.id === id);
-          const storyNode = createNode(story, item);
-          item.list.push(storyNode);
-        });
-      });
+        if (item.parentStoryId) {
+          parent = findParent(items, item.parentStoryId);
+          list = parent.list;
+        }
 
-      items.forEach(item => {
-        item.list.forEach(i => {
-          i.storyOrder.forEach(id => {
-            const story = stories.find(s => s.id === id);
-            const storyNode = createNode(story, i);
-            i.list.push(storyNode);
-          });
-        });
+        let node = createNode(item, parent);
+        list.push(node);
       });
 
       return items;
