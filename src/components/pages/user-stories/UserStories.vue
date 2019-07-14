@@ -54,6 +54,8 @@ export default {
             projectId: this.$route.params.projectId,
             sort: '-createdAt'
           }
+        }).then(response => {
+          console.log(response);
         });
       });
 

@@ -22,4 +22,7 @@ export default {
       });
     }
   },
+  beforeDestroy () {
+    this.streams = [];
+  }
 };

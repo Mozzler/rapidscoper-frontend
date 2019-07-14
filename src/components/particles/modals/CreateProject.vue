@@ -4,15 +4,15 @@
       <v-card class="modal-card">
 
         <div class="modal-header">
-        <v-text-field
-          name="Team Title"
-          v-validate="'required|min:2|max:100'"
-          v-model="data.title"
-          :error-messages="errors.first('Team Title')"
-          :disabled="processing"
-          solo
-          class="input-without-border"
-        ></v-text-field>
+          <v-text-field
+            name="Team Title"
+            v-validate="'required|min:2|max:100'"
+            v-model="data.title"
+            :error-messages="errors.first('Team Title')"
+            :disabled="processing"
+            solo
+            class="input-without-border"
+          ></v-text-field>
           <v-btn icon class="modal-close-btn" @click="closeModal">
             <v-icon>close</v-icon>
           </v-btn>

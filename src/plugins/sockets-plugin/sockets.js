@@ -21,6 +21,10 @@ class MongoSockets {
   }
 
   connect (model, filter, snapshotFlag, cb) {
+    if (this.streams[model]) {
+      this.disconnect([model]);
+    }
+
     const user = store.state.auth.user;
     let token = user.access_token;
 
@@ -61,7 +65,7 @@ class MongoSockets {
         stream_id: this.streams[item]
       });
 
-      this.streams = this.streams.filter(model => model !== item)
+      delete this.streams[item];
     });
   }
 

@@ -20,7 +20,7 @@ export default {
     TeamContent,
     Sidebar
   },
-  created () {
+  beforeMount () {
     this.connect('team', 'entity/setList', 'teams');
     this.connect('user', 'auth/update', 'user');
   },
@@ -29,9 +29,5 @@ export default {
       return this.$route.params.section;
     }
   },
-  beforeDestroy () {
-    this.$socket.disconnect(['team', 'user']);
-    this.streams = this.streams.filter(item => (item !== 'user' && item !== 'team'));
-  }
 };
 </script>
