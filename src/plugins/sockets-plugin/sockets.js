@@ -52,7 +52,8 @@ class MongoSockets {
   disconnect (socketModels = []) {
     if (!socketModels.length) {
       const models = Object.keys(this.streams);
-      return this.deleteStream(models);
+      this.deleteStream(models);
+      this.close();
     }
 
     this.deleteStream(socketModels);

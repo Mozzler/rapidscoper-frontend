@@ -20,10 +20,6 @@ export default {
     TeamContent,
     Sidebar
   },
-  beforeMount () {
-    this.connect('team', 'entity/setList');
-    this.connect('user', 'auth/update');
-  },
   computed: {
     route () {
       return this.$route.params.section;

@@ -50,6 +50,10 @@ export default {
   created () {
     this.$socket.init();
   },
+  beforeMount () {
+    this.connect('team', 'entity/setList');
+    this.connect('user', 'auth/update');
+  },
   computed: {
     user () {
       return this.$store.state.auth.user;
@@ -59,9 +63,7 @@ export default {
     }
   },
   beforeDestroy () {
-    if (this.$socket.io) {
-      this.$socket.disconnect();
-    }
+    this.$socket.disconnect();
   }
 };
 </script>
