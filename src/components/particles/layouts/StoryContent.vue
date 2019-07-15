@@ -78,6 +78,9 @@ export default {
               tab: this.$route.params.tab
             }
           });
+        })
+        .then(() => {
+          this.$socket.recreateWatchers('section');
         });
     },
     scrollToActiveSection () {

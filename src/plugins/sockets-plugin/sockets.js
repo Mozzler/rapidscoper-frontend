@@ -75,7 +75,7 @@ class MongoSockets {
       switch (response.operationType) {
         case 'update':
         case 'insert':
-          const commit = this.getCommitType(response.model);
+          const commit = this.getCommitType(response.model, response.operationType);
           store.commit(commit, {
             entity: response.model,
             data: response.fullDocument
@@ -91,12 +91,12 @@ class MongoSockets {
     });
   }
 
-  getCommitType (model) {
+  getCommitType (model, type) {
     switch (model) {
       case 'user':
         return 'auth/update';
       default:
-        return 'entity/create';
+        return type === 'insert' ? 'entity/create' : 'entity/update';
     }
   }
 }

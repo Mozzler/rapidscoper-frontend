@@ -181,6 +181,8 @@ export default {
         .then(response => {
           this.list[index].id = response.item.id;
           this.processing = false;
+        })
+        .then(() => {
           this.$socket.recreateWatchers('story');
         });
     }
