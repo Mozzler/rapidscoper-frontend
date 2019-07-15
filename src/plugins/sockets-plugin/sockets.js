@@ -1,6 +1,7 @@
 import io from 'socket.io-client';
 import config from './../../config';
 import store from '../../store';
+import app from '@/main';
 
 class MongoSockets {
   constructor () {
@@ -45,7 +46,8 @@ class MongoSockets {
   recreateWatchers (model) {
     this.io.emit('recreate_watcher', {
       model: model,
-      token: store.state.auth.user.access_token
+      token: store.state.auth.user.access_token,
+      initialStreamId: this.streams[model]
     });
   }
 
@@ -88,6 +90,8 @@ class MongoSockets {
         entity: model,
         data: list
       });
+
+      app.$root.$emit('update-model');
     });
   }
 

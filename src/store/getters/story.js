@@ -90,7 +90,7 @@ export default {
         .sortBy(item => item.parentStoryId || '')
         .value();
 
-      const items = [];
+      let items = [];
 
       _.each(stories, item => {
         let parent = null;
@@ -105,7 +105,7 @@ export default {
         list.push(node);
       });
 
-      return items.reverse();
+      return items;
     };
   }
 };

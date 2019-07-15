@@ -7,7 +7,6 @@ export default {
     };
   },
   mounted () {
-    console.log(this.model.id);
     if (this.sectionContent.length) {
       this.stories.list = this.sectionContent;
       return;
@@ -21,6 +20,9 @@ export default {
     el.template = constructions[0].structure;
   },
   computed: {
+    sections () {
+      return this.$store.getters['entity/section'];
+    },
     sectionContent () {
       return this.$store.getters['story/content'](this.model.id);
     },
@@ -43,6 +45,15 @@ export default {
 
         list: []
       };
+    },
+    updateModel () {
+      this.stories.list = this.$store.getters['story/content'](this.model.id);
     }
   },
+  beforeMount () {
+    this.$root.$on('update-model', this.updateModel);
+  },
+  beforeDestroy () {
+    this.$root.$off('update-model', this.updateModel);
+  }
 };
