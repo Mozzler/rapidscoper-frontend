@@ -100,7 +100,7 @@ export default {
       return this.$store.state.auth.user;
     }
   },
-  created () {
+  beforeMount () {
     this.connect('user', 'auth/update', null, false);
   },
   methods: {

@@ -51,8 +51,7 @@ export default {
     this.$socket.init();
   },
   beforeMount () {
-    this.connect('team', 'entity/setList');
-    this.connect('user', 'auth/update');
+    this.initConnect();
   },
   computed: {
     user () {
@@ -64,6 +63,19 @@ export default {
   },
   beforeDestroy () {
     this.$socket.disconnect();
+  },
+  methods: {
+    initConnect () {
+      if (this.authenticated && this.user.access_token) {
+        this.connect('team', 'entity/setList');
+        this.connect('user', 'auth/update');
+      }
+    }
+  },
+  watch: {
+    authenticated () {
+      this.initConnect();
+    }
   }
 };
 </script>
