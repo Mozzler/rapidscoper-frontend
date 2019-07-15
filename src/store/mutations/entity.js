@@ -27,6 +27,7 @@ export default {
   update (state, payload) {
     payload.data = normalizeId(payload.data);
 
+    console.log(payload);
     _.each(state[payload.entity].items, (item, index) => {
       if (item.id === payload.data.id) {
         _.assign(state[payload.entity].items[index], payload.data);

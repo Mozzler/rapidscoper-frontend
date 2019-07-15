@@ -74,7 +74,7 @@ export default {
       };
 
       this.$store.commit('entity/update', {
-        entity: 'sections',
+        entity: 'section',
         data: data
       });
     },
