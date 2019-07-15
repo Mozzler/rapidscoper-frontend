@@ -95,6 +95,14 @@ export default {
           this.$emit('show-error', msg);
         });
     }
+  },
+  watch: {
+    'model.name' () {
+      this.name = this.model.name;
+    },
+    'model.description' () {
+      this.description = this.model.description;
+    }
   }
 };
 </script>

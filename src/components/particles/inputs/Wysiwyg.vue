@@ -140,7 +140,7 @@ export default {
     },
     section () {
       return this.$store.getters['entity/items']('section').find(item => item.id === this.sectionId);
-    },
+    }
   },
   methods: {
     updateText () {

@@ -7,6 +7,7 @@ export default {
     };
   },
   mounted () {
+    console.log(this.model.id);
     if (this.sectionContent.length) {
       this.stories.list = this.sectionContent;
       return;
@@ -43,5 +44,5 @@ export default {
         list: []
       };
     }
-  }
+  },
 };
