@@ -17,7 +17,6 @@ export default {
     state[payload.entity] = payload.data;
   },
   create (state, payload) {
-    console.log(payload);
     payload.data = normalizeId(payload.data);
     const existed = _.filter(state[payload.entity].items, item => item.id === payload.data.id);
 

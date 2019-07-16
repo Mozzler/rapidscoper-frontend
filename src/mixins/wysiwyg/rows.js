@@ -186,7 +186,8 @@ export default {
         data: {
           id: node.id,
           parentStoryId: node.parentStoryId ? node.parentStoryId : null,
-          afterStoryId: list[this.parentIndex].id
+          afterStoryId: list[this.parentIndex].id,
+          markup: this.list[this.focused].text
         }
       };
 
@@ -198,14 +199,9 @@ export default {
         this.focusEditor(editor, this.$parent, false);
       });
 
-      console.log(data);
-/*
-      this.$store.dispatch('entity/update', data)
-        .then(() => {
-          this.list.splice(this.focused, 1);
-        }).then(() => {
-
-        });*/
+      this.$store.dispatch('entity/update', data).then(() => {
+        console.log('updated');
+      });
     },
     remove ($event, index) {
       // allow to remove characters from editable div

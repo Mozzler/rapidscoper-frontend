@@ -98,7 +98,9 @@ export default {
 
         if (item.parentStoryId) {
           parent = findParent(list, item.parentStoryId);
-          list = parent.list;
+
+          let internal = parent.list.find(it => it.id === item.parentStoryId);
+          list = internal ? internal.list : parent.list;
         }
 
         let node = createNode(item, parent);

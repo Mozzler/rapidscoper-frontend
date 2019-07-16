@@ -86,8 +86,6 @@ class MongoSockets {
       }
     });
     this.io.on('update_dataset', ({ list, model }) => {
-      console.log(model, 'update');
-
       store.commit('entity/setList', {
         entity: model,
         data: list

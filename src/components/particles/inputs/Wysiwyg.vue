@@ -150,7 +150,7 @@ export default {
       this.list[parentIndex].list[index] = obj;
     },
     saveStory (id, index) {
-      if (this.storyId === this.hintEditor) {
+      if (this.storyId === this.hintEditor || !this.editor) {
         return;
       }
 
