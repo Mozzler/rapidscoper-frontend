@@ -84,8 +84,6 @@ export default {
         }).then(() => {
           const wysiwygChild = `editor-${ this.focused + 1 }-${ this.level }`;
           this.focusEditor(wysiwygChild, this, true);
-        }).then(() => {
-          this.saveStory(null, this.focused);
         });
       }
     },
@@ -106,8 +104,6 @@ export default {
         const wysiwygChild = `wysiwyg-child-${ this.focused }-${ this.level }`;
         const wysiwygEditor = `editor-${ index }-${ this.level + 1 }`;
         this.focusEditor(wysiwygEditor, this.$refs[wysiwygChild][0]);
-      }).then(() => {
-        this.saveStory(null, this.focused);
       });
     },
     removeRow () {
@@ -157,16 +153,6 @@ export default {
         content.$refs[editor][0].focus();
       });
     },
-    changeOrderList (oldParent, newParent, id, newLevel) {
-      let index = oldParent.storyOrder.indexOf(id);
-      oldParent.storyOrder.splice(index, 1);
-
-      if (newLevel === 1) {
-        //this.$store.dispatch('entity/create')
-      }
-      let parentIndex = newParent.storyOrder.indexOf(newParent.id);
-      newParent.storyOrder.splice(parentIndex, 1, id);
-    },
     decreaseSublistLevel ($event) {
       this.hideHint();
 
@@ -177,29 +163,49 @@ export default {
         return;
       }
 
-      new Promise(resolve => {
-        if (this.level - 1 === 1) {
-          const equation = this.getEquation(this.level - 1);
-          const constructions = this.getAdjusted(equation);
+      if (this.level - 1 === 1) {
+        const equation = this.getEquation(this.level - 1);
+        const constructions = this.getAdjusted(equation);
 
-          this.list[this.focused].text = this.createSpan('beginning', constructions[0].key, true);
-          this.list[this.focused].template = constructions[0].value;
+        this.list[this.focused].text = this.createSpan('beginning', constructions[0].key, true);
+        this.list[this.focused].template = constructions[0].value;
+      }
+
+      const node = Object.assign({}, this.list[this.focused]);
+      const list = node.parent.parent.list;
+
+      list.splice(this.parentIndex + 1, 0, node);
+      node.parent = node.parent.parent;
+      node.parentStoryId = node.parent ? node.parent.id : null;
+
+      const data = {
+        entity: 'story',
+        params: {
+          'id': this.list[this.focused].id
+        },
+        data: {
+          id: node.id,
+          parentStoryId: node.parentStoryId ? node.parentStoryId : null,
+          afterStoryId: list[this.parentIndex].id
         }
+      };
 
-        const node = Object.assign({}, this.list[this.focused]);
-        const list = node.parent.parent.list;
-
-        list.splice(this.parentIndex + 1, 0, node);
-        node.parent = node.parent.parent;
-        resolve(node.parent);
-      }).then((parent) => {
-        this.changeOrderList(this.list[this.focused].parent, parent, this.list[this.focused].id);
+      new Promise(() => {
         this.list.splice(this.focused, 1);
       }).then(() => {
         this.focused = null;
         const editor = `editor-${ this.parentIndex + 1 }-${ this.level - 1 }`;
         this.focusEditor(editor, this.$parent, false);
       });
+
+      console.log(data);
+/*
+      this.$store.dispatch('entity/update', data)
+        .then(() => {
+          this.list.splice(this.focused, 1);
+        }).then(() => {
+
+        });*/
     },
     remove ($event, index) {
       // allow to remove characters from editable div

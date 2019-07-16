@@ -8,7 +8,7 @@ export default {
   },
   mounted () {
     if (this.sectionContent.length) {
-      this.stories.list = this.sectionContent;
+      this.updateModel();
       return;
     }
 
@@ -48,6 +48,9 @@ export default {
     },
     updateModel () {
       this.stories.list = this.$store.getters['story/content'](this.model.id);
+      this.stories.list.forEach((value, index) => {
+        this.stories.list[index].parent = this.stories;
+      });
     }
   },
   beforeMount () {

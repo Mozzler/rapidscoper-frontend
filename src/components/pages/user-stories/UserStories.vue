@@ -39,6 +39,9 @@ export default {
     sections () {
       return this.$store.getters['entity/items']('section');
     },
+    projects () {
+      return this.$store.getters['entity/items']('project');
+    },
     activeProjectId () {
       return this.$route.params.projectId;
     }
@@ -48,9 +51,12 @@ export default {
   },
   methods: {
     fetchData () {
+      const project = this.projects.find(item => item.id === this.activeProjectId);
+
       const filter = {
         $or: [
-          { 'fullDocument.projectId': { '$in': [this.activeProjectId] } }
+          { 'fullDocument.projectId': { '$in': [ this.activeProjectId ] } },
+          { 'fullDocument.teamId': { '$in': [ project.teamId ] } }
         ]
       };
 
