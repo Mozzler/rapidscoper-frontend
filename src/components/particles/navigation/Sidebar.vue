@@ -9,7 +9,7 @@
     <div class="sidebar__header">
       <v-icon class="sidebar__notification">notifications</v-icon>
       <div class="sidebar-header__img">
-        <img src="@/assets/img/user.png"/>
+        <img :src="user.avatarUrl"/>
       </div>
       <div class="text-bold" v-if="user">
         {{ user.firstName ? user.firstName : ''}} {{ user.lastName ? user.lastName : '' }}
