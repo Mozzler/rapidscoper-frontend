@@ -110,6 +110,12 @@
       font-weight: 400;
     }
   }
+
+  &.disabled {
+    .country-code, input {
+      color: rgba(0,0,0, .38) !important;
+    }
+  }
 }
 
 .input-without-border {

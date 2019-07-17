@@ -88,10 +88,10 @@ export default {
     user: {
       firstName: null,
       lastName: null,
-      phone: null
+      phone: '3366'
     },
     team: {
-      name: null
+      name: 'sahdf'
     },
     processing: false
   }),
@@ -126,6 +126,8 @@ export default {
       });
     },
     async create () {
+      this.processing = true;
+
       this.processing = true;
 
       let result = await this.$validator.validate();
