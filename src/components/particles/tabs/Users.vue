@@ -22,7 +22,8 @@
         <td>{{ props.item.userData.email }}</td>
         <td>
           <v-flex>
-            <dropdown :list="roles" :selected="props.item.role"
+            <dropdown :list="roles"
+                      :selected="props.item.role"
                       @update="value => updateRole(value, props.item.id)" />
           </v-flex>
         </td>
@@ -40,7 +41,10 @@ import AbsoluteMenu from "../menus/AbsoluteMenu";
 import Dropdown from "../menus/Dropdown";
 export default {
   name: 'Users',
-  components: {Dropdown, AbsoluteMenu},
+  components: {
+    Dropdown,
+    AbsoluteMenu
+  },
   data () {
     return {
       roles: [
