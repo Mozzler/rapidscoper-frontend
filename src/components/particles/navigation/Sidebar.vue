@@ -75,12 +75,12 @@ export default {
       items: [
         {
           title: 'All projects',
-          number: 24,
+          number: 0,
           icon: 'list_alt'
         },
         {
           title: 'Shared with me',
-          number: 4,
+          number: 0,
           icon: 'share'
         },
         /*{
@@ -97,7 +97,17 @@ export default {
     },
     user () {
       return this.$store.state.auth.user;
+    },
+    totalProjects () {
+      return this.$store.getters['entity/total']('project');
+    },
+    totalShared () {
+      return this.$store.getters['entity/total']('project', (internal) => `${internal.createdUserId} !== ${ this.user.user_id }`);
     }
+  },
+  beforeMount () {
+    this.items[0].number = this.totalProjects;
+    this.items[1].number = this.totalShared;
   },
   methods: {
     toTeams (value, id) {
@@ -114,6 +124,14 @@ export default {
               this.$router.push('/signup');
             });
       }
+    }
+  },
+  watch: {
+    totalProjects () {
+      this.items[0].number = this.totalProjects;
+    },
+    totalShared () {
+      this.items[1].number = this.totalShared;
     }
   }
 };

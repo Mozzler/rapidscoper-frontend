@@ -20,5 +20,16 @@ export default {
 
       return data;
     };
+  },
+  total (state) {
+    return (entity, f = null) => {
+      let list = state[entity].items;
+
+      if (f) {
+        list = list.filter(item => f(item));
+      }
+
+      return list.length;
+    };
   }
 };
