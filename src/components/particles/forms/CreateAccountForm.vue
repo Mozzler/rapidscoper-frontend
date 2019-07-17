@@ -4,13 +4,7 @@
     <v-form @keyup.native.enter="create">
       <v-layout row wrap>
         <v-flex xs12 class="signup-input">
-          <div>
-            <div class="signup-loader sign-up-header--m43"
-                 @click="$refs.inputUpload.click()">
-              <photo-camera />
-            </div>
-            <input v-show="false" ref="inputUpload" type="file" />
-          </div>
+          <image-loader :avatar="user.avatarId"/>
         </v-flex>
         <v-flex xs12 class="signup-input">
           <v-text-field
@@ -75,23 +69,25 @@
 </template>
 
 <script>
-import PhotoCamera from '../../particles/icons/PhotoCamera';
+
 import ErrorMessage from '../../particles/alerts/error-message';
+import ImageLoader from '../../particles/inputs/ImageLoader';
 
 export default {
   name: 'CreateAccountForm',
   components: {
-    PhotoCamera,
-    ErrorMessage
+    ErrorMessage,
+    ImageLoader
   },
   data: () => ({
     user: {
       firstName: null,
       lastName: null,
-      phone: '3366'
+      phone: null,
+      avatarId: null
     },
     team: {
-      name: 'sahdf'
+      name: null
     },
     processing: false
   }),
@@ -104,6 +100,9 @@ export default {
     this.connect('user', 'auth/update', null, false);
   },
   methods: {
+    handleImage ($event) {
+      console.log($event);
+    },
     send () {
       const payload = {
         data: this.team,
