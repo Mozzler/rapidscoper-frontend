@@ -24,7 +24,9 @@
       <template v-slot:items="props">
         <tr @click="props.expanded = !props.expanded">
           <td>
-            {{ props.item.name }}
+            <div @click="() => goTo(props.item.name, props.item.id)" class="cursor-pointer">
+              {{ props.item.name }}
+            </div>
             <span class="index" v-if="props.item.index">
               {{ props.item.index }}
             </span>
@@ -93,7 +95,11 @@ export default {
     fetchData () {
       this.$store.commit('entity/resetList', 'project');
       this.connect('project', 'entity/setList');
-    }
+    },
+    goTo (item, id) {
+      const url = `/projects/${id}/user-story/section/edit`;
+      this.$router.push(url);
+    },
   },
   computed: {
     projects () {
