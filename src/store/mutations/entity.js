@@ -29,6 +29,7 @@ export default {
 
     _.each(state[payload.entity].items, (item, index) => {
       if (item.id === payload.data.id) {
+        console.log(item.id === payload.data.id);
         _.assign(state[payload.entity].items[index], payload.data);
       }
     });

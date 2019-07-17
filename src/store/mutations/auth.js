@@ -1,7 +1,6 @@
 function converter (data) {
-  let obj = data.items ? data.items[0] : data;
-  obj = obj.data ? obj.data : obj;
-  return obj;
+  let obj = _.has(data, 'data') ? data.data : data;
+  return _.has(obj, 'items') ? obj.items[0] : obj;
 }
 
 export default {

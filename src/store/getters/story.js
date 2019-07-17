@@ -27,6 +27,31 @@ function findParent (data, parentStoryId) {
   });
 }
 
+function findRootById (data, parentStoryId, path = []) {
+  for (var i = 0; i < data.length; i++) {
+    if (data[i].id === parentStoryId) {
+      path.push(data[i]);
+
+      if (data[i].parentStoryId !== null) {
+        findRootById(data, data[i].parentStoryId, path);
+      } else {
+        return path;
+      }
+    }
+  }
+}
+
+function sortStoriesByOrder (list, order) {
+  const data = [];
+
+  order.forEach(orderId => {
+    let story = list.find(story => story.id === orderId);
+    data.push(story);
+  });
+
+  return data;
+}
+
 function createNode (entity, parent = null) {
   const constructions = getConstructions();
   const key = Object.keys(constructions).filter(k => {
@@ -85,14 +110,18 @@ export default {
   },
   content (state, getters, rootState) {
     return id => {
+      const section = _.find(rootState.entity.section.items, item => item.id === id);
+      const order = [...section.storyOrder].reverse();
+
       const stories = _.chain(rootState.entity.story.items)
         .filter(item => item.sectionId === id)
-        .sortBy(item => item.parentStoryId || '')
         .value();
+
+      const sorted = sortStoriesByOrder(stories, order);
 
       let items = [];
 
-      _.each(stories, item => {
+      _.each(sorted, item => {
         let parent = null;
         let list = items;
 

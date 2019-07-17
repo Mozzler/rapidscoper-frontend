@@ -92,11 +92,13 @@ export default {
         });
     },
     login () {
-      const props = this.authorized.firstName && this.authorized.lastName;
-      const url = !props ? '/create-account' : '/';
+      this.connect('user', 'auth/update', null, true, () => {
+        const props = this.authorized.firstName && this.authorized.lastName;
+        const url = !props ? '/create-account' : '/';
 
-      this.$router.push(url);
-      this.processing = false;
+        this.$router.push(url);
+        this.processing = false;
+      });
     }
   },
   watch: {

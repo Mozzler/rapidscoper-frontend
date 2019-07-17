@@ -23,7 +23,7 @@
                     class="user-story__input"
                     v-if="tab === 'estimate'"
                     v-model="item.estimation"
-                    @change="$event => item.estimation = $event.target.value"
+                    @change="$event => updateEstimation($event, item.id)"
                   />
                 </v-flex>
                 <v-flex grow>
@@ -36,7 +36,7 @@
             <div class="user-story__wysiwyg">
               <div class="user-story__placeholder"
                    v-html="item.placeholder"
-                   readonly />
+                   readonly></div>
               <div :contenteditable="(processing !== `${storyId}-${index}`)"
                    class="user-story__editable"
                    :id="storyId"
@@ -54,7 +54,7 @@
                    @keydown.delete.exact="($event) => remove($event, index)"
                    @keydown.186.shift.exact="createSublist"
                    @keydown.tab.shift.exact="decreaseSublistLevel"
-                   v-html="item.text" />
+                   v-html="item.text"></div>
               <circular-loader
                 cls="user-story__loader"
                 :size="10"
@@ -143,6 +143,17 @@ export default {
     }
   },
   methods: {
+    updateEstimation ($event, id) {
+      this.$store.dispatch('entity/update', {
+        data: {
+          'estimate': $event.target.value
+        },
+        entity: 'story',
+        params: {
+          id: id
+        }
+      });
+    },
     updateText () {
       this.$emit('update-text', this.focused, this.list[this.focused]);
     },

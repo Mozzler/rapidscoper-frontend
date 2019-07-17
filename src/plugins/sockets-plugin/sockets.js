@@ -22,6 +22,10 @@ class MongoSockets {
   }
 
   connect (model, filter, snapshotFlag, cb) {
+    if (!this.io) {
+      this.init();
+    }
+
     if (this.streams[model]) {
       this.disconnect([model]);
     }
@@ -34,11 +38,16 @@ class MongoSockets {
         this.streams[model] = streamId;
         cb(snapshot);
       } else {
-        const isSuccessfull = await store.dispatch('auth/refreshToken');
+        /*const isSuccessfull = await store.dispatch('auth/refreshToken');
 
         if (isSuccessfull) {
           this.connect(model, filter, cb);
-        }
+        }*/
+        store.dispatch('auth/logout')
+          .then(() => {
+            app.$router.push('/signup');
+          });
+        this.disconnect();
       }
     });
   }
