@@ -26,13 +26,13 @@ export default {
       imp: {
         title: 'IMP.',
         list: {
-          'storage': true,
+          /*'storage': true,
           'verified_user': true,
           'sitemap-icon': false,
           'extension': true,
-          'done_all': true,
+          'done_all': true,*/
           'book-icon': false,
-          'attach_file': true
+          //'attach_file': true
         }
       }
     };

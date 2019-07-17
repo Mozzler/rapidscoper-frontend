@@ -35,12 +35,12 @@
             </v-layout>
           </td>
           <td>{{ props.item.updatedAt | toDate }}</td>
-          <td>
+          <!--<td>
             <v-layout align-center justify-space-between row fill-height>
               <v-icon>share</v-icon>
               <v-icon>archive</v-icon>
             </v-layout>
-          </td>
+          </td>-->
         </tr>
         <span class="tr-border" />
       </template>
@@ -75,11 +75,11 @@ export default {
           sortable: false,
           value: 'last changes'
         },
-        {
+        /*{
           text: 'actions',
           sortable: false,
           value: 'actions'
-        }
+        }*/
       ]
     };
   },

@@ -7,7 +7,9 @@
     app>
 
     <div class="sidebar__header">
-      <v-icon class="sidebar__notification">notifications</v-icon>
+      <!--<v-icon class="sidebar__notification">
+        notifications
+      </v-icon>-->
       <div class="sidebar-header__img">
         <img :src="user.avatarUrl"/>
       </div>
@@ -81,11 +83,11 @@ export default {
           number: 4,
           icon: 'share'
         },
-        {
+        /*{
           title: 'Archived',
           number: 12,
           icon: 'archive'
-        }
+        }*/
       ]
     };
   },

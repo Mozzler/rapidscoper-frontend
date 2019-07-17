@@ -20,12 +20,12 @@
         </v-tabs>
       </v-flex>
       <v-flex text-xs-right>
-        <v-btn icon>
+        <!--<v-btn icon>
           <sort-icon />
         </v-btn>
         <v-btn icon>
           <v-icon>visibility</v-icon>
-        </v-btn>
+        </v-btn>-->
         <v-btn class="btn-rapid primary" large>
           Share
         </v-btn>
@@ -53,7 +53,7 @@ export default {
       project: 'Skellorbit',
 
       tabs: [
-        'Edit', 'Estimates', 'Priorities', 'Labels', 'Comments'
+        'Edit', 'Estimates', 'Priorities', 'Labels', /*'Comments'*/
       ],
       activeTab: null
     };

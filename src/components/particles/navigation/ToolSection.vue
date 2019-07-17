@@ -38,7 +38,7 @@
         :active="priority" />
     </div>
 
-    <div class="tool-block">
+    <!--<div class="tool-block">
       <div class="section__title">
         Attachments
       </div>
@@ -51,7 +51,7 @@
           </v-layout>
         </div>
       </div>
-    </div>
+    </div>-->
   </div>
 </template>
 
