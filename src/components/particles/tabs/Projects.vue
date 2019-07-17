@@ -25,7 +25,9 @@
           </td>
           <td>
             <v-layout align-center justify-start row fill-height>
-              <img src="@/assets/img/user.png" v-for="i in 3" :key="i"/>
+              <v-flex v-for="i in 3" :key="i" shrink mr-2>
+                <img src="@/assets/img/user.png" />
+              </v-flex>
             </v-layout>
           </td>
           <td>{{ props.item.updatedAt | toDate }}</td>

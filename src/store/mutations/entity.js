@@ -25,11 +25,11 @@ export default {
     }
   },
   update (state, payload) {
+    const entity = payload.actual ? payload.actual : payload.entity;
     payload.data = normalizeId(payload.data);
 
-    _.each(state[payload.entity].items, (item, index) => {
+    _.each(state[entity].items, (item, index) => {
       if (item.id === payload.data.id) {
-        console.log(item.id === payload.data.id);
         _.assign(state[payload.entity].items[index], payload.data);
       }
     });

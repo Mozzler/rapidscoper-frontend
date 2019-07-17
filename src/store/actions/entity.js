@@ -1,8 +1,18 @@
+function uppercased (str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function actualEntity (str) {
+  return str.split('-')
+            .map((s, index) => index === 0 ? s : uppercased(s))
+            .join('');
+}
+
 export default {
   async create (store, payload) {
     const response = await this._vm.$axios.post(`${payload.entity}/create`, payload.data);
     const data = {
-      entity: payload.entity,
+      entity: actualEntity(payload.entity),
       data: response.data.item
     };
 
@@ -16,7 +26,7 @@ export default {
     const params = payload.params;
     const response = await this._vm.$axios.put(`${payload.entity}/update`, payload.data, { params });
     const data = {
-      entity: payload.entity,
+      entity: actualEntity(payload.entity),
       data: response.data.item
     };
 

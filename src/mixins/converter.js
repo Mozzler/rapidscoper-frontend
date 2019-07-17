@@ -26,11 +26,11 @@ export default {
       let beginning = value > 1 ? '' : 'a ';
       ending = value > 1 ? ending + 's' : ending;
       return value === 'less than minute ago' ? value : `${beginning}${Math.trunc(value)} ${ending} ago`;
-    }
+    },
   },
   methods: {
     getStrFromObj (item) {
       return item.key || item.name;
-    }
+    },
   }
 };

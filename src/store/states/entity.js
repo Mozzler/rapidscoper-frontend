@@ -13,5 +13,11 @@ export default {
   },
   projectUser: {
     items: []
-  }
+  },
+  userTeam: {
+    items: []
+  },
+  userProject: {
+    items: []
+  },
 };
