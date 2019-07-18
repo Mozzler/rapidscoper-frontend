@@ -2,15 +2,15 @@ export default {
   methods: {
     type (item) {
       switch (item) {
-        case 'Backend':
+        case '1. Backend':
           return 'yellow';
         case 'Must have':
           return 'green';
         case 'Should have':
-        case 'Frontend':
+        case '2. Frontend':
           return 'blue';
         case 'Could have':
-        case 'MVP':
+        case '3. MVP':
           return 'grey';
         case 'Won\'t have':
           return 'red';
