@@ -168,6 +168,7 @@ export default {
       this.processing = `${this.storyId}-${index}`;
 
       let action = 'entity/create';
+
       const story = {
         entity: 'story',
         data: {
@@ -179,9 +180,8 @@ export default {
           projectId: this.activeProject.id,
           level: this.level - 1,
           markup: this.editor.text,
-          afterStoryId: (this.level === 1 && this.focused === 0) ? null :
-            this.list.length > 1 ? this.list[index - 1].id :
-            this.list[index].parent.id
+          afterStoryId: this.list.length > 1 ? this.list[this.focused - 1].id :
+            (this.list[this.focused].parent ? this.list[this.focused].parent.id : null)
         }
       };
 

@@ -91,6 +91,7 @@ export default {
 
       await this.$store.dispatch('entity/create', section);
       story.data.sectionId = this.sections[this.sections.length - 1].id;
+      this.$socket.recreateWatchers('section');
 
       this.$store.dispatch('entity/create', story)
         .then(() => {
@@ -104,7 +105,7 @@ export default {
           });
         })
         .then(() => {
-          this.$socket.recreateWatchers('section');
+          this.$socket.recreateWatchers('story');
         });
     },
     scrollToActiveSection () {
