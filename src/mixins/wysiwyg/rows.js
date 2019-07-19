@@ -196,7 +196,8 @@ export default {
         this.saveStory(this.list[this.focused].id, this.focused);
         resolve(data);
       }).then((data) => {
-        this.$store.dispatch('story/move', data);
+        console.log(data);
+        //this.$store.dispatch('story/move', data);
       });
     },
     remove ($event, index) {
