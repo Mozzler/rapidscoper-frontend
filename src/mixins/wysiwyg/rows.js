@@ -60,10 +60,10 @@ export default {
 
       return main || sub;
     },
-    createRow ($event) {
+    async createRow ($event) {
       if (this.rowIsEmpty()) {
         $event.preventDefault();
-        this.decreaseSublistLevel($event);
+        await this.decreaseSublistLevel($event);
         return;
       }
 
@@ -156,7 +156,9 @@ export default {
 
       this.saveStory(this.list[this.focused].id, this.focused);
     },
-    decreaseSublistLevel ($event) {
+    async decreaseSublistLevel ($event) {
+      const data = {};
+
       this.hideHint();
 
       $event.preventDefault();
@@ -172,6 +174,9 @@ export default {
 
         this.list[this.focused].text = this.createSpan('beginning', constructions[0].key, true);
         this.list[this.focused].template = constructions[0].value;
+
+        await this.saveStory(this.list[this.focused].id, this.focused);
+        //data.storyIds = this.list[this.focused].list.map(item => item.id);
       }
 
       const node = Object.assign({}, this.list[this.focused]);
@@ -181,26 +186,41 @@ export default {
       node.parent = node.parent.parent;
       node.parentStoryId = node.parent ? node.parent.id : null;
 
-      new Promise(() => {
-        this.list.splice(this.focused, 1);
+      data.afterStoryId = node.parent.list[this.parentIndex].id;
+      data.parentStoryId = node.parentStoryId;
+
+      await this.$store.dispatch('story/move', data);
+/*
+      this.saveStory(this.list[this.focused].id, this.focused)
+        .then(() => {
+          this.list.splice(this.focused, 1);
+        })
+        .then(() => {
+
+        });
+      /*
+      new Promise((resolve) => {
+
+        resolve();
       }).then(() => {
+
+        resolve(data);
+      })
+        .then(() => {
         this.focused = null;
         const editor = `editor-${ this.parentIndex + 1 }-${ this.level - 1 }`;
         this.focusEditor(editor, this.$parent, false);
-      }).then(resolve => {
+      }).then(() => {
         const data = {
           storyIds: this.list[this.focused].list.map(item => item.id),
+          afterStoryId: null,
           parentStoryId: this.list[this.focused].id
         };
 
-        this.saveStory(this.list[this.focused].id, this.focused);
-        resolve(data);
-      }).then((data) => {
-        console.log(data);
-        //this.$store.dispatch('story/move', data);
-      });
+
+      });*/
     },
-    remove ($event, index) {
+    async remove ($event, index) {
       // allow to remove characters from editable div
       if (this.isEditable($event)) {
         return;
@@ -210,7 +230,7 @@ export default {
       const spans = this.editor.text.split('</span>');
 
       if (this.level > 1 && !this.getSpanList() && !this.getTail()) {
-        this.decreaseSublistLevel($event);
+        await this.decreaseSublistLevel($event);
       }
 
       const spanList = this.getSpanList(false);

@@ -160,7 +160,7 @@ export default {
     updateChildText (index, obj, parentIndex) {
       this.list[parentIndex].list[index] = obj;
     },
-    saveStory (id, index) {
+    saveStory (id, index, cb = () => {}) {
       if (this.storyId === this.hintEditor || !this.editor) {
         return;
       }
@@ -202,6 +202,9 @@ export default {
         })
         .then(() => {
           this.$socket.recreateWatchers('story');
+        })
+        .then(() => {
+          cb();
         });
     }
   },
