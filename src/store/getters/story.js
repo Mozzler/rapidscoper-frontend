@@ -111,17 +111,16 @@ export default {
   content (state, getters, rootState) {
     return id => {
       const section = _.find(rootState.entity.section.items, item => item.id === id);
-      const order = [...section.storyOrder].reverse();
-
       const stories = _.chain(rootState.entity.story.items)
         .filter(item => item.sectionId === id)
         .value();
 
-      const sorted = sortStoriesByOrder(stories, order);
+      const sorted = sortStoriesByOrder(stories, [...section.storyOrder]);
 
       let items = [];
 
       _.each(sorted, item => {
+
         let parent = null;
         let list = items;
 

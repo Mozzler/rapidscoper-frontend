@@ -5,6 +5,7 @@
         <story-item v-for="(story, index) in sections"
           :model="story"
           :key="index"
+          ref="storyItem"
           @show-error="value => message = value"/>
       </div>
       <hint />
@@ -30,6 +31,9 @@ export default {
   },
   beforeMount () {
     this.$root.$on('create-new-section', this.createSection);
+    if (!this.sections.length) {
+      this.createSection();
+    }
   },
   beforeDestroy () {
     this.$root.$off('create-new-section');
@@ -55,10 +59,11 @@ export default {
     }
   },
   methods: {
-    createSection () {
+    getSectionData () {
       const untitled = this.sections.filter(item => item.name.includes('Untitled'));
       const number = untitled.length;
-      const section = {
+
+      return {
         entity: 'section',
         data: {
           name: `Untitled${number ? ' ' + number : ''}`,
@@ -67,8 +72,27 @@ export default {
           teamId: this.activeProject.teamId
         }
       };
+    },
+    getStoryData () {
+      return {
+        entity: 'story',
+        data: {
+          type: 'user',
+          markup: this.createSpan('beginning', 'As a', true),
+          sectionId: null,
+          projectId: this.activeProject.id,
+          teamId: this.activeProject.teamId
+        }
+      };
+    },
+    async createSection () {
+      const section = this.getSectionData();
+      const story = this.getStoryData();
 
-      this.$store.dispatch('entity/create', section)
+      await this.$store.dispatch('entity/create', section);
+      story.data.sectionId = this.sections[this.sections.length - 1].id;
+
+      this.$store.dispatch('entity/create', story)
         .then(() => {
           this.$router.push({
             name: 'stories',

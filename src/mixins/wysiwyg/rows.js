@@ -84,6 +84,8 @@ export default {
         }).then(() => {
           const wysiwygChild = `editor-${ this.focused + 1 }-${ this.level }`;
           this.focusEditor(wysiwygChild, this, true);
+        }).then(() => {
+          this.saveStory(this.list[this.focused].id, this.focused);
         });
       }
     },
@@ -123,8 +125,7 @@ export default {
         parentStoryId: this.list[this.focused].parentStoryId
       };
 
-      this.$store.dispatch('entity/delete', data)
-        .then(() => this.updateOrder(data, 'entity/delete'));
+      this.$store.dispatch('entity/delete', data);
     },
     increaseSublistLevel () {
       if (this.level === 3 || (this.level === 1 && this.focused === 0)) {
@@ -152,6 +153,8 @@ export default {
       this.$nextTick(() => {
         content.$refs[editor][0].focus();
       });
+
+      this.saveStory(this.list[this.focused].id, this.focused);
     },
     decreaseSublistLevel ($event) {
       this.hideHint();
@@ -178,29 +181,22 @@ export default {
       node.parent = node.parent.parent;
       node.parentStoryId = node.parent ? node.parent.id : null;
 
-      const data = {
-        entity: 'story',
-        params: {
-          'id': this.list[this.focused].id
-        },
-        data: {
-          id: node.id,
-          parentStoryId: node.parentStoryId ? node.parentStoryId : null,
-          afterStoryId: list[this.parentIndex].id,
-          markup: this.list[this.focused].text
-        }
-      };
-
       new Promise(() => {
         this.list.splice(this.focused, 1);
       }).then(() => {
         this.focused = null;
         const editor = `editor-${ this.parentIndex + 1 }-${ this.level - 1 }`;
         this.focusEditor(editor, this.$parent, false);
-      });
+      }).then(resolve => {
+        const data = {
+          storyIds: this.list[this.focused].list.map(item => item.id),
+          parentStoryId: this.list[this.focused].id
+        };
 
-      this.$store.dispatch('entity/update', data).then(() => {
-        console.log('updated');
+        this.saveStory(this.list[this.focused].id, this.focused);
+        resolve(data);
+      }).then((data) => {
+        this.$store.dispatch('story/move', data);
       });
     },
     remove ($event, index) {

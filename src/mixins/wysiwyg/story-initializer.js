@@ -6,18 +6,9 @@ export default {
       }
     };
   },
-  mounted () {
-    if (this.sectionContent.length) {
-      this.updateModel();
-      return;
-    }
-
-    const el = this.stories.list[0];
-    el.parent = this.stories;
-    el.text = this.$refs.wysiwyg.createSpan('beginning', 'As a', true);
-
-    const constructions = Object.values(this.dictionary.constructions);
-    el.template = constructions[0].structure;
+  beforeMount () {
+    this.$root.$on('update-model', this.updateModel);
+    this.updateModel();
   },
   computed: {
     sections () {
@@ -52,9 +43,6 @@ export default {
         this.stories.list[index].parent = this.stories;
       });
     }
-  },
-  beforeMount () {
-    this.$root.$on('update-model', this.updateModel);
   },
   beforeDestroy () {
     this.$root.$off('update-model', this.updateModel);

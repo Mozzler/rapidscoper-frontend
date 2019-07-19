@@ -179,7 +179,9 @@ export default {
           projectId: this.activeProject.id,
           level: this.level - 1,
           markup: this.editor.text,
-          afterStoryId: this.list.length > 0 && this.list[index - 1] ? this.list[index - 1].id : 0
+          afterStoryId: (this.level === 1 && this.focused === 0) ? null :
+            this.list.length > 1 ? this.list[index - 1].id :
+            this.list[index].parent.id
         }
       };
 
@@ -191,6 +193,7 @@ export default {
       this.$store.dispatch(action, story)
         .then(response => {
           this.list[index].id = response.item.id;
+          this.list[index].parentStoryId = response.item.parentStoryId;
           this.processing = false;
         })
         .then(() => {

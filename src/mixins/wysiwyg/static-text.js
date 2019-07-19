@@ -1,17 +1,5 @@
 export default {
-  filters: {
-    withoutDots (str) {
-      const s = str ? (typeof str === 'string' ? str : str.name) : str;
-      return s ? s.replace(/\.../g, '') : s;
-    }
-  },
   methods: {
-    createSpan (type, text, greyed = false, editable = false, clickable = false) {
-      const cls = `user-story__editable--${type}${greyed ? ' text-greyed' : ''}`;
-      const props = `readonly contenteditable="${editable}"`;
-
-      return `<span class="${cls}" ${props}>${ this.$options.filters.withoutDots(text) }</span>&nbsp;`;
-    },
     resetPlaceholder () {
       this.editor.tail = '';
       this.editor.placeholder = this.editor.text;
