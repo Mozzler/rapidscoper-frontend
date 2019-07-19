@@ -180,14 +180,18 @@ export default {
           projectId: this.activeProject.id,
           level: this.level - 1,
           markup: this.editor.text,
-          afterStoryId: this.list.length > 1 ? this.list[this.focused - 1].id :
-            (this.list[this.focused].parent ? this.list[this.focused].parent.id : null)
+          afterStoryId: null
         }
       };
 
       if (id) {
         action = 'entity/update';
         story.params = { 'id': id };
+      }
+
+      if (this.focused !== 0 && this.level !== 1) {
+        story.data = this.list.length > 1 ? this.list[this.focused - 1].id :
+          (this.list[this.focused].parent ? this.list[this.focused].parent.id : null);
       }
 
       this.$store.dispatch(action, story)

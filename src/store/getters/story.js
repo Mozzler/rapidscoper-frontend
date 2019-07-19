@@ -115,6 +115,8 @@ export default {
         .filter(item => item.sectionId === id)
         .value();
 
+      console.log(section, stories);
+
       const sorted = sortStoriesByOrder(stories, [...section.storyOrder]);
 
       let items = [];
