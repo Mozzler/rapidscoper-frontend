@@ -83,36 +83,19 @@ export default {
       loading: true
     };
   },
-  beforeMount () {
-    this.fetchProjects();
-  },
   methods: {
     goTo (item, id) {
       const url = `/projects/${id}/user-story/section/edit`;
       this.$router.push(url);
-    },
-    fetchProjects () {
-      this.$store.commit('entity/resetList', 'project');
-
-      const filter = {
-        $or: [
-          { 'fullDocument.teamId': { '$in': [this.activeTeamId] } }
-        ]
-      };
-      this.connect('project', 'entity/setList', filter);
     }
   },
   computed: {
     projects () {
-      return this.$store.getters['entity/items']('project');
+      return this.$store.getters['entity/items']('project')
+        .filter(item => item.teamId === this.activeTeamId);
     },
     activeTeamId () {
       return this.$route.params.name;
-    }
-  },
-  watch: {
-    activeTeamId () {
-      this.fetchProjects();
     }
   }
 };

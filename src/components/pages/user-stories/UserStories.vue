@@ -44,12 +44,19 @@ export default {
     },
     activeProjectId () {
       return this.$route.params.projectId;
+    },
+    stories () {
+      return this.$store.getters['entity/total']('story');
     }
   },
   beforeMount () {
+    this.$root.$on('section-created', this.stopProcessing);
     this.fetchData();
   },
   methods: {
+    stopProcessing () {
+      this.processing = false;
+    },
     fetchData () {
       const filter = {
         $or: [
@@ -59,7 +66,15 @@ export default {
 
       const entities = ['section', 'dictionary', 'story'];
       entities.forEach(entity => {
-        this.connect(entity, 'entity/setList', filter);
+        this.connect(entity, 'entity/setList', filter, true, () => {
+          if (entity === 'story') {
+            if (this.stories.length) {
+              this.processing = false;
+            } else {
+              this.$root.$emit('create-new-section');
+            }
+          }
+        });
       });
     },
     resetData () {
@@ -68,7 +83,6 @@ export default {
       entities.forEach(entity => {
         this.$store.commit('entity/resetList', entity);
       });
-      this.processing = false;
     }
   },
   beforeDestroy () {

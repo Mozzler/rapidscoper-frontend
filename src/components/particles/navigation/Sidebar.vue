@@ -98,11 +98,17 @@ export default {
     user () {
       return this.$store.state.auth.user;
     },
+    projects () {
+      return this.$store.getters['entity/items']('project');
+    },
     totalProjects () {
-      return this.$store.getters['entity/total']('project');
+      return this.projects.length;
     },
     totalShared () {
-      return this.$store.getters['entity/total']('project', (internal) => `${internal.createdUserId} !== ${ this.user.user_id }`);
+      return this.projects
+        .filter(item => item.createdUserId !== this.user.user_id)
+        .length
+        .toString();
     }
   },
   beforeMount () {
