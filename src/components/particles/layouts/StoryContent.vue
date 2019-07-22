@@ -85,21 +85,8 @@ export default {
     async createSection () {
       const section = this.getSectionData();
 
-      const response = await this.$store.dispatch('entity/create', section);
-      console.log(response);
-      /*const story = this.getStoryData(response.id);
-
-      this.$store.dispatch('entity/create', story)
-        .then(() => {
-          this.$router.push({
-            name: 'stories',
-            params: {
-              project: this.projectId,
-              section: this.sections[this.sections.length - 1].id,
-              tab: this.$route.params.tab
-            }
-          }).then(() => this.$socket.recreateWatchers('story'));
-        });*/
+      await this.$store.dispatch('entity/create', section);
+      this.$socket.recreateWatchers('story', true);
     },
     scrollToActiveSection () {
       const el = document.getElementById(this.activeSectionId);

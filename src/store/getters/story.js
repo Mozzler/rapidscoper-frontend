@@ -54,6 +54,7 @@ function sortStoriesByOrder (list, order) {
 
 function createNode (entity, parent = null) {
   const constructions = getConstructions();
+
   const key = Object.keys(constructions).filter(k => {
     return constructions[k].type === entity.type;
   });

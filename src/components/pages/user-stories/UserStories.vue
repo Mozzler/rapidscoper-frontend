@@ -62,7 +62,7 @@ export default {
         ]
       };
 
-      const entities = ['section', 'dictionary', 'story', 'project'];
+      const entities = ['dictionary', 'section', 'story'];
       entities.forEach(entity => {
         this.connect(entity, 'entity/setList', filter, true, () => {
           if (entity === 'story') {
@@ -73,7 +73,7 @@ export default {
     },
     resetData () {
       this.processing = true;
-      const entities = ['section', 'story', 'dictionary'];
+      const entities = ['dictionary', 'section', 'story'];
       entities.forEach(entity => {
         this.$store.commit('entity/resetList', entity);
       });

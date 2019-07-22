@@ -56,11 +56,12 @@ class MongoSockets {
       });
   }
 
-  recreateWatchers (model) {
+  recreateWatchers (model, globally = false) {
     this.io.emit('recreate_watcher', {
       model: model,
       token: store.state.auth.user.access_token,
-      initialStreamId: this.streams[model]
+      initialStreamId: this.streams[model],
+      globally: globally
     });
   }
 
