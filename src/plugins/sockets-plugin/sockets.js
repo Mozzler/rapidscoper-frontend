@@ -38,18 +38,22 @@ class MongoSockets {
         this.streams[model] = streamId;
         cb(snapshot);
       } else {
-        /*const isSuccessfull = await store.dispatch('auth/refreshToken');
-
-        if (isSuccessfull) {
-          this.connect(model, filter, cb);
-        }*/
-        store.dispatch('auth/logout')
-          .then(() => {
-            app.$router.push('/signup');
-          });
-        this.disconnect();
+        if (Number(error.status) === 401) {
+          const isSuccessfull = await store.dispatch('auth/refreshToken');
+          isSuccessfull ? this.connect(model, filter, snapshotFlag, cb) : this.logout();
+        } else {
+          this.logout();
+        }
       }
     });
+  }
+
+  logout () {
+    store.dispatch('auth/logout')
+      .then(() => this.disconnect())
+      .then(() => {
+        app.$router.push('/signup');
+      });
   }
 
   recreateWatchers (model) {
