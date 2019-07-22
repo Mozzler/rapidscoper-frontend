@@ -85,25 +85,28 @@ export default {
       ]
     };
   },
-  beforeMount () {
-    this.fetchData();
-  },
   methods: {
     showModal () {
       this.$root.$emit('create-project');
     },
-    fetchData () {
-      this.$store.commit('entity/resetList', 'project');
-      this.connect('project', 'entity/setList');
-    },
     goTo (item, id) {
       const url = `/projects/${id}/user-story/section/edit`;
       this.$router.push(url);
-    },
+    }
   },
   computed: {
+    user () {
+      return this.$store.state.auth.user;
+    },
     projects () {
-      return this.$store.getters['entity/items']('project');
+      const projects = this.$store.getters['entity/items']('project');
+      return _.filter(projects, project => {
+        let externalProject = project.createdUserId !== this.user.user_id;
+        return this.sharedRoute ? externalProject : project;
+      });
+    },
+    sharedRoute () {
+      return this.$route.params.name === 'shared-with-me';
     }
   }
 };

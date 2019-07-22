@@ -67,8 +67,9 @@ export default {
   methods: {
     initConnect () {
       if (this.authenticated && this.user.access_token) {
-        this.connect('team', 'entity/setList');
         this.connect('user', 'auth/update');
+        this.connect('team', 'entity/setList');
+        this.connect('project', 'entity/setList');
       }
     }
   },

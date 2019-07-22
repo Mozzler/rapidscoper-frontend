@@ -90,6 +90,7 @@
 
 .phone-input {
   @include rapid-input;
+  display: block;
 
   &:focus-within {
     border-color: $primary !important;
@@ -102,12 +103,35 @@
   .dropdown {
     border-radius: 4px;
     outline: none;
+    margin: 1px;
 
     .country-code {
       font-size: 14px;
       font-family: 'Lato';
       color: rgba(0,0,0,.87);
       font-weight: 400;
+    }
+    ul {
+      width: 254px;
+      @include rapid-scroll;
+      margin-top: 4px !important;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.9);
+
+      .dropdown-item {
+        padding: 4px 7px;
+        height: 38px !important;
+        display: flex;
+        align-items: center;
+
+        strong {
+          margin: 0 5px;
+        }
+      }
+    }
+
+    .highlighted {
+      background: $light-primary !important;
     }
   }
 

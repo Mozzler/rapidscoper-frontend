@@ -31,9 +31,6 @@ export default {
   },
   beforeMount () {
     this.$root.$on('create-new-section', this.createSection);
-    if (!this.sections.length) {
-      this.createSection();
-    }
   },
   beforeDestroy () {
     this.$root.$off('create-new-section');
@@ -106,6 +103,9 @@ export default {
         })
         .then(() => {
           this.$socket.recreateWatchers('story');
+        })
+        .then(() => {
+          this.$root.$emit('section-created');
         });
     },
     scrollToActiveSection () {
