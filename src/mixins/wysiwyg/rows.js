@@ -114,16 +114,16 @@ export default {
       }
 
       this.hideHint();
-      this.list.splice(this.focused, 1);
-
-      let chain = this.getElementToFocus(this.list[this.focused - 1], 1, this.focused - 1);
-      eval(chain).focus();
 
       const data = {
         entity: 'story',
         id: this.list[this.focused].id,
         parentStoryId: this.list[this.focused].parentStoryId
       };
+
+      this.list.splice(this.focused, 1);
+      let chain = this.getElementToFocus(this.list[this.focused - 1], 1, this.focused - 1);
+      eval(chain).focus();
 
       this.$store.dispatch('entity/delete', data);
     },
@@ -151,7 +151,7 @@ export default {
 
       node.parent = this.list[this.focused - 1];
       node.parentStoryId = node.parent.id;
-      node.afterStoryId = parent[parent.length - 1].id;
+      node.afterStoryId = parent.length ? parent[parent.length - 1].id : this.list[this.focused].parentStoryId;
 
       parent.push(node);
       this.list.splice(this.focused, 1);
@@ -181,6 +181,8 @@ export default {
 
         this.list[this.focused].text = this.createSpan('beginning', constructions[0].key, true);
         this.list[this.focused].template = constructions[0].value;
+        this.list[this.focused].tail = '';
+        this.list[this.focused].placeholder = this.list[this.focused].text;
         this.list.type = 'user';
       }
 
@@ -193,10 +195,14 @@ export default {
       this.list.splice(this.focused, 1);
       list.splice(this.parentIndex + 1, 0, node);
 
-      this.reorderStory(node, list[this.parentIndex].id);
+      this.reorderStory(node, list[this.parentIndex].id)
+        .then(() => {
+          const editor = `editor-${ this.parentIndex + 1 }-${ this.level - 1 }`;
+          this.focusEditor(editor, this.$parent, false);
+        });
     },
     reorderStory (node) {
-      this.$store.dispatch('entity/update', {
+      return this.$store.dispatch('entity/update', {
         entity: 'story',
         params: {
           id: node.id

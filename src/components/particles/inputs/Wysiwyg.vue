@@ -189,8 +189,8 @@ export default {
       }
 
       if (!(this.focused === 0 && this.level === 1)) {
-        story.data.afterStoryId = this.list.length > 1 ? this.list[this.focused - 1].id :
-          (this.list[index].parent ? this.list[index].parent.id : null);
+        story.data.afterStoryId = this.list.length > 1 && this.list[index - 1] ?
+          this.list[index - 1].id : (this.list[index].parent ? this.list[index].parent.id : null);
       }
 
       this.$store.dispatch(action, story)

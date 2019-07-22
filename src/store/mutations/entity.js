@@ -35,6 +35,9 @@ export default {
     });
   },
   delete (state, payload) {
+    if (!payload.entity) {
+      return;
+    }
     state[payload.entity].items = _.filter(state[payload.entity].items,
         item => item.id !== payload.id);
   },
