@@ -178,7 +178,6 @@ export default {
           parentStoryId: this.list[index].parentStoryId,
           teamId: this.activeProject.teamId,
           projectId: this.activeProject.id,
-          level: this.level - 1,
           markup: this.editor.text,
           afterStoryId: null
         }
@@ -191,20 +190,18 @@ export default {
 
       if (!(this.focused === 0 && this.level === 1)) {
         story.data.afterStoryId = this.list.length > 1 ? this.list[this.focused - 1].id :
-          (this.list[this.focused].parent ? this.list[this.focused].parent.id : null);
+          (this.list[index].parent ? this.list[index].parent.id : null);
       }
 
       this.$store.dispatch(action, story)
         .then(response => {
+          this.$socket.recreateWatchers('story');
+
           this.list[index].id = response.item.id;
           this.list[index].parentStoryId = response.item.parentStoryId;
           this.processing = false;
-        })
-        .then(() => {
-          this.$socket.recreateWatchers('story');
-        })
-        .then(() => {
-          cb();
+
+          cb(response);
         });
     }
   },

@@ -127,17 +127,23 @@ export default {
 
       this.$store.dispatch('entity/delete', data);
     },
-    increaseSublistLevel () {
+    async increaseSublistLevel () {
       if (this.level === 3 || (this.level === 1 && this.focused === 0)) {
         return;
       }
 
       this.hideHint();
+      const equation = this.getEquation(this.level + 1);
+      const constructions = this.getAdjusted(equation);
+
       if (this.level === 1) {
-        this.editor.text = '';
-        this.editor.placeholder = '';
-        this.editor.tail = '';
-        this.editor.template = '';
+        Object.assign(this.list[this.focused], {
+          text: '',
+          placeholder: '',
+          tail: '',
+          template: '',
+          type: constructions[0].type
+        });
       }
 
       const node = Object.assign({}, this.list[this.focused]);
@@ -147,14 +153,25 @@ export default {
       parent.push(node);
       this.list.splice(this.focused, 1);
 
-      const content = this.$refs[`wysiwyg-child-${ this.focused - 1 }-${ this.level }`][0];
-      const editor = `editor-${ parent.length - 1 }-${ this.level + 1 }`;
-
       this.$nextTick(() => {
+        const content = this.$refs[`wysiwyg-child-${ this.focused - 1 }-${ this.level }`][0];
+        const editor = `editor-${ parent.length - 1 }-${ this.level + 1 }`;
+
         content.$refs[editor][0].focus();
       });
 
-      this.saveStory(this.list[this.focused].id, this.focused);
+      this.$store.dispatch('entity/update', {
+        entity: 'story',
+        params: {
+          id: node.id
+        },
+        data: {
+          type: node.type,
+          markup: node.text,
+          parentStoryId: node.parent.id,
+          afterStoryId: parent.length > 1 ? parent[parent.length - 1].id : node.parent.id
+        }
+      });
     },
     async decreaseSublistLevel ($event) {
       const data = {};
@@ -190,35 +207,6 @@ export default {
       data.parentStoryId = node.parentStoryId;
 
       await this.$store.dispatch('story/move', data);
-/*
-      this.saveStory(this.list[this.focused].id, this.focused)
-        .then(() => {
-          this.list.splice(this.focused, 1);
-        })
-        .then(() => {
-
-        });
-      /*
-      new Promise((resolve) => {
-
-        resolve();
-      }).then(() => {
-
-        resolve(data);
-      })
-        .then(() => {
-        this.focused = null;
-        const editor = `editor-${ this.parentIndex + 1 }-${ this.level - 1 }`;
-        this.focusEditor(editor, this.$parent, false);
-      }).then(() => {
-        const data = {
-          storyIds: this.list[this.focused].list.map(item => item.id),
-          afterStoryId: null,
-          parentStoryId: this.list[this.focused].id
-        };
-
-
-      });*/
     },
     async remove ($event, index) {
       // allow to remove characters from editable div

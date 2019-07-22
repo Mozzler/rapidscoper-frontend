@@ -91,6 +91,7 @@ export default {
       this.$socket.recreateWatchers('section');
 
       this.$store.dispatch('entity/create', story)
+        .then(() => this.$socket.recreateWatchers('story'))
         .then(() => {
           this.$router.push({
             name: 'stories',
@@ -100,12 +101,6 @@ export default {
               tab: this.$route.params.tab
             }
           });
-        })
-        .then(() => {
-          this.$socket.recreateWatchers('story');
-        })
-        .then(() => {
-          this.$root.$emit('section-created');
         });
     },
     scrollToActiveSection () {

@@ -50,14 +50,12 @@ export default {
     }
   },
   beforeMount () {
-    this.$root.$on('section-created', this.stopProcessing);
     this.fetchData();
   },
   methods: {
-    stopProcessing () {
-      this.processing = false;
-    },
     fetchData () {
+      this.processing = true;
+
       const filter = {
         $or: [
           { 'fullDocument.projectId': { '$in': [ this.activeProjectId ] } }
@@ -68,11 +66,7 @@ export default {
       entities.forEach(entity => {
         this.connect(entity, 'entity/setList', filter, true, () => {
           if (entity === 'story') {
-            if (this.stories.length) {
-              this.processing = false;
-            } else {
-              this.$root.$emit('create-new-section');
-            }
+            this.processing = false;
           }
         });
       });
