@@ -62,7 +62,7 @@ export default {
         ]
       };
 
-      const entities = ['section', 'dictionary', 'story'];
+      const entities = ['section', 'dictionary', 'story', 'project'];
       entities.forEach(entity => {
         this.connect(entity, 'entity/setList', filter, true, () => {
           if (entity === 'story') {

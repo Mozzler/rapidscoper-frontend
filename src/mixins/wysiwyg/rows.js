@@ -193,8 +193,6 @@ export default {
       this.list.splice(this.focused, 1);
       list.splice(this.parentIndex + 1, 0, node);
 
-      console.log(list[this.parentIndex]);
-
       this.reorderStory(node, list[this.parentIndex].id);
     },
     reorderStory (node) {

@@ -20,6 +20,9 @@ export default {
     TeamContent,
     Sidebar
   },
+  beforeMount () {
+    this.connect('project', 'entity/setList');
+  },
   computed: {
     route () {
       return this.$route.params.section;

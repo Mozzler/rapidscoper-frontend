@@ -70,13 +70,13 @@ export default {
         }
       };
     },
-    getStoryData () {
+    getStoryData (sectionId) {
       return {
         entity: 'story',
         data: {
           type: 'user',
           markup: this.createSpan('beginning', 'As a', true),
-          sectionId: null,
+          sectionId: sectionId,
           projectId: this.activeProject.id,
           teamId: this.activeProject.teamId
         }
@@ -84,14 +84,12 @@ export default {
     },
     async createSection () {
       const section = this.getSectionData();
-      const story = this.getStoryData();
 
-      await this.$store.dispatch('entity/create', section);
-      story.data.sectionId = this.sections[this.sections.length - 1].id;
-      this.$socket.recreateWatchers('section');
+      const response = await this.$store.dispatch('entity/create', section);
+      console.log(response);
+      /*const story = this.getStoryData(response.id);
 
       this.$store.dispatch('entity/create', story)
-        .then(() => this.$socket.recreateWatchers('story'))
         .then(() => {
           this.$router.push({
             name: 'stories',
@@ -100,8 +98,8 @@ export default {
               section: this.sections[this.sections.length - 1].id,
               tab: this.$route.params.tab
             }
-          });
-        });
+          }).then(() => this.$socket.recreateWatchers('story'));
+        });*/
     },
     scrollToActiveSection () {
       const el = document.getElementById(this.activeSectionId);
