@@ -151,6 +151,7 @@ export default {
 
       node.parent = this.list[this.focused - 1];
       node.parentStoryId = node.parent.id;
+      node.afterStoryId = parent[parent.length - 1].id;
 
       parent.push(node);
       this.list.splice(this.focused, 1);
@@ -162,8 +163,7 @@ export default {
         content.$refs[editor][0].focus();
       });
 
-      const afterStoryId = parent[parent.length - 1].id;
-      this.reorderStory(node, afterStoryId);
+      this.reorderStory(node);
     },
     async decreaseSublistLevel ($event) {
       this.hideHint();
@@ -187,14 +187,17 @@ export default {
       const node = Object.assign({}, this.list[this.focused]);
       const list = node.parent.parent.list;
 
-      node.parentStoryId = list.length > 1 ? list[this.parentIndex].parentStoryId : null;
+      node.parentStoryId = list[this.parentIndex].parentStoryId;
+      node.afterStoryId = list[this.parentIndex].id;
 
       this.list.splice(this.focused, 1);
       list.splice(this.parentIndex + 1, 0, node);
 
+      console.log(list[this.parentIndex]);
+
       this.reorderStory(node, list[this.parentIndex].id);
     },
-    reorderStory (node, afterStoryId) {
+    reorderStory (node) {
       this.$store.dispatch('entity/update', {
         entity: 'story',
         params: {
@@ -203,11 +206,9 @@ export default {
         data: {
           type: node.type,
           markup: node.text,
-          parentStoryId: (this.level - 1 !== 1 || this.level !== 1) ? node.parent.id : null,
-          afterStoryId: afterStoryId
+          parentStoryId: node.parentStoryId,
+          afterStoryId: node.afterStoryId
         }
-      }).then(() => {
-        node.parentStoryId = this.level - 1 !== 1 ? node.parent.id : null;
       });
     },
     async remove ($event, index) {
