@@ -133,10 +133,10 @@ export default {
       }
 
       this.hideHint();
-      const equation = this.getEquation(this.level + 1);
-      const constructions = this.getAdjusted(equation);
-
       if (this.level === 1) {
+        const equation = this.getEquation(this.level + 1);
+        const constructions = this.getAdjusted(equation);
+
         Object.assign(this.list[this.focused], {
           text: '',
           placeholder: '',
@@ -147,9 +147,11 @@ export default {
       }
 
       const node = Object.assign({}, this.list[this.focused]);
-      node.parent = this.list[this.focused - 1];
-
       const parent = this.list[this.focused - 1].list;
+
+      node.parent = this.list[this.focused - 1];
+      node.parentStoryId = node.parent.id;
+
       parent.push(node);
       this.list.splice(this.focused, 1);
 
@@ -160,22 +162,10 @@ export default {
         content.$refs[editor][0].focus();
       });
 
-      this.$store.dispatch('entity/update', {
-        entity: 'story',
-        params: {
-          id: node.id
-        },
-        data: {
-          type: node.type,
-          markup: node.text,
-          parentStoryId: node.parent.id,
-          afterStoryId: parent.length > 1 ? parent[parent.length - 1].id : node.parent.id
-        }
-      });
+      const afterStoryId = parent[parent.length - 1].id;
+      this.reorderStory(node, afterStoryId);
     },
     async decreaseSublistLevel ($event) {
-      const data = {};
-
       this.hideHint();
 
       $event.preventDefault();
@@ -191,22 +181,34 @@ export default {
 
         this.list[this.focused].text = this.createSpan('beginning', constructions[0].key, true);
         this.list[this.focused].template = constructions[0].value;
-
-        await this.saveStory(this.list[this.focused].id, this.focused);
-        //data.storyIds = this.list[this.focused].list.map(item => item.id);
+        this.list.type = 'user';
       }
 
       const node = Object.assign({}, this.list[this.focused]);
       const list = node.parent.parent.list;
 
+      node.parentStoryId = list.length > 1 ? list[this.parentIndex].parentStoryId : null;
+
+      this.list.splice(this.focused, 1);
       list.splice(this.parentIndex + 1, 0, node);
-      node.parent = node.parent.parent;
-      node.parentStoryId = node.parent ? node.parent.id : null;
 
-      data.afterStoryId = node.parent.list[this.parentIndex].id;
-      data.parentStoryId = node.parentStoryId;
-
-      await this.$store.dispatch('story/move', data);
+      this.reorderStory(node, list[this.parentIndex].id);
+    },
+    reorderStory (node, afterStoryId) {
+      this.$store.dispatch('entity/update', {
+        entity: 'story',
+        params: {
+          id: node.id
+        },
+        data: {
+          type: node.type,
+          markup: node.text,
+          parentStoryId: (this.level - 1 !== 1 || this.level !== 1) ? node.parent.id : null,
+          afterStoryId: afterStoryId
+        }
+      }).then(() => {
+        node.parentStoryId = this.level - 1 !== 1 ? node.parent.id : null;
+      });
     },
     async remove ($event, index) {
       // allow to remove characters from editable div
