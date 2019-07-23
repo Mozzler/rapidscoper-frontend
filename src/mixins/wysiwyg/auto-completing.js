@@ -41,6 +41,10 @@ export default {
       if (!items.length || !this.getSpanList()) {
         el = this.$refs[this.ref][0];
       } else {
+        if (!this.previous) {
+          return;
+        }
+
         let filtered = nodes.filter(item => {
           let previous = this.previous.split('=')[0];
           return item.className && item.className.includes(previous);

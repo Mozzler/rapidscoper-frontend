@@ -187,15 +187,15 @@ export default {
       }
 
       const node = Object.assign({}, this.list[this.focused]);
-      const list = node.parent.parent.list;
+      const parent = node.parent.parent;
 
-      node.parentStoryId = list[this.parentIndex].parentStoryId;
-      node.afterStoryId = list[this.parentIndex].id;
+      node.parentStoryId = node.parent && node.parent.id ? node.parent.id : null;
+      node.afterStoryId = parent.list[this.parentIndex] ? parent.list[this.parentIndex].id : 0;
 
       this.list.splice(this.focused, 1);
-      list.splice(this.parentIndex + 1, 0, node);
+      parent.list.splice(this.parentIndex + 1, 0, node);
 
-      this.reorderStory(node, list[this.parentIndex].id)
+      this.reorderStory(node)
         .then(() => {
           const editor = `editor-${ this.parentIndex + 1 }-${ this.level - 1 }`;
           this.focusEditor(editor, this.$parent, false);
@@ -222,6 +222,11 @@ export default {
       }
 
       this.focused = index;
+
+      if (!this.editor) {
+        return;
+      }
+
       const spans = this.editor.text.split('</span>');
 
       if (this.level > 1 && !this.getSpanList() && !this.getTail()) {
