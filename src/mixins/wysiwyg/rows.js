@@ -189,7 +189,8 @@ export default {
       const node = Object.assign({}, this.list[this.focused]);
       const parent = node.parent.parent;
 
-      node.parentStoryId = node.parent && node.parent.id ? node.parent.id : null;
+      node.parent = parent;
+      node.parentStoryId = parent && parent.id ? parent.id : null;
       node.afterStoryId = parent.list[this.parentIndex] ? parent.list[this.parentIndex].id : 0;
 
       this.list.splice(this.focused, 1);
