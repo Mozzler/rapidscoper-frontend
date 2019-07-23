@@ -1,6 +1,6 @@
 <template>
   <v-layout row justify-center>
-    <v-dialog v-model="dialog" max-width="416">
+    <v-dialog v-model="dialog" max-width="416" persistent>
       <v-card class="modal-card">
 
         <div class="modal-header">
