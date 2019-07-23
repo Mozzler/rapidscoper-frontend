@@ -85,7 +85,7 @@ export default {
           const wysiwygChild = `editor-${ this.focused + 1 }-${ this.level }`;
           this.focusEditor(wysiwygChild, this, true);
         }).then(() => {
-          this.saveStory(this.list[this.focused].id, this.focused);
+          this.saveStory(this.list[this.focused + 1].id, this.focused + 1);
         });
       }
     },
@@ -106,26 +106,39 @@ export default {
         const wysiwygChild = `wysiwyg-child-${ this.focused }-${ this.level }`;
         const wysiwygEditor = `editor-${ index }-${ this.level + 1 }`;
         this.focusEditor(wysiwygEditor, this.$refs[wysiwygChild][0]);
+      }).then(() => {
+        this.saveStory(this.list[this.focused].id, this.focused);
       });
     },
     removeRow () {
+      this.hideHint();
+
       if (this.level === 1 && this.list.length === 1) {
         return;
       }
 
-      this.hideHint();
+      const deletable = this.getDeletableSet();
+      const updatable = this.getNextStoryUpdate();
 
-      const data = {
-        entity: 'story',
-        id: this.list[this.focused].id,
-        parentStoryId: this.list[this.focused].parentStoryId
-      };
-
+      // focus previous element
       this.list.splice(this.focused, 1);
+
       let chain = this.getElementToFocus(this.list[this.focused - 1], 1, this.focused - 1);
       eval(chain).focus();
 
-      this.$store.dispatch('entity/delete', data);
+      // delete element and sub-stories
+      const requests = deletable.map(id => {
+        return this.$store.dispatch('entity/delete', {
+          entity: 'story',
+          id: id
+        });
+      });
+
+      Promise.all(requests).then(() => {
+        if (updatable) { // update reference to previous for the next story
+          this.$store.dispatch('entity/update', updatable);
+        }
+      });
     },
     async increaseSublistLevel () {
       if (this.level === 3 || (this.level === 1 && this.focused === 0)) {

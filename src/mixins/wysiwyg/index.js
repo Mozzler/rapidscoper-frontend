@@ -5,6 +5,7 @@ import AutoCompleting from "./auto-completing";
 import Rows from "./rows";
 import Filters from "./filters";
 import Hint from "./hint";
+import ActionHelper from "./action-helper";
 
 export default {
   mixins: [
@@ -14,7 +15,8 @@ export default {
     AutoCompleting,
     Rows,
     Filters,
-    Hint
+    Hint,
+    ActionHelper
   ],
   data () {
     return {

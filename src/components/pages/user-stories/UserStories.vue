@@ -50,6 +50,7 @@ export default {
     }
   },
   beforeMount () {
+    this.connect('project', 'entity/setList');
     this.fetchData();
   },
   methods: {

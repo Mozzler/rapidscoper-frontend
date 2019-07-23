@@ -172,14 +172,13 @@ export default {
       const story = {
         entity: 'story',
         data: {
-          id: id,
           type: this.editor.type,
           sectionId: this.sectionId,
           parentStoryId: this.list[index].parentStoryId,
           teamId: this.activeProject.teamId,
           projectId: this.activeProject.id,
           markup: this.editor.text,
-          afterStoryId: null
+          afterStoryId: 0
         }
       };
 
