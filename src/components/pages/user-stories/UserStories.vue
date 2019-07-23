@@ -32,7 +32,12 @@ export default {
   },
   data () {
     return {
-      processing: false
+      processing: false,
+      flags: {
+        dictionary: false,
+        story: false,
+        section: false
+      }
     };
   },
   computed: {
@@ -56,6 +61,7 @@ export default {
   methods: {
     fetchData () {
       this.processing = true;
+      this.resetData();
 
       const filter = {
         $or: [
@@ -66,14 +72,17 @@ export default {
       const entities = ['dictionary', 'section', 'story'];
       entities.forEach(entity => {
         this.connect(entity, 'entity/setList', filter, true, () => {
-          if (entity === 'story') {
-            this.processing = false;
-          }
+          this.flags[entity] = true;
         });
       });
     },
     resetData () {
-      this.processing = true;
+      this.flags = {
+        dictionary: false,
+        story: false,
+        section: false
+      };
+
       const entities = ['dictionary', 'section', 'story'];
       entities.forEach(entity => {
         this.$store.commit('entity/resetList', entity);
@@ -93,6 +102,15 @@ export default {
         if (this.sections.length && stub) {
           const url = this.$route.params.replace('section', this.sections[0].id);
           this.$router.push(url);
+        }
+      }
+    },
+    flags: {
+      deep: true,
+      handler () {
+        if (this.flags.dictionary && this.flags.section && this.flags.story) {
+          this.processing = false;
+          this.$root.$emit('update-model');
         }
       }
     }

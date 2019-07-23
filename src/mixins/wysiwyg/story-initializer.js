@@ -8,7 +8,6 @@ export default {
   },
   beforeMount () {
     this.$root.$on('update-model', this.updateModel);
-    this.updateModel();
   },
   computed: {
     sections () {
