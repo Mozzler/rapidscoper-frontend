@@ -179,11 +179,13 @@ export default {
         const equation = this.getEquation(this.level - 1);
         const constructions = this.getAdjusted(equation);
 
-        this.list[this.focused].text = this.createSpan('beginning', constructions[0].key, true);
-        this.list[this.focused].template = constructions[0].value;
-        this.list[this.focused].tail = '';
-        this.list[this.focused].placeholder = this.list[this.focused].text;
-        this.list.type = 'user';
+        Object.assign(this.list[this.focused], {
+          text: this.createSpan('beginning', constructions[0].key, true),
+          template: constructions[0].value,
+          tail: '',
+          placeholder: this.list[this.focused].text,
+          type: 'user'
+        });
       }
 
       const node = Object.assign({}, this.list[this.focused]);
