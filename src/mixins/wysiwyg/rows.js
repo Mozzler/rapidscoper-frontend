@@ -183,9 +183,10 @@ export default {
           text: this.createSpan('beginning', constructions[0].key, true),
           template: constructions[0].value,
           tail: '',
-          placeholder: this.list[this.focused].text,
           type: 'user'
         });
+
+        this.list[this.focused].placeholder = this.list[this.focused].text;
       }
 
       const node = Object.assign({}, this.list[this.focused]);
@@ -198,25 +199,44 @@ export default {
       this.list.splice(this.focused, 1);
       parent.list.splice(this.parentIndex + 1, 0, node);
 
-      this.reorderStory(node)
+      // update reference to previous element for the story followed by current ---
+      const dataToUpdate = [
+        { id: node.id,
+          data: _.pick(node, 'type', 'markup', 'parentStoryId', 'afterStoryId') }
+      ];
+
+      if (this.parentIndex + 2 < parent.list.length) {
+        const next = {
+          id: parent.list[this.parentIndex + 2].id,
+          data: { afterStoryId: node.id }
+        };
+
+        dataToUpdate.push(next);
+      }
+      // ---
+
+      this.reorderStory(dataToUpdate)
         .then(() => {
           const editor = `editor-${ this.parentIndex + 1 }-${ this.level - 1 }`;
           this.focusEditor(editor, this.$parent, false);
         });
     },
-    reorderStory (node) {
-      return this.$store.dispatch('entity/update', {
-        entity: 'story',
-        params: {
-          id: node.id
-        },
-        data: {
-          type: node.type,
-          markup: node.text,
-          parentStoryId: node.parentStoryId,
-          afterStoryId: node.afterStoryId
-        }
+    reorderStory (list) {
+      const requests = [];
+
+      _.each(list, item => {
+        let payload = {
+          entity: 'story',
+          params: {
+            id: item.id
+          },
+          data: item.data
+        };
+
+        requests.push(this.$store.dispatch('entity/update', payload));
       });
+
+      return Promise.all(requests);
     },
     async remove ($event, index) {
       // allow to remove characters from editable div
