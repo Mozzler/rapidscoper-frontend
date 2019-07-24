@@ -104,6 +104,10 @@ class MongoSockets {
         entity: model,
         data: list
       });
+
+      if (model === 'story') {
+        app.$root.$emit('update-story-set');
+      }
     });
   }
 
