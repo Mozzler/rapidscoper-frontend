@@ -7,6 +7,9 @@ export default {
   methods: {
     selectTool (id) {
       this.toolId = id;
+    },
+    toolKey ($event) {
+      console.log($event);
     }
   }
 };

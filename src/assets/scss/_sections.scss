@@ -32,6 +32,8 @@
 .user-story {
   border-radius: 4px;
   margin-bottom: 15px;
+  padding: 2px;
+  background-color: $white;
 }
 .user-story--active {
   background-color: $light-grey-1;
@@ -88,10 +90,6 @@
   position: absolute;
   top: 0;
   right: 0;
-}
-
-.user-story--checked {
-  background-color: red;
 }
 
 .user-story__editable--actor {

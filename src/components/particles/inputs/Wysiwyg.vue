@@ -2,10 +2,14 @@
   <div v-if="list">
     <div v-for="(item, index) in list"
          :key="`wysiwyg-${ index }-${ level }`">
-
       <div class="user-story"
-           :class="{'user-story--checked': toolId === item.id}"
-           @click="() => selectTool(item.id)">
+           :class="{
+             'user-story--active': (toolId === item.id && (tab !== 'edit' && tab !== 'estimate')),
+             'cursor-pointer': (tab !== 'edit' && tab !== 'estimate')
+           }"
+           @click="() => selectTool(item.id)"
+           @keypress="$event => toolKey($event, item.id)">
+
         <div class="user-story__tools" v-if="collection">
           <tool-list
             :active="item[tab]"
@@ -128,11 +132,18 @@ export default {
   },
   computed: {
     tab () {
-      let key = this.$route.params.tab.slice(0, -1);
-      if (key.slice(-2) === 'ie') {
-        key = `${key.slice(0, -2)}y`;
+      let modifiable = ['estimates', 'priorities', 'labels'];
+      let tab = this.$route.params.tab;
+
+      if (modifiable.includes(tab)) {
+        tab = tab.slice(0, -1);
+
+        if (tab.slice(-2) === 'ie') {
+          tab = `${tab.slice(0, -2)}y`;
+        }
       }
-      return key;
+
+      return tab;
     },
     storyId () {
       return (this.model.storyId || this.model.id) ? (this.model.id || this.model.storyId) : this.uuid();
