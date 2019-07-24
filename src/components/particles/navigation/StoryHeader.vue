@@ -93,6 +93,9 @@ export default {
       this.$router.push('/');
     }
   },
+  beforeMount () {
+    this.connect('project', 'entity/setList', false);
+  },
   watch: {
     tab () {
       this.activeTab = this.tabs.indexOf(this.tab);

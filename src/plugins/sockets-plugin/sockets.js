@@ -104,8 +104,6 @@ class MongoSockets {
         entity: model,
         data: list
       });
-
-      app.$root.$emit('update-model');
     });
   }
 

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="list">
     <div v-for="(item, index) in list"
          :key="`wysiwyg-${ index }-${ level }`">
 
@@ -8,7 +8,7 @@
           <tool-list
             :active="item[tab]"
             :list="collection"
-            :label-cls="'tool-block__label--minified'"
+            :label-cls="'tool-block__labelplaceholder--minified'"
             @update="value => item[tab] = value"/>
         </div>
 

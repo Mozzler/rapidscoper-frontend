@@ -70,18 +70,6 @@ export default {
         }
       };
     },
-    getStoryData (sectionId) {
-      return {
-        entity: 'story',
-        data: {
-          type: 'user',
-          markup: this.createSpan('beginning', 'As a', true),
-          sectionId: sectionId,
-          projectId: this.activeProject.id,
-          teamId: this.activeProject.teamId
-        }
-      };
-    },
     async createSection () {
       const section = this.getSectionData();
 
@@ -91,7 +79,7 @@ export default {
     scrollToActiveSection () {
       const el = document.getElementById(this.activeSectionId);
       if (el) {
-        el.scrollIntoView({ behavior: "smooth" });
+        el.scrollIntoView({ behavior: 'smooth' });
       }
     }
   },

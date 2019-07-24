@@ -84,9 +84,9 @@ export default {
         }).then(() => {
           const wysiwygChild = `editor-${ this.focused + 1 }-${ this.level }`;
           this.focusEditor(wysiwygChild, this, true);
-        }).then(() => {
+        })/*.then(() => {
           this.saveStory(this.list[this.focused + 1].id, this.focused + 1);
-        });
+        })*/;
       }
     },
     createSublist ($event) {

@@ -7,7 +7,8 @@ export default {
     };
   },
   beforeMount () {
-    this.$root.$on('update-model', this.updateModel);
+    this.$root.$on('update-story-set', this.updateModel);
+    this.updateModel();
   },
   computed: {
     sections () {
@@ -39,11 +40,13 @@ export default {
     updateModel () {
       this.stories.list = this.$store.getters['story/content'](this.model.id);
       this.stories.list.forEach((value, index) => {
-        this.stories.list[index].parent = this.stories;
+        if (this.stories.list[index]) {
+          this.stories.list[index].parent = this.stories;
+        }
       });
     }
   },
   beforeDestroy () {
-    this.$root.$off('update-model', this.updateModel);
+    this.$root.$off('update-story-set', this.updateModel);
   }
 };

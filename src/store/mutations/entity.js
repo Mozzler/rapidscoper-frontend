@@ -42,9 +42,15 @@ export default {
         item => item.id !== payload.id);
   },
   resetList (state, entity) {
-    if (entity) {
+    if (_.isString(entity)) {
       state[entity].items = [];
-    } else {
+    } else
+    if (_.isObject(entity)) {
+      _.each(entity, (val, key) => {
+        state[val].items = [];
+      });
+    } else
+    if (!entity) {
       _.each(state, (val, key) => {
         state[key].items = [];
       });

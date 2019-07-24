@@ -8,7 +8,7 @@
     />
     <story-section />
     <tool-section />
-    <story-content />
+    <story-content v-if="!(processing || initialization)"/>
   </div>
 </template>
 
@@ -33,10 +33,11 @@ export default {
   data () {
     return {
       processing: false,
-      flags: {
+      collections: ['dictionary', 'section', 'story'],
+      loadedCollections: {
         dictionary: false,
-        story: false,
-        section: false
+        section: false,
+        story: false
       }
     };
   },
@@ -44,18 +45,18 @@ export default {
     sections () {
       return this.$store.getters['entity/items']('section');
     },
-    projects () {
-      return this.$store.getters['entity/items']('project');
-    },
     activeProjectId () {
       return this.$route.params.projectId;
     },
-    stories () {
-      return this.$store.getters['entity/total']('story');
+    filter () {
+      return {
+        $or: [
+          { 'fullDocument.projectId': { '$in': [ this.activeProjectId ] } }
+        ]
+      };
     }
   },
   beforeMount () {
-    this.connect('project', 'entity/setList');
     this.fetchData();
   },
   methods: {
@@ -63,30 +64,20 @@ export default {
       this.processing = true;
       this.resetData();
 
-      const filter = {
-        $or: [
-          { 'fullDocument.projectId': { '$in': [ this.activeProjectId ] } }
-        ]
-      };
-
-      const entities = ['dictionary', 'section', 'story'];
-      entities.forEach(entity => {
-        this.connect(entity, 'entity/setList', filter, true, () => {
-          this.flags[entity] = true;
+      this.collections.forEach(c => {
+        this.connect(c, 'entity/setList', this.filter, true, () => {
+          this.loadedCollections[c] = true;
         });
       });
     },
     resetData () {
-      this.flags = {
+      this.loadedCollections = {
         dictionary: false,
-        story: false,
-        section: false
+        section: false,
+        story: false
       };
 
-      const entities = ['dictionary', 'section', 'story'];
-      entities.forEach(entity => {
-        this.$store.commit('entity/resetList', entity);
-      });
+      this.$store.commit('entity/resetList', this.collections);
     }
   },
   beforeDestroy () {
@@ -105,12 +96,11 @@ export default {
         }
       }
     },
-    flags: {
+    loadedCollections: {
       deep: true,
       handler () {
-        if (this.flags.dictionary && this.flags.section && this.flags.story) {
+        if (this.loadedCollections.dictionary && this.loadedCollections.section && this.loadedCollections.story) {
           this.processing = false;
-          this.$root.$emit('update-model');
         }
       }
     }
