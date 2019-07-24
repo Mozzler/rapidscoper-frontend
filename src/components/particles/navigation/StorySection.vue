@@ -4,7 +4,7 @@
       title="user story sections"
       btn="Add section"
       :list="sections"
-      :active="$route.params.section ? $route.params.section : sections[0].id"
+      :active="$route.params.section"
       @go="(value, id) => goTo(id)"
       @add="addSection" />
   </div>

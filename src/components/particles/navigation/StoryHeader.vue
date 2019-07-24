@@ -86,7 +86,7 @@ export default {
       });
     },
     goToProject (name, id) {
-      const url = `/projects/${id}/user-story/mobile-sign-up/edit`;
+      const url = `/projects/${id}/user-story/section/edit`;
       this.$router.push(url);
     },
     toDashboard () {

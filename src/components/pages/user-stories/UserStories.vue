@@ -4,11 +4,11 @@
     <story-sidebar />
     <circular-loader
       cls="loader-shadow"
-      :visible="processing || initialization"
+      :visible="loading"
     />
-    <story-section />
+    <story-section v-if="!loading" />
     <tool-section />
-    <story-content v-if="!(processing || initialization)"/>
+    <story-content v-if="!loading" />
   </div>
 </template>
 
@@ -54,6 +54,9 @@ export default {
           { 'fullDocument.projectId': { '$in': [ this.activeProjectId ] } }
         ]
       };
+    },
+    loading () {
+      return (this.processing || this.initialization);
     }
   },
   beforeMount () {
@@ -78,6 +81,14 @@ export default {
       };
 
       this.$store.commit('entity/resetList', this.collections);
+    },
+    fixRoute () {
+      let stub = this.$route.params.section === 'section';
+
+      if (this.sections.length && stub) {
+        const url = this.$route.path.replace('section', this.sections[0].id);
+        this.$router.push(url);
+      }
     }
   },
   beforeDestroy () {
@@ -87,20 +98,12 @@ export default {
     activeProjectId () {
       this.fetchData();
     },
-    initialization () {
-      if (!this.initialization) {
-        const stub = this.$route.params === 'section';
-        if (this.sections.length && stub) {
-          const url = this.$route.params.replace('section', this.sections[0].id);
-          this.$router.push(url);
-        }
-      }
-    },
     loadedCollections: {
       deep: true,
       handler () {
         if (this.loadedCollections.dictionary && this.loadedCollections.section && this.loadedCollections.story) {
           this.processing = false;
+          this.fixRoute();
         }
       }
     }
