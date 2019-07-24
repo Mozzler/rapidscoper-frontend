@@ -35,6 +35,7 @@ export default {
   },
   beforeDestroy () {
     this.$root.$off('create-new-section');
+    this.setScrollListener('remove');
   },
   mounted () {
     this.scrollToActiveSection();
@@ -99,13 +100,11 @@ export default {
       const el = document.getElementById(this.activeSectionId);
       if (el) {
         el.scrollIntoView();
-        this.$refs['scrollable-layout'].addEventListener('scroll', this.handleScroll);
       }
     }
   },
   watch: {
     activeSectionId () {
-      this.$refs['scrollable-layout'].removeEventListener('scroll', this.handleScroll);
       this.scrollToActiveSection();
     }
   }
