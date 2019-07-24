@@ -227,11 +227,12 @@ export default {
         dataToUpdate.push(next);
       }
       // ---
-
       this.reorderStory(dataToUpdate)
         .then(() => {
-          const editor = `editor-${ this.parentIndex + 1 }-${ this.level - 1 }`;
-          this.focusEditor(editor, this.$parent, false);
+          this.$nextTick(() => {
+            const editor = `editor-${ this.parentIndex + 1 }-${ this.level - 1 }`;
+            this.focusEditor(editor, this.$parent, false);
+          });
         });
     },
     reorderStory (list) {
