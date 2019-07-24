@@ -11,8 +11,9 @@
            @click="() => selectTool(item.id)"
            @keypress="$event => toolKey($event, item.id)">
 
-        <div class="user-story__tools" v-if="collection">
+        <div class="user-story__tools" v-if="collection && toolId === item.id">
           <tool-list
+            :key="tab"
             :active="item[tab]"
             :list="collection"
             :label-cls="'tool-block__label placeholder--minified'"
@@ -133,7 +134,7 @@ export default {
   },
   computed: {
     tab () {
-      let modifiable = ['estimates', 'priorities', 'labels'];
+      let modifiable = ['estimates', 'priorities'];
       let tab = this.$route.params.tab;
 
       if (modifiable.includes(tab)) {

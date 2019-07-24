@@ -70,7 +70,7 @@ function createNode (entity, parent = null) {
 
     estimation: entity.estimate,
     priority: entity.priority,
-    label: 1,
+    labels: 1,
     type: constructions[key].type,
 
     text: entity.markup,
