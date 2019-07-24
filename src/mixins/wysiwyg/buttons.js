@@ -7,6 +7,14 @@ export default {
   beforeMount () {
     this.$root.$on('reset-tool-id', this.resetToolId);
   },
+  computed: {
+    storyOrder () {
+      return _.chain(this.$store.getters['entity/items']('section'))
+        .map(item => item.storyOrder)
+        .flatten()
+        .value();
+    }
+  },
   methods: {
     selectTool (id) {
       this.toolId = id;
@@ -41,6 +49,15 @@ export default {
       if (this.toolId !== id) {
         this.toolId = null;
       }
+    },
+    nextItem () {
+      let next = _.indexOf(this.storyOrder, this.toolId);
+      next = next + 1 < this.storyOrder.length ? next : 0;
+
+      //this.$root.$emit('reset-tool-id', this.storyOrder[next + 1]);
+    },
+    previousItem () {
+      console.log('previous-item');
     }
   },
   beforeDestroy () {

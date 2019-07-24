@@ -9,6 +9,10 @@
            }"
            tabindex="0"
            @click="() => selectTool(item.id)"
+           @keyup.enter.exact="nextItem"
+           @keyup.tab.prevent.exact="nextItem"
+           @keyup.page-down.prevent.exact="nextItem"
+           @keyup.page-up.prevent.exact="previousItem"
            @keypress="$event => toolKey($event, item.id)">
 
         <div class="user-story__tools" v-if="collection && toolId === item.id">
