@@ -37,6 +37,10 @@
 }
 .user-story--active {
   background-color: $light-grey-1;
+
+  &:focus {
+    outline: none;
+  }
 }
 
 .user-story__tools {
