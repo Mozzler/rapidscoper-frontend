@@ -90,6 +90,10 @@
   right: 0;
 }
 
+.user-story--checked {
+  background-color: red;
+}
+
 .user-story__editable--actor {
   @include set-bottom-border($light-green);
 }

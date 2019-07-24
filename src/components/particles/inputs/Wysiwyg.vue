@@ -3,12 +3,14 @@
     <div v-for="(item, index) in list"
          :key="`wysiwyg-${ index }-${ level }`">
 
-      <div class="user-story">
+      <div class="user-story"
+           :class="{'user-story--checked': toolId === item.id}"
+           @click="() => selectTool(item.id)">
         <div class="user-story__tools" v-if="collection">
           <tool-list
             :active="item[tab]"
             :list="collection"
-            :label-cls="'tool-block__labelplaceholder--minified'"
+            :label-cls="'tool-block__label placeholder--minified'"
             @update="value => item[tab] = value"/>
         </div>
 

@@ -6,6 +6,7 @@ import Rows from "./rows";
 import Filters from "./filters";
 import Hint from "./hint";
 import ActionHelper from "./action-helper";
+import Buttons from "./buttons";
 
 export default {
   mixins: [
@@ -16,7 +17,8 @@ export default {
     Rows,
     Filters,
     Hint,
-    ActionHelper
+    ActionHelper,
+    Buttons
   ],
   data () {
     return {

@@ -71,10 +71,10 @@ export default {
           childOffsets = _.map($event.target.children, item => item.offsetTop),
           index = _.findIndex(childOffsets, co => (co + 28) > offset);
 
-      if (this.sections[index].id !== this.activeSectionId) {
-        const url = this.$route.path.replace(this.activeSectionId, this.sections[index].id);
-        this.$router.replace(url);
-      }
+      index = index === -1 ? this.sections.length - 1 : index;
+
+      const url = this.$route.path.replace(this.activeSectionId, this.sections[index].id);
+      this.$router.replace(url);
     },
     getSectionData () {
       const untitled = this.sections.filter(item => item.name.includes('Untitled'));
