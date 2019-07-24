@@ -4,9 +4,13 @@ export default {
       toolId: null
     };
   },
+  beforeMount () {
+    this.$root.$on('reset-tool-id', this.resetToolId);
+  },
   methods: {
     selectTool (id) {
       this.toolId = id;
+      this.$root.$emit('reset-tool-id', id);
     },
     toolKey ($event) {
       const letters = _.map(this.collection, item => item.charAt(0).toLowerCase());
@@ -32,6 +36,14 @@ export default {
           [this.tab]: propertyId
         }
       });
+    },
+    resetToolId (id) {
+      if (this.toolId !== id) {
+        this.toolId = null;
+      }
     }
+  },
+  beforeDestroy () {
+    this.$root.$off('reset-tool-id', this.resetToolId);
   }
 };
