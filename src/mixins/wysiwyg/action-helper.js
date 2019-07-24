@@ -21,7 +21,7 @@ export default {
       return this.focused + 1 < this.list.length ? {
         entity: 'story',
         params: {
-          id: this.list[this.focused + 1]
+          id: this.list[this.focused + 1].id
         },
         data: {
           afterStoryId: this.focused === 0 ? this.list[this.focused].parentStoryId : this.list[this.focused - 1].id

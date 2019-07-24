@@ -1,7 +1,7 @@
 <template>
   <div class="content-container">
     <v-layout align-start justify-center row fill-height>
-      <div class="content">
+      <div class="content" ref="scrollable-layout">
         <story-item v-for="(story, index) in sections"
           :model="story"
           :key="index"
@@ -26,7 +26,8 @@ export default {
   },
   data () {
     return {
-      message: null
+      message: null,
+      scrollActive: false
     };
   },
   beforeMount () {
@@ -37,6 +38,7 @@ export default {
   },
   mounted () {
     this.scrollToActiveSection();
+    this.setScrollListener();
   },
   computed: {
     sections () {
@@ -56,6 +58,23 @@ export default {
     }
   },
   methods: {
+    setScrollListener (type = 'add') {
+      this.$refs['scrollable-layout'][`${type}EventListener`]('scroll', this.handleScroll);
+    },
+    handleScroll ($event) {
+      if (!this.sections || !this.sections.length) {
+        return;
+      }
+
+      let offset = $event.target.scrollTop,
+          childOffsets = _.map($event.target.children, item => item.offsetTop),
+          index = _.findIndex(childOffsets, co => (co + 28) > offset);
+
+      if (this.sections[index].id !== this.activeSectionId) {
+        const url = this.$route.path.replace(this.activeSectionId, this.sections[index].id);
+        this.$router.replace(url);
+      }
+    },
     getSectionData () {
       const untitled = this.sections.filter(item => item.name.includes('Untitled'));
       const number = untitled.length;
@@ -79,12 +98,14 @@ export default {
     scrollToActiveSection () {
       const el = document.getElementById(this.activeSectionId);
       if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
+        el.scrollIntoView();
+        this.$refs['scrollable-layout'].addEventListener('scroll', this.handleScroll);
       }
     }
   },
   watch: {
     activeSectionId () {
+      this.$refs['scrollable-layout'].removeEventListener('scroll', this.handleScroll);
       this.scrollToActiveSection();
     }
   }

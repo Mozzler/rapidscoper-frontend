@@ -75,18 +75,17 @@ export default {
       if (this.next === 'beginning') {
         this.fixStaticText($event);
       } else {
-        new Promise((resolve, reject) => {
-          const finished = this.finishSentence($event);
-          finished !== false ? resolve() : reject(new Error('invalid sentence construction'));
-        }).then(() => {
-          const row = this.addRowToList(this.list[this.focused], $event.target.innerHTML);
-          this.list.splice(this.focused + 1, 0, row);
-        }).then(() => {
-          const wysiwygChild = `editor-${ this.focused + 1 }-${ this.level }`;
-          this.focusEditor(wysiwygChild, this, true);
-        })/*.then(() => {
-          this.saveStory(this.list[this.focused + 1].id, this.focused + 1);
-        })*/;
+        this.finishSentence($event);
+
+        const row = this.addRowToList(this.list[this.focused], $event.target.innerHTML);
+        this.list.splice(this.focused + 1, 0, row);
+
+        this.saveStory(this.list[this.focused + 1].id, this.focused + 1, () => {
+          this.$nextTick(() => {
+            const wysiwygChild = `editor-${ this.focused + 1 }-${ this.level }`;
+            this.focusEditor(wysiwygChild, this, true);
+          });
+        });
       }
     },
     createSublist ($event) {
@@ -135,6 +134,7 @@ export default {
       });
 
       Promise.all(requests).then(() => {
+        console.log(updatable);
         if (updatable) { // update reference to previous for the next story
           this.$store.dispatch('entity/update', updatable);
         }
@@ -246,7 +246,6 @@ export default {
           },
           data: item.data
         };
-
         requests.push(this.$store.dispatch('entity/update', payload));
       });
 
