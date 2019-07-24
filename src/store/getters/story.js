@@ -6,7 +6,7 @@ function getConstructions () {
     },
     'Requires a ...': {
       type: 'requirement',
-      structure: '[beginning][requirement][static-text="called"][field]'
+      structure: '[beginning][requirement][static-text="called"][field][custom-1]'
     },
     'When I ...': {
       type: 'acceptance',
