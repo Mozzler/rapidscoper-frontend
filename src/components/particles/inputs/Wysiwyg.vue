@@ -7,6 +7,7 @@
              'user-story--active': (toolId === item.id && (tab !== 'edit' && tab !== 'estimate')),
              'cursor-pointer': (tab !== 'edit' && tab !== 'estimate')
            }"
+           tabindex="0"
            @click="() => selectTool(item.id)"
            @keypress="$event => toolKey($event, item.id)">
 
@@ -15,7 +16,7 @@
             :active="item[tab]"
             :list="collection"
             :label-cls="'tool-block__label placeholder--minified'"
-            @update="value => item[tab] = value"/>
+            @update="updateToolId"/>
         </div>
 
         <v-layout row fill-height>
