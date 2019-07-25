@@ -15,7 +15,7 @@
            @keyup.page-up.prevent.exact="previousItem"
            @keypress="$event => toolKey($event, item.id)">
 
-        <div class="user-story__tools" v-if="collection && toolId === item.id">
+        <div class="user-story__tools" v-if="(collection && toolId === item.id)">
           <tool-list
             :key="tab"
             :active="item[tab]"

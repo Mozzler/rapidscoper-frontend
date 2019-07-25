@@ -17,7 +17,6 @@ export default {
   name: "ToolList",
   props: {
     list: {
-      type: Array,
       required: true
     },
     active: {

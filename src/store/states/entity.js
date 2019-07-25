@@ -11,6 +11,9 @@ export default {
   dictionary: {
     items: []
   },
+  story: {
+    items: []
+  },
   projectUser: {
     items: []
   },
