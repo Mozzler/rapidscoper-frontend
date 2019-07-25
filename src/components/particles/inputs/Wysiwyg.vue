@@ -6,7 +6,7 @@
       <div class="user-story"
            :class="{
              'user-story--active': (toolId === item.id && (tab !== 'edit' && tab !== 'estimate')),
-             'cursor-pointer': (tab !== 'edit' && tab !== 'estimate')
+             'cursor-pointer': (tab !== 'edit' && tab !== 'estimate'),
            }"
            tabindex="0"
            @click="() => selectTool(item.id)"

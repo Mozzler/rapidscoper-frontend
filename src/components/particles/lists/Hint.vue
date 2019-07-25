@@ -33,8 +33,7 @@ export default {
       visible: false,
       focused: null,
       chapter: null,
-      filter: null,
-      input: null
+      filter: null
     };
   },
   mounted () {
@@ -79,7 +78,7 @@ export default {
       $event.preventDefault();
       this.complete(value);
     },
-    setHintState (visible, chapter = null, filter = null, input = null, position = null, addresserId = null) {
+    setHintState (visible, chapter = null, filter = null, position = null, addresserId = null) {
       const selection = document.getSelection().focusNode;
       this.focusedElId = selection.id || selection.parentNode.offsetParent.id;
       if (addresserId !== this.focusedElId) {
@@ -94,7 +93,6 @@ export default {
       this.visible = visible;
       this.chapter = chapter;
       this.filter = filter;
-      this.input = input;
     },
     setFocus () {
       if (this.focused === null) {

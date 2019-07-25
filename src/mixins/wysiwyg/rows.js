@@ -67,7 +67,7 @@ export default {
       }
     },
     createSublist ($event) {
-      if (!(this.level < 3)) {
+      if (!(this.editor.level < 3)) {
         $event.preventDefault();
         return;
       }
