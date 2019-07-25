@@ -1,3 +1,4 @@
+import Instruments from "./instruments";
 import Converters from "./converters";
 import Getters from "./getters";
 import StaticText from "./static-text";
@@ -6,7 +7,6 @@ import Rows from "./rows";
 import Filters from "./filters";
 import Hint from "./hint";
 import ActionHelper from "./action-helper";
-import Buttons from "./buttons";
 
 export default {
   mixins: [
@@ -18,7 +18,7 @@ export default {
     Filters,
     Hint,
     ActionHelper,
-    Buttons
+    Instruments
   ],
   data () {
     return {
@@ -38,9 +38,6 @@ export default {
   computed: {
     adjustConstructions () {
       return this.$store.state.story.adjustConstructions;
-    },
-    editor () {
-      return this.focused !== null ? this.list[this.focused] : null;
     },
     ref () {
       return `editor-${this.focused}-${this.level}`;

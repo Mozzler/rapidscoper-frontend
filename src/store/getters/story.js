@@ -15,71 +15,20 @@ function getConstructions () {
   };
 }
 
-function findParent (data, parentStoryId) {
-  return data.find(i => {
-    if (i.id === parentStoryId) {
-      return i;
-    } else {
-      if (i.list.length) {
-        return findParent(i.list, parentStoryId);
-      }
-    }
-  });
-}
-
-function findRootById (data, parentStoryId, path = []) {
-  for (var i = 0; i < data.length; i++) {
-    if (data[i].id === parentStoryId) {
-      path.push(data[i]);
-
-      if (data[i].parentStoryId !== null) {
-        findRootById(data, data[i].parentStoryId, path);
-      } else {
-        return path;
-      }
-    }
-  }
-}
-
 function sortStoriesByOrder (list, order) {
-  const data = [];
-
-  order.forEach(orderId => {
-    let story = list.find(story => story.id === orderId);
-    data.push(story);
+  return order.map(orderId => {
+    return list.find(story => story.id === orderId);
   });
-
-  return data;
 }
 
-function createNode (entity, parent = null) {
+function getConstructionByType (type) {
   const constructions = getConstructions();
 
-  if (!constructions || !entity) {
-    return;
-  }
-
-  const key = Object.keys(constructions).filter(k => {
-    return constructions[k].type === entity.type;
+  const key = Object.keys(constructions).find(k => {
+    return constructions[k].type === type;
   });
 
-  return {
-    id: entity.id,
-    parent: parent,
-    parentStoryId: parent ? parent.id : null,
-
-    estimation: entity.estimate,
-    priority: entity.priority,
-    labels: entity.labels ? entity.labels : [],
-    type: constructions[key].type,
-
-    text: entity.markup,
-    template: constructions[key].structure,
-    tail: '',
-    placeholder: entity.markup,
-
-    list: []
-  };
+  return constructions[key];
 }
 
 export default {
@@ -113,38 +62,29 @@ export default {
 
     return dictionary;
   },
+
   content (state, getters, rootState) {
     return id => {
+      // find current section by id
       const section = _.find(rootState.entity.section.items, item => item.id === id);
-      const stories = _.chain(rootState.entity.story.items)
-        .filter(item => item.sectionId === id)
-        .value();
 
-      const sorted = sortStoriesByOrder(stories, [...section.storyOrder]);
+      // find stories of this section
+      const stories = _.filter(rootState.entity.story.items, item => item.sectionId === id);
 
-      let items = [];
+      // sort stories in accordance with storyOrder property
+      const sorted = sortStoriesByOrder(stories, section.storyOrder);
 
-      _.each(sorted, item => {
+      // format the response
+      return _.map(sorted, item => {
+        const basic = _.pick(item, 'id', 'parentStoryId', 'estimate', 'priority', 'labels', 'markup', 'type', 'level');
 
-        let parent = null;
-        let list = items;
-
-        if (item && item.parentStoryId) {
-          parent = findParent(list, item.parentStoryId);
-
-          if (!parent) {
-            parent = null;
-          } else {
-            let internal = parent.list.find(it => it.id === item.parentStoryId);
-            list = internal ? internal.list : parent.list;
-          }
-        }
-
-        let node = createNode(item, parent);
-        list.push(node);
+        return {
+          ...basic,
+          template: getConstructionByType(basic.type).structure,
+          tail: '',
+          placeholder: basic.markup
+        };
       });
-
-      return items;
     };
   }
 };

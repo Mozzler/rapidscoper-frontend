@@ -20,12 +20,7 @@
     </div>
 
     <div>
-      <wysiwyg
-        :sectionId="model.id"
-        :ref="'wysiwyg'"
-        :model="stories.list"
-        :level="1"
-        @update-text="updateText"/>
+      <wysiwyg :sectionId="model.id" />
     </div>
   </div>
 </template>
@@ -33,7 +28,6 @@
 <script>
 import Wysiwyg from "../inputs/Wysiwyg";
 import ErrorHandler from "@/mixins/error-handler";
-import StoryInitializer from "@/mixins/wysiwyg/story-initializer";
 
 export default {
   name: "StoryItem",
@@ -41,8 +35,7 @@ export default {
     Wysiwyg
   },
   mixins: [
-    ErrorHandler,
-    StoryInitializer
+    ErrorHandler
   ],
   props: {
     model: {
@@ -53,13 +46,13 @@ export default {
   data () {
     return {
       name: this.model.name,
-      description: this.model.description
+      description: this.model.description,
     };
   },
   methods: {
-    updateText (index, input) {
-      this.stories.list[index].text = input.text;
-      this.stories.list[index].placeholder = input.placeholder;
+    updateText (id, input) {
+      this.list[id].text = input.text;
+      this.list[id].placeholder = input.placeholder;
     },
     updateSection (item, event) {
       this[item] = event.target.innerText;

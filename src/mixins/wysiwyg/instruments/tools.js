@@ -10,6 +10,23 @@ export default {
     this.$root.$on('stop-tool-processing', this.stopProcessing);
   },
   computed: {
+    tab () {
+      let modifiable = ['estimates', 'priorities'];
+      let tab = this.$route.params.tab;
+
+      if (modifiable.includes(tab)) {
+        tab = tab.slice(0, -1);
+
+        if (tab.slice(-2) === 'ie') {
+          tab = `${tab.slice(0, -2)}y`;
+        }
+      }
+
+      return tab;
+    },
+    toolDictionary () {
+      return this.$store.state.story[this.tab];
+    },
     storyOrder () {
       return _.chain(this.$store.getters['entity/items']('section'))
         .map(item => item.storyOrder)
@@ -32,7 +49,7 @@ export default {
       this.$root.$emit('reset-tool-id', id);
     },
     toolKey ($event) {
-      const letters = _.map(this.collection, item => item.charAt(0).toLowerCase());
+      const letters = _.map(this.toolItems, item => item.charAt(0).toLowerCase());
       let found = _.indexOf(letters, $event.key);
 
       if (found !== -1) {
