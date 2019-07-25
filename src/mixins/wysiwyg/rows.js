@@ -40,6 +40,7 @@ export default {
         estimate: 0,
         priority: null,
         labels: [],
+        level: sublist ? this.editor.level + 1 : this.editor.level,
 
         tail: '',
         placeholder: text,
@@ -51,63 +52,18 @@ export default {
         projectId: this.editor.projectId
       };
     },
-    rowIsEmpty () {
-      const spans = this.getSpanList(false);
-      const tail = this.getTail();
-
-      const main = this.level === 1 && spans.length === 1 && !tail;
-      const sub = this.level !== 1 && !spans.length && !tail;
-
-      return main || sub;
-    },
-    async createRow ($event) {
-      if (this.rowIsEmpty()) {
-        $event.preventDefault();
-        await this.decreaseSublistLevel($event);
-        return;
-      }
-
+    createRow ($event) {
       if (this.dictionary[this.next]) {
         this.createField($event);
         return;
       }
 
-      if (this.next === 'beginning') { // could be a reson of the bug
+      if (this.next === 'beginning') { // could be a reason of the bug
         this.fixStaticText($event);
       } else {
         this.finishSentence($event);
 
-        let payloadToCreate = this.getStoryPayload(false, $event.target.innerHTML);
-        let payloadToUpdate = null;
-
-        let replacementIndex = _.findIndex(this.list, item => item.id === this.editor.id);
-        if (replacementIndex !== -1 && replacementIndex + 1 < this.list.length) {
-          payloadToUpdate = {
-            entity: 'story',
-            params: {
-              id: this.list[replacementIndex + 1].id
-            },
-            data: {
-              afterStoryId: null
-            }
-          };
-        }
-
-        const response = await this.$store.dispatch('entity/create', {
-          entity: 'story',
-          data: payloadToCreate
-        });
-
-        if (payloadToUpdate !== null) {
-          payloadToUpdate.data.afterStoryId = response.item.id;
-          await this.$store.dispatch('entity/update', payloadToUpdate);
-        }
-
-        this.$nextTick(() => {
-          this.$refs[response.item.id][0].focus();
-          document.execCommand('selectAll', false, null);
-          document.getSelection().collapseToEnd();
-        });
+        this.handleStoryRequest(false, $event.target.innerHTML);
       }
     },
     createSublist ($event) {
@@ -116,19 +72,42 @@ export default {
         return;
       }
 
-      const index = this.list[this.focused].list.length;
       this.finishSentence($event, ':');
+      this.handleStoryRequest(true, '');
+    },
+    async handleStoryRequest (sublist, text = '') {
+      let payloadToCreate = this.getStoryPayload(sublist, text);
+      let payloadToUpdate = null;
 
-      new Promise(resolve => {
-        const row = this.getStoryPayload(true, '');
-        this.list[this.focused].list.push(row);
-        resolve();
-      }).then(() => {
-        const wysiwygChild = `wysiwyg-child-${ this.focused }-${ this.level }`;
-        const wysiwygEditor = `editor-${ index }-${ this.level + 1 }`;
-        this.focusEditor(wysiwygEditor, this.$refs[wysiwygChild][0]);
-      }).then(() => {
-        this.saveStory(this.list[this.focused].id, this.focused);
+      let startIndex = _.findIndex(this.list, item => item.id === this.editor.id);
+      let replacementIndex = this.list.slice(startIndex)
+        .findIndex(item => item.parentStoryId === this.editor.parentStoryId);
+      if (replacementIndex !== -1 && startIndex + replacementIndex + 1 < this.list.length) {
+        payloadToUpdate = {
+          entity: 'story',
+          params: {
+            id: this.list[startIndex + replacementIndex + 1].id
+          },
+          data: {
+            afterStoryId: null
+          }
+        };
+      }
+
+      const response = await this.$store.dispatch('entity/create', {
+        entity: 'story',
+        data: payloadToCreate
+      });
+
+      if (payloadToUpdate !== null) {
+        payloadToUpdate.data.afterStoryId = response.item.id;
+        await this.$store.dispatch('entity/update', payloadToUpdate);
+      }
+
+      this.$nextTick(() => {
+        this.$refs[response.item.id][0].focus();
+        document.execCommand('selectAll', false, null);
+        document.getSelection().collapseToEnd();
       });
     },
     removeRow () {
