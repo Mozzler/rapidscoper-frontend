@@ -41,7 +41,7 @@ export default {
 
         estimation: null,
         priority: null,
-        label: null,
+        label: [],
 
         tail: '',
         placeholder: text,

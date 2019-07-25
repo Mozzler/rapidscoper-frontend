@@ -27,7 +27,7 @@ export default {
         parent: null,
         estimation: 0,
         priority: 0,
-        label: 1,
+        label: [],
 
         text: '',
         template: '',

@@ -20,7 +20,7 @@ export default {
       required: true
     },
     active: {
-      type: [Number, String],
+      type: [Number, String, Array],
       default: null,
       required: false
     },

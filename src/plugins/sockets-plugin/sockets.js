@@ -99,6 +99,7 @@ class MongoSockets {
 
           if (response.model === 'story') {
             app.$root.$emit('update-story-set');
+            app.$root.$emit('stop-tool-processing', response.fullDocument._id);
           }
 
           break;

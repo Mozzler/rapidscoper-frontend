@@ -17,7 +17,8 @@ export default {
       }
     },
     outline (index) {
-      return Number(index) === Number(this.active) ? '' : 'label--outline';
+      const labelState = _.isArray(this.active) ? this.active.includes(index) : index === this.active;
+      return labelState ? '' : 'label--outline';
     }
   }
-}
+};

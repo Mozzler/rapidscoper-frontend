@@ -1,11 +1,13 @@
 export default {
   data () {
     return {
-      toolId: null
+      toolId: null,
+      toolProcessing: false
     };
   },
   beforeMount () {
     this.$root.$on('reset-tool-id', this.resetToolId);
+    this.$root.$on('stop-tool-processing', this.stopProcessing);
   },
   computed: {
     storyOrder () {
@@ -16,6 +18,11 @@ export default {
     }
   },
   methods: {
+    stopProcessing (id) {
+      if (id === this.toolId) {
+        this.toolProcessing = false;
+      }
+    },
     selectTool (id) {
       this.toolId = id;
       this.$root.$emit('reset-tool-id', id);
@@ -29,11 +36,21 @@ export default {
       }
     },
     updateToolId (propertyId) {
-      _.each(this.list, item => {
-        if (item.id === this.toolId) {
-          item[this.tab] = propertyId;
-        }
-      });
+      if (this.toolProcessing) {
+        return;
+      }
+
+      this.toolProcessing = true;
+      const item = this.list.find(item => item.id === this.toolId);
+      let query = null;
+
+      if (_.isArray(item[this.tab])) {
+        query = item[this.tab].includes(propertyId) ?
+          item[this.tab].filter(i => i !== propertyId) :
+          [...item[this.tab], ...[propertyId]];
+      } else {
+        query = propertyId;
+      }
 
       this.$store.dispatch('entity/update', {
         entity: 'story',
@@ -41,7 +58,7 @@ export default {
           id: this.toolId
         },
         data: {
-          [this.tab]: propertyId
+          [this.tab]: query
         }
       });
     },
@@ -62,5 +79,6 @@ export default {
   },
   beforeDestroy () {
     this.$root.$off('reset-tool-id', this.resetToolId);
+    this.$root.$off('stop-tool-processing', this.stopProcessing);
   }
 };

@@ -2,6 +2,7 @@
   <div v-if="list">
     <div v-for="(item, index) in list"
          :key="`wysiwyg-${ index }-${ level }`">
+
       <div class="user-story"
            :class="{
              'user-story--active': (toolId === item.id && (tab !== 'edit' && tab !== 'estimate')),
@@ -16,6 +17,12 @@
            @keypress="$event => toolKey($event, item.id)">
 
         <div class="user-story__tools" v-if="(collection && toolId === item.id)">
+          <circular-loader
+            cls="loader-shadow--without-padding"
+            :size="50"
+            :width="5"
+            :visible="toolProcessing"
+          />
           <tool-list
             :key="tab"
             :active="item[tab]"

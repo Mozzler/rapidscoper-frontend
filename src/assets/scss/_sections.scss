@@ -34,6 +34,8 @@
   margin-bottom: 15px;
   padding: 2px;
   background-color: $white;
+  position: relative;
+  display: block;
 }
 .user-story--active {
   background-color: $light-grey-1;

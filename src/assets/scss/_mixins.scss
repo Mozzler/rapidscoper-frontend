@@ -44,3 +44,17 @@
     border-radius: 3px;
   }
 }
+
+@mixin loader-position($left, $top) {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $light-grey-rgb;
+  width: calc(100% - #{$left});
+  height: calc(100% - #{$top});
+  left: $left;
+  top: $top;
+  z-index: 999;
+  color: $light-primary;
+}
