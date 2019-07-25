@@ -80,7 +80,7 @@ export default {
         let payloadToCreate = this.getStoryPayload(false, $event.target.innerHTML);
         let payloadToUpdate = null;
 
-        let replacementIndex = _.indexOf(this.list, item => item.id === this.editor.id);
+        let replacementIndex = _.findIndex(this.list, item => item.id === this.editor.id);
         if (replacementIndex !== -1 && replacementIndex + 1 < this.list.length) {
           payloadToUpdate = {
             entity: 'story',
@@ -100,7 +100,7 @@ export default {
 
         if (payloadToUpdate !== null) {
           payloadToUpdate.data.afterStoryId = response.item.id;
-          await this.$store.dispatch('entity/create', payloadToUpdate);
+          await this.$store.dispatch('entity/update', payloadToUpdate);
         }
 
         this.$nextTick(() => {
