@@ -2,11 +2,11 @@ export default {
   methods: {
     resetContent () {
       return new Promise(resolve => {
-        this.updateText();
+        //this.updateText();
         this.event = null;
         [this.previous, this.next] = [null, null];
 
-        this.$refs[this.ref][0].classList.remove('text-greyed');
+        //this.$refs[this.ref][0].classList.remove('text-greyed');
 
         resolve();
       });
@@ -16,7 +16,7 @@ export default {
         this.event = $event;
         this.setSiblings();
 
-        this.editor.text = this.event.target.innerHTML;
+        this.editor.markup = this.event.target.innerHTML;
 
         this.initPlaceholder();
 
@@ -92,7 +92,7 @@ export default {
       if (completion !== null) {
         const [text, type] = this.getStaticTextByType(completion);
         this.editor.tail = this.createSpan(text, `&nbsp;${type}`, true);
-        this.editor.placeholder = this.editor.text + this.editor.tail;
+        this.editor.placeholder = this.editor.markup + this.editor.tail;
       }
     },
     setSiblings () {
@@ -159,24 +159,24 @@ export default {
 
       if (index !== null) {
         spans[index] = this.createSpan(chapter, text, false, clickable);
-        this.editor.text = spans.map(item => item.replace(/&nbsp;/gi, '')).join('&nbsp;');
+        this.editor.markup = spans.map(item => item.replace(/&nbsp;/gi, '')).join('&nbsp;');
       } else {
         let t = spans.join('');
-        this.editor.text = `${t}${!t ? '' : '&nbsp;'}${this.createSpan(chapter, text, false, clickable)}`;
+        this.editor.markup = `${t}${!t ? '' : '&nbsp;'}${this.createSpan(chapter, text, false, clickable)}`;
         this.setCompletion();
       }
 
       this.filter = null;
       this.editor.tail = '';
-      this.editor.placeholder = this.editor.text;
-      this.updateText();
+      this.editor.placeholder = this.editor.markup;
+      //this.updateText();
     },
     setCompletion () {
       this.next = this.getStaticText();
 
       if (this.next && this.next.includes('static-text')) {
         const [type, text] = this.getStaticTextByType();
-        this.editor.text += this.createSpan(type, text, false);
+        this.editor.markup += this.createSpan(type, text, false);
       }
     },
     finishSentence ($event, character = '') {
@@ -187,20 +187,20 @@ export default {
       }
 
       this.event = $event;
-      this.editor.text = (`${this.editor.text}${character}`);
+      this.editor.markup = (`${this.editor.markup}${character}`);
 
       this.setSiblings();
       this.setCustomText(true);
 
       this.resetPlaceholder();
-      this.updateText();
+      //this.updateText();
     },
     setCustomText (editable = false) {
       const [list, tail] = this.getLineParticles();
 
       if (tail) {
         const text = this.createSpan(this.next, `&nbsp;${tail}`, false, editable);
-        this.editor.text = list + (this.next ? text : ':');
+        this.editor.markup = list + (this.next ? text : ':');
       }
     }
   }

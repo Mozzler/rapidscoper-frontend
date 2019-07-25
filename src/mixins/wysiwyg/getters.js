@@ -1,7 +1,7 @@
 export default {
   methods: {
     getStaticText (increments = 1) {
-      const nodes = this.$refs[this.ref][0].childNodes;
+      const nodes = this.$refs[this.editor.id][0].childNodes;
       nodes.filter = [].filter;
 
       const classes = nodes
@@ -26,7 +26,7 @@ export default {
       return index + increments < templates.length ? templates[index + increments] : null;
     },
     getSpanList (joined = true) {
-      const spans = this.editor.text
+      const spans = this.editor.markup
         .split('</span>')
         .filter(item => item.includes('<span'))
         .map(item => `${item}</span>`);
@@ -34,7 +34,7 @@ export default {
       return !joined ? spans : spans.join('');
     },
     getTail () {
-      return this.editor.text
+      return this.editor.markup
         .split('</span>')
         .filter(item => !item.includes('<span'))
         .join('')
@@ -49,7 +49,7 @@ export default {
     getCurrentSpan () {
       const node = this.event.view.getSelection().focusNode;
 
-      if (!this.editor.text || !this.editor.template || !node.previousSibling) {
+      if (!this.editor.markup || !this.editor.template || !node.previousSibling) {
         this.editor.template = '';
         return null;
       }
@@ -60,7 +60,7 @@ export default {
         current = node.previousSibling.className;
 
         if (current.includes('beginning')) {
-          this.editor.text = this.editor.text.replace(/ text-greyed/, '');
+          this.editor.markup = this.editor.markup.replace(/ text-greyed/, '');
         }
       }
 
@@ -71,7 +71,7 @@ export default {
         .split(/[[(.*)\]]/)
         .filter(item => !!item.trim());
 
-      if (!this.editor.text || !this.editor.template) {
+      if (!this.editor.markup || !this.editor.template) {
         return 'beginning';
       }
 

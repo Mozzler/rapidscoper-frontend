@@ -57,17 +57,17 @@
                    readonly></div>
               <div :contenteditable="processing !== item.id && tab === 'edit'"
                    class="user-story__editable"
-                   :id="item.id"
+                   :ref="item.id"
                    :disabled="processing"
                    tabindex="2"
-                   @blur="() => tab === 'edit' ? updateStory(item.id) : null"
+                   @focus="() => focus(item)"
+                   @keydown.enter.exact="createRow"
+                   @blur="tab === 'edit' ? updateStory : ''"
                    @click="($event) => checkHint($event, index)"
-                   @focus="($event) => focus($event, index)"
                    @keydown.down.exact="focusHint"
                    @keyup.exact="pressed"
                    @keydown.esc.exact="hideHint"
                    @keydown.tab.exact="fixStaticText"
-                   @keydown.enter.exact="createRow"
                    @keydown.delete.exact="($event) => remove($event, index)"
                    @keydown.186.shift.exact="createSublist"
                    @keydown.tab.shift.exact="decreaseSublistLevel"
@@ -111,7 +111,8 @@ export default {
       list: null,
       focused: null,
       hintEditor: null,
-      processing: false
+      processing: false,
+      editor: null
     };
   },
   beforeMount () {
@@ -123,19 +124,18 @@ export default {
     }
   },
   methods: {
-    updateStory (id, properties) {
-      this.processing = id;
+    updateStory (properties) {
+      this.processing = this.editor.id;
 
-      const story = this.list.find(item => item.id === id);
       const payload = {
         entity: 'story',
         data: {
-          type: story.type,
-          markup: story.markup,
+          type: this.editor.type,
+          markup: this.editor.markup,
           ...properties
         },
         params: {
-          id: id
+          id: this.editor.id
         }
       };
 
@@ -147,7 +147,7 @@ export default {
       deep: true,
       handler () {
         new Promise(resolve => {
-          this.list = [...this.stories];
+          this.list = this.stories;
           resolve();
         }).then(() => {
           if (!this.isEditable(this.event)) {

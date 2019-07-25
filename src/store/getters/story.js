@@ -76,11 +76,15 @@ export default {
 
       // format the response
       return _.map(sorted, item => {
-        const basic = _.pick(item, 'id', 'parentStoryId', 'estimate', 'priority', 'labels', 'markup', 'type', 'level');
+        const basic = _.pick(item, 'id', 'parentStoryId',
+          'sectionId', 'teamId', 'projectId',
+          'estimate', 'priority', 'labels', 'markup',
+          'type', 'level');
+        const construction = getConstructionByType(basic.type);
 
         return {
           ...basic,
-          template: getConstructionByType(basic.type).structure,
+          template: construction ? construction.structure : '',
           tail: '',
           placeholder: basic.markup
         };

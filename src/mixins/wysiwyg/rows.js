@@ -1,7 +1,7 @@
 export default {
   methods: {
-    focus ($event, index) {
-      this.focused = index;
+    focus (item) {
+      this.editor = item;
     },
     isEditable (event) {
       if (!event) {
@@ -25,30 +25,30 @@ export default {
 
       el.focus();
     },
-    addRowToList (prototype, text = '', sublist = false, template = '') {
-
+    getStoryPayload (sublist = false, text = '') {
       if (!sublist) {
-        const number = this.level === 1 ? 3 : 1;
+        const number = this.editor.level === 1 ? 3 : 1;
         const data = this.getSpanList(false).slice(0, number);
 
         text = `${data.join('')}&nbsp;`;
       }
 
       return {
-        id: null,
-        parentStoryId: sublist ? prototype.id : prototype.parentStoryId,
-        parent: sublist ? prototype : prototype.parent,
+        parentStoryId: sublist ? this.editor.id : this.editor.parentStoryId,
+        afterStoryId: this.editor.id,
 
-        estimation: null,
+        estimate: 0,
         priority: null,
-        label: [],
+        labels: [],
 
         tail: '',
         placeholder: text,
-        text: text,
-        template: sublist ? template : prototype.template,
+        markup: text,
+        template: sublist ? '' : this.editor.template,
 
-        list: []
+        sectionId: this.editor.sectionId,
+        teamId: this.editor.teamId,
+        projectId: this.editor.projectId
       };
     },
     rowIsEmpty () {
@@ -72,19 +72,41 @@ export default {
         return;
       }
 
-      if (this.next === 'beginning') {
+      if (this.next === 'beginning') { // could be a reson of the bug
         this.fixStaticText($event);
       } else {
         this.finishSentence($event);
 
-        const row = this.addRowToList(this.list[this.focused], $event.target.innerHTML);
-        this.list.splice(this.focused + 1, 0, row);
+        let payloadToCreate = this.getStoryPayload(false, $event.target.innerHTML);
+        let payloadToUpdate = null;
 
-        this.saveStory(this.list[this.focused + 1].id, this.focused + 1, () => {
-          this.$nextTick(() => {
-            const wysiwygChild = `editor-${ this.focused + 1 }-${ this.level }`;
-            this.focusEditor(wysiwygChild, this, true);
-          });
+        let replacementIndex = _.indexOf(this.list, item => item.id === this.editor.id);
+        if (replacementIndex !== -1 && replacementIndex + 1 < this.list.length) {
+          payloadToUpdate = {
+            entity: 'story',
+            params: {
+              id: this.list[replacementIndex + 1].id
+            },
+            data: {
+              afterStoryId: null
+            }
+          };
+        }
+
+        const response = await this.$store.dispatch('entity/create', {
+          entity: 'story',
+          data: payloadToCreate
+        });
+
+        if (payloadToUpdate !== null) {
+          payloadToUpdate.data.afterStoryId = response.item.id;
+          await this.$store.dispatch('entity/create', payloadToUpdate);
+        }
+
+        this.$nextTick(() => {
+          this.$refs[response.item.id][0].focus();
+          document.execCommand('selectAll', false, null);
+          document.getSelection().collapseToEnd();
         });
       }
     },
@@ -98,7 +120,7 @@ export default {
       this.finishSentence($event, ':');
 
       new Promise(resolve => {
-        const row = this.addRowToList(this.list[this.focused], '', true, '');
+        const row = this.getStoryPayload(true, '');
         this.list[this.focused].list.push(row);
         resolve();
       }).then(() => {
@@ -263,7 +285,7 @@ export default {
         return;
       }
 
-      const spans = this.editor.text.split('</span>');
+      const spans = this.editor.markup.split('</span>');
 
       if (this.level > 1 && !this.getSpanList() && !this.getTail()) {
         await this.decreaseSublistLevel($event);
@@ -277,9 +299,9 @@ export default {
       if (this.level === 1 && spans[1] === '&nbsp;') {
         $event.preventDefault();
       } else {
-        if (this.editor.text) {
-          this.editor.text = $event.target.innerHTML;
-          this.$refs[this.ref][0].classList.remove('text-greyed');
+        if (this.editor.markup) {
+          this.editor.markup = $event.target.innerHTML;
+          //this.$refs[this.ref][0].classList.remove('text-greyed');
         }
       }
     }

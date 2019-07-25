@@ -2,7 +2,7 @@ export default {
   methods: {
     resetPlaceholder () {
       this.editor.tail = '';
-      this.editor.placeholder = this.editor.text;
+      this.editor.placeholder = this.editor.markup;
     },
     fixStaticText ($event) {
       $event.preventDefault();
@@ -32,17 +32,17 @@ export default {
         let completion = this.getStaticText(1);
         if (completion && completion.includes('static-text')) {
           const [type, text] = this.getStaticTextByType(completion);
-          this.editor.text = this.editor.text + this.createSpan(type, text);
+          this.editor.markup = this.editor.markup + this.createSpan(type, text);
         }
       }
 
       if (this.next.includes('static-text')) {
         const [type, text] = this.getStaticTextByType();
-        this.editor.text += this.createSpan(type, text, false);
+        this.editor.markup += this.createSpan(type, text, false);
       }
 
       this.resetPlaceholder();
-      this.updateText();
+      //this.updateText();
     }
   }
 };
