@@ -27,7 +27,7 @@
             :key="tab"
             :active="item[tab]"
             :list="collection"
-            :label-cls="'tool-block__label placeholder--minified'"
+            :label-cls="'tool-block__label--minified'"
             @update="updateToolId"/>
         </div>
 
