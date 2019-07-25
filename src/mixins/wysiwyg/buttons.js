@@ -21,6 +21,10 @@ export default {
     stopProcessing (id) {
       if (id === this.toolId) {
         this.toolProcessing = false;
+
+        if (this.tab === 'priority') {
+          this.nextItem();
+        }
       }
     },
     selectTool (id) {
