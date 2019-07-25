@@ -96,6 +96,11 @@ class MongoSockets {
             entity: response.model,
             data: response.fullDocument
           });
+
+          if (response.model === 'story') {
+            app.$root.$emit('update-story-set');
+          }
+
           break;
       }
     });
