@@ -193,25 +193,33 @@ export default {
         const equation = this.getEquation(this.level - 1);
         const constructions = this.getAdjusted(equation);
 
-        Object.assign(this.list[this.focused], {
-          text: this.createSpan('beginning', constructions[0].key, true),
+        Object.assign(this.editor, {
+          markup: this.createSpan('beginning', constructions[0].key, true),
           template: constructions[0].value,
           tail: '',
           type: 'user'
         });
 
-        this.list[this.focused].placeholder = this.list[this.focused].text;
+        this.editor.placeholder = this.editor.markup;
       }
 
-      const node = Object.assign({}, this.list[this.focused]);
-      const parent = node.parent.parent;
+      // ADD AFTER STORY TO CONTENT GETTER!!!!
 
-      node.parent = parent;
-      node.parentStoryId = parent && parent.id ? parent.id : null;
-      node.afterStoryId = parent.list[this.parentIndex] ? parent.list[this.parentIndex].id : 0;
+      //const newParentStoryId = _.findIndex(this.list, item => item.)
 
-      this.list.splice(this.focused, 1);
-      parent.list.splice(this.parentIndex + 1, 0, node);
+      this.$store.dispatch('entity/update', {
+        entity: 'story',
+        params: {
+          id: this.editor.id
+        },
+        data: {
+          afterStoryId: '',
+          parentStoryId: '',
+          level: this.editor.level - 1,
+          markup: this.editor.markup,
+          type: this.editor.type
+        }
+      });
 
       // update reference to previous element for the story followed by current ---
       const dataToUpdate = [
