@@ -1,5 +1,14 @@
 export default {
   methods: {
+    getAfterStoryId () { // find the last child
+      let filtered = _.filter(this.list, item => item.level === this.editor.level),
+          index = _.findIndex(filtered, item => item.id === this.editor.id);
+
+      let next = filtered[index + 1],
+          afterIndex = _.findIndex(this.list, item => item.id === next.id);
+
+      return this.list[afterIndex - 1].id;
+    },
     getCreateRequestPayload (sublist = false, text = '') {
       if (!sublist) {
         const number = this.editor.level === 1 ? 3 : 1;
@@ -10,7 +19,7 @@ export default {
 
       return {
         parentStoryId: sublist ? this.editor.id : this.editor.parentStoryId,
-        afterStoryId: this.editor.id,
+        afterStoryId: this.getAfterStoryId(),
 
         estimate: 0,
         priority: null,
@@ -37,10 +46,11 @@ export default {
       });
 
       this.$nextTick(() => {
-        this.$refs[response.item.id][0].focus();
-        document.execCommand('selectAll', false, null);
-        document.getSelection().collapseToEnd();
-        this.processing = null;
+        if (this.$refs[response.item.id]) {
+          this.$refs[response.item.id][0].focus();
+          this.collapseToEnd();
+          this.processing = null;
+        }
       });
     },
     createStory ($event) {

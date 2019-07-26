@@ -60,12 +60,12 @@
                    :ref="item.id"
                    :disabled="processing === item.id"
                    tabindex="2"
-                   @focus="() => focus(item)"
+                   @focus="() => focusEvent(item, index)"
                    @keydown.enter.exact="createStory"
                    @blur="updateStory"
                    @click="($event) => checkHint($event, index)"
                    @keydown.down.exact="focusHint"
-                   @keyup.exact="pressed"
+                   @keyup.exact="keyupEvent"
                    @keydown.esc.exact="hideHint"
                    @keydown.tab.exact="fixStaticText"
                    @keydown.delete.exact="($event) => remove($event, item)"
@@ -109,10 +109,8 @@ export default {
   data () {
     return {
       list: null,
-      focused: null,
       hintEditor: null,
       processing: false,
-      editor: null
     };
   },
   beforeMount () {
@@ -125,8 +123,10 @@ export default {
   },
   methods: {
     collapseToEnd () {
-      document.execCommand('selectAll', false, null);
-      document.getSelection().collapseToEnd();
+      this.$nextTick(() => {
+        document.execCommand('selectAll', false, null);
+        document.getSelection().collapseToEnd();
+      });
     }
   },
   watch: {

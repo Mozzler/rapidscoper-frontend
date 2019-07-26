@@ -1,32 +1,5 @@
 export default {
   methods: {
-    resetContent () {
-      return new Promise(resolve => {
-        this.collapseToEnd();
-        this.event = null;
-        [this.previous, this.next] = [null, null];
-
-        this.$refs[this.editor.id][0].classList.remove('text-greyed');
-
-        resolve();
-      });
-    },
-    parseContent ($event) {
-      this.resetContent().then(() => {
-        this.event = $event;
-        this.setSiblings();
-
-        this.editor.markup = this.event.target.innerHTML;
-
-        this.initPlaceholder();
-
-        // show hint, if dictionary has next property
-        this.initDictionary();
-
-        // show auto-completion static text
-        this.initStaticText();
-      });
-    },
     initDictionary () {
       let el = this.event.target;
 
@@ -38,6 +11,7 @@ export default {
       nodes.filter = [].filter;
 
       const items = nodes.filter(item => typeof item !== 'function');
+
       if (!items.length || !this.getSpanList()) {
         el = this.$refs[this.editor.id][0];
       } else {
@@ -106,70 +80,6 @@ export default {
       }
       this.$root.$emit('complete-hint', this.filter, first, this.next === 'beginning');
       this.filter = null;
-    },
-    focusHint () {
-      this.$root.$emit('focus-hint');
-    },
-    submitField (chapter, text) {
-      if (typeof text !== 'string') {
-        return;
-      }
-
-      this.$store.dispatch('entity/create', {
-        entity: 'dictionary',
-        data: {
-          projectId: this.activeProject.id,
-          teamId: this.activeProject.teamId,
-          type: chapter,
-          name: text,
-          description: text
-        }
-      });
-    },
-    hintComplete (chapter, text, addresserId) {
-      if (addresserId !== this.hintEditor) {
-        return;
-      }
-
-      let clickable = false;
-
-      this.$nextTick(() => {
-        this.hintEditor = null;
-        const refs = this.$refs[`editor-${this.focused}-${this.level}`];
-        refs[0].focus();
-      });
-
-      if (chapter === 'beginning') {
-        this.editor.template = text.value;
-        this.editor.type = text.type;
-        text = text.key;
-        clickable = false;
-      } else {
-        this.submitField(chapter, text);
-      }
-
-      const spans = this.getSpanList(false);
-
-      let index = null;
-      spans.forEach((item, i) => {
-        if (item.includes(`user-story__editable--${chapter}`)) {
-          index = i;
-        }
-      });
-
-      if (index !== null) {
-        spans[index] = this.createSpan(chapter, text, false, clickable);
-        this.editor.markup = spans.map(item => item.replace(/&nbsp;/gi, '')).join('&nbsp;');
-      } else {
-        let t = spans.join('');
-        this.editor.markup = `${t}${!t ? '' : '&nbsp;'}${this.createSpan(chapter, text, false, clickable)}`;
-        this.setCompletion();
-      }
-
-      this.filter = null;
-      this.editor.tail = '';
-      this.editor.placeholder = this.editor.markup;
-      this.collapseToEnd();
     },
     setCompletion () {
       this.next = this.getStaticText();

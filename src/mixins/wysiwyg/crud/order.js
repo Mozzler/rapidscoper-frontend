@@ -1,6 +1,6 @@
 export default {
   methods: {
-    async reorder() {
+    async reorder () {
       const payload = {
         entity: 'story',
         params: {
@@ -14,7 +14,7 @@ export default {
         this.$refs[response.item.id][0].focus();
       });
     },
-    async increaseStoryLevel() {
+    async increaseStoryLevel () {
       const index = _.findIndex(this.list, item => item.id === this.editor.id);
 
       if (this.level === 2 || (this.level === 0 && !index)) {

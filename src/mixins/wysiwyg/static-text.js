@@ -12,7 +12,8 @@ export default {
       const tail = this.getTail().replace(/&nbsp;/gi, '');
       const spans = this.getSpanList(false).length;
 
-      if ((spans === 1 || spans === 0) && !tail) {
+      const first = _.findIndex(this.list, item => item.id === this.editor.id);
+      if ((spans === 1 || spans === 0) && !tail && !!first) {
         this.increaseStoryLevel($event);
         return;
       }

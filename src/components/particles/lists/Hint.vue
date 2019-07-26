@@ -33,13 +33,14 @@ export default {
       visible: false,
       focused: null,
       chapter: null,
-      filter: null
+      filter: null,
+      storyId: null
     };
   },
   mounted () {
     this.$root.$on('set-hint-state', this.setHintState);
     this.$root.$on('complete-hint', this.complete);
-    this.$root.$on('hideHint-hint', this.hideHint);
+    this.$root.$on('hide-hint', this.hideHint);
     this.$root.$on('focus-hint', this.setFocus);
   },
   computed: {
@@ -78,13 +79,7 @@ export default {
       $event.preventDefault();
       this.complete(value);
     },
-    setHintState (visible, chapter = null, filter = null, position = null, addresserId = null) {
-      const selection = document.getSelection().focusNode;
-      this.focusedElId = selection.id || selection.parentNode.offsetParent.id;
-      if (addresserId !== this.focusedElId) {
-        return;
-      }
-
+    setHintState (visible, chapter = null, filter = null, position = null, storyId = null) {
       Object.assign(this.$refs.hint.style, {
         left: position.left + 'px',
         top: position.top + 'px'
@@ -93,6 +88,7 @@ export default {
       this.visible = visible;
       this.chapter = chapter;
       this.filter = filter;
+      this.storyId = storyId;
     },
     setFocus () {
       if (this.focused === null) {
@@ -131,7 +127,7 @@ export default {
       }
 
       this.visible = false;
-      this.$root.$emit('hint-complete', this.chapter, item, this.focusedElId);
+      this.$root.$emit('hint-complete', this.chapter, item, this.storyId);
       this.focused = null;
     }
   },

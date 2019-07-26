@@ -4,7 +4,7 @@ import Converters from "./converters";
 import Getters from "./getters";
 import StaticText from "./static-text";
 import AutoCompleting from "./auto-completing";
-import Rows from "./rows";
+import BasicEvents from "./basic-events";
 import Filters from "./filters";
 import Hint from "./hint";
 import ActionHelper from "./action-helper";
@@ -17,7 +17,7 @@ export default {
     Getters,
     StaticText,
     AutoCompleting,
-    Rows,
+    BasicEvents,
     Filters,
     Hint,
     ActionHelper
@@ -40,15 +40,6 @@ export default {
   computed: {
     adjustConstructions () {
       return this.$store.state.story.adjustConstructions;
-    },
-    projects () {
-      return this.$store.getters['entity/items']('project');
-    },
-    activeProject () {
-      return this.projects.find(item => item.id === this.activeProjectId);
-    },
-    activeProjectId () {
-      return this.$route.params.projectId;
     }
-  },
+  }
 };

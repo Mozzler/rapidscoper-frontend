@@ -20,10 +20,11 @@ export default {
       });
     },
     async remove ($event, item) {
+      this.event = $event;
       this.editor = item;
 
       // allow to remove characters from editable div
-      if (this.isEditable($event)) {
+      if (this.isEditable()) {
         return;
       }
 

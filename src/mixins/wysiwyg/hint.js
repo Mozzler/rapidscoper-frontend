@@ -1,9 +1,12 @@
 export default {
   methods: {
     hideHint () {
-      this.$root.$emit('hideHint-hint');
+      this.$root.$emit('hide-hint');
     },
-    showHint (el, chapter, filter = this.filter, addresserId) {
+    focusHint () {
+      this.$root.$emit('focus-hint');
+    },
+    showHint (el, chapter, filter = this.filter) {
       const rect = el.getBoundingClientRect();
 
       const position = {
@@ -12,8 +15,8 @@ export default {
       };
 
       this.$nextTick(() => {
-        this.hintEditor = addresserId || this.editor.id;
-        this.$root.$emit('set-hint-state', true, chapter, filter, position, this.hintEditor);
+        this.hintEditor = this.editor.id;
+        this.$root.$emit('set-hint-state', true, chapter, filter, position, this.editor.id);
       });
     },
     checkHint ($event, index) {
@@ -32,10 +35,68 @@ export default {
           refs[0].focus();
         });
 
-        const addresserId = $event.target.parentElement.id;
         this.hideHint();
-        this.showHint($event.target, property, '', addresserId);
+        this.showHint($event.target, property, '');
       }
+    },
+    hintComplete (chapter, text, addresserId) {
+      if (addresserId !== this.hintEditor) {
+        return;
+      }
+
+      let clickable = false;
+
+      this.$nextTick(() => {
+        this.$refs[this.editor.id][0].focus();
+      });
+
+      if (chapter === 'beginning') {
+        this.editor.template = text.value;
+        this.editor.type = text.type;
+        text = text.key;
+        clickable = false;
+      } else {
+        this.submitField(chapter, text);
+      }
+
+      const spans = this.getSpanList(false);
+
+      let index = null;
+      spans.forEach((item, i) => {
+        if (item.includes(`user-story__editable--${chapter}`)) {
+          index = i;
+        }
+      });
+
+      if (index !== null) {
+        spans[index] = this.createSpan(chapter, text, false, clickable);
+        this.editor.markup = spans.map(item => item.replace(/&nbsp;/gi, '')).join('&nbsp;');
+      } else {
+        let t = spans.join('');
+        this.editor.markup = `${t}${!t ? '' : '&nbsp;'}${this.createSpan(chapter, text, false, clickable)}`;
+        this.setCompletion();
+      }
+
+      this.filter = null;
+      this.editor.tail = '';
+      this.editor.placeholder = this.editor.markup;
+      this.collapseToEnd();
+    },
+    submitField (chapter, text) {
+      if (typeof text !== 'string') {
+        return;
+      }
+
+      this.$store.dispatch('entity/create', {
+        entity: 'dictionary',
+        data: {
+          projectId: this.editor.projectId,
+          teamId: this.editor.teamId,
+          type: chapter,
+          name: text,
+          description: text
+        }
+      });
     }
   }
 };
