@@ -13,8 +13,10 @@ export default {
   methods: {
     getEquation (level = this.level) {
       switch (level) {
-        case 1:
+        case 0:
           return '=== 0';
+        case 1:
+          return '> -1';
         default:
           return '> 0';
       }

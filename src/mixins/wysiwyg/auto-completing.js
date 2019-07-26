@@ -6,7 +6,7 @@ export default {
         this.event = null;
         [this.previous, this.next] = [null, null];
 
-        //this.$refs[this.ref][0].classList.remove('text-greyed');
+        this.$refs[this.editor.id][0].classList.remove('text-greyed');
 
         resolve();
       });
@@ -39,7 +39,7 @@ export default {
 
       const items = nodes.filter(item => typeof item !== 'function');
       if (!items.length || !this.getSpanList()) {
-        el = this.$refs[this.ref][0];
+        el = this.$refs[this.editor.id][0];
       } else {
         if (!this.previous) {
           return;

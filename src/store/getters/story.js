@@ -82,6 +82,8 @@ export default {
           'type', 'level');
         const construction = getConstructionByType(basic.type);
 
+        basic.level = basic.level ? basic.level : 0;
+
         return {
           ...basic,
           template: construction ? construction.structure : '',

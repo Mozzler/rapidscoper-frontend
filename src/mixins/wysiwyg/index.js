@@ -1,4 +1,5 @@
 import Instruments from "./instruments";
+import Crud from "./crud";
 import Converters from "./converters";
 import Getters from "./getters";
 import StaticText from "./static-text";
@@ -10,6 +11,8 @@ import ActionHelper from "./action-helper";
 
 export default {
   mixins: [
+    Instruments,
+    Crud,
     Converters,
     Getters,
     StaticText,
@@ -17,8 +20,7 @@ export default {
     Rows,
     Filters,
     Hint,
-    ActionHelper,
-    Instruments
+    ActionHelper
   ],
   data () {
     return {
@@ -38,9 +40,6 @@ export default {
   computed: {
     adjustConstructions () {
       return this.$store.state.story.adjustConstructions;
-    },
-    ref () {
-      return `editor-${this.focused}-${this.level}`;
     },
     projects () {
       return this.$store.getters['entity/items']('project');
