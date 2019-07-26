@@ -75,36 +75,13 @@ export default {
       this.finishSentence($event, ':');
       this.handleStoryRequest(true, '');
     },
-    async handleStoryRequest (sublist, text = '') {
-      let payloadToCreate = this.getStoryPayload(sublist, text);
-      let payloadToUpdate = null;
+    handleStoryRequest (sublist, text = '') {
+      let payload = this.getStoryPayload(sublist, text);
 
-      let startIndex = _.findIndex(this.list, item => item.id === this.editor.id);
-      let replacementIndex = this.list.slice(startIndex)
-        .findIndex(item => item.parentStoryId === this.editor.parentStoryId);
-      if (replacementIndex !== -1 && startIndex + replacementIndex + 1 < this.list.length) {
-        payloadToUpdate = {
-          entity: 'story',
-          params: {
-            id: this.list[startIndex + replacementIndex + 1].id
-          },
-          data: {
-            afterStoryId: null
-          }
-        };
-      }
-
-      const response = await this.$store.dispatch('entity/create', {
+      this.$store.dispatch('entity/create', {
         entity: 'story',
-        data: payloadToCreate
-      });
-
-      if (payloadToUpdate !== null) {
-        payloadToUpdate.data.afterStoryId = response.item.id;
-        await this.$store.dispatch('entity/update', payloadToUpdate);
-      }
-
-      this.$nextTick(() => {
+        data: payload
+      }).then(response => {
         this.$refs[response.item.id][0].focus();
         document.execCommand('selectAll', false, null);
         document.getSelection().collapseToEnd();
