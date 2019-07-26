@@ -13,7 +13,7 @@ export default {
       const spans = this.getSpanList(false).length;
 
       if ((spans === 1 || spans === 0) && !tail) {
-        this.increaseSublistLevel($event);
+        this.increaseStoryLevel($event);
         return;
       }
 
@@ -42,7 +42,7 @@ export default {
       }
 
       this.resetPlaceholder();
-      //this.updateText();
+      this.collapseToEnd();
     }
   }
 };

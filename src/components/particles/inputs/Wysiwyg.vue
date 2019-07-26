@@ -62,7 +62,7 @@
                    tabindex="2"
                    @focus="() => focus(item)"
                    @keydown.enter.exact="createStory"
-                   @blur="tab === 'edit' ? updateStory : ''"
+                   @blur="updateStory"
                    @click="($event) => checkHint($event, index)"
                    @keydown.down.exact="focusHint"
                    @keyup.exact="pressed"
@@ -70,7 +70,7 @@
                    @keydown.tab.exact="fixStaticText"
                    @keydown.delete.exact="($event) => remove($event, item)"
                    @keydown.186.shift.exact="createSubstory"
-                   @keydown.tab.shift.exact="decreaseSublistLevel"
+                   @keydown.tab.shift.exact="decreaseStoryLevel"
                    v-html="item.markup"></div>
               <circular-loader
                 cls="user-story__loader"
@@ -124,22 +124,9 @@ export default {
     }
   },
   methods: {
-    updateStory (properties) {
-      this.processing = this.editor.id;
-
-      const payload = {
-        entity: 'story',
-        data: {
-          type: this.editor.type,
-          markup: this.editor.markup,
-          ...properties
-        },
-        params: {
-          id: this.editor.id
-        }
-      };
-
-      return this.$store.dispatch('entity/update', payload);
+    collapseToEnd () {
+      document.execCommand('selectAll', false, null);
+      document.getSelection().collapseToEnd();
     }
   },
   watch: {

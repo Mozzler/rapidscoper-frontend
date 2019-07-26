@@ -2,7 +2,7 @@ export default {
   methods: {
     resetContent () {
       return new Promise(resolve => {
-        //this.updateText();
+        this.collapseToEnd();
         this.event = null;
         [this.previous, this.next] = [null, null];
 
@@ -169,7 +169,7 @@ export default {
       this.filter = null;
       this.editor.tail = '';
       this.editor.placeholder = this.editor.markup;
-      //this.updateText();
+      this.collapseToEnd();
     },
     setCompletion () {
       this.next = this.getStaticText();
@@ -193,7 +193,7 @@ export default {
       this.setCustomText(true);
 
       this.resetPlaceholder();
-      //this.updateText();
+      this.collapseToEnd();
     },
     setCustomText (editable = false) {
       const [list, tail] = this.getLineParticles();

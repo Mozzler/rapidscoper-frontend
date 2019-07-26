@@ -50,10 +50,6 @@ export default {
     };
   },
   methods: {
-    updateText () {
-      /*this.editor.text = input.text;
-      this.editor.placeholder = input.placeholder;*/
-    },
     updateSection (item, event) {
       this[item] = event.target.innerText;
 

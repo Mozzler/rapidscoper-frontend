@@ -1,14 +1,5 @@
 export default {
   methods: {
-    getUpdateRequestPayload () {
-      return {
-        entity: 'story',
-        params: {
-          id: this.editor.id
-        },
-        data: _.pick(this.editor, 'markup', 'type')
-      };
-    },
     getCreateRequestPayload (sublist = false, text = '') {
       if (!sublist) {
         const number = this.editor.level === 1 ? 3 : 1;
@@ -36,24 +27,20 @@ export default {
         projectId: this.editor.projectId
       };
     },
-    sendCreateStoryRequest (sublist, text = '') {
+    async sendCreateStoryRequest (sublist, text = '') {
       this.processing = this.editor.id;
-      let createPayload = this.getCreateRequestPayload(sublist, text);
-      let updatePayload = this.getUpdateRequestPayload();
+      let payload = this.getCreateRequestPayload(sublist, text);
 
-      Promise.all([
-        this.$store.dispatch('entity/update', updatePayload),
-        this.$store.dispatch('entity/create', {
-          entity: 'story',
-          data: createPayload
-        })
-      ]).then(response => {
-        this.$nextTick(() => {
-          this.$refs[response[1].item.id][0].focus();
-          document.execCommand('selectAll', false, null);
-          document.getSelection().collapseToEnd();
-          this.processing = null;
-        });
+      const response = await this.$store.dispatch('entity/create', {
+        entity: 'story',
+        data: payload
+      });
+
+      this.$nextTick(() => {
+        this.$refs[response.item.id][0].focus();
+        document.execCommand('selectAll', false, null);
+        document.getSelection().collapseToEnd();
+        this.processing = null;
       });
     },
     createStory ($event) {
