@@ -81,6 +81,8 @@ export default {
         data: {
           [this.tab]: query
         }
+      }).then(() => {
+        this.toolProcessing = false;
       });
     },
     resetToolId (id) {
