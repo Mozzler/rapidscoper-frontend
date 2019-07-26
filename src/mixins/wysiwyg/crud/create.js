@@ -1,13 +1,16 @@
 export default {
   methods: {
-    getAfterStoryId () { // find the last child
-      let filtered = _.filter(this.list, item => item.level === this.editor.level),
-          index = _.findIndex(filtered, item => item.id === this.editor.id);
+    getAfterStoryId () {
+      const currentIndex = _.findIndex(this.list, item => item.id === this.editor.id);
+      const sliced = this.list.slice(currentIndex);
+      const reversed = sliced.reverse();
 
-      let next = filtered[index + 1],
-          afterIndex = _.findIndex(this.list, item => item.id === next.id);
-
-      return this.list[afterIndex - 1].id;
+      if (!sliced.length) {
+        return this.editor.id;
+      } else {
+        const next = _.findIndex(sliced, item => item.level === this.editor.level);
+        return next !== -1 ? reversed[0].id : reversed[1].id;
+      }
     },
     getCreateRequestPayload (sublist = false, text = '') {
       if (!sublist) {
@@ -19,7 +22,7 @@ export default {
 
       return {
         parentStoryId: sublist ? this.editor.id : this.editor.parentStoryId,
-        afterStoryId: this.getAfterStoryId(),
+        afterStoryId: this.editor.id,
 
         estimate: 0,
         priority: null,
@@ -39,7 +42,7 @@ export default {
     async sendCreateStoryRequest (sublist, text = '') {
       this.processing = this.editor.id;
       let payload = this.getCreateRequestPayload(sublist, text);
-
+/*
       const response = await this.$store.dispatch('entity/create', {
         entity: 'story',
         data: payload
@@ -51,7 +54,7 @@ export default {
           this.collapseToEnd();
           this.processing = null;
         }
-      });
+      });*/
     },
     createStory ($event) {
       if (this.dictionary[this.next]) {

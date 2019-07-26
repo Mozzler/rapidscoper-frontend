@@ -49,7 +49,7 @@ export default {
     getCurrentSpan () {
       const node = this.event.view.getSelection().focusNode;
 
-      if (!this.editor.markup || !this.editor.template || !node.previousSibling) {
+      if (!this.editor.markup || !this.editor.template || !node ||  !node.previousSibling) {
         this.editor.template = '';
         return null;
       }

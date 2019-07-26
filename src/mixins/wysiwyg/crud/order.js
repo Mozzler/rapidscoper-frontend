@@ -43,7 +43,7 @@ export default {
 
       this.reorder();
     },
-    async decreaseStoryLevel($event) {
+    async decreaseStoryLevel ($event) {
       this.hideHint();
 
       $event.preventDefault();
