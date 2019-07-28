@@ -1,10 +1,13 @@
 export default {
   methods: {
     async removeStory () {
-      this.processing = this.editor.id;
       this.hideHint();
+      await this.$nextTick();
+      this.$refs[this.editor.id][0].focus();
 
-      if (this.editor.level === 1 && this.list.length === 1) {
+      this.processing = this.editor.id;
+
+      if (this.editor.level === 0 && this.list.length === 1) {
         return;
       }
 
@@ -12,14 +15,12 @@ export default {
       await this.$store.dispatch('entity/delete', {
         entity: 'story',
         id: this.editor.id
-      }).then(() => {
-        this.editor = null;
       });
 
-      this.$nextTick(() => {
-        this.$refs[this.list[previousId].id][0].focus();
-        this.processing = null;
-      });
+      await this.$nextTick();
+      this.$refs[this.list[previousId].id][0].focus();
+      this.processing = null;
+      this.editor = null;
     },
     async remove ($event, item) {
       this.event = $event;

@@ -13,9 +13,8 @@
          :ref="`hint-item-${index}`"
          :class="{'hint__item--active': focused === index}"
          @click="$event => tabComplete($event, item)">
-      <span class="hint__item-text">
-        {{ getStrFromObj(item) }}
-      </span>
+      <span class="hint__item-text"
+            v-html="getStrFromObj(item, chapter === 'beginning')" />
     </div>
     <div class="hint__item hint__bordered"
          v-if="(filter && !inList) && this.chapter !== 'beginning'"
@@ -72,7 +71,7 @@ export default {
     }
   },
   methods: {
-    hideHint () {
+    async hideHint () {
       this.visible = false;
     },
     tabComplete ($event, value) {

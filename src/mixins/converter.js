@@ -33,14 +33,18 @@ export default {
     }
   },
   methods: {
-    getStrFromObj (item) {
-      return item.key || item.name;
+    getStrFromObj (item, shortcut = false) {
+      const value = item.key || item.name;
+      return shortcut ? this.shortcut(value) : value;
     },
     createSpan (type, text, greyed = false, editable = false, clickable = false) {
       const cls = `user-story__editable--${type}${greyed ? ' text-greyed' : ''}`;
       const props = `readonly contenteditable="${editable}"`;
 
       return `<span class="${cls}" ${props}>${ this.$options.filters.withoutDots(text) }</span>&nbsp;`;
+    },
+    shortcut (item) {
+      return `<span class='text-underlined'>${item.charAt(0)}</span><span>${item.slice(1)}</span>`;
     }
   }
 };
