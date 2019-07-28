@@ -63,7 +63,7 @@
                    @focus="() => focusEvent(item, index)"
                    @keydown.enter.exact="createStory"
                    @blur="updateStory"
-                   @click="($event) => checkHint($event)"
+                   @click="($event) => checkHint($event, item)"
                    @keydown.down.exact="focusHint"
                    @keyup.exact="keyupEvent"
                    @keydown.esc.exact="hideHint"

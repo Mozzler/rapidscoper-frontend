@@ -20,7 +20,7 @@ export default {
         this.$root.$emit('set-hint-state', true, chapter, filter, position, this.editor.id);
       });
     },
-    checkHint ($event, index) {
+    checkHint ($event, item) {
       this.event = $event;
 
       let property = $event.target.className.replace('user-story__editable--', '');
@@ -31,9 +31,8 @@ export default {
           $event.target.innerText = '';
         }*/
 
-        const refs = this.$refs[`editor-${this.focused}-${this.level}`];
         this.$nextTick(() => {
-          refs[0].focus();
+          this.$refs[item.id][0].focus();
         });
 
         this.hideHint();
@@ -41,6 +40,7 @@ export default {
       }
     },
     hintComplete (chapter, text, addresserId) {
+      console.log(this.hintEditor, addresserId);
       if (addresserId !== this.hintEditor) {
         return;
       }

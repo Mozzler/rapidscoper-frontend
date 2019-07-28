@@ -111,12 +111,12 @@ export default {
 
       this.focused = step;
     },
-    complete (item = this.filter, first = false, beginning = false) {
+    complete (item = this.filter, first = false, beginning = false, storyId = this.storyId) {
       if (!item) {
         return;
       }
 
-      if (beginning) {
+      if (beginning && !this.items.length) {
         return;
       }
 
@@ -125,7 +125,7 @@ export default {
       }
 
       this.visible = false;
-      this.$root.$emit('hint-complete', this.chapter, item, this.storyId);
+      this.$root.$emit('hint-complete', this.chapter, item, storyId);
       this.focused = null;
     }
   },

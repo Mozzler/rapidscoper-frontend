@@ -78,7 +78,8 @@ export default {
       if ($event.code === 'Enter' && this.next === 'beginning') {
         return;
       }
-      this.$root.$emit('complete-hint', this.filter, first, this.next === 'beginning');
+
+      this.$root.$emit('complete-hint', this.filter, first, this.next === 'beginning', this.editor.id);
       this.filter = null;
     },
     setCompletion () {

@@ -18,7 +18,6 @@ export default {
       }
 
       if (this.filter && this.filter.trim()) {
-        this.hideHint();
         this.createField($event, true);
         return;
       }
