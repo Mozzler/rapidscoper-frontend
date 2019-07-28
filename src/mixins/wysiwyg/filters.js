@@ -11,7 +11,7 @@ export default {
     }
   },
   methods: {
-    getEquation (level = this.level) {
+    getEquation (level = this.editor ? this.editor.level : null) {
       switch (level) {
         case 0:
           return '=== 0';

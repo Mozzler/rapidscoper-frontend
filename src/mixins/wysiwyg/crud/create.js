@@ -43,8 +43,6 @@ export default {
       this.nextIdToFocus = response.item.id;
     },
     createStory ($event) {
-      this.hideHint();
-
       if (this.dictionary[this.next]) {
         this.createField($event);
         return;

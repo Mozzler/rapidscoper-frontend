@@ -39,23 +39,19 @@ export default {
         this.showHint($event.target, property, '');
       }
     },
-    hintComplete (chapter, text, addresserId) {
-      console.log(this.hintEditor, addresserId);
+    async hintComplete (chapter, text, addresserId) {
       if (addresserId !== this.hintEditor) {
         return;
       }
 
-      let clickable = false;
-
-      this.$nextTick(() => {
-        this.$refs[this.editor.id][0].focus();
-      });
+      await this.$nextTick();
+      this.$refs[this.editor.id][0].focus();
+      await this.$nextTick();
 
       if (chapter === 'beginning') {
         this.editor.template = text.value;
         this.editor.type = text.type;
         text = text.key;
-        clickable = false;
       } else {
         this.submitField(chapter, text);
       }
@@ -70,11 +66,11 @@ export default {
       });
 
       if (index !== null) {
-        spans[index] = this.createSpan(chapter, text, false, clickable);
+        spans[index] = this.createSpan(chapter, text, false, false);
         this.editor.markup = spans.map(item => item.replace(/&nbsp;/gi, '')).join('&nbsp;');
       } else {
         let t = spans.join('');
-        this.editor.markup = `${t}${!t ? '' : '&nbsp;'}${this.createSpan(chapter, text, false, clickable)}`;
+        this.editor.markup = `${t}${!t ? '' : '&nbsp;'}${this.createSpan(chapter, text, false)}`;
         this.setCompletion();
       }
 
