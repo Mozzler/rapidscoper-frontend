@@ -4,16 +4,19 @@ export default {
       return this.focused === 0 ? 0 : this.list[this.focused - 1].id;
     },
     getAfterStoryId () {
-      const substoryIndex = _.findIndex(this.list, item => this.editor.id === item.afterStoryId);
-      if (substoryIndex !== -1) {
+      const substoryIndex = (this.focused + 1 < this.list.length) &&
+        (this.list[this.focused + 1].level > this.editor.level);
+
+      if (substoryIndex) {
         let nextStoryIndex = _.findIndex(this.list, (item, index) =>
           this.editor.level === item.level && (this.focused < index)
         );
+
         if (nextStoryIndex === -1) {
           nextStoryIndex = this.list.length;
         }
 
-        return [...this.list].slice(substoryIndex, nextStoryIndex).pop();
+        return [...this.list].slice(this.focused + 1, nextStoryIndex).pop().id;
       } else {
         return this.editor.id;
       }

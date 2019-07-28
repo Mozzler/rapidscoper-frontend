@@ -44,16 +44,14 @@ export default {
       this.reorder();
     },
     async decreaseStoryLevel ($event) {
+      $event.preventDefault();
       this.hideHint();
 
-      $event.preventDefault();
-
       if (this.editor.level === 0) {
-        this.removeStory($event);
-        return;
+        return this.removeStory();
       }
 
-      if (this.editor.level - 1 === 1) {
+      if (this.editor.level - 1 === 0) {
         const equation = this.getEquation(this.editor.level - 1);
         const constructions = this.getAdjusted(equation);
 
@@ -65,12 +63,12 @@ export default {
         });
 
         this.editor.placeholder = this.editor.markup;
-
-        this.editor.afterStoryId = this.editor.parentStoryId;
-        this.editor.parentStoryId = this.list.find(item => item.id === this.editor.parentStoryId).parentStoryId;
+        this.editor.afterStoryId = this.list[this.focused - 1].id;
+        this.editor.parentStoryId = _.find(this.list, item => item.id === this.editor.parentStoryId).parentStoryId;
         this.editor.level = this.editor.level - 1;
 
-        this.reorder();
+
+        //this.reorder();
       }
     }
   }

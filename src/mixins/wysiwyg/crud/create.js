@@ -39,7 +39,7 @@ export default {
         story: true
       };
 
-      const response = await this.$store.dispatch('entity/create', payload)
+      const response = await this.$store.dispatch('entity/create', payload);
       this.nextIdToFocus = response.item.id;
     },
     createStory ($event) {
@@ -54,7 +54,7 @@ export default {
       this.sendCreateStoryRequest(false, $event.target.innerHTML);
     },
     createSubstory ($event) {
-      if (!(this.editor.level < 3)) {
+      if (this.editor.level === 2) {
         $event.preventDefault();
         return;
       }
