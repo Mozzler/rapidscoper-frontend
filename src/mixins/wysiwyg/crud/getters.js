@@ -1,0 +1,70 @@
+export default {
+  methods: {
+    getPreviousAfterStoryId () {
+      return this.focused === 0 ? 0 : this.list[this.focused - 1].id;
+    },
+    getAfterStoryId () {
+      const substoryIndex = _.findIndex(this.list, item => this.editor.id === item.afterStoryId);
+      if (substoryIndex !== -1) {
+        let nextStoryIndex = _.findIndex(this.list, (item, index) =>
+          this.editor.level === item.level && (this.focused < index)
+        );
+        if (nextStoryIndex === -1) {
+          nextStoryIndex = this.list.length;
+        }
+
+        return [...this.list].slice(substoryIndex, nextStoryIndex).pop();
+      } else {
+        return this.editor.id;
+      }
+    },
+    getCreateRequestPayload (sublist = false, text = '') {
+      if (!sublist) {
+        const number = this.editor.level === 1 ? 3 : 1;
+        const data = this.getSpanList(false).slice(0, number);
+
+        text = `${data.join('')}&nbsp;`;
+      }
+
+      const data = {
+        parentStoryId: sublist ? this.editor.id : this.editor.parentStoryId,
+        afterStoryId: this.getAfterStoryId(),
+
+        estimate: 0,
+        priority: null,
+        labels: [],
+        level: sublist ? this.editor.level + 1 : this.editor.level,
+
+        tail: '',
+        placeholder: text,
+        markup: text,
+        template: sublist ? '' : this.editor.template,
+
+        sectionId: this.editor.sectionId,
+        teamId: this.editor.teamId,
+        projectId: this.editor.projectId
+      };
+
+      return {
+        entity: 'story',
+        data: data
+      };
+    },
+    getUpdateRequestPayload () {
+      const data = {
+        type: this.editor.type,
+        markup: this.editor.markup,
+        afterStoryId: this.getPreviousAfterStoryId(),
+        parentStoryId: this.editor.parentStoryId
+      };
+
+      return {
+        entity: 'story',
+        data: data,
+        params: {
+          id: this.editor.id
+        }
+      };
+    }
+  }
+};

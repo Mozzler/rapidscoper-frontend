@@ -37,9 +37,4 @@ export default {
   beforeDestroy () {
     //this.$root.$off('hint-complete');
   },
-  computed: {
-    adjustConstructions () {
-      return this.$store.state.story.adjustConstructions;
-    }
-  }
 };

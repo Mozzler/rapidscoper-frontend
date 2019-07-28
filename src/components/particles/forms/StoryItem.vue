@@ -46,7 +46,7 @@ export default {
   data () {
     return {
       name: this.model.name,
-      description: this.model.description,
+      description: this.model.description
     };
   },
   methods: {

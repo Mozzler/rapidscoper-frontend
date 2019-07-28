@@ -12,6 +12,8 @@ export default {
       await this.$store.dispatch('entity/delete', {
         entity: 'story',
         id: this.editor.id
+      }).then(() => {
+        this.editor = null;
       });
 
       this.$nextTick(() => {

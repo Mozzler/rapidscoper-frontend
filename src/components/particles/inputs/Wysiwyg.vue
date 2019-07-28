@@ -63,7 +63,7 @@
                    @focus="() => focusEvent(item, index)"
                    @keydown.enter.exact="createStory"
                    @blur="updateStory"
-                   @click="($event) => checkHint($event, index)"
+                   @click="($event) => checkHint($event)"
                    @keydown.down.exact="focusHint"
                    @keyup.exact="keyupEvent"
                    @keydown.esc.exact="hideHint"
@@ -110,7 +110,7 @@ export default {
     return {
       list: null,
       hintEditor: null,
-      processing: false,
+      processing: false
     };
   },
   beforeMount () {

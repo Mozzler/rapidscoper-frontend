@@ -98,8 +98,11 @@ class MongoSockets {
           });
 
           if (response.model === 'story') {
-            app.$root.$emit('update-story-set');
             app.$root.$emit('stop-tool-processing', response.fullDocument._id);
+          }
+
+          if (['story', 'section'].includes(response.model)) {
+            app.$root.$emit('editor-update', response.model);
           }
 
           break;
@@ -110,10 +113,6 @@ class MongoSockets {
         entity: model,
         data: list
       });
-
-      if (model === 'story') {
-        app.$root.$emit('update-story-set');
-      }
     });
   }
 
