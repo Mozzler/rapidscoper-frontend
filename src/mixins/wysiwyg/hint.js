@@ -81,6 +81,7 @@ export default {
       this.filter = null;
       this.editor.tail = '';
       this.editor.placeholder = this.editor.markup;
+      this.hideHint();
       this.collapseToEnd();
     },
     submitField (chapter, text) {
