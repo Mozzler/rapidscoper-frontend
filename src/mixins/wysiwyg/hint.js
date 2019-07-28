@@ -3,7 +3,8 @@ export default {
     hideHint () {
       this.$root.$emit('hide-hint');
     },
-    focusHint () {
+    focusHint ($event) {
+      $event.preventDefault();
       this.$root.$emit('focus-hint');
     },
     showHint (el, chapter, filter = this.filter) {

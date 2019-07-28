@@ -31,7 +31,7 @@ export default {
 
       const data = {
         parentStoryId: sublist ? this.editor.id : this.editor.parentStoryId,
-        afterStoryId: this.getAfterStoryId(),
+        afterStoryId: sublist ? this.editor.id : this.getAfterStoryId(),
 
         estimate: 0,
         priority: null,

@@ -95,9 +95,7 @@ export default {
         this.focused = 0;
       }
       this.$nextTick(() => {
-        if (this.$refs.hint) {
-          this.$refs.hint.focus();
-        }
+        this.$refs.hint.focus();
       });
     },
     navigate ($event, step) {
