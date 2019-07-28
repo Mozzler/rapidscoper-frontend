@@ -1,13 +1,14 @@
 export default {
   methods: {
     hideHint () {
+      this.hintEditor = null;
       this.$root.$emit('hide-hint');
     },
     focusHint ($event) {
-      $event.preventDefault();
+      this.hintEditor = this.editor.id;
       this.$root.$emit('focus-hint');
     },
-    showHint (el, chapter, filter = this.filter) {
+    async showHint (el, chapter, filter = this.filter) {
       const rect = el.getBoundingClientRect();
 
       const position = {
@@ -15,10 +16,9 @@ export default {
         left: rect.left + 24
       };
 
-      this.$nextTick(() => {
-        this.hintEditor = this.editor.id;
-        this.$root.$emit('set-hint-state', true, chapter, filter, position, this.editor.id);
-      });
+      this.hintEditor = this.editor.id;
+      await this.$nextTick();
+      this.$root.$emit('set-hint-state', true, chapter, filter, position, this.editor.id);
     },
     checkHint ($event, item) {
       this.event = $event;

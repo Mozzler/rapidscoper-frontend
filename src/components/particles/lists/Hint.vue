@@ -90,13 +90,12 @@ export default {
       this.filter = filter;
       this.storyId = storyId;
     },
-    setFocus () {
+    async setFocus () {
       if (this.focused === null) {
         this.focused = 0;
       }
-      this.$nextTick(() => {
-        this.$refs.hint.focus();
-      });
+      await this.$nextTick();
+      this.$refs.hint.focus();
     },
     navigate ($event, step) {
       $event.preventDefault();
