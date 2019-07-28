@@ -17,13 +17,13 @@ export default {
     async increaseStoryLevel () {
       const index = _.findIndex(this.list, item => item.id === this.editor.id);
 
-      if (this.level === 2 || (this.level === 0 && !index)) {
+      if (this.editor.level === 2 || (this.editor.level === 0 && !index)) {
         return;
       }
 
       this.hideHint();
-      if (this.level === 0) {
-        const equation = this.getEquation(this.level + 1);
+      if (this.editor.level === 0) {
+        const equation = this.getEquation(this.editor.level + 1);
         const constructions = this.getAdjusted(equation);
 
         Object.assign(this.list[this.focused], {
@@ -67,8 +67,7 @@ export default {
         this.editor.parentStoryId = _.find(this.list, item => item.id === this.editor.parentStoryId).parentStoryId;
         this.editor.level = this.editor.level - 1;
 
-
-        //this.reorder();
+        this.reorder();
       }
     }
   }
