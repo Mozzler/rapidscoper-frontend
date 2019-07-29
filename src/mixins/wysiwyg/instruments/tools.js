@@ -83,6 +83,10 @@ export default {
         }
       }).then(() => {
         this.toolProcessing = false;
+
+        if (this.tab === 'priority') {
+          this.nextItem();
+        }
       });
     },
     async resetToolId (id) {
