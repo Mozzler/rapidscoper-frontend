@@ -5,5 +5,6 @@ export default {
   priority: [
     'Must have', 'Should have', 'Could have', 'Won\'t have'
   ],
-  adjustConstructions: {}
+  adjustConstructions: {},
+  activeStoryOnTab: null
 };

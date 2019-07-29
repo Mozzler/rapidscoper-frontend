@@ -1,13 +1,12 @@
 export default {
   data () {
     return {
-      toolId: null,
       toolProcessing: false
     };
   },
   beforeMount () {
-    this.$root.$on('reset-tool-id', this.resetToolId);
     this.$root.$on('stop-tool-processing', this.stopProcessing);
+    this.activatePanel();
   },
   computed: {
     tab () {
@@ -32,6 +31,9 @@ export default {
         .map(item => item.storyOrder)
         .flatten()
         .value();
+    },
+    toolId () {
+      return this.$store.state.story.activeStoryOnTab;
     }
   },
   methods: {
@@ -45,8 +47,7 @@ export default {
       }
     },
     selectTool (id) {
-      this.toolId = id;
-      this.$root.$emit('reset-tool-id', id);
+      this.$store.commit('story/setActiveStoryOnTab', id);
     },
     toolKey ($event) {
       const letters = _.map(this.toolDictionary, item => item.charAt(0).toLowerCase());
@@ -89,34 +90,38 @@ export default {
         }
       });
     },
-    async resetToolId (id) {
-      if (this.$refs[`tool-panel-${id}`]) {
-        this.toolId = id;
-        await this.$nextTick();
-        this.$refs[`tool-panel-${id}`][0].focus();
-      } else {
-        this.toolId = null;
-      }
-    },
     nextItem () {
       let next = _.indexOf(this.storyOrder, this.toolId);
       next = next + 1 < this.storyOrder.length ? next + 1 : 0;
 
-      this.focusItem(next);
+      this.selectTool(this.storyOrder[next]);
     },
     previousItem () {
       let previous = _.indexOf(this.storyOrder, this.toolId);
-      previous = previous - 1 > -1 ? previous - 1 : 0;
+      previous = previous - 1 > -1 ? previous - 1 : this.storyOrder.length - 1;
 
-      this.focusItem(previous);
+      this.selectTool(this.storyOrder[previous]);
     },
-    async focusItem (id) {
-      this.toolId = null;
-      this.$root.$emit('reset-tool-id', this.storyOrder[id]);
+    activatePanel () {
+      if (this.toolId) {
+        const ref = this.$refs[`tool-panel-${this.toolId}`];
+        if (ref) {
+          ref[0].focus();
+        }
+      } else {
+        this.selectTool(this.storyOrder[0]);
+      }
     }
   },
   beforeDestroy () {
-    this.$root.$off('reset-tool-id', this.resetToolId);
     this.$root.$off('stop-tool-processing', this.stopProcessing);
+  },
+  watch: {
+    toolId () {
+      this.activatePanel();
+    },
+    tab () {
+      this.activatePanel();
+    }
   }
 };
