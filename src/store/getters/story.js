@@ -2,7 +2,8 @@ function getConstructions () {
   return {
     'As a ...': {
       type: 'user',
-      structure: '[beginning][actor][static-text="I can"][custom-1][static-text="so that"][custom-2]'
+      structure: '[beginning][actor][static-text="I can"][custom-1][static-text="so that"][custom-2]',
+      limits: 'user-story'
     },
     'Requires a ...': {
       type: 'requirement',
@@ -11,6 +12,11 @@ function getConstructions () {
     'When I ...': {
       type: 'acceptance',
       structure: '[beginning][custom-1][static-text="then I"][custom-2]'
+    },
+    'The system must ...': {
+      type: 'technical',
+      structure: '[beginning][custom-1]',
+      limits: 'technical-story'
     }
   };
 }

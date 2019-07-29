@@ -11,6 +11,9 @@ export default {
     },
     shortcutList () {
       return this.adjustedConstruction.map(item => item.shortcut);
+    },
+    storyType () {
+      return this.$route.params.storyType;
     }
   },
   methods: {
@@ -25,7 +28,7 @@ export default {
     getAdjusted (threshold = this.threshold) {
       const list = this.dictionary.constructions;
       const keys = Object.keys(list).filter((item, index) => {
-        return eval(index + threshold);
+        return eval(index + threshold) && (!item.limits || item.limits === this.storyType);
       });
 
       return keys.map((item, index) => {
