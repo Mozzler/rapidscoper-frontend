@@ -1,8 +1,9 @@
 export default {
   methods: {
-    hideHint () {
-      this.hintEditor = null;
+    async hideHint () {
       this.$root.$emit('hide-hint');
+      await this.$nextTick();
+      this.hintEditor = null;
     },
     focusHint ($event) {
       this.hintEditor = this.editor.id;
