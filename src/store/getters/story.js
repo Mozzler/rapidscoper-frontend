@@ -37,6 +37,24 @@ function getConstructionByType (type) {
   return constructions[key];
 }
 
+// stupid code, but can't use recursion: leads to the
+// 'Maximum call stack size exceeded error'
+function getStoryLevel (id, stories) {
+  if (id === null) {
+    return 0;
+  }
+
+  id = stories.find(item => item.id === id).parentStoryId;
+  if (id === null) {
+    return 1;
+  }
+
+  id = stories.find(item => item.id === id).parentStoryId;
+  if (id === null) {
+    return 2;
+  }
+}
+
 export default {
   dictionary (state, getters, rootState) {
     const types = [
@@ -88,10 +106,9 @@ export default {
           'type', 'level');
         const construction = getConstructionByType(basic.type);
 
-        basic.level = basic.level ? basic.level : 0;
-
         return {
           ...basic,
+          level: getStoryLevel(basic.parentStoryId, sorted),
           template: construction ? construction.structure : '',
           tail: '',
           placeholder: basic.markup

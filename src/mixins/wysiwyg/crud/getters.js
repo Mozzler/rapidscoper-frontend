@@ -58,8 +58,7 @@ export default {
         type: this.editor.type,
         markup: this.editor.markup,
         afterStoryId: this.getPreviousAfterStoryId(),
-        parentStoryId: this.editor.parentStoryId,
-        level: this.editor.level
+        parentStoryId: this.editor.parentStoryId
       };
 
       return {
