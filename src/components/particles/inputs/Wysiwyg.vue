@@ -68,7 +68,7 @@
                    @keyup.exact="keyupEvent"
                    @keydown.esc.exact="hideHint"
                    @keydown.tab.exact="fixStaticText"
-                   @keydown.delete.exact="($event) => remove($event, item)"
+                   @keydown.delete.exact="remove"
                    @keydown.186.shift.exact="createSubstory"
                    @keydown.tab.shift.exact="decreaseStoryLevel"
                    v-html="item.markup"></div>

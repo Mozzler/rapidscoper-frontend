@@ -4,22 +4,25 @@ export default {
       this.editor.tail = '';
       this.editor.placeholder = this.editor.markup;
     },
+    increasable () {
+      const tail = this.getTail().replace(/&nbsp;/gi, '');
+      const spans = this.getSpanList(false).length;
+      const parentExists = this.focused !== 0 &&
+        this.list[this.focused - 1].level === this.editor.level;
+
+      return (spans === 1 || spans === 0) && !tail && parentExists;
+    },
     fixStaticText ($event) {
       $event.preventDefault();
       this.event = $event;
       this.setSiblings();
 
-      const tail = this.getTail().replace(/&nbsp;/gi, '');
-      const spans = this.getSpanList(false).length;
-
-      if ((spans === 1 || spans === 0) && !tail && this.focused === 0) {
-        this.increaseStoryLevel($event);
-        return;
+      if (this.increasable()) {
+        return this.increaseStoryLevel($event);
       }
 
       if (this.filter && this.filter.trim()) {
-        this.createField($event, true);
-        return;
+        return this.createField($event, true);
       }
 
       if (!this.next) {

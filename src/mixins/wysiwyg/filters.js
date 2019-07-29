@@ -17,8 +17,6 @@ export default {
     getEquation (level = this.editor ? this.editor.level : null) {
       switch (level) {
         case 0:
-          return '=== 0';
-        case 1:
           return '> -1';
         default:
           return '> 0';
@@ -45,7 +43,7 @@ export default {
     }
   },
   watch: {
-    focused () {
+    'editor.level' () {
       this.setConstructions();
     }
   }

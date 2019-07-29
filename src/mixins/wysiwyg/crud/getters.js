@@ -39,9 +39,9 @@ export default {
         level: sublist ? this.editor.level + 1 : this.editor.level,
 
         tail: '',
-        placeholder: text,
-        markup: text,
-        template: sublist ? '' : this.editor.template,
+        placeholder: '',
+        markup: '',
+        template: '',
 
         sectionId: this.editor.sectionId,
         teamId: this.editor.teamId,

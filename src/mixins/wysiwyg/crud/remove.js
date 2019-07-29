@@ -22,9 +22,8 @@ export default {
       this.processing = null;
       this.editor = null;
     },
-    async remove ($event, item) {
+    async remove ($event) {
       this.event = $event;
-      this.editor = item;
 
       // allow to remove characters from editable div
       if (this.isEditable()) {
@@ -35,18 +34,16 @@ export default {
         return;
       }
 
-      const spans = this.editor.markup.split('</span>');
-
       if (this.editor.level > 0 && !this.getSpanList() && !this.getTail()) {
         await this.decreaseStoryLevel($event);
       }
 
-      const spanList = this.getSpanList(false);
-      if (this.editor.level === 0 && spanList.length === 1 && !this.getTail()) {
+      if (this.editor.level === 0 && !this.editor.markup.length) {
         this.removeStory();
       }
 
-      if (this.editor.level === 0 && spans[1] === '&nbsp;') {
+      const spans = this.getSpanList(false).length === 1;
+      if (this.editor.level === 0 && this.focused === 0 && spans) {
         $event.preventDefault();
       } else {
         if (this.editor.markup) {

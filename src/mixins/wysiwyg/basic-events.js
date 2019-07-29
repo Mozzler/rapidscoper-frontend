@@ -44,7 +44,6 @@ export default {
       const item = _.find(this.adjustedConstruction, item => item.shortcut === shortcut);
       this.hintEditor = this.editor.id;
       this.hintComplete('beginning', item, this.editor.id);
-      this.hideHint();
     }
   }
 };

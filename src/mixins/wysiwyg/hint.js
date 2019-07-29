@@ -51,6 +51,12 @@ export default {
       if (chapter === 'beginning') {
         this.editor.template = text.value;
         this.editor.type = text.type;
+
+        if (text.type !== 'user' && this.editor.level === 0) {
+          this.editor.parentStoryId = this.list[this.focused].id;
+          this.editor.level += 1;
+        }
+
         text = text.key;
       } else {
         this.submitField(chapter, text);
