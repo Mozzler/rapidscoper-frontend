@@ -1,13 +1,16 @@
 export default {
-  beforeMount () {
-    this.setConstructions();
-  },
   computed: {
     dictionary () {
       return this.$store.getters['story/dictionary'];
     },
     threshold () {
       return this.getEquation();
+    },
+    adjustedConstruction () {
+      return this.$store.state.story.adjustConstructions;
+    },
+    shortcutList () {
+      return this.adjustedConstruction.map(item => item.shortcut);
     }
   },
   methods: {
@@ -31,7 +34,8 @@ export default {
         return {
           key: item,
           value: list[item].structure,
-          type: list[item].type
+          type: list[item].type,
+          shortcut: item.charAt(0).toLowerCase()
         };
       });
     },

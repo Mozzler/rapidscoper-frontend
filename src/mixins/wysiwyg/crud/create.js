@@ -15,17 +15,19 @@ export default {
     this.$root.$off('editor-update', this.stopProcessing);
   },
   methods: {
-    stopProcessing (model) {
+    async stopProcessing (model) {
       this.flags[model] = false;
       if (!this.flags.section && !this.flags.story && typeof this.nextIdToFocus === 'string') {
         this.processing = null;
 
-        this.$nextTick(() => {
+        await this.$nextTick();
+
+        if (this.$refs[this.nextIdToFocus]) {
           this.$refs[this.nextIdToFocus][0].focus();
           document.execCommand('selectAll', false, null);
           document.getSelection().collapseToEnd();
-          this.nextIdToFocus = false;
-        });
+        }
+        this.nextIdToFocus = false;
       }
     },
     async sendCreateStoryRequest (sublist, text = '') {
