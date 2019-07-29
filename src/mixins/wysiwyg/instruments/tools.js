@@ -85,19 +85,30 @@ export default {
         this.toolProcessing = false;
       });
     },
-    resetToolId (id) {
-      if (this.toolId !== id) {
+    async resetToolId (id) {
+      if (this.$refs[`tool-panel-${id}`]) {
+        this.toolId = id;
+        await this.$nextTick();
+        this.$refs[`tool-panel-${id}`][0].focus();
+      } else {
         this.toolId = null;
       }
     },
     nextItem () {
       let next = _.indexOf(this.storyOrder, this.toolId);
-      next = next + 1 < this.storyOrder.length ? next : 0;
+      next = next + 1 < this.storyOrder.length ? next + 1 : 0;
 
-      //this.$root.$emit('reset-tool-id', this.storyOrder[next + 1]);
+      this.focusItem(next);
     },
     previousItem () {
-      console.log('previous-item');
+      let previous = _.indexOf(this.storyOrder, this.toolId);
+      previous = previous - 1 > -1 ? previous - 1 : 0;
+
+      this.focusItem(previous);
+    },
+    async focusItem (id) {
+      this.toolId = null;
+      this.$root.$emit('reset-tool-id', this.storyOrder[id]);
     }
   },
   beforeDestroy () {

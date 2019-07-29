@@ -9,11 +9,12 @@
              'cursor-pointer': (tab !== 'edit' && tab !== 'estimate'),
            }"
            tabindex="0"
+           :ref="`tool-panel-${item.id}`"
            @click="() => selectTool(item.id)"
-           @keyup.enter.exact="nextItem"
-           @keyup.tab.prevent.exact="nextItem"
-           @keyup.page-down.prevent.exact="nextItem"
-           @keyup.page-up.prevent.exact="previousItem"
+           @keyup.enter.prevent.exact="() => nextItem(item.id)"
+           @keydown.tab.prevent.exact="() => nextItem(item.id)"
+           @keydown.down.prevent.exact="() => nextItem(item.id)"
+           @keydown.up.prevent.exact="() => previousItem(item.id)"
            @keypress="$event => toolKey($event, item.id)">
 
         <div class="user-story__tools" v-if="(toolDictionary && toolId === item.id)">
