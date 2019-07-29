@@ -49,7 +49,7 @@ export default {
       this.$root.$emit('reset-tool-id', id);
     },
     toolKey ($event) {
-      const letters = _.map(this.toolItems, item => item.charAt(0).toLowerCase());
+      const letters = _.map(this.toolDictionary, item => item.charAt(0).toLowerCase());
       let found = _.indexOf(letters, $event.key);
 
       if (found !== -1) {
