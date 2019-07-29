@@ -43,7 +43,7 @@ export default {
       }
 
       const spans = this.getSpanList(false).length === 1;
-      if (this.editor.level === 0 && this.focused === 0 && spans) {
+      if (this.editor.level === 0 && this.focused === 0 && spans && !this.getTail()) {
         $event.preventDefault();
       } else {
         if (this.editor.markup) {

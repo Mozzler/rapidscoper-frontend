@@ -97,6 +97,7 @@ export default {
       this.$refs.hint.focus();
     },
     navigate ($event, step) {
+      console.log($event);
       $event.preventDefault();
       step = this.focused + step;
 
