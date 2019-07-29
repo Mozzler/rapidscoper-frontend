@@ -28,7 +28,8 @@ export default {
     getAdjusted (threshold = this.threshold) {
       const list = this.dictionary.constructions;
       const keys = Object.keys(list).filter((item, index) => {
-        return eval(index + threshold) && (!item.limits || item.limits === this.storyType);
+        const notLimited = !_.has(list[item], 'limits') || list[item].limits === this.storyType;
+        return eval(index + threshold) && notLimited;
       });
 
       return keys.map((item, index) => {
