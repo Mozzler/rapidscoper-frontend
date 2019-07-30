@@ -51,8 +51,8 @@ export default {
     if (_.isString(entity)) {
       state[entity].items = [];
     } else
-    if (_.isObject(entity)) {
-      _.each(entity, (val, key) => {
+    if (_.isArray(entity)) {
+      _.each(entity, val => {
         state[val].items = [];
       });
     } else

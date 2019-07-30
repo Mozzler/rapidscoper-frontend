@@ -33,8 +33,7 @@ export default {
   data () {
     return {
       processing: false,
-      collections: ['dictionary', 'section', 'story'],
-      loadedCollections: {
+      loaded: {
         dictionary: false,
         section: false,
         story: false
@@ -70,25 +69,35 @@ export default {
       this.processing = true;
       this.resetData();
 
-      this.collections.forEach(c => {
-        let filter = JSON.parse(JSON.stringify(this.filter)); // deep copying
-        if (c === 'section') {
-          filter.$or[0]['fullDocument.type'] = this.storyType;
-        }
+      this.connect('dictionary', 'entity/setList', this.filter, true, () => {
+        this.loaded['dictionary'] = true;
+      });
 
-        this.connect(c, 'entity/setList', filter, true, () => {
-          this.loadedCollections[c] = true;
+      let filter = JSON.parse(JSON.stringify(this.filter));
+      filter.$or[0]['fullDocument.type'] = this.storyType;
+      this.connect('section', 'entity/setList', filter, true, () => {
+        this.loaded['section'] = true;
+        let orderList = _.chain(this.sections)
+          .map(item => item.storyOrder)
+          .flatten()
+          .value();
+
+        let filter = JSON.parse(JSON.stringify(this.filter));
+        filter.$or[0]['fullDocument._id'] = { '$in': [ orderList ] };
+
+        this.connect('story', 'entity/setList', filter, true, () => {
+          this.loaded['story'] = true;
         });
       });
     },
     resetData () {
-      this.loadedCollections = {
+      this.loaded = {
         dictionary: false,
         section: false,
         story: false
       };
 
-      this.$store.commit('entity/resetList', this.collections);
+      this.$store.commit('entity/resetList', ['dictionary', 'section', 'story']);
     },
     fixRoute () {
       let stub = this.$route.params.section === 'section';
@@ -109,10 +118,10 @@ export default {
     storyType () {
       this.fetchData();
     },
-    loadedCollections: {
+    loaded: {
       deep: true,
       handler () {
-        if (this.loadedCollections.dictionary && this.loadedCollections.section && this.loadedCollections.story) {
+        if (this.loaded.dictionary && this.loaded.section && this.loaded.story) {
           this.processing = false;
           this.fixRoute();
         }
