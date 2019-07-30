@@ -1,7 +1,7 @@
 <template>
   <div class="sidebar story-section pt-4">
     <sidebar-list
-      title="user story sections"
+      :title="title"
       btn="Add section"
       :list="sections"
       :active="$route.params.section"
@@ -25,6 +25,14 @@ export default {
   computed: {
     sections () {
       return this.$store.getters['entity/items']('section');
+    },
+    title () {
+      switch (this.$route.params.storyType) {
+        case 'user-story':
+          return 'user story sections';
+        case 'technical-story':
+          return 'technical story sections';
+      }
     }
   },
   methods: {
