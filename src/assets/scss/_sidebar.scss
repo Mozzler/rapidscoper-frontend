@@ -122,11 +122,26 @@
     width: 14px;
     height: 14px;
     cursor: pointer;
+    fill: rgba(0, 0, 0, 0.8);
   }
 
   .v-icon {
-    font-size: 14px;
-    color: rgba(0, 0, 0, 0.8) !important;
     cursor: pointer;
+  }
+}
+
+.sidebar__icon--active {
+  svg {
+    fill: $primary;
+  }
+}
+
+.u-sidebar {
+  .v-list__tile {
+    cursor: pointer;
+
+    &:hover {
+      background-color: $light-grey;
+    }
   }
 }

@@ -5,7 +5,8 @@
       <v-list-tile v-for="(item, key) in list" :key="key">
         <v-list-tile-content>
           <v-list-tile-title class="sidebar__icon"
-                             @click="() => $emit('update')">
+                             :class="{'sidebar__icon--active': activeIcon === key}"
+                             @click="() => $emit('click', key)">
             <v-icon v-if="item">{{ key }}</v-icon>
             <component :is="key" v-else />
           </v-list-tile-title>
@@ -25,7 +26,8 @@ export default {
   name: "IconList",
   props: [
     "title",
-    "list"
+    "list",
+    "activeIcon"
   ],
   components: {
     BookIcon,

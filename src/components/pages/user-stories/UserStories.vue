@@ -48,6 +48,9 @@ export default {
     activeProjectId () {
       return this.$route.params.projectId;
     },
+    storyType () {
+      return _.first(this.$route.params.storyType.split('-'));
+    },
     filter () {
       return {
         $or: [
@@ -68,7 +71,12 @@ export default {
       this.resetData();
 
       this.collections.forEach(c => {
-        this.connect(c, 'entity/setList', this.filter, true, () => {
+        let filter = JSON.parse(JSON.stringify(this.filter)); // deep copying
+        if (c === 'section') {
+          filter.$or[0]['fullDocument.type'] = this.storyType;
+        }
+
+        this.connect(c, 'entity/setList', filter, true, () => {
           this.loadedCollections[c] = true;
         });
       });
@@ -87,7 +95,7 @@ export default {
 
       if (this.sections.length && stub) {
         const url = this.$route.path.replace('section', this.sections[0].id);
-        this.$router.push(url);
+        this.$router.replace(url);
       }
     }
   },
@@ -96,6 +104,9 @@ export default {
   },
   watch: {
     activeProjectId () {
+      this.fetchData();
+    },
+    storyType () {
       this.fetchData();
     },
     loadedCollections: {

@@ -56,7 +56,11 @@ export default {
     },
     activeProject () {
       return this.projects.find(item => item.id === this.projectId);
-    }
+    },
+    storyType () {
+      const splitted = this.$route.params.storyType.split('-');
+      return _.first(splitted);
+    },
   },
   methods: {
     setScrollListener (type = 'add') {
@@ -86,7 +90,8 @@ export default {
           name: `Untitled${number ? ' ' + number : ''}`,
           description: '',
           projectId: this.activeProject.id,
-          teamId: this.activeProject.teamId
+          teamId: this.activeProject.teamId,
+          type: this.storyType
         }
       };
     },
