@@ -11,5 +11,12 @@ export default {
     Remove,
     Order,
     Update
-  ]
+  ],
+  watch: {
+    processing () {
+      if (this.processing) {
+        this.hideHint();
+      }
+    }
+  }
 };

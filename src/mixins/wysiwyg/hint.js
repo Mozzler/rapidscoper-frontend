@@ -1,8 +1,13 @@
 export default {
+  watch: {
+    hintEditor () {
+      if (this.hintEditor === null) {
+        this.$root.$emit('hide-hint');
+      }
+    }
+  },
   methods: {
-    async hideHint () {
-      this.$root.$emit('hide-hint');
-      await this.$nextTick();
+    hideHint () {
       this.hintEditor = null;
     },
     focusHint ($event) {

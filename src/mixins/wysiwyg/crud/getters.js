@@ -68,6 +68,14 @@ export default {
           id: this.editor.id
         }
       };
+    },
+    getSubstoryIds () {
+      const lastIndexId = this.getAfterStoryId();
+      const lastIndex = _.findIndex(this.list, item => item.id === lastIndexId);
+
+      return this.list
+        .slice(this.focused, lastIndex + 1)
+        .map(item => item.id);
     }
   }
 };

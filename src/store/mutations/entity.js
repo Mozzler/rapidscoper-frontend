@@ -35,11 +35,17 @@ export default {
     });
   },
   delete (state, payload) {
-    if (!payload.entity) {
-      return;
+    let deletable = [];
+
+    if (payload.id) {
+      deletable = [payload.id];
     }
+    if (payload.ids) {
+      deletable = payload.ids;
+    }
+
     state[payload.entity].items = _.filter(state[payload.entity].items,
-        item => item.id !== payload.id);
+        item => !deletable.includes(item.id));
   },
   resetList (state, entity) {
     if (_.isString(entity)) {

@@ -1,7 +1,6 @@
 export default {
   methods: {
     async removeStory () {
-      this.hideHint();
       await this.$nextTick();
       this.$refs[this.editor.id][0].focus();
 
@@ -11,14 +10,14 @@ export default {
         return;
       }
 
-      const previousId = _.findIndex(this.list, item => item.id === this.editor.id);
-      await this.$store.dispatch('entity/delete', {
-        entity: 'story',
-        id: this.editor.id
-      });
+      const removable = {
+        'ids': this.getSubstoryIds()
+      };
+      const focusable = this.$refs[this.list[this.focused - 1].id];
 
+      await this.$store.dispatch('story/deleteMany', removable);
       await this.$nextTick();
-      this.$refs[this.list[previousId].id][0].focus();
+      focusable[0].focus();
       this.processing = null;
       this.editor = null;
     },
