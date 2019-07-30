@@ -47,7 +47,9 @@ export default {
       }
     },
     selectTool (id) {
-      this.$store.commit('story/setActiveStoryOnTab', id);
+      if (this.tab !== 'edit') {
+        this.$store.commit('story/setActiveStoryOnTab', id);
+      }
     },
     toolKey ($event) {
       const letters = _.map(this.toolDictionary, item => item.charAt(0).toLowerCase());

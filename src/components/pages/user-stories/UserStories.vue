@@ -87,7 +87,6 @@ export default {
 
         this.connect('story', 'entity/setList', filter, true, () => {
           this.loaded['story'] = true;
-          console.log(this.$store.getters['entity/items']('story'));
         });
       });
     },

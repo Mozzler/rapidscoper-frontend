@@ -8,7 +8,7 @@
              'user-story--active': (toolId === item.id && (tab !== 'edit' && tab !== 'estimate')),
              'cursor-pointer': (tab !== 'edit' && tab !== 'estimate'),
            }"
-           tabindex="0"
+           :tabindex="0"
            :ref="`tool-panel-${item.id}`"
            @click="() => selectTool(item.id)"
            @keyup.enter.prevent.exact="() => setHandler('nextItem', item.id)"
@@ -56,6 +56,7 @@
               <div class="user-story__placeholder"
                    v-html="item.placeholder"
                    readonly></div>
+
               <div :contenteditable="processing !== item.id && tab === 'edit'"
                    class="user-story__editable"
                    :ref="item.id"
@@ -63,7 +64,6 @@
                    tabindex="2"
                    @focus="() => focusEvent(item, index)"
                    @keydown.enter.exact="createStory"
-                   @blur="updateStory"
                    @click="($event) => checkHint($event, item)"
                    @keydown.down.exact="focusHint"
                    @keyup.exact="keyupEvent"
@@ -72,6 +72,7 @@
                    @keydown.delete.exact="remove"
                    @keydown.186.shift.exact="createSubstory"
                    @keydown.tab.shift.exact="decreaseStoryLevel"
+                   @blur="updateStory"
                    v-html="item.markup"></div>
               <circular-loader
                 cls="user-story__loader"
@@ -149,7 +150,7 @@ export default {
           }
         });
       }
-    }
+    },
   }
 };
 </script>
