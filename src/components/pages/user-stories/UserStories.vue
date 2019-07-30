@@ -83,10 +83,11 @@ export default {
           .value();
 
         let filter = JSON.parse(JSON.stringify(this.filter));
-        filter.$or[0]['fullDocument._id'] = { '$in': [ orderList ] };
+        filter.$or[0] = { 'fullDocument._id': { '$in': orderList } };
 
         this.connect('story', 'entity/setList', filter, true, () => {
           this.loaded['story'] = true;
+          console.log(this.$store.getters['entity/items']('story'));
         });
       });
     },
