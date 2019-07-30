@@ -42,18 +42,10 @@ class MongoSockets {
           const isSuccessfull = await store.dispatch('auth/refreshToken');
           isSuccessfull ? this.connect(model, filter, snapshotFlag, cb) : this.logout();
         } else {
-          this.logout();
+          app.logout();
         }
       }
     });
-  }
-
-  logout () {
-    store.dispatch('auth/logout')
-      .then(() => this.disconnect())
-      .then(() => {
-        app.$router.push('/signup');
-      });
   }
 
   recreateWatchers (model, globally = false) {

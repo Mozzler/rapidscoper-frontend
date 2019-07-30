@@ -46,10 +46,6 @@ export default {
   methods: {
     logout (event) {
       event.preventDefault();
-      this.$store.dispatch('auth/logout')
-        .then(() => {
-          this.$router.push('/signup');
-        });
     }
   }
 };

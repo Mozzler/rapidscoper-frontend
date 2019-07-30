@@ -6,14 +6,14 @@
     width="272"
     app>
 
-    <div class="sidebar__header">
+    <div class="sidebar__header" v-if="user">
       <!--<v-icon class="sidebar__notification">
         notifications
       </v-icon>-->
       <div class="sidebar-header__img">
         <img :src="user.avatarUrl"/>
       </div>
-      <div class="text-bold" v-if="user">
+      <div class="text-bold">
         {{ user.firstName ? user.firstName : ''}} {{ user.lastName ? user.lastName : '' }}
         <span class="menu-bottom">
           <dropdown

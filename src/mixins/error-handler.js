@@ -21,6 +21,13 @@ export default {
         const msg = { field: field || error.field, msg: error.message };
         this.errors.add(msg);
       }
+    },
+    logout () {
+      this.$store.dispatch('auth/logout')
+        .then(() => this.$socket.disconnect())
+        .then(() => {
+          this.$router.push('/signup');
+        });
     }
   }
 };
