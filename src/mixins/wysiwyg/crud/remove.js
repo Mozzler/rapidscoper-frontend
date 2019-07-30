@@ -18,6 +18,7 @@ export default {
       await this.$store.dispatch('story/deleteMany', removable);
       await this.$nextTick();
       focusable[0].focus();
+      this.collapseToEnd();
       this.processing = null;
       this.editor = null;
     },

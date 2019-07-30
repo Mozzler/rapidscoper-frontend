@@ -22,9 +22,16 @@ function getConstructions () {
 }
 
 function sortStoriesByOrder (list, order) {
-  return order.map(orderId => {
-    return list.find(story => story.id === orderId);
+  let data = [];
+
+  _.each(order, orderId => {
+    const story = list.find(story => story.id === orderId);
+    if (!_.isUndefined(story)) {
+      data.push(story);
+    }
   });
+
+  return data;
 }
 
 function getConstructionByType (type) {
