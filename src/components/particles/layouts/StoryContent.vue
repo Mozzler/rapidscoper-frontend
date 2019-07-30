@@ -99,7 +99,18 @@ export default {
       const section = this.getSectionData();
 
       await this.$store.dispatch('entity/create', section);
-      this.$socket.recreateWatchers('story', true);
+
+      let orderList = _.chain(this.sections)
+        .map(item => item.storyOrder)
+        .flatten()
+        .value();
+
+      let filter = {
+        $or: [
+          { 'fullDocument._id': { '$in': [ orderList ] } }
+        ]
+      };
+      this.$socket.recreateWatchers('story', true, filter);
     },
     scrollToActiveSection () {
       const el = document.getElementById(this.activeSectionId);
