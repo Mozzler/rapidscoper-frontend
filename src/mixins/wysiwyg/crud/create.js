@@ -1,11 +1,7 @@
 export default {
   data () {
     return {
-      nextIdToFocus: false,
-      flags: {
-        section: false,
-        story: false
-      }
+      nextIdToFocus: false
     };
   },
   beforeMount () {
@@ -15,20 +11,18 @@ export default {
     this.$root.$off('editor-update', this.stopProcessing);
   },
   methods: {
-    async stopProcessing (model) {
-      this.flags[model] = false;
-      if (!this.flags.section && !this.flags.story && typeof this.nextIdToFocus === 'string') {
-        this.processing = null;
+    async stopProcessing () {
+      this.processing = false;
 
-        await this.$nextTick();
+      await this.$nextTick();
 
-        if (this.$refs[this.nextIdToFocus]) {
-          this.$refs[this.nextIdToFocus][0].focus();
-          document.execCommand('selectAll', false, null);
-          document.getSelection().collapseToEnd();
-        }
-        this.nextIdToFocus = false;
+      if (this.$refs[this.nextIdToFocus]) {
+        this.$refs[this.nextIdToFocus][0].focus();
+        document.execCommand('selectAll', false, null);
+        document.getSelection().collapseToEnd();
       }
+
+      this.nextIdToFocus = false;
     },
     async sendCreateStoryRequest (sublist, text = '') {
       this.nextIdToFocus = true;
@@ -43,6 +37,7 @@ export default {
 
       const response = await this.$store.dispatch('entity/create', payload);
       this.nextIdToFocus = response.item.id;
+      this.$socket.recreateWatchers('story', false);
     },
     createStory ($event) {
       if (this.dictionary[this.next]) {

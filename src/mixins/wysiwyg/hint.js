@@ -59,8 +59,10 @@ export default {
         this.editor.type = text.type;
 
         if (text.type !== 'user' && this.editor.level === 0) {
-          this.editor.parentStoryId = this.list[this.focused].id;
+          this.editor.parentStoryId = this.list[this.focused - 1].id;
           this.editor.level += 1;
+          this.nextIdToFocus = false;
+          this.hintEditor = null;
         }
 
         text = text.key;

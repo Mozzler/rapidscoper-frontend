@@ -1,7 +1,8 @@
 export default {
   methods: {
     async updateStory () {
-      if (this.tab !== 'edit' || _.isString(this.nextIdToFocus)) {
+      console.log(this.nextIdToFocus, 'update-story');
+      if (this.tab !== 'edit' || _.isString(this.nextIdToFocus) || !this.editor) {
         return;
       }
 

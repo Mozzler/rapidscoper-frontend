@@ -2,7 +2,8 @@ export default {
   data () {
     return {
       focused: null,
-      editor: null
+      editor: null,
+      unhandled: ['Tab', 'Shift', 'Backspace', 'Delete']
     };
   },
   methods: {
@@ -13,6 +14,10 @@ export default {
     keyupEvent ($event) {
       this.event = $event;
       this.setSiblings();
+
+      if (this.unhandled.includes($event.key)) {
+        return;
+      }
 
       if (this.isEditable()) {
         return;
