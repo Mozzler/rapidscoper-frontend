@@ -1,11 +1,10 @@
 export default {
   methods: {
     async updateStory () {
-      if (this.tab !== 'edit') {
+      if (this.tab !== 'edit' || this.hintEditor !== null) {
         return;
       }
 
-      this.hideHint();
       this.processing = this.editor.id;
       const payload = this.getUpdateRequestPayload();
 

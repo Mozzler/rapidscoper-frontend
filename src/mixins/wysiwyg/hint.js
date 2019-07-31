@@ -8,7 +8,7 @@ export default {
   },
   methods: {
     hideHint () {
-      //this.hintEditor = null;
+      this.hintEditor = null;
     },
     focusHint ($event) {
       this.hintEditor = this.editor.id;
@@ -62,7 +62,6 @@ export default {
           this.editor.parentStoryId = this.list[this.focused - 1].id;
           this.editor.level += 1;
           this.nextIdToFocus = false;
-          this.hintEditor = null;
         }
 
         text = text.key;
