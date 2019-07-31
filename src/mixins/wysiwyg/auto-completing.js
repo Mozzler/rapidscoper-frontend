@@ -98,7 +98,7 @@ export default {
       }
 
       this.event = $event;
-      this.list[this.focused].markup = (`${this.list[this.focused].markup}${character}`);
+      this.list[this.focused].markup = this.list[this.focused].markup + character;
 
       this.setSiblings();
       this.setCustomText(true);

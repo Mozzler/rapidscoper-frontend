@@ -1,5 +1,14 @@
 <template>
-  <div :id="model.id" class="user-story__block">
+  <div class="user-story__block"
+    :id="model.id"
+    :class="{'user-story__block--blur': stories.length === 0}">
+
+    <circular-loader
+      cls="loader-shadow--without-padding"
+      :size="50"
+      :width="5"
+      :visible="stories.length === 0" />
+
     <h1>
       <input v-model="name"
              @input="updateSectionName"
@@ -20,7 +29,9 @@
     </div>
 
     <div>
-      <wysiwyg :sectionId="model.id" />
+      <wysiwyg
+        :sectionId="model.id"
+        :stories="stories"/>
     </div>
   </div>
 </template>
@@ -28,11 +39,13 @@
 <script>
 import Wysiwyg from "../inputs/Wysiwyg";
 import ErrorHandler from "@/mixins/error-handler";
+import CircularLoader from "../../particles/loaders/Circular";
 
 export default {
   name: "StoryItem",
   components: {
-    Wysiwyg
+    Wysiwyg,
+    CircularLoader
   },
   mixins: [
     ErrorHandler
@@ -46,8 +59,14 @@ export default {
   data () {
     return {
       name: this.model.name,
-      description: this.model.description
+      description: this.model.description,
+      processing: null
     };
+  },
+  computed: {
+    stories () {
+      return this.$store.getters['story/content'](this.model.id);
+    }
   },
   methods: {
     updateSection (item, event) {

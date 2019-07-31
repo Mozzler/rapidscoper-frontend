@@ -106,6 +106,10 @@ export default {
     sectionId: {
       type: String,
       required: true
+    },
+    stories: {
+      type: Array,
+      required: true
     }
   },
   data () {
@@ -117,11 +121,6 @@ export default {
   },
   beforeMount () {
     this.list = this.stories;
-  },
-  computed: {
-    stories () {
-      return this.$store.getters['story/content'](this.sectionId);
-    }
   },
   methods: {
     setHandler (handler, params) {
