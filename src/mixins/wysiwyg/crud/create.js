@@ -1,34 +1,29 @@
 export default {
   data () {
     return {
-      nextIdToFocus: false
+      nextIdToFocus: false,
+      processing: null
     };
   },
-  computed: {
-    requestsInProcessing () {
-      return this.$store.getters['story/processing'];
-    }
+  beforeMount () {
+    this.$root.$on('stop-processing', this.stopProcessing);
   },
-  watch: {
-    requestsInProcessing () {
-      if (!this.requestsInProcessing) {
-        this.stopProcessing();
-      }
-    }
+  beforeDestroy () {
+    this.$root.$on('stop-processing', this.stopProcessing);
   },
   methods: {
     async stopProcessing () {
       this.processing = null;
 
       await this.$nextTick();
-/*
+
       if (this.$refs[this.nextIdToFocus]) {
         this.$refs[this.nextIdToFocus][0].focus();
         document.execCommand('selectAll', false, null);
         document.getSelection().collapseToEnd();
       }
 
-      this.nextIdToFocus = false;*/
+      this.nextIdToFocus = false;
     },
     async sendCreateStoryRequest (sublist, text = '') {
       this.nextIdToFocus = true;

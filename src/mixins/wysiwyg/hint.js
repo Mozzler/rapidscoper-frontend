@@ -8,7 +8,7 @@ export default {
   },
   methods: {
     hideHint () {
-      this.hintEditor = null;
+      //this.hintEditor = null;
     },
     focusHint ($event) {
       this.hintEditor = this.editor.id;

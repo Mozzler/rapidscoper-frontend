@@ -13,12 +13,13 @@ export default {
       const focusable = this.$refs[this.list[this.focused - 1].id];
 
       await this.$store.dispatch('story/deleteMany', removable);
-      await this.$nextTick();
-      focusable[0].focus();
-      this.collapseToEnd();
 
       this.processing = null;
       this.editor = null;
+
+      await this.$nextTick();
+      focusable[0].focus();
+      this.collapseToEnd();
     },
     async remove ($event) {
       this.event = $event;
@@ -49,6 +50,8 @@ export default {
           this.$refs[this.editor.id][0].classList.remove('text-greyed');
         }
       }
+
+      this.collapseToEnd();
     }
   }
 };

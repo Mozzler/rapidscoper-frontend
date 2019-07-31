@@ -1,7 +1,7 @@
 export default {
   methods: {
     async updateStory () {
-      if (this.tab !== 'edit' || this.hintEditor !== null) {
+      if (this.tab !== 'edit' || this.hintEditor !== null || !this.editor) {
         return;
       }
 

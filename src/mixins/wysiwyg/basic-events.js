@@ -18,18 +18,20 @@ export default {
         return;
       }
 
-      if (!this.editor.markup.length && this.shortcutList.includes(this.event.key)) {
-        $event.preventDefault();
-        return this.completeBeginning(this.event.key);
+      if (!['Backspace', 'Delete'].includes($event.key)) {
+        if (!this.editor.markup.length && this.shortcutList.includes(this.event.key)) {
+          $event.preventDefault();
+          return this.completeBeginning(this.event.key);
+        }
+
+        this.editor.markup = this.event.target.innerHTML;
+        this.$refs[this.editor.id][0].classList.remove('text-greyed');
+        this.collapseToEnd();
+
+        this.initPlaceholder();
+        this.initDictionary();
+        this.initStaticText();
       }
-
-      this.editor.markup = this.event.target.innerHTML;
-      this.$refs[this.editor.id][0].classList.remove('text-greyed');
-      this.collapseToEnd();
-
-      this.initPlaceholder();
-      this.initDictionary();
-      this.initStaticText();
     },
     isEditable () {
       if (!this.event) {

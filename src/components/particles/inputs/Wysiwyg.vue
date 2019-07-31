@@ -57,7 +57,7 @@
                    v-html="item.placeholder"
                    readonly></div>
 
-              <div :contenteditable="processing !== item.id && tab === 'edit'"
+              <div :contenteditable="true"
                    class="user-story__editable"
                    :ref="item.id"
                    tabindex="2"
