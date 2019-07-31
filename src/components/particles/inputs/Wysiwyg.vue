@@ -60,7 +60,6 @@
               <div :contenteditable="processing !== item.id && tab === 'edit'"
                    class="user-story__editable"
                    :ref="item.id"
-                   :disabled="processing === item.id"
                    tabindex="2"
                    @focus="() => focusEvent(item, index)"
                    @keydown.enter.exact="createStory"
@@ -74,11 +73,11 @@
                    @keydown.tab.shift.exact="decreaseStoryLevel"
                    @blur="updateStory"
                    v-html="item.markup"></div>
-              <circular-loader
+              <!--<circular-loader
                 cls="user-story__loader"
                 :size="10"
                 :width="7"
-                :visible="processing === item.id" />
+                :visible="processing === item.id" />-->
             </div>
           </v-flex>
         </v-layout>

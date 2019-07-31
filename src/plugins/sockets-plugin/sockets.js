@@ -94,10 +94,6 @@ class MongoSockets {
             app.$root.$emit('stop-tool-processing', response.fullDocument._id);
           }
 
-          if (['story', 'section'].includes(response.model)) {
-            store.commit('story/updateProcessingState', response.model);
-          }
-
           break;
       }
     });

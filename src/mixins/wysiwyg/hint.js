@@ -59,8 +59,9 @@ export default {
         this.editor.type = text.type;
 
         if (text.type !== 'user' && this.editor.level === 0) {
-          this.editor.parentStoryId = this.list[this.focused - 1].id;
           this.editor.level += 1;
+          this.editor.parentStoryId = this.list[this.focused - 1].level === this.editor.level ?
+            this.list[this.focused - 1].parentStoryId : this.list[this.focused - 1].id;
           this.nextIdToFocus = false;
         }
 

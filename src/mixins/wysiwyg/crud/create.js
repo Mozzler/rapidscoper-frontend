@@ -21,14 +21,14 @@ export default {
       this.processing = null;
 
       await this.$nextTick();
-
+/*
       if (this.$refs[this.nextIdToFocus]) {
         this.$refs[this.nextIdToFocus][0].focus();
         document.execCommand('selectAll', false, null);
         document.getSelection().collapseToEnd();
       }
 
-      this.nextIdToFocus = false;
+      this.nextIdToFocus = false;*/
     },
     async sendCreateStoryRequest (sublist, text = '') {
       this.nextIdToFocus = true;
@@ -37,7 +37,7 @@ export default {
 
       this.processing = this.editor.id;
 
-      this.$store.commit('story/initProcessing', ['section', 'story']);
+      this.$store.commit('story/initProcessing', ['section']);
       const response = await this.$store.dispatch('entity/create', payload);
       this.nextIdToFocus = response.item.id;
       this.$socket.recreateWatchers('story', false);
