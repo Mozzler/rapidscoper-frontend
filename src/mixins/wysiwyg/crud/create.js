@@ -11,11 +11,11 @@ export default {
     this.$root.$off('stop-processing', this.stopProcessing);
   },
   methods: {
-     async stopProcessing () {
+    async stopProcessing () {
       this.processing = null;
+       await this.$nextTick();
 
       if (this.$refs[this.nextIdToFocus]) {
-        await this.$nextTick();
         this.$refs[this.nextIdToFocus][0].focus();
         document.execCommand('selectAll', false, null);
         document.getSelection().collapseToEnd();
