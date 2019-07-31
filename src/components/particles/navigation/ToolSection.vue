@@ -68,7 +68,7 @@ export default {
   },
   computed: {
     labels () {
-      return this.$store.state.story.label;
+      return this.$store.state.story.labels;
     },
     priorities () {
       return this.$store.state.story.priority;

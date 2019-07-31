@@ -7,7 +7,7 @@
       :visible="loading"
     />
     <story-section v-if="!loading" />
-    <!--<tool-section />-->
+    <tool-section />
     <story-content v-if="!loading" />
   </div>
 </template>
