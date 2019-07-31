@@ -16,7 +16,7 @@ export default {
       return this.$route.params.storyType;
     },
     focusedLevel () {
-      return this.focused ? this.list[this.focused].level : null;
+      return this.focused && this.list[this.focused] ? this.list[this.focused].level : null;
     }
   },
   methods: {
