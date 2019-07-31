@@ -1,9 +1,6 @@
 export default {
   methods: {
     async removeStory () {
-      await this.$nextTick();
-      this.$refs[this.editor.id][0].focus();
-
       this.processing = this.editor.id;
 
       if (this.editor.level === 0 && this.list.length === 1) {
@@ -19,6 +16,7 @@ export default {
       await this.$nextTick();
       focusable[0].focus();
       this.collapseToEnd();
+
       this.processing = null;
       this.editor = null;
     },

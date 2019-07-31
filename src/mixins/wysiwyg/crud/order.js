@@ -61,14 +61,14 @@ export default {
           tail: '',
           type: 'user'
         });
-
-        this.editor.placeholder = this.editor.markup;
-        this.editor.afterStoryId = this.list[this.focused - 1].id;
-        this.editor.parentStoryId = _.find(this.list, item => item.id === this.editor.parentStoryId).parentStoryId;
-        this.editor.level = this.editor.level - 1;
-
-        this.reorder();
       }
+
+      this.editor.placeholder = this.editor.markup;
+      this.editor.afterStoryId = this.list[this.focused - 1].id;
+      this.editor.parentStoryId = _.find(this.list, item => item.id === this.editor.parentStoryId).parentStoryId;
+      this.editor.level = this.editor.level - 1;
+
+      this.reorder();
     }
   }
 };
