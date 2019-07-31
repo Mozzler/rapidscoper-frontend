@@ -11,7 +11,7 @@ export default {
       //this.hintEditor = null;
     },
     focusHint ($event) {
-      this.hintEditor = this.editor.id;
+      this.hintEditor = this.list[this.focused].id;
       this.$root.$emit('focus-hint');
     },
     async showHint (el, chapter, filter = this.filter) {
@@ -22,9 +22,9 @@ export default {
         left: rect.left + 24
       };
 
-      this.hintEditor = this.editor.id;
+      this.hintEditor = this.list[this.focused].id;
       await this.$nextTick();
-      this.$root.$emit('set-hint-state', true, chapter, filter, position, this.editor.id);
+      this.$root.$emit('set-hint-state', true, chapter, filter, position, this.list[this.focused].id);
     },
     checkHint ($event, item) {
       this.event = $event;
@@ -51,16 +51,16 @@ export default {
       }
 
       await this.$nextTick();
-      this.$refs[this.editor.id][0].focus();
+      this.$refs[this.list[this.focused].id][0].focus();
       await this.$nextTick();
 
       if (chapter === 'beginning') {
-        this.editor.template = text.value;
-        this.editor.type = text.type;
+        this.list[this.focused].template = text.value;
+        this.list[this.focused].type = text.type;
 
-        if (text.type !== 'user' && this.editor.level === 0) {
-          this.editor.level += 1;
-          this.editor.parentStoryId = this.list[this.focused - 1].level === this.editor.level ?
+        if (text.type !== 'user' && this.list[this.focused].level === 0) {
+          this.list[this.focused].level += 1;
+          this.list[this.focused].parentStoryId = this.list[this.focused - 1].level === this.list[this.focused].level ?
             this.list[this.focused - 1].parentStoryId : this.list[this.focused - 1].id;
           this.nextIdToFocus = false;
         }
@@ -81,17 +81,17 @@ export default {
 
       if (index !== null) {
         spans[index] = this.createSpan(chapter, text, false, false);
-        this.editor.markup = spans.map(item => item.replace(/&nbsp;/gi, '')).join('&nbsp;');
+        this.list[this.focused].markup = spans.map(item => item.replace(/&nbsp;/gi, '')).join('&nbsp;');
       } else {
         let t = spans.join('');
-        this.editor.markup = `${t}${!t ? '' : '&nbsp;'}${this.createSpan(chapter, text, false)}`;
+        this.list[this.focused].markup = `${t}${!t ? '' : '&nbsp;'}${this.createSpan(chapter, text, false)}`;
         this.setCompletion();
       }
 
       this.filter = null;
-      this.editor.tail = '';
-      this.editor.placeholder = this.editor.markup;
-      this.hideHint();
+      this.list[this.focused].tail = '';
+      this.list[this.focused].placeholder = this.list[this.focused].markup;
+      this.hintEditor = null;
       this.collapseToEnd();
     },
     submitField (chapter, text) {
@@ -102,8 +102,8 @@ export default {
       this.$store.dispatch('entity/create', {
         entity: 'dictionary',
         data: {
-          projectId: this.editor.projectId,
-          teamId: this.editor.teamId,
+          projectId: this.list[this.focused].projectId,
+          teamId: this.list[this.focused].teamId,
           type: chapter,
           name: text,
           description: text

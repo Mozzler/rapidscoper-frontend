@@ -26,7 +26,7 @@ export default {
       this.nextIdToFocus = true;
       await this.updateStory();
 
-      this.processing = this.editor.id;
+      this.processing = this.list[this.focused].id;
       const payload = this.getCreateRequestPayload(sublist, text);
       const response = await this.$store.dispatch('entity/create', payload);
       this.nextIdToFocus = response.item.id;
@@ -43,7 +43,7 @@ export default {
       this.sendCreateStoryRequest(false, $event.target.innerHTML);
     },
     createSubstory ($event) {
-      if (this.editor.level === 2) {
+      if (this.list[this.focused].level === 2) {
         $event.preventDefault();
         return;
       }

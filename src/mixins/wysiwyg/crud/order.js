@@ -4,9 +4,9 @@ export default {
       const payload = {
         entity: 'story',
         params: {
-          id: this.editor.id
+          id: this.list[this.focused].id
         },
-        data: _.pick(this.editor, 'parentStoryId', 'afterStoryId', 'markup', 'type', 'level')
+        data: _.pick(this.list[this.focused], 'parentStoryId', 'afterStoryId', 'markup', 'type', 'level')
       };
 
       const response = await this.$store.dispatch('entity/update', payload);
@@ -15,15 +15,15 @@ export default {
       });
     },
     async increaseStoryLevel () {
-      const index = _.findIndex(this.list, item => item.id === this.editor.id);
+      const index = _.findIndex(this.list, item => item.id === this.list[this.focused].id);
 
-      if (this.editor.level === 2 || (this.editor.level === 0 && !index)) {
+      if (this.list[this.focused].level === 2 || (this.list[this.focused].level === 0 && !index)) {
         return;
       }
 
       this.hideHint();
-      if (this.editor.level === 0) {
-        const equation = this.getEquation(this.editor.level + 1);
+      if (this.list[this.focused].level === 0) {
+        const equation = this.getEquation(this.list[this.focused].level + 1);
         const constructions = this.getAdjusted(equation);
 
         Object.assign(this.list[this.focused], {
@@ -35,11 +35,11 @@ export default {
         });
       }
 
-      const storyIndex = this.list.findIndex(item => item.id === this.editor.id);
+      const storyIndex = this.list.findIndex(item => item.id === this.list[this.focused].id);
 
-      this.editor.afterStoryId = this.list[storyIndex - 1].id;
-      this.editor.parentStoryId = this.list[storyIndex - 1].id;
-      this.editor.level = this.editor.level + 1;
+      this.list[this.focused].afterStoryId = this.list[storyIndex - 1].id;
+      this.list[this.focused].parentStoryId = this.list[storyIndex - 1].id;
+      this.list[this.focused].level = this.list[this.focused].level + 1;
 
       this.reorder();
     },
@@ -47,15 +47,15 @@ export default {
       $event.preventDefault();
       this.hideHint();
 
-      if (this.editor.level === 0) {
+      if (this.list[this.focused].level === 0) {
         return this.removeStory();
       }
 
-      if (this.editor.level - 1 === 0) {
-        const equation = this.getEquation(this.editor.level - 1);
+      if (this.list[this.focused].level - 1 === 0) {
+        const equation = this.getEquation(this.list[this.focused].level - 1);
         const constructions = this.getAdjusted(equation);
 
-        Object.assign(this.editor, {
+        Object.assign(this.list[this.focused], {
           markup: this.createSpan('beginning', constructions[0].key, true),
           template: constructions[0].value,
           tail: '',
@@ -63,10 +63,10 @@ export default {
         });
       }
 
-      this.editor.placeholder = this.editor.markup;
-      this.editor.afterStoryId = this.list[this.focused - 1].id;
-      this.editor.parentStoryId = _.find(this.list, item => item.id === this.editor.parentStoryId).parentStoryId;
-      this.editor.level = this.editor.level - 1;
+      this.list[this.focused].placeholder = this.list[this.focused].markup;
+      this.list[this.focused].afterStoryId = this.list[this.focused - 1].id;
+      this.list[this.focused].parentStoryId = _.find(this.list, item => item.id === this.list[this.focused].parentStoryId).parentStoryId;
+      this.list[this.focused].level = this.list[this.focused].level - 1;
 
       this.reorder();
     }

@@ -14,10 +14,13 @@ export default {
     },
     storyType () {
       return this.$route.params.storyType;
+    },
+    focusedLevel () {
+      return this.focused ? this.list[this.focused].level : null;
     }
   },
   methods: {
-    getEquation (level = this.editor ? this.editor.level : null) {
+    getEquation (level = this.focusedLevel) {
       switch (level) {
         case 0:
           return '> -1';
@@ -47,7 +50,7 @@ export default {
     }
   },
   watch: {
-    'editor.level' () {
+    focusedLevel () {
       this.setConstructions();
     }
   }

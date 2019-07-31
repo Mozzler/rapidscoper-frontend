@@ -5,11 +5,11 @@ export default {
     },
     getAfterStoryId () {
       const substoryIndex = (this.focused + 1 < this.list.length) &&
-        (this.list[this.focused + 1].level > this.editor.level);
+        (this.list[this.focused + 1].level > this.list[this.focused].level);
 
       if (substoryIndex) {
         let nextStoryIndex = _.findIndex(this.list, (item, index) =>
-          this.editor.level === item.level && (this.focused < index)
+          this.list[this.focused].level === item.level && (this.focused < index)
         );
 
         if (nextStoryIndex === -1) {
@@ -18,34 +18,34 @@ export default {
 
         return [...this.list].slice(this.focused + 1, nextStoryIndex).pop().id;
       } else {
-        return this.editor.id;
+        return this.list[this.focused].id;
       }
     },
     getCreateRequestPayload (sublist = false, text = '') {
       if (!sublist) {
-        const number = this.editor.level === 1 ? 3 : 1;
+        const number = this.list[this.focused].level === 1 ? 3 : 1;
         const data = this.getSpanList(false).slice(0, number);
 
         text = `${data.join('')}&nbsp;`;
       }
 
       const data = {
-        parentStoryId: sublist ? this.editor.id : this.editor.parentStoryId,
-        afterStoryId: sublist ? this.editor.id : this.getAfterStoryId(),
+        parentStoryId: sublist ? this.list[this.focused].id : this.list[this.focused].parentStoryId,
+        afterStoryId: sublist ? this.list[this.focused].id : this.getAfterStoryId(),
 
         estimate: 0,
         priority: null,
         labels: [],
-        level: sublist ? this.editor.level + 1 : this.editor.level,
+        level: sublist ? this.list[this.focused].level + 1 : this.list[this.focused].level,
 
         tail: '',
         placeholder: '',
         markup: '',
         template: '',
 
-        sectionId: this.editor.sectionId,
-        teamId: this.editor.teamId,
-        projectId: this.editor.projectId
+        sectionId: this.list[this.focused].sectionId,
+        teamId: this.list[this.focused].teamId,
+        projectId: this.list[this.focused].projectId
       };
 
       return {
@@ -55,18 +55,18 @@ export default {
     },
     getUpdateRequestPayload () {
       const data = {
-        type: this.editor.type,
-        markup: this.editor.markup,
+        type: this.list[this.focused].type,
+        markup: this.list[this.focused].markup,
         afterStoryId: this.getPreviousAfterStoryId(),
-        parentStoryId: this.editor.parentStoryId,
-        level: this.editor.level
+        parentStoryId: this.list[this.focused].parentStoryId,
+        level: this.list[this.focused].level
       };
 
       return {
         entity: 'story',
         data: data,
         params: {
-          id: this.editor.id
+          id: this.list[this.focused].id
         }
       };
     },

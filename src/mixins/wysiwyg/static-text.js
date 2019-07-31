@@ -1,14 +1,14 @@
 export default {
   methods: {
     resetPlaceholder () {
-      this.editor.tail = '';
-      this.editor.placeholder = this.editor.markup;
+      this.list[this.focused].tail = '';
+      this.list[this.focused].placeholder = this.list[this.focused].markup;
     },
     increasable () {
       const tail = this.getTail().replace(/&nbsp;/gi, '');
       const spans = this.getSpanList(false).length;
       const parentExists = this.focused !== 0 &&
-        this.list[this.focused - 1].level === this.editor.level;
+        this.list[this.focused - 1].level === this.list[this.focused].level;
 
       return (spans === 1 || spans === 0) && !tail && parentExists;
     },
@@ -35,13 +35,13 @@ export default {
         let completion = this.getStaticText(1);
         if (completion && completion.includes('static-text')) {
           const [type, text] = this.getStaticTextByType(completion);
-          this.editor.markup = this.editor.markup + this.createSpan(type, text);
+          this.list[this.focused].markup = this.list[this.focused].markup + this.createSpan(type, text);
         }
       }
 
       if (this.next.includes('static-text')) {
         const [type, text] = this.getStaticTextByType();
-        this.editor.markup += this.createSpan(type, text, false);
+        this.list[this.focused].markup += this.createSpan(type, text, false);
       }
 
       this.resetPlaceholder();

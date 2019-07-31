@@ -13,7 +13,7 @@ export default {
       const items = nodes.filter(item => typeof item !== 'function');
 
       if (!items.length || !this.getSpanList()) {
-        el = this.$refs[this.editor.id][0];
+        el = this.$refs[this.list[this.focused].id][0];
       } else {
         if (!this.previous) {
           return;
@@ -43,8 +43,8 @@ export default {
       const text = this.dictionary.placeholders[this.next];
 
       if (!tail && text) {
-        this.editor.tail = this.createSpan(this.next, `&nbsp;${text}`, true, false);
-        this.editor.placeholder = line + this.editor.tail;
+        this.list[this.focused].tail = this.createSpan(this.next, `&nbsp;${text}`, true, false);
+        this.list[this.focused].placeholder = line + this.list[this.focused].tail;
       } else {
         this.resetPlaceholder();
       }
@@ -65,8 +65,8 @@ export default {
 
       if (completion !== null) {
         const [text, type] = this.getStaticTextByType(completion);
-        this.editor.tail = this.createSpan(text, `&nbsp;${type}`, true);
-        this.editor.placeholder = this.editor.markup + this.editor.tail;
+        this.list[this.focused].tail = this.createSpan(text, `&nbsp;${type}`, true);
+        this.list[this.focused].placeholder = this.list[this.focused].markup + this.list[this.focused].tail;
       }
     },
     setSiblings () {
@@ -79,7 +79,7 @@ export default {
         return;
       }
 
-      this.$root.$emit('complete-hint', this.filter, first, this.next === 'beginning', this.editor.id);
+      this.$root.$emit('complete-hint', this.filter, first, this.next === 'beginning', this.list[this.focused].id);
       this.filter = null;
     },
     setCompletion () {
@@ -87,7 +87,7 @@ export default {
 
       if (this.next && this.next.includes('static-text')) {
         const [type, text] = this.getStaticTextByType();
-        this.editor.markup += this.createSpan(type, text, false);
+        this.list[this.focused].markup += this.createSpan(type, text, false);
       }
     },
     finishSentence ($event, character = '') {
@@ -98,7 +98,7 @@ export default {
       }
 
       this.event = $event;
-      this.editor.markup = (`${this.editor.markup}${character}`);
+      this.list[this.focused].markup = (`${this.list[this.focused].markup}${character}`);
 
       this.setSiblings();
       this.setCustomText(true);
@@ -111,7 +111,7 @@ export default {
 
       if (tail) {
         const text = this.createSpan(this.next, `&nbsp;${tail}`, false, editable);
-        this.editor.markup = list + (this.next ? text : ':');
+        this.list[this.focused].markup = list + (this.next ? text : ':');
       }
     }
   }

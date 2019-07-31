@@ -1,7 +1,7 @@
 export default {
   methods: {
     getStaticText (increments = 1) {
-      const nodes = this.$refs[this.editor.id][0].childNodes;
+      const nodes = this.$refs[this.list[this.focused].id][0].childNodes;
       nodes.filter = [].filter;
 
       const classes = nodes
@@ -16,7 +16,7 @@ export default {
           return value;
         });
 
-      const templates = this.editor.template ? this.editor.template
+      const templates = this.list[this.focused].template ? this.list[this.focused].template
         .split(/(?=\[)/g)
         .map(item => item.replace(/[[\]]/g, '')) : [];
 
@@ -26,7 +26,7 @@ export default {
       return index + increments < templates.length ? templates[index + increments] : null;
     },
     getSpanList (joined = true) {
-      const spans = this.editor.markup
+      const spans = this.list[this.focused].markup
         .split('</span>')
         .filter(item => item.includes('<span'))
         .map(item => `${item}</span>`);
@@ -34,7 +34,7 @@ export default {
       return !joined ? spans : spans.join('');
     },
     getTail () {
-      return this.editor.markup
+      return this.list[this.focused].markup
         .split('</span>')
         .filter(item => !item.includes('<span'))
         .join('')
@@ -49,8 +49,8 @@ export default {
     getCurrentSpan () {
       const node = this.event.view.getSelection().focusNode;
 
-      if (!this.editor.markup || !this.editor.template || !node ||  !node.previousSibling) {
-        this.editor.template = '';
+      if (!this.list[this.focused].markup || !this.list[this.focused].template || !node ||  !node.previousSibling) {
+        this.list[this.focused].template = '';
         return null;
       }
 
@@ -60,18 +60,18 @@ export default {
         current = node.previousSibling.className;
 
         if (current.includes('beginning')) {
-          this.editor.markup = this.editor.markup.replace(/ text-greyed/, '');
+          this.list[this.focused].markup = this.list[this.focused].markup.replace(/ text-greyed/, '');
         }
       }
 
       return this.classToType(current);
     },
     getNextSpan () {
-      const parts = this.editor.template
+      const parts = this.list[this.focused].template
         .split(/[[(.*)\]]/)
         .filter(item => !!item.trim());
 
-      if (!this.editor.markup || !this.editor.template) {
+      if (!this.list[this.focused].markup || !this.list[this.focused].template) {
         return 'beginning';
       }
 

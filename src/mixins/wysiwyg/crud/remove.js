@@ -1,9 +1,9 @@
 export default {
   methods: {
     async removeStory () {
-      this.processing = this.editor.id;
+      this.processing = this.list[this.focused].id;
 
-      if (this.editor.level === 0 && this.list.length === 1) {
+      if (this.list[this.focused].level === 0 && this.list.length === 1) {
         return;
       }
 
@@ -15,7 +15,6 @@ export default {
       await this.$store.dispatch('story/deleteMany', removable);
 
       this.processing = null;
-      this.editor = null;
 
       await this.$nextTick();
       focusable[0].focus();
@@ -29,26 +28,22 @@ export default {
         return;
       }
 
-      if (!this.editor) {
-        return;
-      }
-
-      if (this.editor.level > 0 && !this.getSpanList() && !this.getTail()) {
+      if (this.list[this.focused].level > 0 && !this.getSpanList() && !this.getTail()) {
         await this.decreaseStoryLevel($event);
       }
 
-      if (this.editor.level === 0 && !this.editor.markup.length) {
+      if (this.list[this.focused].level === 0 && !this.list[this.focused].markup.length) {
         this.hintEditor = null;
         this.removeStory();
       }
 
       const spans = this.getSpanList(false).length === 1;
-      if (this.editor.level === 0 && this.focused === 0 && spans && !this.getTail()) {
+      if (this.list[this.focused].level === 0 && this.focused === 0 && spans && !this.getTail()) {
         $event.preventDefault();
       } else {
-        if (this.editor.markup) {
-          this.editor.markup = $event.target.innerHTML;
-          this.$refs[this.editor.id][0].classList.remove('text-greyed');
+        if (this.list[this.focused].markup) {
+          this.list[this.focused].markup = $event.target.innerHTML;
+          this.$refs[this.list[this.focused].id][0].classList.remove('text-greyed');
         }
       }
 

@@ -10,7 +10,6 @@ export default {
     focusEvent (item, index) {
       this.focused = index;
       this.etalon = { ...item };
-      this.editor = item;
       this.hintEditor = null;
     },
     keyupEvent ($event) {
@@ -21,13 +20,13 @@ export default {
         return;
       }
 
-      if (!this.editor.markup.length && this.shortcutList.includes(this.event.key)) {
+      if (!this.list[this.focused].markup.length && this.shortcutList.includes(this.event.key)) {
         $event.preventDefault();
         return this.completeBeginning(this.event.key);
       }
 
-      this.editor.markup = this.event.target.innerHTML;
-      this.$refs[this.editor.id][0].classList.remove('text-greyed');
+      this.list[this.focused].markup = this.event.target.innerHTML;
+      this.$refs[this.list[this.focused].id][0].classList.remove('text-greyed');
       this.collapseToEnd();
 
       this.initPlaceholder();
@@ -45,8 +44,8 @@ export default {
     },
     completeBeginning (shortcut) {
       const item = _.find(this.adjustedConstruction, item => item.shortcut === shortcut);
-      this.hintEditor = this.editor.id;
-      this.hintComplete('beginning', item, this.editor.id);
+      this.hintEditor = this.list[this.focused].id;
+      this.hintComplete('beginning', item, this.list[this.focused].id);
     }
   }
 };
