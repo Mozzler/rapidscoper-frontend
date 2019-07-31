@@ -42,8 +42,6 @@ export default {
         this.removeStory();
       }
 
-      console.log('remove-item');
-
       const spans = this.getSpanList(false).length === 1;
       if (this.editor.level === 0 && this.focused === 0 && spans && !this.getTail()) {
         $event.preventDefault();

@@ -1,8 +1,7 @@
 export default {
   methods: {
     async updateStory () {
-      console.log(this.nextIdToFocus, 'update-story');
-      if (this.tab !== 'edit' || _.isString(this.nextIdToFocus) || !this.editor) {
+      if (this.tab !== 'edit') {
         return;
       }
 
@@ -10,8 +9,8 @@ export default {
       this.processing = this.editor.id;
       const payload = this.getUpdateRequestPayload();
 
+      this.$store.commit('story/initProcessing', ['story']);
       await this.$store.dispatch('entity/update', payload);
-      this.processing = null;
     }
   }
 };

@@ -45,7 +45,8 @@ function getConstructionByType (type) {
 }
 
 // stupid code, but can't use recursion: leads to the
-// 'Maximum call stack size exceeded error'
+// 'Maximum call stack size exceeded error':
+// vue watcher can't create the recursive references
 function getStoryLevel (id, stories) {
   if (id === null) {
     return 0;
@@ -122,5 +123,9 @@ export default {
         };
       });
     };
+  },
+
+  processing (state) {
+    return state.processing.length;
   }
 };

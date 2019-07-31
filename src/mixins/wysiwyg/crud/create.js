@@ -4,15 +4,21 @@ export default {
       nextIdToFocus: false
     };
   },
-  beforeMount () {
-    this.$root.$on('editor-update', this.stopProcessing);
+  computed: {
+    requestsInProcessing () {
+      return this.$store.getters['story/processing'];
+    }
   },
-  beforeDestroy () {
-    this.$root.$off('editor-update', this.stopProcessing);
+  watch: {
+    requestsInProcessing () {
+      if (!this.requestsInProcessing) {
+        this.stopProcessing();
+      }
+    }
   },
   methods: {
     async stopProcessing () {
-      this.processing = false;
+      this.processing = null;
 
       await this.$nextTick();
 
@@ -30,11 +36,8 @@ export default {
       await this.updateStory();
 
       this.processing = this.editor.id;
-      this.flags = {
-        section: true,
-        story: true
-      };
 
+      this.$store.commit('story/initProcessing', ['section', 'story']);
       const response = await this.$store.dispatch('entity/create', payload);
       this.nextIdToFocus = response.item.id;
       this.$socket.recreateWatchers('story', false);

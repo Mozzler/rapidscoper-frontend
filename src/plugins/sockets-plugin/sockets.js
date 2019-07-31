@@ -95,7 +95,7 @@ class MongoSockets {
           }
 
           if (['story', 'section'].includes(response.model)) {
-            app.$root.$emit('editor-update', response.model);
+            store.commit('story/updateProcessingState', response.model);
           }
 
           break;
