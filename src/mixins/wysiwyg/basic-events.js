@@ -2,13 +2,15 @@ export default {
   data () {
     return {
       focused: null,
-      editor: null
+      editor: null,
+      etalon: null
     };
   },
   methods: {
     focusEvent (item, index) {
       this.focused = index;
-      this.editor = { ...item };
+      this.etalon = { ...item };
+      this.editor = item;
       this.hintEditor = null;
     },
     keyupEvent ($event) {

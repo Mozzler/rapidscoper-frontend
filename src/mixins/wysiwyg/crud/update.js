@@ -1,7 +1,7 @@
 export default {
   methods: {
     equal () {
-      return _.isEqual(this.editor, this.list[this.focused]);
+      return _.isEqual(this.etalon, this.editor);
     },
     async updateStory () {
       this.processing = this.editor.id;

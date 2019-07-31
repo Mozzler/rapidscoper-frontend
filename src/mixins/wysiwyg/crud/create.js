@@ -12,16 +12,15 @@ export default {
   },
   methods: {
      async stopProcessing () {
-      await this.$nextTick();
       this.processing = null;
 
       if (this.$refs[this.nextIdToFocus]) {
+        await this.$nextTick();
         this.$refs[this.nextIdToFocus][0].focus();
         document.execCommand('selectAll', false, null);
         document.getSelection().collapseToEnd();
+        this.nextIdToFocus = false;
       }
-
-      this.nextIdToFocus = false;
     },
     async sendCreateStoryRequest (sublist, text = '') {
       this.nextIdToFocus = true;
