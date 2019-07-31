@@ -4,6 +4,10 @@ export default {
       return _.isEqual(this.etalon, this.list[this.focused]);
     },
     async updateStory () {
+      if (!this.list[this.focused]) {
+        return;
+      }
+
       this.processing = this.list[this.focused].id;
 
       if (this.tab !== 'edit' || this.equal() || this.hintEditor !== null) {
