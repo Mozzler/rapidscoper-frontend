@@ -123,9 +123,5 @@ export default {
         };
       });
     };
-  },
-
-  processing (state) {
-    return state.processing.length;
   }
 };

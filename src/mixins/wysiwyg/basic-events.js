@@ -8,9 +8,11 @@ export default {
   methods: {
     focusEvent (item, index) {
       this.focused = index;
-      this.editor = item;
+      this.editor = { ...item };
+      this.hintEditor = null;
     },
     keyupEvent ($event) {
+      this.hintEditor = null;
       this.event = $event;
       this.setSiblings();
 

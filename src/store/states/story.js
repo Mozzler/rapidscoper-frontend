@@ -6,6 +6,5 @@ export default {
     'Must have', 'Should have', 'Could have', 'Won\'t have'
   ],
   adjustConstructions: {},
-  activeStoryOnTab: null,
-  processing: []
+  activeStoryOnTab: null
 };

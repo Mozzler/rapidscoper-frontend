@@ -1,21 +1,19 @@
 export default {
   data () {
     return {
-      nextIdToFocus: false,
-      processing: null
+      nextIdToFocus: false
     };
   },
   beforeMount () {
     this.$root.$on('stop-processing', this.stopProcessing);
   },
   beforeDestroy () {
-    this.$root.$on('stop-processing', this.stopProcessing);
+    this.$root.$off('stop-processing', this.stopProcessing);
   },
   methods: {
-    async stopProcessing () {
-      this.processing = null;
-
+     async stopProcessing () {
       await this.$nextTick();
+      this.processing = null;
 
       if (this.$refs[this.nextIdToFocus]) {
         this.$refs[this.nextIdToFocus][0].focus();
@@ -27,14 +25,13 @@ export default {
     },
     async sendCreateStoryRequest (sublist, text = '') {
       this.nextIdToFocus = true;
-      const payload = this.getCreateRequestPayload(sublist, text);
       await this.updateStory();
 
       this.processing = this.editor.id;
-
-      this.$store.commit('story/initProcessing', ['section']);
+      const payload = this.getCreateRequestPayload(sublist, text);
       const response = await this.$store.dispatch('entity/create', payload);
       this.nextIdToFocus = response.item.id;
+
       this.$socket.recreateWatchers('story', false);
     },
     createStory ($event) {

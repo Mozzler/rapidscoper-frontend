@@ -78,7 +78,7 @@ export default {
       $event.preventDefault();
       this.complete(value);
     },
-    setHintState (visible, chapter = null, filter = null, position = null, storyId = null) {
+    async setHintState (visible, chapter = null, filter = null, position = null, storyId = null) {
       Object.assign(this.$refs.hint.style, {
         left: position.left + 'px',
         top: position.top + 'px'
@@ -88,6 +88,8 @@ export default {
       this.chapter = chapter;
       this.filter = filter;
       this.storyId = storyId;
+
+      await this.$nextTick();
     },
     async setFocus () {
       if (this.focused === null) {

@@ -57,7 +57,8 @@
                    v-html="item.placeholder"
                    readonly></div>
 
-              <div :contenteditable="true"
+              <div :contenteditable="processing !== item.id && tab === 'edit'"
+                   :disabled="processing === item.id"
                    class="user-story__editable"
                    :ref="item.id"
                    tabindex="2"
@@ -73,11 +74,11 @@
                    @keydown.tab.shift.exact="decreaseStoryLevel"
                    @blur="updateStory"
                    v-html="item.markup"></div>
-              <!--<circular-loader
+              <circular-loader
                 cls="user-story__loader"
                 :size="10"
                 :width="7"
-                :visible="processing === item.id" />-->
+                :visible="processing === item.id" />
             </div>
           </v-flex>
         </v-layout>

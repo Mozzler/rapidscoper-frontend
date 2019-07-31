@@ -93,7 +93,8 @@ class MongoSockets {
           if (response.model === 'story') {
             app.$root.$emit('stop-tool-processing', response.fullDocument._id);
           }
-          if (['story', 'section'].includes(response.model)) {
+
+          if (response.model === 'section') {
             app.$root.$emit('stop-processing');
           }
 
