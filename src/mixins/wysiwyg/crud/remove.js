@@ -38,6 +38,7 @@ export default {
       }
 
       if (this.editor.level === 0 && !this.editor.markup.length) {
+        this.hintEditor = null;
         this.removeStory();
       }
 
