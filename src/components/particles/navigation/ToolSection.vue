@@ -1,5 +1,5 @@
 <template>
-  <div class="tool-section pt-4" v-if="activeStory">
+  <div class="tool-section pt-4" v-if="story">
     <div class="tool-block">
       <div class="section__title">
         ID
@@ -26,7 +26,8 @@
         <tool-list
           :active="story.priority"
           :list="priorities"
-          :shortcutted="false" />
+          :shortcutted="false"
+          @update="value => updateToolId('priority', value)" />
       </div>
     </div>
 
@@ -43,7 +44,8 @@
         :active="story.labels"
         :list="labels"
         :shortcutted="false"
-        :label-cls="'tool-block__label rounded'" />
+        :label-cls="'tool-block__label rounded'"
+        @update="value => updateToolId('labels', value)" />
     </div>
 
     <!--<div class="tool-block">
@@ -90,6 +92,29 @@ export default {
     },
     story () {
       return _.find(this.stories, item => item.id === this.activeStory);
+    }
+  },
+  methods: {
+    updateToolId (key, propertyId) {
+      let query = null;
+
+      if (_.isArray(this.story[key])) {
+        query = this.story[key].includes(propertyId) ?
+          this.story[key].filter(i => i !== propertyId) :
+          [...this.story[key], ...[propertyId]];
+      } else {
+        query = propertyId;
+      }
+
+      this.$store.dispatch('entity/update', {
+        entity: 'story',
+        params: {
+          id: this.story.id
+        },
+        data: {
+          [key]: query
+        }
+      });
     }
   }
 };
