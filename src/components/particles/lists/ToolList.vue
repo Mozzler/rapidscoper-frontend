@@ -1,5 +1,6 @@
 <template>
-  <div class="tool-block__text">
+  <div class="tool-block__text"
+    :class="{'tool-block__text--minified': minified}">
     <circular-loader
       cls="loader-shadow--without-padding transparent"
       :size="50"
@@ -48,7 +49,8 @@ export default {
     },
     loader: {
       default: false
-    }
+    },
+    minified: false
   },
   mixins: [
     Tools

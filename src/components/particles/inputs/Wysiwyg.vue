@@ -22,6 +22,7 @@
             :key="tab"
             :active="item[tab]"
             :list="toolDictionary"
+            :minified="true"
             :label-cls="'tool-block__label--minified'"
             :loader="toolProcessing &&
               toolProcessing.type === tab &&

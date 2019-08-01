@@ -123,5 +123,40 @@ export default {
         };
       });
     };
+  },
+
+  vocabularySections () {
+    return [
+      { 'Actors': 'actor' },
+      { 'API Endpoints': 'api-endpoint' },
+      { 'Fields' : 'field' },
+      { 'Models': 'model' },
+      { 'Other': 'custom' }
+    ];
+  },
+
+  vocabulary (state, getters, rootState) {
+    const dictionary = rootState.entity.dictionary.items;
+    const sections = getters['vocabularySections'].map((item, key) => {
+      return {
+        [key]: []
+      };
+    });
+
+    _.each(dictionary, item => {
+      let type = item.type;
+
+      if (item.relatedDictionaryId) {
+        type = dictionary.find(parentItem => parentItem.id === item.relatedDictionaryId);
+      }
+    });
+/*
+    return _.mapObject(dictionary, item => {
+      return {
+        id: item.id,
+        name: item.name,
+        type:
+      }
+    });*/
   }
 };

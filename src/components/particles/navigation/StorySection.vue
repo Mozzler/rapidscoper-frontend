@@ -1,9 +1,10 @@
 <template>
   <div class="sidebar story-section pt-4">
     <sidebar-list
-      :title="title"
-      :btn="addBtn"
-      :list="list"
+      :title="content.title"
+      :btn="content.addBtn"
+      :list="content.list"
+      :indicator="content.indicator"
       :active="$route.params.section"
       @go="(value, id) => goTo(id)"
       @add="addSection" />
@@ -24,7 +25,6 @@ export default {
   ],
   data () {
     return {
-      addBtn: 'Add section',
       list: null
     };
   },
@@ -32,37 +32,42 @@ export default {
     sections () {
       return this.$store.getters['entity/items']('section');
     },
-    title () {
-      let title = '';
+    content () {
+      let data = {
+        title: '',
+        indicator: 'id'
+      };
 
       switch (this.$route.name) {
-        case 'stories':
+        case 'stories': {
           if (this.$route.params.storyType === 'user-story') {
-            title = 'user story sections';
+            data.title = 'user story sections';
           }
           if (this.$route.params.storyType === 'technical-story') {
-            title = 'technical story sections';
+            data.title = 'technical story sections';
           }
+          data.list = this.sections;
 
-          this.list = this.sections;
           break;
-        case 'dictionary':
+        }
+        case 'dictionary': {
           const items = ['Actors', 'API Endpoints', 'Fields', 'Models', 'Other'];
 
-          this.addBtn = '';
-          this.list = _.map(items, (item, index) => {
+          data.addBtn = '';
+          data.title = 'dictionary sections';
+          data.indicator = 'name';
+          data.list = _.map(items, (item, index) => {
             return {
               name: item,
               id: index
             };
           });
 
-
-          title = 'dictionary sections';
           break;
+        }
       }
 
-      return title;
+      return data;
     }
   },
   methods: {

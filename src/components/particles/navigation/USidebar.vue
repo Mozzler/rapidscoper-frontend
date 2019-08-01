@@ -86,7 +86,8 @@ export default {
           data = {
             name: 'dictionary',
             params: {
-              projectId: this.$route.params.projectId
+              projectId: this.$route.params.projectId,
+              section: 'actors'
             }
           };
       }
