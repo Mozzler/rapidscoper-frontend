@@ -35,11 +35,14 @@
               <v-layout fill-height>
                 <v-flex shrink mr-2>
                   <input
-                    tabindex="1"
+                    tabindex="0"
                     class="user-story__input"
                     v-if="tab === 'estimate'"
                     v-model="item.estimate"
+                    @keydown.tab.exact.prevent="$event => nextEstimateField($event, item.id)"
+                    @keyup.enter.exact.prevent="$event => nextEstimateField($event, item.id)"
                     @change="$event => updateEstimate($event, item.id)"
+                    :ref="`estimate-input-${item.id}`"
                   />
                 </v-flex>
                 <v-flex grow>

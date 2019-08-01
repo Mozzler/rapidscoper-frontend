@@ -4,6 +4,11 @@ export default {
   mixins: [
     Processing
   ],
+  data () {
+    return {
+      disabled: false
+    };
+  },
   beforeMount () {
     this.$root.$on('' +
       'stop-tool-processing', this.stopProcessing);
@@ -34,6 +39,7 @@ export default {
     },
     submitTool (propertyId) {
       const item = this.list.find(item => item.id === this.toolId);
+      this.disabled = true;
       this.updateToolId(propertyId, item, this.tab);
     },
     nextItem () {
@@ -69,11 +75,10 @@ export default {
     tab () {
       this.activatePanel();
     },
-    watch: {
-      toolProcessing (newVal, oldVal) {
-        if (newVal === null && oldVal === this.toolId && this.tab === 'priority') {
-          this.nextItem();
-        }
+    toolProcessing (newVal, oldVal) {
+      if (newVal === null && oldVal.id === this.toolId && this.tab === 'priority' && this.disabled) {
+        this.nextItem();
+        this.disabled = false;
       }
     }
   }

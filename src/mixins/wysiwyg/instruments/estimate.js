@@ -1,7 +1,7 @@
 export default {
   methods: {
     updateEstimate ($event, id) {
-      this.$store.dispatch('entity/update', {
+      return this.$store.dispatch('entity/update', {
         data: {
           'estimate': $event.target.value
         },
@@ -10,6 +10,11 @@ export default {
           id: id
         }
       });
+    },
+    nextEstimateField ($event, id) {
+      this.updateEstimate($event, id).then(() => {
+        this.nextItem();
+      });
     }
   }
-}
+};
