@@ -1,6 +1,10 @@
-@import url('https://fonts.googleapis.com/css?family=Lato&display=swap');
+@import '~vue-tel-input/dist/vue-tel-input.css';
 
 @import 'variables';
+@import 'fonts';
+@import 'mixins';
+
+@import 'layout';
 @import 'typography';
 @import 'buttons';
 @import 'headers';
@@ -12,6 +16,7 @@
 @import 'tables';
 @import 'selects';
 @import 'cards';
-
-
+@import 'labels';
+@import 'sidebar';
+@import 'hint';
 

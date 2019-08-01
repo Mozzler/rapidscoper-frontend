@@ -1,26 +1,70 @@
+import ErrorHandlerMixin from "@/mixins/error-handler";
+
 export default {
-  data() {
+  mixins: [
+    ErrorHandlerMixin
+  ],
+  data () {
     return {
-      dialog: false
-    }
+      dialog: false,
+      processing: false
+    };
   },
-  beforeMount() {
+  beforeMount () {
     this.$root.$on(this.$options.name, this.showModal);
+    if (typeof this.initData === 'function') {
+      this.initData();
+    }
   },
   methods: {
-    closeModal() {
+    closeModal () {
       this.dialog = false;
     },
-    showModal() {
+    showModal () {
       this.dialog = true;
+    },
+    async submit () {
+      this.processing = true;
+
+      const result = await this.$validator.validate();
+
+      if (!result) {
+        this.processing = false;
+        return;
+      }
+
+      const params = this.getPayload();
+
+      this.$store.dispatch(params.action, params)
+        .then(() => {
+          if (params.recreate) {
+            this.$socket.recreateWatchers(params.entity);
+          }
+        })
+        .then(() => {
+          this.processing = false;
+          this.closeModal();
+        })
+        .catch(error => {
+          this.processing = false;
+          this.handleErrors(error);
+        });
     }
   },
-  beforeDestroy() {
+  beforeDestroy () {
     this.$root.$off(this.$options.name, this.showModal);
   },
   computed: {
-    isMobileDevice() {
-      return this.$store.state.auth.isMobileDevice;
+    isMobileDevice () {
+      return this.$store.state.system.isMobileDevice;
     }
   },
-}
+  watch: {
+    dialog () {
+      if (this.dialog) {
+        this.initData();
+        this.$validator.reset();
+      }
+    }
+  }
+};

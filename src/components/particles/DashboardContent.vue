@@ -15,15 +15,18 @@
     </v-layout>
     <v-data-table
         :headers="headers"
-        :items="items"
+        :items="projects"
         item-key="name"
         :hide-actions="true"
+        :loading="initialization"
         class="dashboard-table">
 
       <template v-slot:items="props">
         <tr @click="props.expanded = !props.expanded">
           <td>
-            {{ props.item.name }}
+            <div @click="() => goTo(props.item.name, props.item.id)" class="cursor-pointer">
+              {{ props.item.name }}
+            </div>
             <span class="index" v-if="props.item.index">
               {{ props.item.index }}
             </span>
@@ -33,13 +36,13 @@
               <img src="@/assets/img/user.png" v-for="i in 3" :key="i"/>
             </v-layout>
           </td>
-          <td>{{ props.item.last_changes }}</td>
-          <td>
+          <td>{{ props.item.updatedAt | toDate }}</td>
+          <!--<td>
             <v-layout align-center justify-space-between row fill-height>
               <v-icon>share</v-icon>
               <v-icon>archive</v-icon>
             </v-layout>
-          </td>
+          </td>-->
         </tr>
         <span class="tr-border" />
       </template>
@@ -49,13 +52,11 @@
 
 <script>
 import DashboardActionBtn from '@/components/particles/buttons/DashboardActionButton';
-import CreateProjectModal from '@/components/particles/modals/CreateProject';
 
 export default {
   name: 'DashboardContent',
   components: {
-    DashboardActionBtn,
-    CreateProjectModal
+    DashboardActionBtn
   },
   data () {
     return {
@@ -76,35 +77,37 @@ export default {
           sortable: false,
           value: 'last changes'
         },
-        {
+        /*{
           text: 'actions',
           sortable: false,
           value: 'actions'
-        }
-      ],
-      items: [
-        {
-          name: 'Skellorbit',
-          index: 4,
-          last_changes: 'a day ago'
-        },
-        {
-          name: 'Skellorbit',
-          index: 4,
-          last_changes: '2 days ago'
-        },
-        {
-          name: 'Skellorbit',
-          index: null,
-          last_changes: 'a day ago'
-        }
+        }*/
       ]
     };
   },
   methods: {
-    showModal() {
+    showModal () {
       this.$root.$emit('create-project');
     },
+    goTo (item, id) {
+      const url = `/projects/${id}/user-story/section/edit`;
+      this.$router.push(url);
+    }
+  },
+  computed: {
+    user () {
+      return this.$store.state.auth.user;
+    },
+    projects () {
+      const projects = this.$store.getters['entity/items']('project');
+      return _.filter(projects, project => {
+        let externalProject = project.createdUserId !== this.user.user_id;
+        return this.sharedRoute ? externalProject : project;
+      });
+    },
+    sharedRoute () {
+      return this.$route.params.name === 'shared-with-me';
+    }
   }
 };
 </script>

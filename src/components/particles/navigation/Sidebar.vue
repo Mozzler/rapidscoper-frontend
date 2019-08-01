@@ -1,70 +1,45 @@
 <template>
   <v-navigation-drawer
     v-model="drawer"
-    :mini-variant="minified"
-    permanent
-    clipped
-    fixed
+    permanent clipped fixed
     class="sidebar"
+    width="272"
     app>
 
-    <v-btn icon @click.stop="updateState">
-      <v-icon v-if="!minified">chevron_left</v-icon>
-      <v-icon v-else>chevron_right</v-icon>
-    </v-btn>
-    <div class="sidebar-header" v-if="!minified">
-      <v-icon class="sidebar-notification">notifications</v-icon>
+    <div class="sidebar__header" v-if="user">
+      <!--<v-icon class="sidebar__notification">
+        notifications
+      </v-icon>-->
       <div class="sidebar-header__img">
-        <img src="@/assets/img/user.png"/>
+        <img :src="user.avatarUrl"/>
       </div>
       <div class="text-bold">
-        Jennifer Foster
+        {{ user.firstName ? user.firstName : ''}} {{ user.lastName ? user.lastName : '' }}
         <span class="menu-bottom">
-          <dropdown :list="settings"
-                    @update="value => handleDropdown(value)" />
+          <dropdown
+            :list="settings"
+            @update="value => handleDropdown(value)" />
         </span>
       </div>
     </div>
 
-    <div class="sidebar-scroll">
-      <v-list>
-        <v-list-tile v-for="(item, key) in items" :key="key" class="sidebar__item"
-          :class="{'sidebar__item--active': $route.params.name === itemToParam(item.title)}"
-          @click="goTo(item.title, 'dashboard')">
-            <v-list-tile-content>
-              <v-list-tile-title>
-                <v-icon v-if="minified">{{item.icon}}</v-icon>
-                <v-layout v-else align-center justify-space-between row fill-height>
-                    <span>{{ item.title }}</span>
-                    <span class="text-greyed">{{ item.number }}</span>
-                </v-layout>
-              </v-list-tile-title>
-            </v-list-tile-content>
-        </v-list-tile>
-        <div @click="() => teamMenu = !teamMenu" class="sidebar-section"
-             :class="{'text-primary': team && minified}">
-          Teams
-        </div>
-      </v-list>
+    <div class="sidebar__scroll">
+      <sidebar-list
+        :list="items"
+        :active="$route.params.name"
+        :indicator="'title'"
+        @go="value => goTo(`/dashboard/${value}`)" />
 
-      <absolute-menu v-if="minified"
-        :x="22" :y="230" :visible="teamMenu">
-        <template #content>
-          <team-list />
-        </template>
-      </absolute-menu>
-
-      <team-list v-else />
-
-      <div class="sidebar-add" @click="showAddTeamModal">
-        <v-icon>add</v-icon>
-        <span v-if="!minified">
-          Add team
-        </span>
-      </div>
+      <sidebar-list
+        title="Teams"
+        btn="Add team"
+        :list="teams"
+        :active="$route.params.name"
+        @add="showAddTeamModal"
+        @go="toTeams" />
     </div>
 
-    <div class="sidebar-footer" v-if="!minified">
+    <div class="sidebar__footer">
       <logo-rapid-scope />
     </div>
 
@@ -75,16 +50,14 @@
 <script>
 import LogoRapidScope from '../icons/LogoRapidScope';
 import Navigation from '@/mixins/navigation';
-import TeamList from "../lists/TeamList";
-import AbsoluteMenu from "../menus/AbsoluteMenu";
 import AddTeamModal from "@/components/particles/modals/AddTeam";
 import Dropdown from "../menus/Dropdown";
+import SidebarList from "../lists/SidebarList";
 
 export default {
   name: 'Sidebar',
   components: {
-    AbsoluteMenu,
-    TeamList,
+    SidebarList,
     LogoRapidScope,
     AddTeamModal,
     Dropdown
@@ -102,50 +75,69 @@ export default {
       items: [
         {
           title: 'All projects',
-          number: 24,
+          number: 0,
           icon: 'list_alt'
         },
         {
           title: 'Shared with me',
-          number: 4,
+          number: 0,
           icon: 'share'
         },
-        {
+        /*{
           title: 'Archived',
           number: 12,
           icon: 'archive'
-        }
+        }*/
       ]
     };
   },
   computed: {
-    minified () {
-      return this.$store.state.auth.minified;
+    teams () {
+      return this.$store.getters['entity/items']('team');
     },
-    team () {
-      return this.$route.params.section === 'team';
+    user () {
+      return this.$store.state.auth.user;
+    },
+    projects () {
+      return this.$store.getters['entity/items']('project');
+    },
+    totalProjects () {
+      return this.projects.length;
+    },
+    totalShared () {
+      return this.projects
+        .filter(item => item.createdUserId !== this.user.user_id)
+        .length
+        .toString();
     }
   },
+  beforeMount () {
+    this.items[0].number = this.totalProjects;
+    this.items[1].number = this.totalShared;
+  },
   methods: {
-    showAddTeamModal() {
+    toTeams (value, id) {
+      this.goTo(`/team/${id}`);
+    },
+    showAddTeamModal () {
       this.$root.$emit('add-team');
     },
-    updateState () {
-      new Promise(resolve => {
-        this.teamMenu = false;
-        resolve();
-      }).then(() => {
-        this.$store.commit('updateSidebarState', !this.minified);
-      });
-    },
-    handleDropdown(value) {
+    handleDropdown (value) {
       switch (value) {
         case 'Log out':
-          this.$store.dispatch('AUTH_LOGOUT')
+          this.$store.dispatch('auth/logout')
             .then(() => {
-              this.$router.push('/');
+              this.$router.push('/signup');
             });
       }
+    }
+  },
+  watch: {
+    totalProjects () {
+      this.items[0].number = this.totalProjects;
+    },
+    totalShared () {
+      this.items[1].number = this.totalShared;
     }
   }
 };

@@ -1,5 +1,5 @@
 <template>
-  <v-form class="signup-with-email">
+  <v-form class="signup-with-email" @keyup.native.enter="submit">
     <v-layout row wrap>
       <v-flex xs12 class="signup-input">
         <v-text-field
@@ -17,7 +17,7 @@
         <v-text-field
           :key="`${action}-password`"
           name="password"
-          v-validate="'required|min:6|max:255'"
+          v-validate="'required|min:6|max:30'"
           v-model="user.password"
           placeholder="Password"
           :error-messages="errors.first('password')"
@@ -27,9 +27,11 @@
         ></v-text-field>
       </v-flex>
       <v-flex xs12>
-        <v-btn class="btn-rapid primary submit-btn mt-5px" block large @click="submit">
-          {{ type }} with Email
-        </v-btn>
+        <v-btn class="btn-rapid primary submit-btn mt-5px"
+               block large
+               @click="submit"
+               :disabled="processing"
+        > {{ type }} with Email </v-btn>
       </v-flex>
       <v-flex xs12 v-if="type !== 'Sign Up'">
         <p class="forgot-link">
@@ -43,9 +45,6 @@
 </template>
 
 <script>
-
-import * as actionConst from '../../../store/actions/auth';
-
 export default {
   name: 'SignupForm',
   props: {
@@ -64,7 +63,13 @@ export default {
   }),
   computed: {
     action () {
-      return this.type === 'Sign Up' ? actionConst.AUTH_REGISTER : actionConst.AUTH_LOGIN;
+      return this.type === 'Sign Up' ? 'signup' : 'login';
+    },
+    route () {
+      return this.type === 'Sign Up' ? '/create-account' : '/';
+    },
+    authorized () {
+      return this.$store.state.auth.user;
     }
   },
   methods: {
@@ -72,16 +77,28 @@ export default {
       this.processing = true;
 
       let result = await this.$validator.validate();
+      result ? this.send() : this.processing = false;
+    },
+    send (action = this.action) {
+      this.$store.dispatch(`auth/${action}`, this.user)
+        .then(response => {
+          if (!response.error) {
+            action === 'login' ? this.login() : this.send('login');
+          }
+        }).catch(error => {
+          const msg = { field: 'email', msg: error.message };
+          this.errors.add(msg);
+          this.processing = false;
+        });
+    },
+    login () {
+      this.connect('user', 'auth/update', null, true, () => {
+        const props = this.authorized.firstName && this.authorized.lastName;
+        const url = !props ? '/create-account' : '/';
 
-      if (result) {
-        this.processing = true;
-        await this.$store.dispatch(this.action, this.user);
-
-        let route = this.type !== 'Sign Up' ? '/' : 'create-account';
-        this.$router.push(route);
-      } else {
+        this.$router.push(url);
         this.processing = false;
-      }
+      });
     }
   },
   watch: {

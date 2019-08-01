@@ -80,7 +80,7 @@ export default {
   },
   computed: {
     isMobileDevice() {
-      return this.$store.state.auth.isMobileDevice;
+      return this.$store.state.system.isMobileDevice;
     }
   }
 };

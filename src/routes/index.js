@@ -4,8 +4,7 @@ import Router from 'vue-router';
 import SignupRoutes from './signup';
 import DashboardRoutes from './dashboard';
 
-import store from "../store";
-import {IS_AUTHENTICATED} from "../store/actions/auth";
+import store from '../store';
 
 Vue.use(Router);
 
@@ -13,25 +12,28 @@ const router = new Router({
   mode: 'history',
   routes: [
     {
-      path: '*',
+      path: '/',
       redirect: '/dashboard/all-projects'
     },
     ...DashboardRoutes,
-    ...SignupRoutes
+    ...SignupRoutes,
   ]
 });
 
 router.beforeEach((to, from, next) => {
 
-  let authenticated = store.getters[IS_AUTHENTICATED];
+  const user = store.state.auth.user;
+  const authenticated = user !== null;
 
-  if(to.meta.guest && authenticated) {
-    next('/dashboard');
-  }
-  else if(to.meta.requiresAuth && !authenticated) {
+  if (authenticated && user.firstName && to.name === 'create-account') {
+    next('/');
+  } else if (authenticated && !user.firstName && to.name !== 'create-account') {
+    next('/create-account');
+  } else if (to.meta.guest && authenticated) {
+    next('/');
+  } else if (to.meta.requiresAuth && !authenticated) {
     next('/signup');
-  }
-  else {
+  } else {
     next();
   }
 });

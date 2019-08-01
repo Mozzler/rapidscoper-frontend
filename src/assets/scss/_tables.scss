@@ -11,10 +11,9 @@
   cursor: default;
   box-shadow: 0 2px 3px rgba(0,0,0, 0.2);
   border-radius: 4px;
-  position: relative;
 
   thead {
-    tr {
+    tr:not(.v-datatable__progress) {
       margin: 20px;
       height: 48px !important;
     }
@@ -25,12 +24,12 @@
 
     .tr-border {
       width: calc(100% - 48px);
-      border-bottom: 1px solid $grey1;
+      border-bottom: 1px solid $light-grey;
       position: absolute;
       margin: 0 24px;
     }
 
-    tr {
+    tr:not(.v-datatable__progress) {
       height: 55px;
       border-bottom: none !important;
     }
@@ -70,11 +69,7 @@
     position: relative;
     width: 24px;
     height: 24px;
-    margin: 0 8px 0 0;
-  }
-
-  .v-datatable__progress {
-    display: none;
+    margin: 0 !important;
   }
 
   .v-icon {

@@ -1,10 +1,5 @@
 .v-text-field--solo .v-input__control .v-input__slot {
-  border: 1px solid $grey;
-  box-shadow: none !important;
-  font-size: 14px !important;
-  height: 40px !important;
-  min-height: auto;
-  border-radius: 4px !important;
+  @include rapid-input;
 }
 
 .v-input {
@@ -45,6 +40,21 @@
   min-height: 80px;
 }
 
+.signup-loader {
+  display: inline-block;
+  width: 120px;
+  height: 120px;
+  background: $white;
+  border: 1px solid $light-grey;
+  box-sizing: border-box;
+  border-radius: 50%;
+  cursor: pointer !important;
+
+  svg {
+    margin-top: 43px;
+  }
+}
+
 .forgot-link {
   margin-top: 26px;
 }
@@ -65,4 +75,105 @@
     top: 3px;
     right: 6px;
   }
+}
+
+.editor {
+  border: 1px solid green;
+}
+
+.user-story__item--1 {
+  margin-left: 16px;
+}
+.user-story__item--2 {
+  margin-left: 32px;
+}
+
+.phone-input {
+  @include rapid-input;
+  display: block;
+
+  &:focus-within {
+    border-color: $primary !important;
+  }
+
+  input {
+    padding: 0 !important;
+  }
+
+  .dropdown {
+    border-radius: 4px;
+    outline: none;
+    margin: 1px;
+
+    .country-code {
+      font-size: 14px;
+      font-family: 'Lato';
+      color: rgba(0,0,0,.87);
+      font-weight: 400;
+    }
+    ul {
+      width: 254px;
+      @include rapid-scroll;
+      margin-top: 4px !important;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.9);
+
+      .dropdown-item {
+        padding: 4px 7px;
+        height: 38px !important;
+        display: flex;
+        align-items: center;
+
+        strong {
+          margin: 0 5px;
+        }
+      }
+    }
+
+    .highlighted {
+      background: $light-primary !important;
+    }
+  }
+
+  &.disabled {
+    .country-code, input {
+      color: rgba(0,0,0, .38) !important;
+    }
+  }
+}
+
+.input-without-border {
+  .v-input__slot {
+    border: none !important;
+    padding: 0 !important;
+
+    input {
+      font-size: 24px !important;
+      line-height: 29px !important;
+      color: $black !important;
+      font-weight: bold;
+    }
+  }
+}
+
+.error-message {
+  color: $error;
+  font-size: 12px;
+  margin-top: 5px;
+  text-align: left !important;
+  font-weight: bold;
+}
+
+.select-in-input {
+  position: absolute;
+  right: 0;
+  margin-top: 10px;
+  margin-right: 8px;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active  {
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
 }

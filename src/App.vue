@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-content class="theme--rapid" :class="{'padding-left--50': sidebarMini}">
+    <v-content class="theme--rapid">
       <router-view />
     </v-content>
 
@@ -47,14 +47,36 @@ export default {
   mixins: [
     ResizeMixin
   ],
+  created () {
+    this.$socket.init();
+  },
+  beforeMount () {
+    this.initConnect();
+  },
   computed: {
-    sidebarMini () {
-      return this.$store.state.auth.minified;
+    user () {
+      return this.$store.state.auth.user;
     },
-    authenticated() {
-      return this.$store.state.auth.is_authenticated;
+    authenticated () {
+      return this.user !== null;
     }
   },
+  beforeDestroy () {
+    this.$socket.disconnect();
+  },
+  methods: {
+    initConnect () {
+      if (this.authenticated && this.user.access_token) {
+        this.connect('user', 'auth/update');
+        this.connect('team', 'entity/setList');
+      }
+    }
+  },
+  watch: {
+    authenticated () {
+      this.initConnect();
+    }
+  }
 };
 </script>
 

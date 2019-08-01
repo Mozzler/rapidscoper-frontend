@@ -6,8 +6,9 @@
     </div>
 
     <v-data-table
+      :loading="initialization"
       :headers="headers"
-      :items="items"
+      :items="projects"
       item-key="name"
       :hide-actions="true"
       class="dashboard-table projects-table">
@@ -15,17 +16,21 @@
       <template v-slot:items="props">
         <tr @click="props.expanded = !props.expanded">
           <td>
-            {{ props.item.name }}
+            <div @click="() => goTo(props.item.name, props.item.id)" class="cursor-pointer">
+              {{ props.item.name }}
+            </div>
             <span class="index" v-if="props.item.index">
               {{ props.item.index }}
             </span>
           </td>
           <td>
             <v-layout align-center justify-start row fill-height>
-              <img src="@/assets/img/user.png" v-for="i in 3" :key="i"/>
+              <v-flex v-for="i in 3" :key="i" shrink mr-2>
+                <img src="@/assets/img/user.png" />
+              </v-flex>
             </v-layout>
           </td>
-          <td>{{ props.item.last_changes }}</td>
+          <td>{{ props.item.updatedAt | toDate }}</td>
           <td>
             <v-layout align-center justify-space-between row fill-height>
               <v-icon>share</v-icon>
@@ -41,9 +46,14 @@
 
 <script>
 import Dropdown from "../menus/Dropdown";
+import Navigation from "@/mixins/navigation";
+
 export default {
   name: 'Projects',
   components: {Dropdown},
+  mixins: [
+    Navigation
+  ],
   data () {
     return {
       active: 'Active',
@@ -70,28 +80,23 @@ export default {
           value: 'actions'
         }
       ],
-      items: [
-        {
-          name: 'Skellorbit',
-          index: 4,
-          last_changes: 'a day ago'
-        },
-        {
-          name: 'Skellorbit',
-          index: 4,
-          last_changes: '2 days ago'
-        },
-        {
-          name: 'Skellorbit',
-          index: null,
-          last_changes: 'a day ago'
-        }
-      ]
+      loading: true
     };
+  },
+  methods: {
+    goTo (item, id) {
+      const url = `/projects/${id}/user-story/section/edit`;
+      this.$router.push(url);
+    }
+  },
+  computed: {
+    projects () {
+      return this.$store.getters['entity/items']('project')
+        .filter(item => item.teamId === this.activeTeamId);
+    },
+    activeTeamId () {
+      return this.$route.params.name;
+    }
   }
 };
 </script>
-
-<style scoped>
-
-</style>

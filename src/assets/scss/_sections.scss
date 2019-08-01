@@ -19,3 +19,100 @@
 .dashboard-content {
   margin-top: 24px;
 }
+
+.user-story__block {
+  margin-bottom: 64px;
+  display: block;
+  position: relative;
+}
+
+.user-story__block--blur {
+  filter: blur(1px);
+}
+
+.user-story__container {
+  position: absolute;
+  width: 100%;
+}
+
+.user-story {
+  border-radius: 4px;
+  margin-bottom: 15px;
+  padding: 2px;
+  background-color: $white;
+  position: relative;
+  display: block;
+  outline: none;
+}
+.user-story--active {
+  background-color: $light-grey-1;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.user-story__tools {
+  padding: 0 24px;
+}
+
+.user-story__prefix {
+  color: rgba(0, 0, 0, 0.7);
+  cursor: default;
+}
+
+.user-story__wysiwyg {
+  position: relative;
+  width: 100%;
+}
+
+.user-story__input {
+  width: 32px;
+  height: 24px;
+  background: $white;
+  border: 1px solid $light-grey;
+  box-sizing: border-box;
+  border-radius: 2px;
+  text-indent: 5px;
+}
+
+.user-story__placeholder {
+  position: absolute;
+  width: 100%;
+  color: $white;
+}
+
+.user-story__editable {
+  position: relative;
+  width: 100%;
+}
+
+.user-story__editable, .user-story__input {
+  caret-color: $light-blue;
+
+  &:focus {
+    outline: none;
+  }
+  &::selection {
+    background-color: $light-primary;
+  }
+}
+
+.user-story__loader {
+  color: $light-primary;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.user-story__editable--actor {
+  @include set-bottom-border($light-green);
+}
+
+.user-story__editable--requirement {
+  @include set-bottom-border($light-blue);
+}
+
+.user-story__editable--field {
+  @include set-bottom-border($light-red);
+}

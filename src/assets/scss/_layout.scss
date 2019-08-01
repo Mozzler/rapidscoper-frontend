@@ -1,0 +1,40 @@
+@import "containers/stories";
+
+
+.dashboard-container {
+  display: grid;
+  grid-auto-rows: 100vh;
+  grid-template-columns: 272px auto repeat(12, 1fr) auto;
+  grid-template-areas: "sidebar . content .";
+  grid-gap: 10px;
+}
+
+.rapid-sidebar {
+  grid-area: sidebar;
+}
+
+.rapid-content {
+  grid-area: content;
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-gap: 16px;
+  grid-auto-rows: minmax(100px, auto);
+}
+
+.column {
+  grid-column: 1 / 12;
+  grid-row: 1;
+}
+
+.loader-shadow {
+  @include loader-position(56px, 64px);
+
+}
+
+.loader-shadow--without-padding {
+  @include loader-position(0px, 0px);
+}
+

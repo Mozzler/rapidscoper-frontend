@@ -1,0 +1,32 @@
+.hint {
+  background-color: $white;
+  position: fixed;
+  z-index: 999;
+  margin: 4px 0;
+  width: 210px;
+  box-shadow: 0 0 2px 0 rgba(0,0,0,0.75);
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.hint__item {
+  padding: 5px 15px;
+  cursor: pointer;
+  color: $light-black;
+  line-height: 30px;
+}
+
+.hint__item--active {
+  background-color: $light-grey;
+}
+
+.hint__item-text {
+  display: inline;
+  border-bottom: 2px solid $light-green;
+}
+
+.hint__bordered {
+  border-top: 1px solid $light-grey;
+}

@@ -9,6 +9,7 @@
             <change-password-form v-if="$route.name === 'change-password'"/>
             <create-account-form v-if="$route.name === 'create-account'"/>
             <accept-invite-form v-if="$route.name === 'accept-invite'"/>
+            <create-team v-if="$route.name === 'create-team'"/>
           </v-flex>
         </v-layout>
       </v-container>
@@ -21,6 +22,7 @@ import ForgotPasswordForm from '../../particles/forms/ForgotPasswordForm';
 import ChangePasswordForm from '../../particles/forms/ChangePasswordForm';
 import CreateAccountForm from '../../particles/forms/CreateAccountForm';
 import AcceptInviteForm from '../../particles/forms/AcceptInviteForm';
+import CreateTeam from '../../particles/forms/CreateTeam';
 import AppHeader from '../../particles/navigation/Header';
 
 export default {
@@ -30,6 +32,7 @@ export default {
     ChangePasswordForm,
     CreateAccountForm,
     AcceptInviteForm,
+    CreateTeam,
     AppHeader
   }
 };

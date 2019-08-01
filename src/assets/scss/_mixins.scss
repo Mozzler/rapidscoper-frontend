@@ -1,0 +1,60 @@
+@mixin rapid-input () {
+  border: 1px solid $grey;
+  box-shadow: none !important;
+  font-size: 14px !important;
+  height: 40px !important;
+  min-height: auto;
+  border-radius: 4px !important;
+}
+
+@mixin label-generator() {
+  $colours:
+    "green" $light-green,
+    "blue" $light-blue,
+    "red" $light-red,
+    "yellow" $light-yellow,
+    "grey" $light-grey;
+
+  @each $color in $colours {
+    .label--#{nth($color, 1)} {
+      background-color: nth($color, 2);
+      border: 1px solid nth($color, 2);
+    }
+  }
+}
+
+@mixin set-bottom-border($color) {
+  border-bottom: 2px solid $color;
+  cursor: pointer;
+}
+
+@mixin rapid-scroll () {
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    border-radius: 3px;
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba($primary, 0.7);
+    outline: 1px solid slategrey;
+    border-radius: 3px;
+  }
+}
+
+@mixin loader-position($left, $top) {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: $light-grey-rgb;
+  width: calc(100% - #{$left});
+  height: calc(100% - #{$top});
+  left: $left;
+  top: $top;
+  z-index: 999;
+  color: $light-primary;
+}

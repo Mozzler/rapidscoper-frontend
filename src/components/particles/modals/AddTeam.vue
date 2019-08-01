@@ -1,6 +1,6 @@
 <template>
   <v-layout row justify-center>
-    <v-dialog v-model="dialog" max-width="416">
+    <v-dialog v-model="dialog" max-width="416" persistent>
       <v-card class="modal-card">
 
         <div class="modal-header">
@@ -20,7 +20,9 @@
                 key="team name"
                 name="Team name"
                 placeholder="Team name"
-                v-model="team"
+                v-model="data.name"
+                v-validate="'required|min:2|max:100'"
+                :disabled="processing"
                 :error-messages="errors.first('Team name')"
                 solo
               ></v-text-field>
@@ -34,7 +36,8 @@
               Cancel
             </v-btn>
             <v-btn class="btn-rapid primary" large
-                   @click="closeModal">
+                   :disabled="processing"
+                   @click="submit">
               {{ isMobileDevice ? 'Create' : 'Create team' }}
             </v-btn>
           </v-flex>
@@ -45,21 +48,32 @@
 </template>
 
 <script>
-  import ModalMixin from '@/mixins/modal';
+import ModalMixin from '@/mixins/modal';
 
-  export default {
-    name: "add-team",
-    mixins: [
-      ModalMixin
-    ],
-    data() {
-      return {
-        team: null,
+export default {
+  name: "add-team",
+  mixins: [
+    ModalMixin
+  ],
+  data () {
+    return {
+      data: {
+        name: null
       }
+    };
+  },
+  methods: {
+    initData () {
+      this.data.name = null;
     },
+    getPayload () {
+      return {
+        entity: 'team',
+        action: 'entity/create',
+        recreate: true,
+        data: this.data
+      };
+    }
   }
+};
 </script>
-
-<style scoped>
-
-</style>

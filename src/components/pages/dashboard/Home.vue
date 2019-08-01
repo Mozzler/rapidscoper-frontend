@@ -1,6 +1,6 @@
 <template>
   <v-layout align-start justify-start row fill-height>
-    <sidebar />
+    <sidebar class="dashboard-sidebar" />
     <v-flex align-self-baseline class="dashboard-content">
       <dashboard-content v-if="route === 'dashboard'" />
       <team-content v-else-if="route === 'team'" />
@@ -19,6 +19,9 @@ export default {
     DashboardContent,
     TeamContent,
     Sidebar
+  },
+  beforeMount () {
+    this.connect('project', 'entity/setList');
   },
   computed: {
     route () {

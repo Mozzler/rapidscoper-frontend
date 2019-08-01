@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-layout align-center justify-space-between row fill-height>
-      <h1>{{ toTitle($route.params.name) }}</h1>
+      <h1>{{ team.name }}</h1>
       <dashboard-action-btn
         v-if="btnText"
         :text="btnText"
@@ -15,7 +15,7 @@
         </template>
       </dashboard-action-btn>
     </v-layout>
-    <v-tabs fixed-tabs class="tabs">
+    <v-tabs fixed-tabs class="tabs team-tabs">
       <v-tab v-for="tab in tabs" :key="tab" @click="setTab(tab)">
         {{ tab }}
       </v-tab>
@@ -52,12 +52,12 @@ export default {
   },
   data () {
     return {
-      tabs: ['Projects', 'Users', 'Billing', 'Advanced'],
+      tabs: ['Projects', 'Users', /*'Billing', 'Advanced'*/],
       activeTab: 'Projects',
 
       modals: {
         Projects: 'create-project',
-        Users: 'invite-user',
+        Users: 'invite-user'
       }
     };
   },
@@ -65,9 +65,9 @@ export default {
     setTab (item) {
       this.activeTab = item;
     },
-    showModal() {
+    showModal () {
       this.$root.$emit(this.modals[this.activeTab]);
-    },
+    }
   },
   computed: {
     btnText () {
@@ -79,6 +79,16 @@ export default {
         default:
           return null;
       }
+    },
+    activeTeamId () {
+      return this.$route.params.name;
+    },
+    teams () {
+      return this.$store.getters['entity/items']('team');
+    },
+    team () {
+      const filtered = this.teams.filter(item => item.id === this.activeTeamId);
+      return filtered[0];
     }
   }
 };

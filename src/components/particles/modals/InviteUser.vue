@@ -1,6 +1,6 @@
 <template>
   <v-layout row justify-center>
-    <v-dialog v-model="dialog" max-width="608">
+    <v-dialog v-model="dialog" max-width="608" persistent>
       <v-card class="modal-card">
 
         <div class="modal-header">
@@ -20,14 +20,11 @@
                   placeholder="Invite someone..."
                   solo
                 ></v-text-field>
-                <v-autocomplete
-                  ref="select"
-                  v-model="user.role"
-                  :items="roles"
-                  placeholder="Select..."
-                  required
-                  class="rapid-select select-in-input"
-                ></v-autocomplete>
+                <div class="select-in-input">
+                  <dropdown :list="roles"
+                            :selected="user.role"
+                            @update="value => user.role = value" />
+                </div>
               </div>
             </v-flex>
 
@@ -51,23 +48,30 @@
 </template>
 
 <script>
-  import ModalMixin from '@/mixins/modal';
+import ModalMixin from '@/mixins/modal';
+import Dropdown from "@/components/particles/menus/Dropdown";
 
-  export default {
-    name: 'invite-user',
-    mixins: [
-      ModalMixin
-    ],
-    data() {
-      return {
-        user: {
-          role: 'Full Member',
-          entity: null
-        },
-        roles: [
-          'Manager', 'Full Member', 'Client'
-        ],
-      }
-    },
-  };
+export default {
+  name: 'invite-user',
+  components: { Dropdown },
+  mixins: [
+    ModalMixin
+  ],
+  data () {
+    return {
+      user: null,
+      roles: [
+        'Manager', 'Member', 'Client'
+      ]
+    };
+  },
+  methods: {
+    initData () {
+      this.user = {
+        role: 'Member',
+        entity: null
+      };
+    }
+  }
+};
 </script>
