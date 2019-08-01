@@ -18,18 +18,15 @@
            @keypress="$event => toolKey($event, item.id)">
 
         <div class="user-story__tools" v-if="(toolDictionary && toolId === item.id)">
-          <circular-loader
-            cls="loader-shadow--without-padding"
-            :size="50"
-            :width="5"
-            :visible="toolProcessing"
-          />
           <tool-list
             :key="tab"
             :active="item[tab]"
             :list="toolDictionary"
             :label-cls="'tool-block__label--minified'"
-            @update="updateToolId"/>
+            :loader="toolProcessing &&
+              toolProcessing.type === tab &&
+              toolProcessing.id === item.id"
+            @update="id => submitTool(id)"/>
         </div>
 
         <v-layout row fill-height>
@@ -149,7 +146,7 @@ export default {
           }
         });
       }
-    },
+    }
   }
 };
 </script>

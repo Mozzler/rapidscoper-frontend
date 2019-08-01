@@ -7,5 +7,8 @@ export default {
   },
   setActiveEditorId (state, data) {
     state.activeEditorId = data;
+  },
+  setToolProcessing (state, data) {
+    state.toolProcessing = data;
   }
 };

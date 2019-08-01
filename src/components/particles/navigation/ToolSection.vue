@@ -22,13 +22,12 @@
       <div class="section__title">
         Priority
       </div>
-      <div class="tool-block__text">
-        <tool-list
-          :active="story.priority"
-          :list="priorities"
-          :shortcutted="false"
-          @update="value => updateToolId('priority', value)" />
-      </div>
+      <tool-list
+        :active="story.priority"
+        :list="priorities"
+        :shortcutted="false"
+        :loader="toolProcessing && toolProcessing.type === 'priority'"
+        @update="id => updateToolId(id, story, 'priority')" />
     </div>
 
     <div class="tool-block">
@@ -45,7 +44,8 @@
         :list="labels"
         :shortcutted="false"
         :label-cls="'tool-block__label rounded'"
-        @update="value => updateToolId('labels', value)" />
+        :loader="toolProcessing && toolProcessing.type === 'labels'"
+        @update="id => updateToolId(id, story, 'labels')" />
     </div>
 
     <!--<div class="tool-block">
@@ -67,9 +67,16 @@
 
 <script>
 import ToolList from "../lists/ToolList";
+import ProcessingMixin from '@/mixins/wysiwyg/instruments/processing';
+
 export default {
   name: "ToolSection",
-  components: { ToolList },
+  mixins: [
+    ProcessingMixin
+  ],
+  components: {
+    ToolList
+  },
   filters: {
     hours (str) {
       const estimate = `${str} hour`;
@@ -83,43 +90,12 @@ export default {
     priorities () {
       return this.$store.state.story.priority;
     },
-    activeStory () {
-      return this.$store.state.story.activeStoryOnTab ||
-        this.$store.state.story.activeEditorId;
-    },
     stories () {
       return this.$store.getters['entity/items']('story');
     },
     story () {
-      return _.find(this.stories, item => item.id === this.activeStory);
-    }
-  },
-  methods: {
-    updateToolId (key, propertyId) {
-      let query = null;
-
-      if (_.isArray(this.story[key])) {
-        query = this.story[key].includes(propertyId) ?
-          this.story[key].filter(i => i !== propertyId) :
-          [...this.story[key], ...[propertyId]];
-      } else {
-        query = propertyId;
-      }
-
-      this.$store.dispatch('entity/update', {
-        entity: 'story',
-        params: {
-          id: this.story.id
-        },
-        data: {
-          [key]: query
-        }
-      });
+      return _.find(this.stories, item => item.id === this.toolId);
     }
   }
 };
 </script>
-
-<style scoped>
-
-</style>

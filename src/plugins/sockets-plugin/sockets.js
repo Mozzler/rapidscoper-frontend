@@ -91,7 +91,7 @@ class MongoSockets {
           });
 
           if (response.model === 'story') {
-            app.$root.$emit('stop-tool-processing', response.fullDocument._id);
+            store.commit('story/setToolProcessing', null);
           }
 
           if (response.model === 'section') {

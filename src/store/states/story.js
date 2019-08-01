@@ -7,5 +7,6 @@ export default {
   ],
   adjustConstructions: {},
   activeStoryOnTab: null,
-  activeEditorId: null
+  activeEditorId: null,
+  toolProcessing: null
 };

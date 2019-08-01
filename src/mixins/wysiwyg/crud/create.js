@@ -4,16 +4,10 @@ export default {
       nextIdToFocus: false
     };
   },
-  beforeMount () {
-    this.$root.$on('stop-processing', this.stopProcessing);
-  },
-  beforeDestroy () {
-    this.$root.$off('stop-processing', this.stopProcessing);
-  },
   methods: {
     async stopProcessing () {
       this.processing = null;
-       await this.$nextTick();
+      await this.$nextTick();
 
       if (this.$refs[this.nextIdToFocus]) {
         this.$refs[this.nextIdToFocus][0].focus();
