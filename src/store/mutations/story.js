@@ -4,5 +4,8 @@ export default {
   },
   setActiveStoryOnTab (state, data) {
     state.activeStoryOnTab = data;
+  },
+  setActiveEditorId (state, data) {
+    state.activeEditorId = data;
   }
 };

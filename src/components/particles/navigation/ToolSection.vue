@@ -1,11 +1,11 @@
 <template>
-  <div class="tool-section pt-4">
+  <div class="tool-section pt-4" v-if="activeStory">
     <div class="tool-block">
       <div class="section__title">
         ID
       </div>
       <div class="tool-section__text">
-        S012
+        {{ story.storyIdentifier }}
       </div>
     </div>
 
@@ -14,7 +14,7 @@
         Estimate
       </div>
       <div class="tool-block__text">
-        2 hours
+        {{ story.estimate | hours }}
       </div>
     </div>
 
@@ -24,18 +24,26 @@
       </div>
       <div class="tool-block__text">
         <tool-list
-          :list="labels"
-          :active="label" />
+          :active="story.priority"
+          :list="priorities"
+          :shortcutted="false" />
       </div>
     </div>
 
     <div class="tool-block">
-      <div class="section__title">
-        Labels
-      </div>
+      <v-layout align-start justify-space-between row fill-height >
+        <div class="section__title">
+          Labels
+        </div>
+        <div class="section__ref">
+          Settings
+        </div>
+      </v-layout>
       <tool-list
-        :list="priorities"
-        :active="priority" />
+        :active="story.labels"
+        :list="labels"
+        :shortcutted="false"
+        :label-cls="'tool-block__label rounded'" />
     </div>
 
     <!--<div class="tool-block">
@@ -59,11 +67,11 @@
 import ToolList from "../lists/ToolList";
 export default {
   name: "ToolSection",
-  components: {ToolList},
-  data () {
-    return {
-      label: 1,
-      priority: 1
+  components: { ToolList },
+  filters: {
+    hours (str) {
+      const estimate = `${str} hour`;
+      return Number(str) > 1 ? `${estimate}s` : estimate;
     }
   },
   computed: {
@@ -72,8 +80,18 @@ export default {
     },
     priorities () {
       return this.$store.state.story.priority;
+    },
+    activeStory () {
+      return this.$store.state.story.activeStoryOnTab ||
+        this.$store.state.story.activeEditorId;
+    },
+    stories () {
+      return this.$store.getters['entity/items']('story');
+    },
+    story () {
+      return _.find(this.stories, item => item.id === this.activeStory);
     }
-  },
+  }
 };
 </script>
 

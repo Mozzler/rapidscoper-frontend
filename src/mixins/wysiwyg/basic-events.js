@@ -11,6 +11,7 @@ export default {
       this.focused = index;
       this.etalon = { ...item };
       this.hintEditor = null;
+      this.$store.commit('story/setActiveEditorId', this.etalon.id);
     },
     keyupEvent ($event) {
       this.event = $event;

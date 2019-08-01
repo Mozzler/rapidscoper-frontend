@@ -4,8 +4,13 @@
          :class="`${labelCls} label--${type(item)} ${outline(index)}`"
          :key="index"
          @click="() => $emit('update', index)">
-      <span class="text-underlined">{{ item.charAt(0) }}</span>
-      <span>{{ item.slice(1) }}</span>
+      <template v-if="shortcutted">
+        <span class="text-underlined">{{ item.charAt(0) }}</span>
+        <span>{{ item.slice(1) }}</span>
+      </template>
+      <template v-else>
+        <span>{{ item }}</span>
+      </template>
     </div>
   </div>
 </template>
@@ -27,6 +32,9 @@ export default {
     labelCls: {
       type: String,
       default: 'tool-block__label'
+    },
+    shortcutted: {
+      default: true
     }
   },
   mixins: [
