@@ -131,6 +131,7 @@
 }
 
 .sidebar__icon--active {
+  color: $primary;
   svg {
     fill: $primary;
   }

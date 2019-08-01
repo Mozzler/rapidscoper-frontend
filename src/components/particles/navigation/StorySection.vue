@@ -2,8 +2,8 @@
   <div class="sidebar story-section pt-4">
     <sidebar-list
       :title="title"
-      btn="Add section"
-      :list="sections"
+      :btn="addBtn"
+      :list="list"
       :active="$route.params.section"
       @go="(value, id) => goTo(id)"
       @add="addSection" />
@@ -22,17 +22,47 @@ export default {
   mixins: [
     Navigation
   ],
+  data () {
+    return {
+      addBtn: 'Add section',
+      list: null
+    };
+  },
   computed: {
     sections () {
       return this.$store.getters['entity/items']('section');
     },
     title () {
-      switch (this.$route.params.storyType) {
-        case 'user-story':
-          return 'user story sections';
-        case 'technical-story':
-          return 'technical story sections';
+      let title = '';
+
+      switch (this.$route.name) {
+        case 'stories':
+          if (this.$route.params.storyType === 'user-story') {
+            title = 'user story sections';
+          }
+          if (this.$route.params.storyType === 'technical-story') {
+            title = 'technical story sections';
+          }
+
+          this.list = this.sections;
+          break;
+        case 'dictionary':
+          const items = ['Actors', 'API Endpoints', 'Fields', 'Models', 'Other'];
+
+          this.addBtn = '';
+          this.list = _.map(items, (item, index) => {
+            return {
+              name: item,
+              id: index
+            };
+          });
+
+
+          title = 'dictionary sections';
+          break;
       }
+
+      return title;
     }
   },
   methods: {

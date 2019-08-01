@@ -73,6 +73,7 @@
   border-radius: 2px;
   cursor: pointer;
   margin: 0 0 8px 0;
+  line-height: 14px;
 }
 
 .tool-block__label {
@@ -89,7 +90,7 @@
 .tool-block__label--minified {
   @extend .tool-block__label--base;
   padding: 1px 6px;
-  margin-left: 16px;
+  margin-right: 16px;
 }
 
 .tool-block__file {
