@@ -1,7 +1,11 @@
 branch-defaults:
   staging:
-    environment: rappdio-frontend-staging
+    environment: rapidscoper-frontend-staging
     group_suffix: null
+environment-defaults:
+  rappdio-frontend-staging:
+    branch: null
+    repository: null
 global:
   application_name: rapidscoper-frontend
   branch: null
