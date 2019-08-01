@@ -66,6 +66,10 @@
   width: 100%;
 }
 
+.user-story__wysiwyg--disabled {
+  pointer-events: none;
+}
+
 .user-story__input {
   width: 32px;
   height: 24px;

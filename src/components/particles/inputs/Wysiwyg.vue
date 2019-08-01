@@ -57,6 +57,7 @@
               <div :contenteditable="processing !== item.id && tab === 'edit'"
                    :disabled="processing === item.id"
                    class="user-story__editable"
+                   :class="{'user-story__wysiwyg--disabled': tab !== 'edit'}"
                    :ref="item.id"
                    tabindex="2"
                    @focus="() => focusEvent(item, index)"
