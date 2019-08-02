@@ -75,7 +75,7 @@ export default {
         this.submitField(chapter, text);
       }
 
-      const spans = this.getSpanList(false);
+      let spans = this.getSpanList(false);
 
       let index = null;
       spans.forEach((item, i) => {
@@ -86,10 +86,18 @@ export default {
 
       if (index !== null) {
         spans[index] = this.createSpan(chapter, text, false, false);
-        this.list[this.focused].markup = spans.map(item => item.replace(/&nbsp;/gi, '')).join('&nbsp;');
+
+        if (chapter === 'requirement') {
+          spans = spans.filter((item, i) => i <= index);
+        }
+
+        this.list[this.focused].markup = spans
+          .map(item => item.replace(/&nbsp;/gi, ''))
+          .join('&nbsp;');
       } else {
         let t = spans.join('');
-        this.list[this.focused].markup = `${t}${!t ? '' : '&nbsp;'}${this.createSpan(chapter, text, false, false)}`;
+        let span = this.createSpan(chapter, text, false, false);
+        this.list[this.focused].markup = `${t}${!t ? '' : '&nbsp;'}${span}`;
         this.setCompletion();
       }
 
