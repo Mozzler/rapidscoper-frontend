@@ -101,8 +101,13 @@ export default {
       });
     },
     goToProject (name, id) {
-      const url = `/projects/${id}/user-story/section/edit`;
-      this.$router.push(url);
+      this.$router.push({
+        name: this.$route.name,
+        params: {
+          ...this.$route.params,
+          projectId: id
+        }
+      });
     },
     toDashboard () {
       this.$router.push('/');
