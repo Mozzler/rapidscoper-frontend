@@ -18,7 +18,8 @@
       <div class="user-story__placeholder text-greyed">
         {{ !description ? 'Describe this section' : '' }}
       </div>
-      <div contenteditable class="user-story__editable"
+      <div contenteditable
+           class="user-story__editable"
            v-html="description"
            @input="event => updateSection('description', event)"
            @blur="() => updateStory('description')">

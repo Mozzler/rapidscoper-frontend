@@ -33,12 +33,13 @@ export default {
       return this.$store.getters['entity/items']('section');
     },
     dictionarySections () {
-      return this.$store.getters['story/sections'];
+      return this.$store.getters['dictionary/sections'];
     },
     content () {
       let data = {
         title: '',
-        indicator: 'id'
+        indicator: 'id',
+        addBtn: 'Add Section'
       };
 
       switch (this.$route.name) {

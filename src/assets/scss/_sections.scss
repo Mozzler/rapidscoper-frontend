@@ -109,6 +109,10 @@
   right: 0;
 }
 
+.dictionary__contenteditable {
+
+}
+
 .user-story__editable--actor {
   @include set-bottom-border($light-green);
 }
@@ -119,4 +123,22 @@
 
 .user-story__editable--field {
   @include set-bottom-border($light-red);
+}
+
+.dictionary {
+  font-size: 14px;
+  line-height: 17px;
+  color: $black;
+
+  .user-story__editable {
+    font-size: 14px;
+    line-height: 17px;
+  }
+
+  .user-story__editable--after {
+    &:after {
+      content: ':';
+      margin: 5px;
+    }
+  }
 }

@@ -8,7 +8,7 @@ export default {
   },
   computed: {
     sections () {
-      return this.$store.getters['story/sections'];
+      return this.$store.getters['dictionary/items'];
     }
   },
   methods: {
@@ -141,7 +141,7 @@ export default {
           projectId: this.list[this.focused].projectId,
           teamId: this.list[this.focused].teamId,
           name: text,
-          description: text,
+          description: 'Is is a description of this term',
           type: replacement.type,
           relatedDictionaryId: replacement.relatedDictionaryId
         }

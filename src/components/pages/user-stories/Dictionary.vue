@@ -9,21 +9,48 @@
     <div class="content-container">
       <v-layout align-start justify-center row fill-height>
         <div class="content" ref="scrollable-layout">
-          <div class="user-story__block">
-            <div class="user-story"
-                 v-for="section in vocabulary"
-                :key="section.id">
+          <div class="user-story__block"
+               v-for="section in dictionary"
+               :key="section.id">
               <h1> {{ section.name }} </h1>
-              <v-layout row fill-height
-                        v-for="word in section.list"
-                        :key="word.id">
-                <v-flex shrink mr-1>
-                  <input v-model="word.name" />
-                </v-flex>
-                <v-flex grow text-xs-left>
-                  <input v-model="word.description" />
-                </v-flex>
-              </v-layout>
+              <div class="user-story dictionary mt-4">
+                <template v-if="section.list.length">
+                  <v-layout row fill-height
+                            v-for="word in section.list"
+                            :key="word.id">
+
+                    <v-flex shrink>
+                      <div class="user-story__placeholder"
+                           v-html="'Terms'"
+                           v-if="!word.name"
+                           readonly />
+                      <div class="user-story__editable user-story__editable--after"
+                        v-html="word.name"
+                        :contenteditable="true"
+                        :ref="`name-${word.id}`"
+                        @blur="() => update(word.id, 'name')"
+                      ></div>
+                    </v-flex>
+                    <v-flex grow text-xs-left>
+                      <div class="user-story__placeholder"
+                           v-if="!word.description"
+                           v-html="'Description'"
+                           readonly />
+                      <div class="user-story__editable"
+                           v-html="word.description"
+                           :contenteditable="true"
+                           :ref="`description-${word.id}`"
+                           @blur="() => update(word.id, 'description')"
+                      ></div>
+                    </v-flex>
+                  </v-layout>
+                </template>
+                <template v-else>
+                  <div class="text-greyed full-width text-sm-center">
+                    The list of items is empty
+                  </div>
+                </template>
+
             </div>
           </div>
         </div>
@@ -52,8 +79,8 @@ export default {
     };
   },
   computed: {
-    vocabulary () {
-      return this.$store.getters['story/vocabulary'];
+    dictionary () {
+      return this.$store.getters['dictionary/items'];
     },
     activeProjectId () {
       return this.$route.params.projectId;
@@ -67,10 +94,27 @@ export default {
     }
   },
   beforeMount () {
-    this.processing = true;
-    this.connect('dictionary', 'entity/setList', this.filter, true, () => {
-      this.processing = false;
-    });
+    this.fetchData();
+  },
+  methods: {
+    fetchData () {
+      this.processing = true;
+      this.connect('dictionary', 'entity/setList', this.filter, true, () => {
+        this.processing = false;
+      });
+    },
+    update (id, property) {
+      this.submit(id, { [property]: this.$refs[`${property}-${id}`][0].innerText });
+    },
+    submit (id, data) {
+      this.$store.dispatch('entity/update', {
+        params: {
+          id: id
+        },
+        entity: 'dictionary',
+        data: data
+      });
+    }
   }
 };
 </script>
