@@ -13,11 +13,16 @@
         </span>
       </v-flex>
       <v-flex>
-        <v-tabs fixed-tabs class="tabs stories-tabs" v-model="activeTab">
-          <v-tab v-for="tab in tabs" :key="tab" @click="setTab(tab)">
-            {{ tab }}
-          </v-tab>
-        </v-tabs>
+        <template v-if="tabsPanel">
+          <v-tabs fixed-tabs class="tabs stories-tabs" v-model="activeTab">
+            <v-tab v-for="tab in tabs" :key="tab" @click="setTab(tab)">
+              {{ tab }}
+            </v-tab>
+          </v-tabs>
+        </template>
+        <template v-if="heading">
+          <div class="text-sm-center text-size--16">{{ heading }}</div>
+        </template>
       </v-flex>
       <v-flex text-xs-right>
         <!--<v-btn icon>
@@ -48,6 +53,16 @@ export default {
   mixins: [
     Navigation
   ],
+  props: {
+    tabsPanel: {
+      default: true,
+      required: false
+    },
+    heading: {
+      default: '',
+      required: false
+    }
+  },
   data () {
     return {
       project: 'Skellorbit',
