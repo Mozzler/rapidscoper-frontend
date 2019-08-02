@@ -18,7 +18,7 @@
                    :value="section.name"
                    :ref="section.id"
                    @input="$event => updateSectionName(section.id, $event)"
-                   @blur="() => update(section.id, 'name')" />
+                   @blur="() => update(section.id, 'name', section.name)" />
               </h1>
               <div class="user-story dictionary mt-4">
                 <template v-if="section.list.length">
@@ -33,7 +33,7 @@
                       <div class="user-story__editable user-story__editable--after"
                         v-html="word.name"
                         :contenteditable="true"
-                        :ref="word.id"
+                        :ref="`name-${word.id}`"
                         @blur="() => update(word.id, 'name')"
                       ></div>
                     </v-flex>
@@ -44,7 +44,7 @@
                       <div class="user-story__editable"
                            v-html="word.description"
                            :contenteditable="true"
-                           :ref="word.id"
+                           :ref="`description-${word.id}`"
                            @blur="() => update(word.id, 'description')"
                       ></div>
                     </v-flex>
@@ -114,8 +114,8 @@ export default {
         this.processing = false;
       });
     },
-    update (id, property) {
-      this.submit(id, { [property]: this.$refs[id][0].innerText });
+    update (id, property, input = this.$refs[`${property}-${id}`][0].innerText) {
+      this.submit(id, { [property]: input });
     },
     submit (id, data) {
       this.$store.dispatch('entity/update', {
