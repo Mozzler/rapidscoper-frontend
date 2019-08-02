@@ -29,8 +29,11 @@ export default {
     };
   },
   computed: {
-    sections () {
+    storySections () {
       return this.$store.getters['entity/items']('section');
+    },
+    dictionarySections () {
+      return this.$store.getters['story/sections'];
     },
     content () {
       let data = {
@@ -46,22 +49,15 @@ export default {
           if (this.$route.params.storyType === 'technical-story') {
             data.title = 'technical story sections';
           }
-          data.list = this.sections;
+          data.list = this.storySections;
 
           break;
         }
         case 'dictionary': {
-          const items = ['Actors', 'API Endpoints', 'Fields', 'Models', 'Other'];
-
           data.addBtn = '';
           data.title = 'dictionary sections';
           data.indicator = 'name';
-          data.list = _.map(items, (item, index) => {
-            return {
-              name: item,
-              id: index
-            };
-          });
+          data.list = this.dictionarySections;
 
           break;
         }

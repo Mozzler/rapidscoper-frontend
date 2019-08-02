@@ -18,7 +18,7 @@
                         v-for="word in section.list"
                         :key="word.id">
                 <v-flex shrink mr-1>
-                  <input v-model="word.field" />
+                  <input v-model="word.name" />
                 </v-flex>
                 <v-flex grow text-xs-left>
                   <input v-model="word.description" />
@@ -40,7 +40,7 @@ export default {
   name: "Dictionary",
   components: {
     StorySidebar,
-    StorySection,
+    StorySection
   },
   data () {
     return {

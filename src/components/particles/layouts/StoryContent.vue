@@ -60,7 +60,7 @@ export default {
     storyType () {
       const splitted = this.$route.params.storyType.split('-');
       return _.first(splitted);
-    },
+    }
   },
   methods: {
     setScrollListener (type = 'add') {

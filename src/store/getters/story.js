@@ -139,11 +139,15 @@ export default {
   },
 
   vocabulary (state, getters, rootState) {
+    const dictionary = rootState.entity.dictionary.items;
     const sections = getters.sections;
 
-    _.each(sections, el => {
+    _.each(dictionary, el => {
       if (el.relatedDictionaryId) {
-        const j = _.indexOf(sections, chapter => chapter.id === el.relatedDictionaryId);
+        const j = _.findIndex(sections, chapter => {
+          return chapter.id === el.relatedDictionaryId;
+        });
+
         sections[j].list.push(el);
       }
     });
