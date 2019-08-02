@@ -10,14 +10,18 @@
       <v-layout align-start justify-center row fill-height>
         <div class="content" ref="scrollable-layout">
           <div class="user-story__block">
-            <div class="user-story">
-              <h1> Actors </h1>
-              <v-layout row fill-height>
+            <div class="user-story"
+                 v-for="section in vocabulary"
+                :key="section.id">
+              <h1> {{ section.name }} </h1>
+              <v-layout row fill-height
+                        v-for="word in section.list"
+                        :key="word.id">
                 <v-flex shrink mr-1>
-                  <input v-model="item.field" />
+                  <input v-model="word.field" />
                 </v-flex>
                 <v-flex grow text-xs-left>
-                  <input v-model="item.description" />
+                  <input v-model="word.description" />
                 </v-flex>
               </v-layout>
             </div>
@@ -66,7 +70,6 @@ export default {
     this.processing = true;
     this.connect('dictionary', 'entity/setList', this.filter, true, () => {
       this.processing = false;
-      console.log(this.$store.state.entity.dictionary.items);
     });
   }
 };

@@ -125,38 +125,29 @@ export default {
     };
   },
 
-  vocabularySections () {
-    return [
-      { 'Actors': 'actor' },
-      { 'API Endpoints': 'api-endpoint' },
-      { 'Fields' : 'field' },
-      { 'Models': 'model' },
-      { 'Other': 'custom' }
-    ];
+  sections (state, getters, rootState) {
+    const dictionary = rootState.entity.dictionary.items;
+    return _.chain(dictionary)
+      .filter(item => !item.relatedDictionaryId)
+      .map(item => {
+        return {
+          ...item,
+          list: []
+        };
+      })
+      .value();
   },
 
   vocabulary (state, getters, rootState) {
-    const dictionary = rootState.entity.dictionary.items;
-    const sections = getters['vocabularySections'].map((item, key) => {
-      return {
-        [key]: []
-      };
-    });
+    const sections = getters.sections;
 
-    _.each(dictionary, item => {
-      let type = item.type;
-
-      if (item.relatedDictionaryId) {
-        type = dictionary.find(parentItem => parentItem.id === item.relatedDictionaryId);
+    _.each(sections, el => {
+      if (el.relatedDictionaryId) {
+        const j = _.indexOf(sections, chapter => chapter.id === el.relatedDictionaryId);
+        sections[j].list.push(el);
       }
     });
-/*
-    return _.mapObject(dictionary, item => {
-      return {
-        id: item.id,
-        name: item.name,
-        type:
-      }
-    });*/
+
+    return sections;
   }
 };

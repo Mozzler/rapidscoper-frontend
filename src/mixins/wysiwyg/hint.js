@@ -6,6 +6,11 @@ export default {
       }
     }
   },
+  computed: {
+    sections () {
+      return this.$store.getters['story/sections'];
+    }
+  },
   methods: {
     hideHint () {
       //this.hintEditor = null;
@@ -84,7 +89,7 @@ export default {
         this.list[this.focused].markup = spans.map(item => item.replace(/&nbsp;/gi, '')).join('&nbsp;');
       } else {
         let t = spans.join('');
-        this.list[this.focused].markup = `${t}${!t ? '' : '&nbsp;'}${this.createSpan(chapter, text, false)}`;
+        this.list[this.focused].markup = `${t}${!t ? '' : '&nbsp;'}${this.createSpan(chapter, text, false, false)}`;
         this.setCompletion();
       }
 
@@ -99,14 +104,32 @@ export default {
         return;
       }
 
+      let replacement = {
+        type: chapter,
+        relatedDictionaryId: null
+      };
+
+      // block of `field`-type always have the relatedDictionaryId
+      if (chapter === 'field') {
+        const children = this.$refs[this.list[this.focused].id][0].children;
+        const div = _.find(children, item => item.className === 'user-story__editable--requirement');
+        const section = _.find(this.sections, item => item.name === div.innerText);
+
+        replacement = {
+          type: 'requirement',
+          relatedDictionaryId: section.id
+        };
+      }
+
       this.$store.dispatch('entity/create', {
         entity: 'dictionary',
         data: {
           projectId: this.list[this.focused].projectId,
           teamId: this.list[this.focused].teamId,
-          type: chapter,
           name: text,
-          description: text
+          description: text,
+          type: replacement.type,
+          relatedDictionaryId: replacement.relatedDictionaryId
         }
       });
     }
