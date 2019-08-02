@@ -33,7 +33,8 @@ export default {
       focused: null,
       chapter: null,
       filter: null,
-      storyId: null
+      storyId: null,
+      relatedDictionary: null
     };
   },
   mounted () {
@@ -54,10 +55,27 @@ export default {
         return [];
       }
 
-      return this.chapter === 'beginning' ? this.beginnings : this.dictionary[this.chapter];
+      let list = this.dictionary[this.chapter];
+
+      if (this.chapter === 'beginning') {
+        return this.beginnings;
+      }
+
+      if (this.chapter === 'field') {
+        list = this.dictionary['requirement'];
+
+        const parent = _.find(list, item =>
+          item.type === 'requirement' && !item.relatedDictionaryId &&
+          item.name === this.relatedDictionary);
+
+        return _.filter(list, item => item.relatedDictionaryId === parent.id);
+      }
+
+      return list;
     },
     items () {
       const keyword = this.filter ? this.filter.toLowerCase() : '';
+
       return this.list.filter(item => {
         const data = this.getStrFromObj(item);
         return data.toLowerCase().includes(keyword, 0);
@@ -78,7 +96,7 @@ export default {
       $event.preventDefault();
       this.complete(value);
     },
-    async setHintState (visible, chapter = null, filter = null, position = null, storyId = null) {
+    async setHintState (visible, chapter = null, filter = null, position = null, storyId = null, relatedDictionary = null) {
       Object.assign(this.$refs.hint.style, {
         left: position.left + 'px',
         top: position.top + 'px'
@@ -88,6 +106,7 @@ export default {
       this.chapter = chapter;
       this.filter = filter;
       this.storyId = storyId;
+      this.relatedDictionary = relatedDictionary;
 
       await this.$nextTick();
     },

@@ -29,7 +29,15 @@ export default {
 
       this.hintEditor = this.list[this.focused].id;
       await this.$nextTick();
-      this.$root.$emit('set-hint-state', true, chapter, filter, position, this.list[this.focused].id);
+
+      let keyword = null;
+
+      if (chapter === 'field') {
+        let relatedDictionary = this.getParentDictionary();
+        keyword = relatedDictionary ? relatedDictionary.name : null;
+      }
+
+      this.$root.$emit('set-hint-state', true, chapter, filter, position, this.list[this.focused].id, keyword);
     },
     checkHint ($event, item) {
       this.event = $event;
@@ -119,13 +127,11 @@ export default {
 
       // block of `field`-type always have the relatedDictionaryId
       if (chapter === 'field') {
-        const children = this.$refs[this.list[this.focused].id][0].children;
-        const div = _.find(children, item => item.className === 'user-story__editable--requirement');
-        const section = _.find(this.sections, item => item.name === div.innerText);
+        const parentDictionary = this.getParentDictionary();
 
         replacement = {
           type: 'requirement',
-          relatedDictionaryId: section.id
+          relatedDictionaryId: parentDictionary.id
         };
       }
 
