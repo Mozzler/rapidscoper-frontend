@@ -20,6 +20,8 @@ import ToolSection from "../../particles/navigation/ToolSection";
 import StoryContent from "../../particles/layouts/StoryContent";
 import CircularLoader from "../../particles/loaders/Circular";
 
+import LayoutMixin from "@/mixins/layout";
+
 export default {
   name: "UserStories",
   components: {
@@ -30,9 +32,11 @@ export default {
     StoryContent,
     CircularLoader
   },
+  mixins: [
+    LayoutMixin
+  ],
   data () {
     return {
-      processing: false,
       loaded: {
         dictionary: false,
         section: false,
@@ -44,25 +48,9 @@ export default {
     sections () {
       return this.$store.getters['entity/items']('section');
     },
-    activeProjectId () {
-      return this.$route.params.projectId;
-    },
     storyType () {
       return _.first(this.$route.params.storyType.split('-'));
-    },
-    filter () {
-      return {
-        $or: [
-          { 'fullDocument.projectId': { '$in': [ this.activeProjectId ] } }
-        ]
-      };
-    },
-    loading () {
-      return (this.processing || this.initialization);
     }
-  },
-  beforeMount () {
-    this.fetchData();
   },
   methods: {
     fetchData () {
@@ -112,9 +100,6 @@ export default {
     this.resetData();
   },
   watch: {
-    activeProjectId () {
-      this.fetchData();
-    },
     storyType () {
       this.fetchData();
     },

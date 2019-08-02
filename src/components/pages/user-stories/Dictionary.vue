@@ -4,9 +4,13 @@
       :tabs-panel="false"
       :heading="'Dictionary'"
     />
+    <circular-loader
+      cls="loader-shadow"
+      :visible="loading"
+    />
+    <story-section v-if="!loading" />
     <story-sidebar />
-    <story-section />
-    <dictionary-layout />
+    <dictionary-layout v-if="!loading" />
   </div>
 </template>
 
@@ -15,6 +19,9 @@ import StoryHeader from "../../particles/navigation/StoryHeader";
 import StorySidebar from "../../particles/navigation/USidebar";
 import StorySection from "../../particles/navigation/StorySection";
 import DictionaryLayout from "../../particles/inputs/DictionaryLayout";
+import CircularLoader from "../../particles/loaders/Circular";
+
+import LayoutMixin from "@/mixins/layout";
 
 export default {
   name: "Dictionary",
@@ -22,7 +29,21 @@ export default {
     StoryHeader,
     StorySidebar,
     StorySection,
-    DictionaryLayout
+    DictionaryLayout,
+    CircularLoader
+  },
+  mixins: [
+    LayoutMixin
+  ],
+  methods: {
+    fetchData () {
+      this.connect('dictionary', 'entity/setList', this.filter, true, () => {
+        this.processing = false;
+      });
+    },
+    resetData () {
+      this.$store.commit('entity/resetList', 'dictionary');
+    }
   }
 };
 </script>
