@@ -1,15 +1,26 @@
 export default {
   sections (state, getters, rootState) {
     const dictionary = rootState.entity.dictionary.items;
-    return _.chain(dictionary)
-      .filter(item => !item.relatedDictionaryId)
-      .map(item => {
-        return {
+    const sections = [{
+      name: 'Actor',
+      type: 'actor',
+      list: []
+    }, {
+      name: 'Others',
+      type: 'custom',
+      list: []
+    }];
+
+    _.each(dictionary, item => {
+      if (item.type === 'requirement' && !item.relatedDictionaryId) {
+        sections.push({
           ...item,
           list: []
-        };
-      })
-      .value();
+        });
+      }
+    });
+
+    return sections;
   },
 
   items (state, getters, rootState) {
@@ -17,14 +28,30 @@ export default {
     const sections = getters.sections;
 
     _.each(dictionary, el => {
-      if (el.relatedDictionaryId) {
-        const j = _.findIndex(sections, chapter => {
+      let notReq = el.type !== 'requirement';
+      let req = el.relatedDictionaryId && el.type === 'requirement';
+      let j = null;
+
+      if (req) {
+        j = _.findIndex(sections, chapter => {
           return chapter.id === el.relatedDictionaryId;
         });
+      }
 
+      if (notReq) {
+        j = _.findIndex(sections, chapter => {
+          return chapter.type === el.type;
+        });
+      }
+
+      if (j) {
         sections[j].list.push(el);
       }
     });
+
+    if (sections.length > 2) {
+      [sections[1], sections[sections.length - 1]] = [sections[sections.length - 1], sections[1]];
+    }
 
     return sections;
   }

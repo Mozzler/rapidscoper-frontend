@@ -12,7 +12,14 @@
           <div class="user-story__block"
                v-for="section in dictionary"
                :key="section.id">
-              <h1> {{ section.name }} </h1>
+              <h1>
+                <input class="user-story__editable"
+                   :disabled="section.type !== 'requirement'"
+                   :value="section.name"
+                   :ref="section.id"
+                   @input="$event => updateSectionName(section.id, $event)"
+                   @blur="() => update(section.id, 'name')" />
+              </h1>
               <div class="user-story dictionary mt-4">
                 <template v-if="section.list.length">
                   <v-layout row fill-height
@@ -20,26 +27,24 @@
                             :key="word.id">
 
                     <v-flex shrink>
-                      <div class="user-story__placeholder"
-                           v-html="'Terms'"
-                           v-if="!word.name"
-                           readonly />
+                      <div class="user-story__placeholder text-greyed">
+                        {{ !word.name ? 'Terms' : '' }}
+                      </div>
                       <div class="user-story__editable user-story__editable--after"
                         v-html="word.name"
                         :contenteditable="true"
-                        :ref="`name-${word.id}`"
+                        :ref="word.id"
                         @blur="() => update(word.id, 'name')"
                       ></div>
                     </v-flex>
                     <v-flex grow text-xs-left>
-                      <div class="user-story__placeholder"
-                           v-if="!word.description"
-                           v-html="'Description'"
-                           readonly />
+                      <div class="user-story__placeholder text-greyed">
+                        {{ !word.description ? 'Description' : '' }}
+                      </div>
                       <div class="user-story__editable"
                            v-html="word.description"
                            :contenteditable="true"
-                           :ref="`description-${word.id}`"
+                           :ref="word.id"
                            @blur="() => update(word.id, 'description')"
                       ></div>
                     </v-flex>
@@ -97,6 +102,12 @@ export default {
     this.fetchData();
   },
   methods: {
+    updateSectionName (id, $event) {
+      this.$store.commit('dictionary/update', {
+        id: id,
+        name: $event.target.value
+      });
+    },
     fetchData () {
       this.processing = true;
       this.connect('dictionary', 'entity/setList', this.filter, true, () => {
@@ -104,7 +115,7 @@ export default {
       });
     },
     update (id, property) {
-      this.submit(id, { [property]: this.$refs[`${property}-${id}`][0].innerText });
+      this.submit(id, { [property]: this.$refs[id][0].innerText });
     },
     submit (id, data) {
       this.$store.dispatch('entity/update', {
