@@ -5,7 +5,7 @@
 
       <div class="user-story"
            :class="{
-             'user-story--active': (toolId === item.id && (tab !== 'edit' && tab !== 'estimate')),
+             'user-story--active': toolId === item.id || focus === index,
              'cursor-pointer': (tab !== 'edit' && tab !== 'estimate'),
            }"
            :tabindex="0"
@@ -30,10 +30,10 @@
             @update="id => submitTool(id)"/>
         </div>
 
-        <v-layout row fill-height>
+        <v-layout align-center row fill-height>
           <v-flex shrink mr-1>
             <div :class="`user-story__item user-story__item--${ item.level }`">
-              <v-layout fill-height>
+              <v-layout align-center fill-height>
                 <v-flex shrink mr-2>
                   <input
                     tabindex="0"
@@ -53,7 +53,7 @@
               </v-layout>
             </div>
           </v-flex>
-          <v-flex grow text-xs-left>
+          <v-flex grow text-xs-left align-center row fill-height>
             <div class="user-story__wysiwyg">
               <div class="user-story__placeholder"
                    v-html="item.placeholder"
