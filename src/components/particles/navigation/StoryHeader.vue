@@ -21,7 +21,9 @@
           </v-tabs>
         </template>
         <template v-if="heading">
-          <div class="text-sm-center text-size--16">{{ heading }}</div>
+          <div class="text-sm-center text-size--16 cursor-default">
+            {{ heading }}
+          </div>
         </template>
       </v-flex>
       <v-flex text-xs-right>

@@ -73,9 +73,10 @@ export default {
     },
     goTo (id) {
       this.$router.push({
-        name: 'stories',
+        name: this.$route.name,
         params: {
-          project: this.$route.params.project,
+          project: this.$route.params.projectId,
+          storyType: this.$route.params.storyType,
           section: id,
           tab: this.$route.params.tab
         }

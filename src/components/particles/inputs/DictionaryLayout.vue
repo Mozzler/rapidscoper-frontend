@@ -13,9 +13,9 @@
                    @input="$event => updateSectionName(section.id, $event)"
                    @blur="() => update(section.id, 'name', section.name)" />
           </h1>
-          <div class="user-story dictionary mt-4">
+          <div class="user-story dictionary mt-1">
             <template v-if="section.list.length">
-              <v-layout row fill-height
+              <v-layout row fill-height mt-3
                         v-for="word in section.list"
                         :key="word.id">
 
