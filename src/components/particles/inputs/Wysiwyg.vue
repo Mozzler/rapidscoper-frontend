@@ -61,7 +61,10 @@
               <div class="user-story__editable"
                    :contenteditable="processing !== item.id && tab === 'edit'"
                    :disabled="processing === item.id"
-                   :class="{'user-story__wysiwyg--disabled': tab !== 'edit'}"
+                   :class="{
+                    'user-story__wysiwyg--disabled': tab !== 'edit',
+                    'text-dark-grey': beginning(item.markup)
+                   }"
                    :ref="item.id"
                    tabindex="2"
                    @focus="() => focusEvent(item, index)"
@@ -136,6 +139,9 @@ export default {
         document.getSelection().collapseToEnd();
       });
     },
+    beginning (markup) {
+      return !markup.includes('user-story__editable--beginning');
+    }
   },
   watch: {
     stories: {
