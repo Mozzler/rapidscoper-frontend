@@ -14,7 +14,12 @@
         Estimate
       </div>
       <div class="tool-block__text">
-        {{ story.estimate | hours }}
+        <input class="user-story__input"
+           :value="story.estimate"
+           type="number"
+           @input="$event => updateEstimate($event, story.id)"
+           @blur="$event => submitEstimate($event, story.id)" />
+        <span class="ml-2">{{ hours(story.estimate) }}</span>
       </div>
     </div>
 
@@ -67,21 +72,18 @@
 
 <script>
 import ToolList from "../lists/ToolList";
+
 import ProcessingMixin from '@/mixins/wysiwyg/instruments/processing';
+import EstimateMixin from '@/mixins/wysiwyg/instruments/estimate';
 
 export default {
   name: "ToolSection",
   mixins: [
-    ProcessingMixin
+    ProcessingMixin,
+    EstimateMixin
   ],
   components: {
     ToolList
-  },
-  filters: {
-    hours (str) {
-      const estimate = `${str} hour`;
-      return Number(str) > 1 ? `${estimate}s` : estimate;
-    }
   },
   computed: {
     labels () {
@@ -95,6 +97,11 @@ export default {
     },
     story () {
       return _.find(this.stories, item => item.id === this.toolId);
+    }
+  },
+  methods: {
+    hours (str) {
+      return Number(str) > 1 ? 'hours' : 'hour';
     }
   }
 };

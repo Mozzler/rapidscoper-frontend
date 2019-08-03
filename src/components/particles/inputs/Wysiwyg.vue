@@ -40,9 +40,10 @@
                     class="user-story__input"
                     v-if="tab === 'estimate'"
                     v-model="item.estimate"
-                    @keydown.tab.exact.prevent="$event => updateEstimate($event, item.id, true)"
-                    @keyup.enter.exact.prevent="$event => updateEstimate($event, item.id, true)"
-                    @change="$event => updateEstimate($event, item.id)"
+                    @keydown.tab.exact.prevent="$event => submitEstimate($event, item.id, true)"
+                    @keyup.enter.exact.prevent="$event => submitEstimate($event, item.id, true)"
+                    @input="$event => updateEstimate($event, item.id)"
+                    @blur="$event => submitEstimate($event, item.id)"
                     :ref="`estimate-${item.id}`"
                   />
                 </v-flex>
