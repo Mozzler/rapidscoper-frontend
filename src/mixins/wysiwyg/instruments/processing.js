@@ -4,8 +4,7 @@ export default {
       return this.$store.state.story.toolProcessing;
     },
     toolId () {
-      return this.$store.state.story.activeStoryOnTab ||
-        this.$store.state.story.activeEditorId;
+      return this.$store.state.story.activeStoryOnTab;
     },
     tab () {
       let modifiable = ['estimates', 'priorities'];

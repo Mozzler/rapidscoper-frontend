@@ -10,8 +10,7 @@ export default {
     };
   },
   beforeMount () {
-    this.$root.$on('' +
-      'stop-tool-processing', this.stopProcessing);
+    this.$root.$on('stop-tool-processing', this.stopProcessing);
     this.activatePanel();
   },
   computed: {
@@ -56,10 +55,10 @@ export default {
     },
     activatePanel () {
       if (this.toolId) {
-        const ref = this.$refs[`tool-panel-${this.toolId}`];
-        if (ref) {
+        this.$nextTick(() => {
+          const ref = this.$refs[`tool-panel-${this.toolId}`];
           ref[0].focus();
-        }
+        });
       } else {
         this.selectTool(this.storyOrder[0]);
       }
