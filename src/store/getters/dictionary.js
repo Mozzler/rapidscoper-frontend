@@ -20,6 +20,10 @@ export default {
       }
     });
 
+    if (sections.length > 2) {
+      [sections[1], sections[sections.length - 1]] = [sections[sections.length - 1], sections[1]];
+    }
+
     return sections;
   },
 
@@ -48,10 +52,6 @@ export default {
         sections[j].list.push(el);
       }
     });
-
-    if (sections.length > 2) {
-      [sections[1], sections[sections.length - 1]] = [sections[sections.length - 1], sections[1]];
-    }
 
     return sections;
   }
