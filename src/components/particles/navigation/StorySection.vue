@@ -71,15 +71,26 @@ export default {
     addSection () {
       this.$root.$emit('create-new-section');
     },
+    getParams (id) {
+      switch (this.$route.name) {
+        case 'stories':
+          return {
+            projectId: this.$route.params.projectId,
+            storyType: this.$route.params.storyType,
+            section: id,
+            tab: this.$route.params.tab
+          };
+        case 'dictionary':
+          return {
+            projectId: this.$route.params.projectId,
+            section: id
+          };
+      }
+    },
     goTo (id) {
-      this.$router.push({
+      this.$router.replace({
         name: this.$route.name,
-        params: {
-          project: this.$route.params.projectId,
-          storyType: this.$route.params.storyType,
-          section: id,
-          tab: this.$route.params.tab
-        }
+        params: this.getParams(id)
       });
     }
   }

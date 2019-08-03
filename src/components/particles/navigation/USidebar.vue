@@ -61,12 +61,14 @@ export default {
         case this.$route.name === 'dictionary':
           return 'book-icon';
       }
+    },
+    dictionarySections () {
+      return this.$store.getters['dictionary/sections'];
     }
   },
   methods: {
     click (item) {
       let data = null;
-      console.log(item);
 
       switch (item) {
         case 'functional-requirements-icon':
@@ -87,7 +89,7 @@ export default {
             name: 'dictionary',
             params: {
               projectId: this.$route.params.projectId,
-              section: 'actors'
+              section: _.first(this.dictionarySections).id
             }
           };
       }

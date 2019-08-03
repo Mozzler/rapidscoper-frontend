@@ -2,10 +2,12 @@ export default {
   sections (state, getters, rootState) {
     const dictionary = rootState.entity.dictionary.items;
     const sections = [{
+      id: 'actor',
       name: 'Actor',
       type: 'actor',
       list: []
     }, {
+      id: 'others',
       name: 'Others',
       type: 'custom',
       list: []
@@ -32,9 +34,9 @@ export default {
     const sections = getters.sections;
 
     _.each(dictionary, el => {
-      let notReq = el.type !== 'requirement';
       let req = el.relatedDictionaryId && el.type === 'requirement';
-      let j = null;
+      let notReq = el.type !== 'requirement';
+      let j = -1; // findIndex returns -1, if item not found
 
       if (req) {
         j = _.findIndex(sections, chapter => {
@@ -48,7 +50,7 @@ export default {
         });
       }
 
-      if (j) {
+      if (j !== -1) {
         sections[j].list.push(el);
       }
     });

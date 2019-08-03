@@ -28,8 +28,6 @@ Vue.mixin(ConverterMixin);
 Vue.mixin(SocketMixin);
 Vue.mixin(ErrorHandler);
 
-Vue.prototype.uuid = v4;
-
 let main = new Vue({
   el: '#app',
   store,
