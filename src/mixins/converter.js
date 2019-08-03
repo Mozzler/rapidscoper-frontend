@@ -48,7 +48,13 @@ export default {
       return `<span class="${cls}" ${props} ${attr}>${ this.$options.filters.withoutDots(text) }</span>&nbsp;`;
     },
     shortcut (item) {
-      return `<span class='text-underlined'>${item.charAt(0)}</span><span>${item.slice(1)}</span>`;
+      const exp = new RegExp(this.filter, 'gi');
+      let markup = item.replace(exp, "<span class='text-black'>$&</span>");
+
+      return `<span class="shortcut text-greyed">${markup}</span>`;
+    },
+    difference (str1, str2) {
+      return str1.split(str2).join('');
     }
   }
 };

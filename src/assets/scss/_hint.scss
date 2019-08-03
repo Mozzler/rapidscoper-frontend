@@ -24,7 +24,20 @@
 
 .hint__item-text {
   display: inline;
-  border-bottom: 2px solid $light-green;
+
+  span {
+    display: inline-block;
+  }
+
+  .underlined {
+    border-bottom: 2px solid $light-green;
+  }
+
+  .shortcut {
+    &:first-letter {
+      text-decoration: underline;
+    }
+  }
 }
 
 .hint__bordered {
