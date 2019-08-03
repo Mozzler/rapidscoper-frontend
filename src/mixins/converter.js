@@ -37,11 +37,13 @@ export default {
       const value = item.key || item.name;
       return shortcut ? this.shortcut(value) : value;
     },
-    createSpan (type, text, greyed = false, editable = false, clickable = false, attr = '') {
+    getAttr (field) {
+      return _.isObject(field) ? `data-id="${field.id}"` : '';
+    },
+    createSpan (type, text, greyed = false, editable = false, clickable = false) {
       const cls = `user-story__editable--${type}${greyed ? ' text-greyed' : ''}`;
       const props = `readonly contenteditable="${editable}"`;
-
-      attr = attr ? `data-id=${attr}` : '';
+      const attr = this.getAttr(text);
 
       return `<span class="${cls}" ${props} ${attr}>${ this.$options.filters.withoutDots(text) }</span>&nbsp;`;
     },

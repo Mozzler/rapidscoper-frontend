@@ -63,6 +63,22 @@ function getStoryLevel (id, stories) {
   }
 }
 
+function replaceMarkup (markup, dictionary) {
+  const spans = markup.split('&nbsp;');
+
+  _.each(spans, (item, index) => {
+    const matched = item.match(/data-id="(.*?)"/);
+    if (matched) {
+      const dictionaryItem = _.find(dictionary, i => i.id === matched[1]);
+      const replaceable = item.match(/>(.*?)(?=<\/span>)/)[1];
+
+      spans[index] = item.replace(replaceable, dictionaryItem.name);
+    }
+  });
+
+  return spans.join('&nbsp;');
+}
+
 export default {
   dictionary (state, getters, rootState) {
     const types = [
@@ -106,6 +122,8 @@ export default {
       // sort stories in accordance with storyOrder property
       const sorted = sortStoriesByOrder(stories, section.storyOrder);
 
+      const dictionary = rootState.entity.dictionary.items;
+
       // format the response
       return _.map(sorted, item => {
         const basic = _.pick(item, 'id', 'parentStoryId',
@@ -113,13 +131,15 @@ export default {
           'estimate', 'priority', 'labels', 'markup',
           'type', 'level');
         const construction = getConstructionByType(basic.type);
+        const markup = replaceMarkup(basic.markup, dictionary);
 
         return {
           ...basic,
           level: getStoryLevel(basic.parentStoryId, sorted),
           template: construction ? construction.structure : '',
           tail: '',
-          placeholder: basic.markup
+          markup: markup,
+          placeholder: markup
         };
       });
     };

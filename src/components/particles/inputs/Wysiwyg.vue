@@ -58,9 +58,9 @@
                    v-html="item.placeholder"
                    readonly></div>
 
-              <div :contenteditable="processing !== item.id && tab === 'edit'"
+              <div class="user-story__editable"
+                   :contenteditable="processing !== item.id && tab === 'edit'"
                    :disabled="processing === item.id"
-                   class="user-story__editable"
                    :class="{'user-story__wysiwyg--disabled': tab !== 'edit'}"
                    :ref="item.id"
                    tabindex="2"
@@ -75,7 +75,7 @@
                    @keydown.186.shift.exact="createSubstory"
                    @keydown.tab.shift.exact="decreaseStoryLevel"
                    @blur="updateStory"
-                   v-html="replaceId(item.markup)"></div>
+                   v-html="item.markup"></div>
               <circular-loader
                 cls="user-story__loader"
                 :size="10"
@@ -136,9 +136,6 @@ export default {
         document.getSelection().collapseToEnd();
       });
     },
-    replaceId (markup) {
-      return markup;
-    }
   },
   watch: {
     stories: {

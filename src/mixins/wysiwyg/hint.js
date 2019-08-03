@@ -9,6 +9,9 @@ export default {
   computed: {
     sections () {
       return this.$store.getters['dictionary/items'];
+    },
+    rawSections () {
+      return this.$store.getters['entity/items']('dictionary');
     }
   },
   methods: {
@@ -62,6 +65,7 @@ export default {
       if (addresserId !== this.hintEditor) {
         return;
       }
+
       this.hintEditor = null;
 
       await this.$nextTick();
@@ -116,6 +120,7 @@ export default {
       this.collapseToEnd();
     },
     submitField (chapter, text) {
+      this.processing = this.list[this.focused].id;
       if (typeof text !== 'string') {
         return;
       }
@@ -147,8 +152,15 @@ export default {
         }
       }).then(response => {
         const children = this.$refs[this.list[this.focused].id][0].children;
-        const div = _.find(children, item => item.className === `user-story__editable--${chapter}`);
-        div.setAttribute('data-id', response.item.id);
+        const node = _.find(children, item => item.className === `user-story__editable--${chapter}`);
+        node.setAttribute('data-id', response.item.id);
+
+        const spans = this.list[this.focused].markup.split('&nbsp;');
+        const index = _.findIndex(spans, item => item.includes(`user-story__editable--${chapter}`));
+        spans[index] = node.outerHTML;
+
+        this.list[this.focused].markup = spans.join('&nbsp;');
+        this.processing = false;
       });
     }
   }

@@ -51,7 +51,6 @@ export default {
             data.title = 'technical story sections';
           }
           data.list = this.storySections;
-
           break;
         }
         case 'dictionary': {
