@@ -57,7 +57,6 @@ export default {
         case 'dictionary': {
           data.addBtn = '';
           data.title = 'dictionary sections';
-          data.indicator = 'name';
           data.list = this.dictionarySections;
 
           break;

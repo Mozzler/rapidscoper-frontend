@@ -75,7 +75,7 @@
                    @keydown.186.shift.exact="createSubstory"
                    @keydown.tab.shift.exact="decreaseStoryLevel"
                    @blur="updateStory"
-                   v-html="item.markup"></div>
+                   v-html="replaceId(item.markup)"></div>
               <circular-loader
                 cls="user-story__loader"
                 :size="10"
@@ -135,6 +135,9 @@ export default {
         document.execCommand('selectAll', false, null);
         document.getSelection().collapseToEnd();
       });
+    },
+    replaceId (markup) {
+      return markup;
     }
   },
   watch: {

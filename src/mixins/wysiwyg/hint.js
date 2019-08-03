@@ -62,6 +62,7 @@ export default {
       if (addresserId !== this.hintEditor) {
         return;
       }
+      this.hintEditor = null;
 
       await this.$nextTick();
       this.$refs[this.list[this.focused].id][0].focus();
@@ -112,7 +113,6 @@ export default {
       this.filter = null;
       this.list[this.focused].tail = '';
       this.list[this.focused].placeholder = this.list[this.focused].markup;
-      this.hintEditor = null;
       this.collapseToEnd();
     },
     submitField (chapter, text) {
@@ -145,6 +145,10 @@ export default {
           type: replacement.type,
           relatedDictionaryId: replacement.relatedDictionaryId
         }
+      }).then(response => {
+        const children = this.$refs[this.list[this.focused].id][0].children;
+        const div = _.find(children, item => item.className === `user-story__editable--${chapter}`);
+        div.setAttribute('data-id', response.item.id);
       });
     }
   }
