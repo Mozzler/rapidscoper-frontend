@@ -54,9 +54,10 @@ export default {
       this.selectTool(this.storyOrder[previous]);
     },
     activatePanel () {
-      if (this.toolId) {
+      const ref = this.$refs[`tool-panel-${this.toolId}`];
+
+      if (this.toolId && ref) {
         this.$nextTick(() => {
-          const ref = this.$refs[`tool-panel-${this.toolId}`];
           ref[0].focus();
         });
       } else {

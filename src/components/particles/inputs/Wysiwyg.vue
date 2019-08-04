@@ -5,7 +5,7 @@
 
       <div class="user-story"
            :class="{
-             'user-story--active': toolId === item.id || focus === index,
+             'user-story--active': toolId === item.id || focused === index,
              'cursor-pointer': (tab !== 'edit' && tab !== 'estimate'),
            }"
            :tabindex="0"
