@@ -3,10 +3,12 @@
     <div v-if="title" class="sidebar__title" @click="() => $emit('menu')">
       {{ title }}
     </div>
-    <v-list v-if="list.length">
-      <draggable :value="list" @change="change" @move="move">
+    <v-list v-if="items.length">
+      <draggable
+        v-model="items"
+        @change="change">
         <v-list-tile
-        v-for="(item, key) in list"  :key="key" class="sidebar__item"
+        v-for="(item, key) in items"  :key="key" class="sidebar__item"
         :class="{'sidebar__item--active ': active === itemToParam(item[indicator]) }"
         @click="() => $emit('go', itemToParam(item.title || item.name), item.id)">
         <v-list-tile-content>
@@ -66,6 +68,11 @@ export default {
       default: 'id'
     }
   },
+  data () {
+    return {
+      items: this.list
+    };
+  },
   methods: {
     change ($event) {
       const moved = $event.moved;
@@ -86,8 +93,10 @@ export default {
         }
       };
 
-      this.$store.commit('entity/update', data);
-      this.$store.dispatch('entity/update', data);
+      this.$store.dispatch('entity/update', data)
+        .then(() => {
+          this.items = this.list;
+        });
     }
   }
 };
