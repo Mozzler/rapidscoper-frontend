@@ -11,6 +11,14 @@
   }
 }
 
+.sidebar__list {
+  .replaceable {
+    border: none;
+    border-top: 2px solid $primary;
+  }
+
+}
+
 .sidebar__title {
   padding: 8px 0 8px 25px;
   text-transform: uppercase;
@@ -33,7 +41,6 @@
   border-left: 2px solid $white;
 
   &:hover {
-    border-left: 2px solid $primary;
     background-color: rgba($primary, 0.2);
   }
 }

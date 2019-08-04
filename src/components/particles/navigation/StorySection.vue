@@ -79,10 +79,22 @@ export default {
   },
   methods: {
     reorder ($event, cb) {
-      const moved = $event.moved;
-      const sectionOrder = this.project.sectionOrder;
-      [sectionOrder[moved.newIndex], sectionOrder[moved.oldIndex]] =
-        [sectionOrder[moved.oldIndex], sectionOrder[moved.newIndex]];
+      let sectionOrder = [...this.project.sectionOrder];
+
+      const el = sectionOrder[$event.oldIndex];
+      sectionOrder.splice($event.oldIndex, 1);
+
+      if ($event.newIndex < sectionOrder.length) {
+        let [before, after] = [
+          sectionOrder.slice(0, $event.newIndex),
+          sectionOrder.slice($event.newIndex)
+        ];
+        before.push(el);
+
+        sectionOrder = [...before, ...after];
+      } else {
+        sectionOrder.push(el);
+      }
 
       const data = {
         entity: 'project',

@@ -3,16 +3,21 @@
     <div v-if="title" class="sidebar__title" @click="() => $emit('menu')">
       {{ title }}
     </div>
-    <v-list v-if="items.length">
-      <component :is="reorder ? 'draggable' : 'div'" v-model="items" @change="change">
+    <v-list v-if="items.length" class="sidebar__list">
+      <component :is="reorder ? 'draggable' : 'div'"
+                 v-model="items"
+                 @start="start"
+                 @end="end"
+                 ghost-class="replaceable">
         <v-list-tile
           v-for="(item, key) in items"  :key="key" class="sidebar__item"
-          :class="{'sidebar__item--active ': active === itemToParam(item[indicator]) }"
+          :class="{'sidebar__item--active ': !replacement && active === itemToParam(item[indicator]) }"
           @click="() => $emit('go', itemToParam(item.title || item.name), item.id)">
             <v-list-tile-content>
           <v-list-tile-title>
             <v-layout align-center justify-space-between row fill-height>
               <span> {{ item.title || item.name }}
+                {{ item.id.slice(-4) }}
                 <div v-if="item.marker" class="red-circle" />
               </span>
               <span class="text-greyed" v-if="item.number">
@@ -71,11 +76,16 @@ export default {
   },
   data () {
     return {
-      items: this.list
+      items: this.list,
+      replacement: false
     };
   },
   methods: {
-    change ($event) {
+    start () {
+      this.replacement = true;
+    },
+    end ($event) {
+      this.replacement = false;
       this.reorder($event, list => {
         this.items = list;
       });
