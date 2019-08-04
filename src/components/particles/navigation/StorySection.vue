@@ -1,6 +1,7 @@
 <template>
   <div class="sidebar story-section pt-4">
     <sidebar-list
+      :reorder="content.reorder"
       :title="content.title"
       :btn="content.addBtn"
       :list="content.list"
@@ -35,6 +36,12 @@ export default {
     dictionarySections () {
       return this.$store.getters['dictionary/sections'];
     },
+    projects () {
+      return this.$store.getters['entity/items']('project');
+    },
+    project () {
+      return _.find(this.projects, item => item.id === this.projectId);
+    },
     projectId () {
       return this.$route.params.projectId;
     },
@@ -42,7 +49,8 @@ export default {
       let data = {
         title: '',
         indicator: 'id',
-        addBtn: 'Add Section'
+        addBtn: 'Add Section',
+        reorder: null
       };
 
       switch (this.$route.name) {
@@ -54,6 +62,7 @@ export default {
             data.title = 'technical story sections';
           }
           data.list = this.storySections;
+          data.reorder = this.reorder;
           break;
         }
         case 'dictionary': {
@@ -69,6 +78,28 @@ export default {
     }
   },
   methods: {
+    reorder ($event, cb) {
+      const moved = $event.moved;
+      const sectionOrder = this.project.sectionOrder;
+      [sectionOrder[moved.newIndex], sectionOrder[moved.oldIndex]] =
+        [sectionOrder[moved.oldIndex], sectionOrder[moved.newIndex]];
+
+      const data = {
+        entity: 'project',
+        params: {
+          id: this.projectId
+        },
+        data: {
+          id: this.projectId,
+          sectionOrder: sectionOrder
+        }
+      };
+
+      this.$store.dispatch('entity/update', data)
+        .then(() => {
+          cb(this.storySections);
+        });
+    },
     addSection () {
       this.$root.$emit('create-new-section');
     },
