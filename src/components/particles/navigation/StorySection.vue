@@ -31,19 +31,18 @@ export default {
   },
   computed: {
     storySections () {
-      return this.$store.getters['story/orderedSections'](this.projectId);
+      return this.$store.getters['story/orderedSections'](this.projectId, this.storyType);
     },
     dictionarySections () {
       return this.$store.getters['dictionary/sections'];
     },
-    projects () {
-      return this.$store.getters['entity/items']('project');
-    },
-    project () {
-      return _.find(this.projects, item => item.id === this.projectId);
-    },
     projectId () {
       return this.$route.params.projectId;
+    },
+    storyType () {
+      const storyType = this.$route.params.storyType;
+      const splitted = storyType ? storyType.split('-') : [];
+      return _.first(splitted);
     },
     content () {
       let data = {

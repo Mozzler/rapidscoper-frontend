@@ -146,13 +146,20 @@ export default {
   },
 
   orderedSections (state, getters, rootState) {
-    return id => {
+    return (id, type) => {
       const sections = rootState.entity.section.items;
       const project = _.find(rootState.entity.project.items, item => item.id === id);
 
-      return _.map(project.sectionOrder, sectionId => {
-        return _.find(sections, item => item.id === sectionId);
+      const filteredOrder = [];
+
+      _.each(project.sectionOrder, sectionId => {
+        let found = _.find(sections, section => section.id === sectionId && section.type === type);
+        if (found) {
+          filteredOrder.push(found);
+        }
       });
+
+      return filteredOrder;
     };
   }
 };

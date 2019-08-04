@@ -89,6 +89,14 @@ export default {
         this.items = list;
       });
     }
+  },
+  watch: {
+    list: {
+      deep: true,
+      handler () {
+        this.items = this.list;
+      }
+    }
   }
 };
 </script>
