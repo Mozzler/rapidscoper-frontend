@@ -143,5 +143,16 @@ export default {
         };
       });
     };
+  },
+
+  orderedSections (state, getters, rootState) {
+    return id => {
+      const sections = rootState.entity.section.items;
+      const project = _.find(rootState.entity.project.items, item => item.id === id);
+
+      return _.map(project.sectionOrder, sectionId => {
+        return _.find(sections, item => item.id === sectionId);
+      });
+    };
   }
 };

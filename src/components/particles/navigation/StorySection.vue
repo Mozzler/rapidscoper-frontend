@@ -30,10 +30,13 @@ export default {
   },
   computed: {
     storySections () {
-      return this.$store.getters['entity/items']('section');
+      return this.$store.getters['story/orderedSections'](this.projectId);
     },
     dictionarySections () {
       return this.$store.getters['dictionary/sections'];
+    },
+    projectId () {
+      return this.$route.params.projectId;
     },
     content () {
       let data = {
@@ -73,14 +76,14 @@ export default {
       switch (this.$route.name) {
         case 'stories':
           return {
-            projectId: this.$route.params.projectId,
+            projectId: this.projectId,
             storyType: this.$route.params.storyType,
             section: id,
             tab: this.$route.params.tab
           };
         case 'dictionary':
           return {
-            projectId: this.$route.params.projectId,
+            projectId: this.projectId,
             section: id
           };
       }

@@ -43,7 +43,7 @@ export default {
   },
   computed: {
     sections () {
-      return this.$store.getters['entity/items']('section');
+      return this.$store.getters['story/orderedSections'](this.projectId);
     },
     activeSectionId () {
       return this.$route.params.section;

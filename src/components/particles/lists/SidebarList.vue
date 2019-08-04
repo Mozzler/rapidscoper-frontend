@@ -4,7 +4,8 @@
       {{ title }}
     </div>
     <v-list v-if="list.length">
-      <v-list-tile
+      <draggable :value="list" @change="change" @move="move">
+        <v-list-tile
         v-for="(item, key) in list"  :key="key" class="sidebar__item"
         :class="{'sidebar__item--active ': active === itemToParam(item[indicator]) }"
         @click="() => $emit('go', itemToParam(item.title || item.name), item.id)">
@@ -21,6 +22,7 @@
           </v-list-tile-title>
         </v-list-tile-content>
       </v-list-tile>
+      </draggable>
     </v-list>
     <div v-if="btn"
       class="sidebar__btn"
@@ -62,6 +64,30 @@ export default {
     indicator: {
       type: String,
       default: 'id'
+    }
+  },
+  methods: {
+    change ($event) {
+      const moved = $event.moved;
+
+      const projects = this.$store.getters['entity/items']('project');
+      const project = _.find(projects, item => item.id === moved.element.projectId);
+      const sectionOrder = project.sectionOrder;
+      [sectionOrder[moved.newIndex], sectionOrder[moved.oldIndex]] = [sectionOrder[moved.oldIndex], sectionOrder[moved.newIndex]];
+
+      const data = {
+        entity: 'project',
+        params: {
+          id: moved.element.projectId
+        },
+        data: {
+          id: moved.element.projectId,
+          sectionOrder: sectionOrder
+        }
+      };
+
+      this.$store.commit('entity/update', data);
+      this.$store.dispatch('entity/update', data);
     }
   }
 };
