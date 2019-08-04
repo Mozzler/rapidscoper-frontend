@@ -39,6 +39,12 @@ export default {
     projectId () {
       return this.$route.params.projectId;
     },
+    projects () {
+      return this.$store.getters['entity/items']('project');
+    },
+    project () {
+      return _.find(this.projects, item => item.id === this.projectId);
+    },
     storyType () {
       const storyType = this.$route.params.storyType;
       const splitted = storyType ? storyType.split('-') : [];
