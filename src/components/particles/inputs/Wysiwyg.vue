@@ -9,7 +9,7 @@
 
       <div class="user-story"
            :class="{
-             'user-story--active': toolId === item.id || focused === index,
+             'user-story--active': toolId === item.id,
              'cursor-pointer': (tab !== 'edit' && tab !== 'estimate'),
              'user-story--draggable': replacement === item.id
            }"
@@ -66,8 +66,6 @@
               <div class="user-story__placeholder"
                    v-html="item.placeholder"
                    readonly></div>
-
-              {{item.id}}
               <div class="user-story__editable"
                    :contenteditable="processing !== item.id && tab === 'edit'"
                    :disabled="processing === item.id"
