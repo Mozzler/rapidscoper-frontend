@@ -33,7 +33,7 @@ export default {
   },
   methods: {
     initToolId () {
-      if (!this.toolId || !this.storyOrder.includes(this.toolId)) {
+      if (!this.toolId) {
         this.$store.commit('story/setActiveStoryOnTab', this.storyOrder[0]);
         this.activatePanel();
       }
@@ -81,10 +81,14 @@ export default {
   },
   watch: {
     toolId () {
-      this.activatePanel();
+      this.$nextTick(() => {
+        this.activatePanel();
+      });
     },
     tab () {
-      this.activatePanel();
+      this.$nextTick(() => {
+        this.activatePanel();
+      });
     },
     toolProcessing (newVal, oldVal) {
       if (newVal === null && oldVal.id === this.toolId && this.tab === 'priority' && this.disabled) {
