@@ -180,10 +180,10 @@ export default {
           //parentStoryId: event.element.parentStoryId,
           afterStoryId: afterStoryId,
           storyIds: ids
-        }).then(() => {
-          this.replacement = null;
         });
       }
+
+      this.replacement = null;
     }
   },
   watch: {
