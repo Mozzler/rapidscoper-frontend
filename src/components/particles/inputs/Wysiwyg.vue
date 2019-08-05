@@ -14,9 +14,10 @@
              'user-story--active': toolId === item.id,
              'cursor-pointer': (tab !== 'edit' && tab !== 'estimate'),
              'cursor-default': tab === 'estimate',
-             'user-story--draggable': replacement === item.id
+             'user-story--draggable': replacement === item.id,
            }"
            :tabindex="0"
+           :key="`tool-panel-${item.id}`"
            :ref="`tool-panel-${item.id}`"
            @click="() => selectTool(item.id)"
            @keyup.enter.prevent.exact="() => setHandler('nextItem', item.id)"
@@ -27,7 +28,7 @@
 
         <div class="user-story__tools" v-if="(toolDictionary && toolId === item.id)">
           <tool-list
-            :key="tab"
+            :key="`tool-list-${item.id}`"
             :active="item[tab]"
             :list="toolDictionary"
             :minified="true"
@@ -48,12 +49,13 @@
                     class="user-story__input"
                     v-if="tab === 'estimate'"
                     v-model="item.estimate"
-                    @click="() => selectTool(item.id)"
+                    @focus="() => selectTool(item.id)"
                     @keydown.tab.exact.prevent="$event => submitEstimate($event, item.id, true)"
                     @keyup.enter.exact.prevent="$event => submitEstimate($event, item.id, true)"
                     @input="$event => updateEstimate($event, item.id)"
                     @blur="$event => submitEstimate($event, item.id)"
                     :ref="`estimate-${item.id}`"
+                    :key="`estimate-${item.id}`"
                   />
                 </v-flex>
                 <v-flex grow>

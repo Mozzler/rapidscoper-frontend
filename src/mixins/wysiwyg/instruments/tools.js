@@ -67,8 +67,6 @@ export default {
         this.$nextTick(() => {
           ref[0].focus();
         });
-      } else {
-        this.selectTool(this.storyOrder[0]);
       }
     }
   },
