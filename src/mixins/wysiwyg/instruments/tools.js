@@ -6,11 +6,18 @@ export default {
   ],
   data () {
     return {
-      disabled: false
+      disabled: false,
+      elRef: {
+        estimate: 'estimate',
+        labels: 'tool-panel',
+        priority: 'tool-panel'
+      }
     };
   },
   beforeMount () {
     this.$root.$on('stop-tool-processing', this.stopProcessing);
+  },
+  mounted () {
     this.activatePanel();
   },
   computed: {
@@ -54,7 +61,7 @@ export default {
       this.selectTool(this.storyOrder[previous]);
     },
     activatePanel () {
-      const ref = this.$refs[`tool-panel-${this.toolId}`];
+      const ref = this.$refs[`${this.elRef[this.tab]}-${this.toolId}`];
 
       if (this.toolId && ref) {
         this.$nextTick(() => {

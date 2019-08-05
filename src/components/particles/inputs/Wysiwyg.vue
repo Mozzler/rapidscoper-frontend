@@ -1,6 +1,7 @@
 <template>
   <div v-if="list">
-    <draggable v-model="list"
+    <component :is="tab === 'edit' ? 'draggable' : 'div'"
+               v-model="list"
                :clone="clone"
                @start="start"
                ghost-class="user-story__draggable"
@@ -12,6 +13,7 @@
            :class="{
              'user-story--active': toolId === item.id,
              'cursor-pointer': (tab !== 'edit' && tab !== 'estimate'),
+             'cursor-default': tab === 'estimate',
              'user-story--draggable': replacement === item.id
            }"
            :tabindex="0"
@@ -42,10 +44,11 @@
               <v-layout align-center fill-height>
                 <v-flex shrink mr-2>
                   <input
-                    tabindex="0"
+                    :tabindex="0"
                     class="user-story__input"
                     v-if="tab === 'estimate'"
                     v-model="item.estimate"
+                    @click="() => selectTool(item.id)"
                     @keydown.tab.exact.prevent="$event => submitEstimate($event, item.id, true)"
                     @keyup.enter.exact.prevent="$event => submitEstimate($event, item.id, true)"
                     @input="$event => updateEstimate($event, item.id)"
@@ -75,7 +78,7 @@
                     'text-dark-grey': beginning(item.markup)
                    }"
                    :ref="item.id"
-                   tabindex="2"
+                   :tabindex="tab !== 'edit' ? -1 : 2"
                    @focus="() => focusEvent(item, index)"
                    @keydown.enter.exact="createStory"
                    @click="($event) => checkHint($event, item)"
@@ -98,7 +101,7 @@
         </v-layout>
       </div>
     </div>
-    </draggable>
+    </component>
   </div>
 </template>
 
@@ -162,6 +165,10 @@ export default {
       this.primaryList = JSON.parse(JSON.stringify(this.list));
     },
     change ($event) {
+      if (this.tab !== 'edit') {
+        return;
+      }
+
       const event = $event.moved;
       const sliced = this.primaryList.slice(event.oldIndex);
 
