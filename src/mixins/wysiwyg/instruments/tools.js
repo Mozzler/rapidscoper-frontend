@@ -18,7 +18,7 @@ export default {
     this.$root.$on('stop-tool-processing', this.stopProcessing);
   },
   mounted () {
-    this.activatePanel();
+    this.initToolId();
   },
   computed: {
     toolDictionary () {
@@ -32,6 +32,12 @@ export default {
     }
   },
   methods: {
+    initToolId () {
+      if (!this.toolId || !this.storyOrder.includes(this.toolId)) {
+        this.$store.commit('story/setActiveStoryOnTab', this.storyOrder[0]);
+        this.activatePanel();
+      }
+    },
     selectTool (id) {
       this.$store.commit('story/setActiveStoryOnTab', id);
     },
