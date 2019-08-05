@@ -10,7 +10,8 @@
     <div v-for="(item, index) in list"
          :class="`${labelCls} label--${type(item)} ${outline(index)}`"
          :key="index"
-         @click="() => $emit('update', index)">
+         @click="() => $emit('update', index)"
+         class="mr-3">
       <template v-if="shortcutted">
         <span class="text-underlined">{{ item.charAt(0) }}</span>
         <span>{{ item.slice(1) }}</span>
