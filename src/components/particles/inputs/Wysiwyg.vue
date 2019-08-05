@@ -1,12 +1,16 @@
 <template>
   <div v-if="list">
-    <div v-for="(item, index) in list"
-         :key="`wysiwyg-${ item.id }`">
+    <draggable v-model="list"
+               :clone="clone"
+               @end="end">
+      <div v-for="(item, index) in list"
+           :key="`wysiwyg-${ item.id }`">
 
       <div class="user-story"
            :class="{
              'user-story--active': toolId === item.id || focused === index,
              'cursor-pointer': (tab !== 'edit' && tab !== 'estimate'),
+             'user-story--draggable': replacement === item.id
            }"
            :tabindex="0"
            :ref="`tool-panel-${item.id}`"
@@ -48,7 +52,10 @@
                   />
                 </v-flex>
                 <v-flex grow>
-                  <div class="user-story__prefix"> # </div>
+                  <div class="user-story__prefix">
+                   <span v-if="replacement !== item.id">#</span>
+                   <drag v-else />
+                  </div>
                 </v-flex>
               </v-layout>
             </div>
@@ -90,6 +97,7 @@
         </v-layout>
       </div>
     </div>
+    </draggable>
   </div>
 </template>
 
@@ -98,10 +106,12 @@ import ToolList from "../lists/ToolList";
 import CircularLoader from "../../particles/loaders/Circular";
 
 import WysiwygMixin from "@/mixins/wysiwyg";
+import Drag from "../icons/Drag";
 
 export default {
   name: "Wysiwyg",
   components: {
+    Drag,
     ToolList,
     CircularLoader
   },
@@ -122,7 +132,8 @@ export default {
     return {
       list: null,
       hintEditor: null,
-      processing: false
+      processing: false,
+      replacement: null
     };
   },
   beforeMount () {
@@ -142,6 +153,20 @@ export default {
     },
     beginning (markup) {
       return !markup.includes('user-story__editable--beginning');
+    },
+    clone (item) {
+      this.replacement = item.id;
+    },
+    end ($event) {
+      const newIndex = $event.newIndex;
+      const oldIndex = $event.oldIndex;
+      let sections = this.$store.getters['entity/items']('section');
+      let section = _.find(sections, section => section.id === this.sectionId);
+
+
+
+      console.log(section);
+      this.replacement = null;
     }
   },
   watch: {

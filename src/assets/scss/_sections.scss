@@ -38,7 +38,7 @@
 .user-story {
   border-radius: 4px;
   margin-bottom: 6px;
-  padding: 7px 2px 5px 0;
+  padding: 5px 2px 5px 0;
   background-color: $white;
   position: relative;
   display: block;
@@ -59,6 +59,11 @@
 .user-story__prefix {
   color: rgba(0, 0, 0, 0.7);
   cursor: default;
+
+  svg {
+    display: inherit;
+    fill: rgba(0, 0, 0, 0.8);
+  }
 }
 
 .user-story__wysiwyg {
@@ -115,10 +120,6 @@
   right: 0;
 }
 
-.dictionary__contenteditable {
-
-}
-
 .user-story__editable--actor {
   @include set-bottom-border($light-green);
 }
@@ -146,5 +147,18 @@
       content: ':';
       margin: 5px;
     }
+  }
+}
+
+[draggable=true] {
+  .user-story {
+    border: 1px solid rgba(120, 57, 223, 0.4);
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
+  }
+}
+[draggable=false] {
+  .user-story {
+    border: none;
+    box-shadow: none;
   }
 }
