@@ -23,9 +23,14 @@ export default {
       this.processing = this.list[this.focused].id;
       const payload = this.getCreateRequestPayload(sublist, text);
       const response = await this.$store.dispatch('entity/create', payload);
-      this.nextIdToFocus = response.item.id;
 
       this.$socket.recreateWatchers('story', false);
+      this.processing = false;
+
+      this.$nextTick(() => {
+        this.$refs[response.item.id][0].focus();
+        this.collapseToEnd();
+      });
     },
     createStory ($event) {
       if (this.dictionary[this.next]) {
