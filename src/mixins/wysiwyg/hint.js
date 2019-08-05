@@ -111,6 +111,15 @@ export default {
         let t = spans.join('');
         let span = this.createSpan(chapter, text, false, false);
         this.list[this.focused].markup = `${t}${!t ? '' : '&nbsp;'}${span}`;
+
+        this.$store.commit('entity/update', {
+          entity: 'story',
+          data: {
+            id: this.list[this.focused].id,
+            markup: this.list[this.focused].markup
+          }
+        });
+
         this.setCompletion();
       }
 
@@ -152,7 +161,7 @@ export default {
         }
       }).then(response => {
         const children = this.$refs[this.list[this.focused].id][0].children;
-        const node = _.find(children, item => item.className === `user-story__editable--${chapter}`);
+        const node = _.find(children, item => item.className.includes(`user-story__editable--${chapter}`));
         node.setAttribute('data-id', response.item.id);
 
         const spans = this.list[this.focused].markup.split('&nbsp;');

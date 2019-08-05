@@ -89,6 +89,14 @@ export default {
         const [type, text] = this.getStaticTextByType();
         this.list[this.focused].markup += this.createSpan(type, text, false);
       }
+
+      this.$store.commit('entity/update', {
+        entity: 'story',
+        data: {
+          id: this.list[this.focused].id,
+          markup: this.list[this.focused].markup
+        }
+      });
     },
     finishSentence ($event, character = '') {
       $event.preventDefault();
