@@ -3,6 +3,7 @@
     <draggable v-model="list"
                :clone="clone"
                @start="start"
+               ghost-class="user-story__draggable"
                @change="change">
       <div v-for="(item, index) in list"
            :key="`wysiwyg-${ item.id }`">
