@@ -43,11 +43,10 @@
           <v-flex shrink mr-1>
             <div :class="`user-story__item user-story__item--${ item.level }`">
               <v-layout align-center fill-height>
-                <v-flex shrink mr-2>
+                <v-flex shrink mr-2 v-if="tab === 'estimate'">
                   <input
                     :tabindex="0"
                     class="user-story__input"
-                    v-if="tab === 'estimate'"
                     v-model="item.estimate"
                     @focus="() => selectTool(item.id)"
                     @keydown.tab.exact.prevent="$event => submitEstimate($event, item.id, true)"

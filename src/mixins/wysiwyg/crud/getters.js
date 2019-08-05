@@ -72,7 +72,6 @@ export default {
     },
     getSubstoryIds (startIndex = this.focused, list = this.list) {
       const lastIndexId = this.getAfterStoryId(startIndex, list);
-      console.log(lastIndexId);
       const lastIndex = _.findIndex(list, item => item.id === lastIndexId);
 
       return list
