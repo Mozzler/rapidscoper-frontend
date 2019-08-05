@@ -29,10 +29,6 @@
     display: inline-block;
   }
 
-  .underlined {
-    border-bottom: 2px solid $light-green;
-  }
-
   .shortcut {
     &:first-letter {
       text-decoration: underline;
@@ -42,4 +38,8 @@
 
 .hint__bordered {
   border-top: 1px solid $light-grey;
+}
+
+.underlined {
+  border-bottom: 2px solid $light-green !important;
 }
