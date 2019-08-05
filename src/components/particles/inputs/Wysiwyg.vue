@@ -146,7 +146,7 @@ export default {
   },
   methods: {
     setHandler (handler, params) {
-      if (this.tab === 'priority' || this.tab === 'label') {
+      if (this.tab === 'priority' || this.tab === 'labels') {
         this[handler](params);
       }
     },

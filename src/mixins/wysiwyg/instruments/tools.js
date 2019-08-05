@@ -91,7 +91,7 @@ export default {
       });
     },
     toolProcessing (newVal, oldVal) {
-      if (newVal === null && oldVal.id === this.toolId && this.tab === 'priority' && this.disabled) {
+      if (newVal === null && oldVal.id === this.toolId && /*this.tab === 'priority' && */this.disabled) {
         this.nextItem();
         this.disabled = false;
       }
