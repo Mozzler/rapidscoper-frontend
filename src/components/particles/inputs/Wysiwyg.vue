@@ -2,7 +2,8 @@
   <div v-if="list">
     <draggable v-model="list"
                :clone="clone"
-               @end="end">
+               @start="start"
+               @change="change">
       <div v-for="(item, index) in list"
            :key="`wysiwyg-${ item.id }`">
 
@@ -66,6 +67,7 @@
                    v-html="item.placeholder"
                    readonly></div>
 
+              {{item.id}}
               <div class="user-story__editable"
                    :contenteditable="processing !== item.id && tab === 'edit'"
                    :disabled="processing === item.id"
@@ -157,16 +159,33 @@ export default {
     clone (item) {
       this.replacement = item.id;
     },
-    end ($event) {
-      const newIndex = $event.newIndex;
-      const oldIndex = $event.oldIndex;
-      let sections = this.$store.getters['entity/items']('section');
-      let section = _.find(sections, section => section.id === this.sectionId);
+    start () {
+      this.primaryList = JSON.parse(JSON.stringify(this.list));
+    },
+    change ($event) {
+      const event = $event.moved;
+      const sliced = this.primaryList.slice(event.oldIndex);
 
+      let ids = [];
+      for (let i = 0; i < sliced.length; i++) {
+        if (sliced[i].level > event.element.level || sliced[i].id === event.element.id) {
+          ids.push(sliced[i].id);
+        } else {
+          break;
+        }
+      }
 
+      if (ids.length) {
+        const afterStoryId = event.newIndex === 0 ? 0 : this.list[event.newIndex - 1].id;
 
-      console.log(section);
-      this.replacement = null;
+        this.$store.dispatch('story/move', {
+          //parentStoryId: event.element.parentStoryId,
+          afterStoryId: afterStoryId,
+          storyIds: ids
+        }).then(() => {
+          this.replacement = null;
+        });
+      }
     }
   },
   watch: {

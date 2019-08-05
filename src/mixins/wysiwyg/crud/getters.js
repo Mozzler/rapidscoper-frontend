@@ -1,24 +1,24 @@
 export default {
   methods: {
-    getPreviousAfterStoryId () {
-      return this.focused === 0 ? 0 : this.list[this.focused - 1].id;
+    getPreviousAfterStoryId (index = this.focused) {
+      return index === 0 ? 0 : this.list[index - 1].id;
     },
-    getAfterStoryId () {
-      const substoryIndex = (this.focused + 1 < this.list.length) &&
-        (this.list[this.focused + 1].level > this.list[this.focused].level);
+    getAfterStoryId (startIndex = this.focused, list = this.list) {
+      const substoryIndex = (startIndex + 1 < list.length) &&
+        (list[startIndex + 1].level > list[startIndex].level);
 
       if (substoryIndex) {
-        let nextStoryIndex = _.findIndex(this.list, (item, index) =>
-          this.list[this.focused].level === item.level && (this.focused < index)
+        let nextStoryIndex = _.findIndex(list, (item, index) =>
+          list[startIndex].level === item.level && (startIndex < index)
         );
 
         if (nextStoryIndex === -1) {
-          nextStoryIndex = this.list.length;
+          nextStoryIndex = list.length;
         }
 
-        return [...this.list].slice(this.focused + 1, nextStoryIndex).pop().id;
+        return [...list].slice(startIndex + 1, nextStoryIndex).pop().id;
       } else {
-        return this.list[this.focused].id;
+        return list[startIndex].id;
       }
     },
     getCreateRequestPayload (sublist = false, text = '') {
@@ -70,12 +70,13 @@ export default {
         }
       };
     },
-    getSubstoryIds () {
-      const lastIndexId = this.getAfterStoryId();
-      const lastIndex = _.findIndex(this.list, item => item.id === lastIndexId);
+    getSubstoryIds (startIndex = this.focused, list = this.list) {
+      const lastIndexId = this.getAfterStoryId(startIndex, list);
+      console.log(lastIndexId);
+      const lastIndex = _.findIndex(list, item => item.id === lastIndexId);
 
-      return this.list
-        .slice(this.focused, lastIndex + 1)
+      return list
+        .slice(startIndex, lastIndex + 1)
         .map(item => item.id);
     }
   }
