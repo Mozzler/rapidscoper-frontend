@@ -7,6 +7,7 @@ export default {
   data () {
     return {
       disabled: false,
+      archived: null,
       elRef: {
         estimate: 'estimate',
         labels: 'tool-panel',
@@ -39,6 +40,11 @@ export default {
       }
     },
     selectTool (id) {
+      const focusedTab = this.$refs[`${this.elRef[this.tab]}-${this.toolId}`];
+      if (focusedTab.length) {
+        this.archived = focusedTab[0].value;
+      }
+
       this.$store.commit('story/setActiveStoryOnTab', id);
     },
     toolKey ($event) {

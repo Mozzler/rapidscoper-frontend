@@ -16,13 +16,18 @@ export default {
       const payload = this.getEstimateData(id, $event.target.value);
       this.$store.commit('entity/update', payload);
     },
-    submitEstimate ($event, id, next = false) {
+    navigate (action) {
+      return action === null ? null : this[action]();
+    },
+    submitEstimate ($event, id, action = null) {
+      if (Number(this.archived) === Number($event.target.value)) {
+        return this.navigate(action);
+      }
+
       const payload = this.getEstimateData(id, $event.target.value);
       this.$store.dispatch('entity/update', payload)
         .then(() => {
-          if (next) {
-            this.nextItem();
-          }
+          this.navigate(action);
         });
     }
   }
