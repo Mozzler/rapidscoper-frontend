@@ -41,7 +41,7 @@ export default {
     },
     selectTool (id) {
       const focusedTab = this.$refs[`${this.elRef[this.tab]}-${this.toolId}`];
-      if (focusedTab.length) {
+      if (focusedTab) {
         this.archived = focusedTab[0].value;
       }
 

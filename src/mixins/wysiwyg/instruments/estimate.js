@@ -24,10 +24,12 @@ export default {
         return this.navigate(action);
       }
 
+      this.processing = id;
       const payload = this.getEstimateData(id, $event.target.value);
       this.$store.dispatch('entity/update', payload)
         .then(() => {
           this.navigate(action);
+          this.processing = null;
         });
     }
   }
