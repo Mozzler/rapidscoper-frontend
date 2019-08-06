@@ -129,7 +129,6 @@ export default {
       this.collapseToEnd();
     },
     submitField (chapter, text) {
-      this.processing = this.list[this.focused].id;
       if (typeof text !== 'string') {
         return;
       }
@@ -149,6 +148,7 @@ export default {
         };
       }
 
+      this.processing = this.list[this.focused].id;
       this.$store.dispatch('entity/create', {
         entity: 'dictionary',
         data: {
@@ -170,6 +170,10 @@ export default {
 
         this.list[this.focused].markup = spans.join('&nbsp;');
         this.processing = false;
+      }).then(() => {
+        this.$nextTick(() => {
+          this.$refs[this.list[this.focused].id][0].focus();
+        });
       });
     }
   }
