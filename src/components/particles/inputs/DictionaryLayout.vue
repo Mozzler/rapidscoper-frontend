@@ -11,33 +11,39 @@
                    :value="section.name"
                    :ref="section.id"
                    @input="$event => updateSectionName(section.id, $event)"
-                   @blur="() => update(section.id, 'name', section.name)" />
+                   @blur="() => update(section.id, 'name', false, section.name)" />
           </h1>
-          <div class="user-story dictionary mt-1">
+          <div class="dictionary user-story mt-3">
             <template v-if="section.list.length">
-              <v-layout row fill-height mt-3
+              <v-layout row fill-height mt-2
                         v-for="word in section.list"
-                        :key="word.id">
+                        :key="word.id"
+                        :class="{
+                          'user-story--active': focused === word.id
+                        }">
 
                 <v-flex shrink>
-                  <div class="user-story__placeholder text-greyed">
-                    {{ !word.name ? 'Terms' : '' }}
-                  </div>
                   <div class="user-story__editable user-story__editable--after text-bold"
                        v-html="word.name"
                        :contenteditable="true"
                        :ref="`name-${word.id}`"
+                       @input="$event => input($event, word.id, 'name')"
+                       @focus="() => focus(word.id, 'name')"
+                       @keydown.enter.exact.prevent="() => update(word.id, 'name', true)"
                        @blur="() => update(word.id, 'name')"
                   ></div>
                 </v-flex>
                 <v-flex grow text-xs-left>
                   <div class="user-story__placeholder text-greyed">
-                    {{ !word.description ? 'Description' : '' }}
+                    {{ !word.description  ? 'It is a description of this term' : '' }}
                   </div>
                   <div class="user-story__editable"
                        v-html="word.description"
                        :contenteditable="true"
                        :ref="`description-${word.id}`"
+                       @input="$event => input($event, word.id, 'description')"
+                       @focus="() => focus(word.id, 'description')"
+                       @keydown.enter.exact.prevent="() => update(word.id, 'description', true)"
                        @blur="() => update(word.id, 'description')"
                   ></div>
                 </v-flex>
@@ -65,7 +71,8 @@ export default {
       item: {
         field: null,
         description: null
-      }
+      },
+      focused: null
     };
   },
   computed: {
@@ -81,12 +88,30 @@ export default {
           { 'fullDocument.projectId': { '$in': [ this.activeProjectId ] } }
         ]
       };
+    },
+    order () {
+      return _.chain(this.dictionary)
+        .map(item => item.list)
+        .flatten()
+        .map(item => item.id)
+        .value();
     }
   },
   beforeMount () {
     this.fetchData();
   },
   methods: {
+    input ($event, id, property) {
+      this.$store.commit('entity/update', {
+        entity: 'dictionary',
+        data: {
+          id: id,
+          [property]: $event.target.innerText
+        }
+      });
+
+      this.collapseToEnd();
+    },
     updateSectionName (id, $event) {
       this.$store.commit('dictionary/update', {
         id: id,
@@ -99,17 +124,39 @@ export default {
         this.processing = false;
       });
     },
-    update (id, property, input = this.$refs[`${property}-${id}`][0].innerText) {
-      this.submit(id, { [property]: input });
+    async update (id, property, next = false, input = this.$refs[`${property}-${id}`][0].innerText) {
+      this.processing = id;
+      await this.submit(id, { [property]: input });
+      this.processing = false;
+
+      if (!next) {
+        return;
+      }
+
+      this.$nextTick(() => {
+        if (property === 'name') {
+          this.$refs[`description-${id}`][0].focus();
+        } else {
+          let index = _.findIndex(this.order, item => item === id);
+          let nextId = index + 1 < this.order.length ? this.order[index + 1] : this.order[0];
+
+          this.$refs[`name-${nextId}`][0].focus();
+        }
+
+        this.collapseToEnd();
+      });
     },
     submit (id, data) {
-      this.$store.dispatch('entity/update', {
+      return this.$store.dispatch('entity/update', {
         params: {
           id: id
         },
         entity: 'dictionary',
         data: data
       });
+    },
+    focus (id) {
+      this.focused = id;
     }
   }
 };

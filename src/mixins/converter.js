@@ -52,6 +52,12 @@ export default {
       let markup = item.replace(exp, "<span class='text-black'>$&</span>");
 
       return `<span class="shortcut text-greyed">${markup}</span>`;
-    }
+    },
+    collapseToEnd () {
+      this.$nextTick(() => {
+        document.execCommand('selectAll', false, null);
+        document.getSelection().collapseToEnd();
+      });
+    },
   }
 };

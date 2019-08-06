@@ -155,7 +155,7 @@ export default {
           projectId: this.list[this.focused].projectId,
           teamId: this.list[this.focused].teamId,
           name: text,
-          description: 'It is a description of this term',
+          description: '',
           type: replacement.type,
           relatedDictionaryId: replacement.relatedDictionaryId
         }

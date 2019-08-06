@@ -150,12 +150,6 @@ export default {
         this[handler](params);
       }
     },
-    collapseToEnd () {
-      this.$nextTick(() => {
-        document.execCommand('selectAll', false, null);
-        document.getSelection().collapseToEnd();
-      });
-    },
     beginning (markup) {
       return !markup.includes('user-story__editable--beginning');
     },

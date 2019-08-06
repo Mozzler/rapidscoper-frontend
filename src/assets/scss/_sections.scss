@@ -134,6 +134,15 @@
   line-height: 17px;
   color: $black;
 
+  &.user-story {
+    padding: 0;
+    margin: -5px -8px;
+
+    .layout {
+      padding: 5px 8px;
+    }
+  }
+
   .user-story__editable {
     font-size: 14px;
     line-height: 17px;
