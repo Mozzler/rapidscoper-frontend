@@ -59,7 +59,7 @@
                 </v-flex>
                 <v-flex grow>
                   <div class="user-story__prefix">
-                   <span v-if="replacement !== item.id">#</span>
+                   <span v-if="tab !== 'edit'">#</span>
                    <drag v-else />
                   </div>
                 </v-flex>
