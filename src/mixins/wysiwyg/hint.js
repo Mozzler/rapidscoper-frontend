@@ -98,6 +98,7 @@ export default {
       });
 
       if (index !== null) {
+        console.log('index');
         spans[index] = this.createSpan(chapter, text, false, false);
 
         if (chapter === 'requirement') {
@@ -112,20 +113,17 @@ export default {
         let span = this.createSpan(chapter, text, false, false);
         this.list[this.focused].markup = `${t}${!t ? '' : '&nbsp;'}${span}`;
 
-        this.$store.commit('entity/update', {
-          entity: 'story',
-          data: {
-            id: this.list[this.focused].id,
-            markup: this.list[this.focused].markup
-          }
-        });
-
         this.setCompletion();
       }
 
       this.filter = null;
       this.list[this.focused].tail = '';
       this.list[this.focused].placeholder = this.list[this.focused].markup;
+
+      this.$store.commit('entity/update', {
+        entity: 'story',
+        data: this.list[this.focused]
+      });
       this.collapseToEnd();
     },
     submitField (chapter, text) {
