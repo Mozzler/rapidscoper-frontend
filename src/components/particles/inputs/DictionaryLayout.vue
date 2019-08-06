@@ -23,7 +23,7 @@
                   <div class="user-story__placeholder text-greyed">
                     {{ !word.name ? 'Terms' : '' }}
                   </div>
-                  <div class="user-story__editable user-story__editable--after"
+                  <div class="user-story__editable user-story__editable--after text-bold"
                        v-html="word.name"
                        :contenteditable="true"
                        :ref="`name-${word.id}`"
@@ -112,5 +112,5 @@ export default {
       });
     }
   }
-}
+};
 </script>
