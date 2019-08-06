@@ -124,7 +124,6 @@ export default {
         entity: 'story',
         data: this.list[this.focused]
       });
-      this.collapseToEnd();
     },
     submitField (chapter, text) {
       if (typeof text !== 'string') {
@@ -170,7 +169,8 @@ export default {
         this.processing = false;
       }).then(() => {
         this.$nextTick(() => {
-          this.$refs[this.list[this.focused].id][0].focus();
+          document.getElementById(this.list[this.focused].id).focus();
+          this.collapseToEnd();
         });
       });
     }

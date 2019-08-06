@@ -75,10 +75,17 @@ export default {
     activatePanel () {
       const ref = this.$refs[`${this.elRef[this.tab]}-${this.toolId}`];
 
-      if (this.toolId && ref) {
+      if (this.tab === 'edit') {
         this.$nextTick(() => {
-          ref[0].focus();
+          document.getElementById(this.toolId).focus();
+          this.collapseToEnd();
         });
+      } else {
+        if (this.toolId && ref) {
+          this.$nextTick(() => {
+            ref[0].focus();
+          });
+        }
       }
     }
   },

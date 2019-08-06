@@ -27,10 +27,8 @@ export default {
       this.$socket.recreateWatchers('story', false);
       this.processing = false;
 
-      await this.$nextTick();
-
       return new Promise(resolve => {
-        resolve(response.item.id)
+        resolve(response.item.id);
       });
     },
     createStory ($event) {
@@ -41,11 +39,8 @@ export default {
 
       this.finishSentence($event);
       this.sendCreateStoryRequest(false, $event.target.innerHTML)
-        .then(() => {
-          if (this.$refs[this.toolId]) {
-            this.$refs[this.toolId][0].focus();
-            this.collapseToEnd();
-          }
+        .then((id) => {
+          this.$store.commit('story/setActiveStoryOnTab', id);
         });
     },
     createSubstory ($event) {
@@ -55,7 +50,10 @@ export default {
       }
 
       this.finishSentence($event, ':');
-      this.sendCreateStoryRequest(true, '');
+      this.sendCreateStoryRequest(true, '')
+        .then((id) => {
+          this.$store.commit('story/setActiveStoryOnTab', id);
+        });
     }
   }
 };
