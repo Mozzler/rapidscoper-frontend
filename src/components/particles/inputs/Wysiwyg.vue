@@ -49,6 +49,8 @@
                     class="user-story__input"
                     v-model="item.estimate"
                     @focus="() => selectTool(item.id)"
+                    @keyup.up.exact.prevent="$event => submitEstimate($event, item.id, true)"
+                    @keyup.down.exact.prevent="$event => submitEstimate($event, item.id, true)"
                     @keydown.tab.exact.prevent="$event => submitEstimate($event, item.id, true)"
                     @keyup.enter.exact.prevent="$event => submitEstimate($event, item.id, true)"
                     @input="$event => updateEstimate($event, item.id)"
