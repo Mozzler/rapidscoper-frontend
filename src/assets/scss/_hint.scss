@@ -40,6 +40,14 @@
   border-top: 1px solid $light-grey;
 }
 
-.underlined {
-  border-bottom: 2px solid $light-green !important;
+.underlined--actor {
+  @include set-bottom-border($light-green);
+}
+
+.underlined--requirement {
+  @include set-bottom-border($light-blue);
+}
+
+.underlined--field {
+  @include set-bottom-border($light-red);
 }

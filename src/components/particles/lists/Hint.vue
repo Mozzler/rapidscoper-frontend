@@ -13,9 +13,9 @@
          :ref="`hint-item-${index}`"
          :class="{'hint__item--active': focused === index}"
          @click="$event => tabComplete($event, item)">
-      <span class="hint__item-text"
-            :class="{'underlined': chapter !== 'beginning'}"
-            v-html="getStrFromObj(item, chapter === 'beginning')" />
+      <span :class="`hint__item-text underlined--${chapter}`"
+            v-html="getStrFromObj(item, chapter === 'beginning')">
+      </span>
     </div>
     <div class="hint__item hint__bordered"
          v-if="(filter && !inList) && this.chapter !== 'beginning'"
