@@ -23,10 +23,7 @@ export default [
   {
     path: '/project/:projectName/:projectShareId/:token',
     name: 'shared-project',
-    component: SharedProject,
-    meta: {
-      requiresAuth: true
-    }
+    component: SharedProject
   },
   {
     path: '/:section/:name',

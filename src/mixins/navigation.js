@@ -13,7 +13,7 @@ export default {
     },
     itemToParam (str) {
       if (str) {
-        str = str.toLowerCase().replace(/ /g, '-');
+        str = str.toString().toLowerCase().replace(/ /g, '-');
       }
       return str;
     },

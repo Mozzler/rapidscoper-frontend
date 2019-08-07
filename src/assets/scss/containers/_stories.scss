@@ -70,6 +70,15 @@
   @extend .stories-container--base;
 }
 
+.stories-container--public {
+  grid-template-areas:
+          "header header header"
+          "story-section content-container tool-section";
+  grid-template-columns: 224px calc(100% - 224px);
+
+  @extend .stories-container--base;
+}
+
 .tool-block {
   margin-bottom: 35px;
   padding: 0 !important;
@@ -145,5 +154,14 @@
   }
 }
 
+.content-container__header {
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 18px;
+  line-height: 22px;
+  opacity: 0.5;
+  color: rgba(0,0,0, 0.5);
+  margin-bottom: 30px;
+}
 
 
