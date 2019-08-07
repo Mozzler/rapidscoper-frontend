@@ -84,6 +84,10 @@ export default {
         if (this.toolId && ref) {
           this.$nextTick(() => {
             ref[0].focus();
+
+            if (this.tab === 'estimate') {
+              ref[0].setSelectionRange(0, ref[0].value.length);
+            }
           });
         }
       }
