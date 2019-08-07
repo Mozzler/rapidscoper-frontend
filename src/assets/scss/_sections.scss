@@ -59,10 +59,9 @@
 
 .user-story__prefix {
   color: rgba(0, 0, 0, 0.7);
-  cursor: default;
 
   svg {
-    display: inherit;
+    margin: 0 2px 2px 0;
     fill: rgba(0, 0, 0, 0.8);
   }
 }

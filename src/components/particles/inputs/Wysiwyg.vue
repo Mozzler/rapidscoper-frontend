@@ -3,6 +3,7 @@
     <component :is="tab === 'edit' ? 'draggable' : 'div'"
                v-model="list"
                :clone="clone"
+               :move="movable"
                @start="start"
                ghost-class="user-story__draggable"
                @change="change">
@@ -20,6 +21,8 @@
            :key="`tool-panel-${item.id}`"
            :ref="`tool-panel-${item.id}`"
            @click="() => selectTool(item.id)"
+           @mouseover="() => hovered = item.id"
+           @mouseleave="() => hovered = null"
            @keyup.enter.prevent.exact="() => setHandler('nextItem', item.id)"
            @keydown.tab.prevent.exact="() => setHandler('nextItem', item.id)"
            @keydown.down.prevent.exact="() => setHandler('nextItem', item.id)"
@@ -60,10 +63,16 @@
                   />
                 </v-flex>
                 <v-flex grow>
-                  <div class="user-story__prefix">
-                    <span v-if="tab !== 'edit'">#</span>
-                    <drag v-else />
-                  </div>
+                  <v-layout row
+                            align-center
+                            fill-height
+                            class="user-story__prefix">
+                    <drag class="cursor-move"
+                          v-if="hovered === item.id && tab === 'edit'"
+                          @mouseover="() => movable = item.id"
+                          @mouseleave="() => movable = null"/>
+                    <div>#</div>
+                  </v-layout>
                 </v-flex>
               </v-layout>
             </div>
@@ -141,7 +150,10 @@ export default {
       list: null,
       hintEditor: null,
       processing: false,
-      replacement: null
+      replacement: null,
+
+      hovered: null,
+      movable: null
     };
   },
   beforeMount () {
