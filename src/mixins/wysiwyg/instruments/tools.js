@@ -43,6 +43,10 @@ export default {
       const focusedTab = this.$refs[`${this.elRef[this.tab]}-${this.toolId}`];
       if (focusedTab) {
         this.archived = focusedTab[0].value;
+
+        if (this.tab === 'estimate') {
+          focusedTab[0].setSelectionRange(0, focusedTab[0].value.length);
+        }
       }
 
       this.$store.commit('story/setActiveStoryOnTab', id);
