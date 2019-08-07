@@ -150,16 +150,9 @@ export default {
       const sections = rootState.entity.section.items;
       const project = _.find(rootState.entity.project.items, item => item.id === id);
 
-      const filteredOrder = [];
-
-      _.each(project.sectionOrder, sectionId => {
-        let found = _.find(sections, section => section.id === sectionId && section.type === type);
-        if (found) {
-          filteredOrder.push(found);
-        }
+      return _.map(project.sectionOrder[type], sectionId => {
+        return _.find(sections, section => section.id === sectionId);
       });
-
-      return filteredOrder;
     };
   }
 };

@@ -84,7 +84,8 @@ export default {
   },
   methods: {
     reorder ($event, cb) {
-      let sectionOrder = [...this.project.sectionOrder];
+      let sectionOrder = [...this.project.sectionOrder[this.storyType]];
+      let basic = { ...this.project.sectionOrder };
 
       const el = sectionOrder[$event.oldIndex];
       sectionOrder.splice($event.oldIndex, 1);
@@ -108,7 +109,9 @@ export default {
         },
         data: {
           id: this.projectId,
-          sectionOrder: sectionOrder
+          sectionOrder: _.assign(basic, {
+            [this.storyType]: sectionOrder
+          })
         }
       };
 

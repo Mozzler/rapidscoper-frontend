@@ -22,7 +22,7 @@ export default [
   },
   {
     path: '/project/:projectName/:projectShareId/:token',
-    name: 'dictionary',
+    name: 'shared-project',
     component: SharedProject,
     meta: {
       requiresAuth: true
