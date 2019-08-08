@@ -95,5 +95,9 @@ export default {
       version: info && info.projectShare ? info.projectShare[0].versionNumber : null,
       created: created
     };
+  },
+
+  comment (state, getters, rootState) {
+    return state.projectVersion.comment;
   }
 };

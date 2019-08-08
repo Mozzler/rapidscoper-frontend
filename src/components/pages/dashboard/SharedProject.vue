@@ -10,6 +10,7 @@
       <public-header />
       <sidebar-full-list />
       <story-content-static />
+      <comments />
     </template>
   </div>
 </template>
@@ -19,6 +20,7 @@ import CircularLoader from '../../particles/loaders/Circular';
 import SidebarFullList from '../../particles/lists/SidebarFullList';
 import StoryContentStatic from '../../particles/layouts/StoryContentStatic';
 import PublicHeader from "../../particles/navigation/PublicHeader";
+import Comments from "../../particles/lists/Comments";
 
 export default {
   name: "SharedProject",
@@ -26,7 +28,8 @@ export default {
     CircularLoader,
     SidebarFullList,
     StoryContentStatic,
-    PublicHeader
+    PublicHeader,
+    Comments
   },
   data () {
     return {
