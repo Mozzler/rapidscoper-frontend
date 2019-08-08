@@ -29,7 +29,21 @@
             </v-flex>
             <v-flex grow text-xs-left align-center row fill-height>
               <div class="user-story__wysiwyg">
-                <div class="user-story__editable" v-html="item.markup"></div>
+                <priority-indicator
+                  :index="item.priority"
+                />
+                <span class="user-story--without-padding" v-html="augmented(item.markup)"></span>
+                <v-layout class="indicators"
+                          align-center justify-start row fill-height>
+                  <mark-indicator
+                    :value="item.estimate"
+                    :icon="'estimate-icon'" />
+                  <mark-indicator
+                    :value="0"
+                    :icon="'attachment-icon'" />
+                  <label-indicator
+                    :list="item.labels" />
+                  </v-layout>
               </div>
             </v-flex>
           </v-layout>
@@ -43,8 +57,21 @@
 </template>
 
 <script>
+import PriorityIndicator from "../../particles/indicators/Priority";
+import LabelIndicator from "../../particles/indicators/Label";
+import MarkIndicator from "../../particles/indicators/Mark";
+import Tools from '@/mixins/story';
+
 export default {
   name: "StoryStatic",
+  components: {
+    PriorityIndicator,
+    LabelIndicator,
+    MarkIndicator
+  },
+  mixins: [
+    Tools
+  ],
   props: {
     id: {
       required: true
@@ -53,6 +80,17 @@ export default {
   computed: {
     model () {
       return this.$store.getters['projectVersion/section'](this.id);
+    },
+    labels () {
+      return this.$store.state.story.labels;
+    },
+    priorities () {
+      return this.$store.state.story.priority;
+    }
+  },
+  methods: {
+    augmented (markup) {
+      return markup;
     }
   }
 };

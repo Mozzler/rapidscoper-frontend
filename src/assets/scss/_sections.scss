@@ -169,7 +169,32 @@
   }
 }
 
-
 .user-story__wysiwyg--disabled {
   pointer-events: none;
+}
+
+.user-story__priority--short {
+  margin: 3px 0 0 -68px;
+  position: absolute;
+  background-color: red;
+  border-radius: 0 2px 2px 0;
+  color: rgba(0, 0, 0, 0.8);
+  font-weight: bold;
+  font-size: 12px;
+  line-height: 24px;
+  text-align: center;
+  width: 24px;
+  height: 24px;
+}
+
+.user-story__label--short {
+  display: inline-block;
+  margin-right: 8px;
+  border-radius: 10px;
+  width: 32px;
+  height: 9px;
+}
+
+.user-story--without-padding {
+  padding: 5px 0;
 }
