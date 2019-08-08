@@ -54,7 +54,6 @@
                 The list of items is empty
               </div>
             </template>
-
           </div>
         </div>
       </div>

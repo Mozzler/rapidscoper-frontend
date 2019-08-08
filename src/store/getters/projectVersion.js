@@ -1,3 +1,5 @@
+import filters from '../shared/filters';
+
 function reduce (list) {
   return _.reduce(list, (memo, item) => { return Number(memo) + Number(item.estimate) }, 0);
 }
@@ -72,5 +74,10 @@ export default {
 
       return result;
     };
+  },
+
+  dictionary (state, getters, rootState) {
+    const sections = filters.chapters(state.projectVersion.section);
+    return filters.volumns(state.projectVersion.dictionary, sections);
   }
 };
