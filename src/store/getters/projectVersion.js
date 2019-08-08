@@ -79,5 +79,21 @@ export default {
   dictionary (state, getters, rootState) {
     const sections = filters.chapters(state.projectVersion.section);
     return filters.volumns(state.projectVersion.dictionary, sections);
+  },
+
+  info (state, getters, rootState) {
+    const info = state.projectVersion;
+    let created = null;
+
+    if (info && info.projectShare) {
+      let unix = moment.unix(info.projectShare[0].createdAt);
+      created = unix.format("MMMM DD, YYYY hh:mm A");
+    }
+
+    return {
+      projectName: info && info.project ? info.project[0].name : null,
+      version: info && info.projectShare ? info.projectShare[0].versionNumber : null,
+      created: created
+    };
   }
 };

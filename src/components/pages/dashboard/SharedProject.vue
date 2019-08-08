@@ -7,6 +7,7 @@
       :visible="processing" />
 
     <template v-if="!processing">
+      <public-header />
       <sidebar-full-list />
       <story-content-static />
     </template>
@@ -17,13 +18,15 @@
 import CircularLoader from '../../particles/loaders/Circular';
 import SidebarFullList from '../../particles/lists/SidebarFullList';
 import StoryContentStatic from '../../particles/layouts/StoryContentStatic';
+import PublicHeader from "../../particles/navigation/PublicHeader";
 
 export default {
   name: "SharedProject",
   components: {
     CircularLoader,
     SidebarFullList,
-    StoryContentStatic
+    StoryContentStatic,
+    PublicHeader
   },
   data () {
     return {

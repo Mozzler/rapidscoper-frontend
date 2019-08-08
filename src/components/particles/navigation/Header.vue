@@ -1,5 +1,5 @@
 <template>
-  <v-container class="header-container">
+  <div class="header">
     <v-layout row wrap align-center>
       <v-flex xs6>
           <logo-rapid-scope class="app-logo"/>
@@ -20,7 +20,7 @@
         </template>
       </v-flex>
     </v-layout>
-  </v-container>
+  </div>
 </template>
 
 <script>

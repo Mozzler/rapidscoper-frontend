@@ -58,6 +58,6 @@ export default {
         document.execCommand('selectAll', false, null);
         document.getSelection().collapseToEnd();
       });
-    },
+    }
   }
 };
