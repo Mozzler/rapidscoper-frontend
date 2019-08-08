@@ -16,23 +16,23 @@
 
       <h1 class="content-container__header">summary</h1>
       <div class="user-story__block">
-        <h1> Estimate for priorities </h1>
+        <h1> Estimate for priority </h1>
         <div class="mt-3 user-story__wysiwyg">
           Time estimate for each priority.
         </div>
         <summary-list
+          total="true"
           collection="priority" />
       </div>
-<!--
       <div class="user-story__block">
         <h1> Estimate for labels </h1>
         <div class="mt-3 user-story__wysiwyg">
           Time estimate for each label.
         </div>
-        <summary
-          :id="item.id"
-          :collection="'labels'" />
-      </div>-->
+        <summary-list
+          label-cls="tool-block__label rounded"
+          collection="labels" />
+      </div>
     </div>
   </v-layout>
 </div>

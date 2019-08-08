@@ -1,12 +1,20 @@
 <template>
-  <div class="tool-block__text">
-    <div v-for="(value, item) in list"
-         :class="`label--${type(item)}`"
-         :key="value.index"
-         @click="() => $emit('update', index)"
-         class="mr-3">
-      <span>{{ value.estimate }}</span>
-    </div>
+  <div class="tool-block__text tool-block__text--fixed">
+    <v-layout
+      v-for="(value, key) in list"
+      :class="`${labelCls} label--${type(key)}`"
+      :key="value.index"
+      align-center
+      justify-space-between
+      row
+      fill-height
+      mb-2
+      v-if="key !== 'Total' || total">
+        <span>{{ key }}</span>
+        <span :class="{ 'text-bold': key === 'Total' }">
+          {{ value.estimate }}
+        </span>
+    </v-layout>
   </div>
 </template>
 
@@ -24,6 +32,14 @@ export default {
       required: true,
       type: String
     },
+    total: {
+      required: false,
+      default: false
+    },
+    labelCls: {
+      required: false,
+      default: 'tool-block__label'
+    }
   },
   data () {
     return {

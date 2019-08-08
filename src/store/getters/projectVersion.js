@@ -1,3 +1,17 @@
+function reduce (list) {
+  return _.reduce(list, (memo, item) => {
+    let estimate = item.estimate;
+
+    if (_.isArray(item)) {
+      estimate = _.reduce(item, (memoInternal, story) => {
+        return story.estimate;
+      }, 0);
+    }
+
+    return Number(memo) + Number(estimate);
+  }, 0);
+}
+
 export default {
   chapters (state, getters, rootState) {
     let sectionsByType = (type) => {
@@ -45,20 +59,27 @@ export default {
     return type => {
       const keys = rootState.story[type];
       const stories = state.projectVersion.story;
-      let result = {
-        total: 0
-      };
+      let result = {};
 
       _.each(keys, (key, index) => {
-        let filtered = _.filter(stories, story => Number(story[type]) === Number(index));
-        console.log(filtered);
+        let filtered = _.filter(stories, story => {
+          if (_.isArray(story[type])) {
+            return story[type].includes(index);
+          } else {
+            return Number(story[type]) === Number(index);
+          }
+        });
 
         result[key] = {
-          estimate: _.reduce(filtered, (memo, item) => { return Number(memo) + Number(item.estimate) }, 0),
+          estimate: reduce(filtered),
           index: index
         };
-        result.total += result[key].estimate;
       });
+
+      result['Total'] = {
+        estimate: reduce(result)
+      };
+
       return result;
     };
   }
