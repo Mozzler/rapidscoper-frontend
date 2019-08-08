@@ -12,7 +12,7 @@
     <div class="user-story">
       <div v-if="model.list.length">
         <div v-for="item in model.list" :key="item.id">
-          <v-layout align-center row fill-height>
+          <v-layout align-center row fill-height mb-2>
             <v-flex shrink mr-1>
               <div :class="`user-story__item user-story__item--${ item.level }`">
                 <v-layout align-center fill-height>
