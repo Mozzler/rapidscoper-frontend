@@ -1,15 +1,5 @@
 function reduce (list) {
-  return _.reduce(list, (memo, item) => {
-    let estimate = item.estimate;
-
-    if (_.isArray(item)) {
-      estimate = _.reduce(item, (memoInternal, story) => {
-        return story.estimate;
-      }, 0);
-    }
-
-    return Number(memo) + Number(estimate);
-  }, 0);
+  return _.reduce(list, (memo, item) => { return Number(memo) + Number(item.estimate) }, 0);
 }
 
 export default {
