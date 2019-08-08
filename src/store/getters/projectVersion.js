@@ -23,7 +23,7 @@ export default {
           title: 'Estimate for labels'
         }
       ],
-      'dictionary': [],
+      'dictionary': filters.chapters(state.projectVersion.section),
       '': [{
         id: 3,
         title: 'Attachments'
