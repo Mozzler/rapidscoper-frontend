@@ -80,8 +80,10 @@ export default {
   },
 
   dictionary (state) {
-    const sections = filters.chapters(state.projectVersion.section);
-    return filters.volumns(state.projectVersion.dictionary, sections);
+    const dictionary = state.projectVersion.dictionary;
+    const chapters = filters.chapters(dictionary);
+
+    return filters.volumns(dictionary, chapters);
   },
 
   info (state) {
