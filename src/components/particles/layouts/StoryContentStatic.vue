@@ -70,7 +70,7 @@ export default {
     handleScroll ($event) {
       const nodes = $event.target.querySelectorAll('*[id]');
       const node = _.find(nodes, item => item.getBoundingClientRect().top > -24);
-      
+
       this.$router.replace({
         name: 'shared-project',
         params: {
