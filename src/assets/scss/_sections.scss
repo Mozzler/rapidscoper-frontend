@@ -174,7 +174,7 @@
 }
 
 .user-story__priority--short {
-  margin: -2px 0 0 -68px;
+  margin: -2px 0 0 -56px;
   position: absolute;
   background-color: red;
   border-radius: 0 2px 2px 0;
@@ -185,6 +185,11 @@
   text-align: center;
   width: 24px;
   height: 24px;
+  cursor: default;
+
+  &:hover {
+    filter: brightness(0.9);
+  }
 }
 
 .user-story__label--short {

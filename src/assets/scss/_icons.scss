@@ -43,5 +43,8 @@
 
   svg {
     width: 72px;
+    &:hover {
+      filter: brightness(0.9);
+    }
   }
 }

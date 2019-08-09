@@ -14,6 +14,9 @@
         <div v-for="item in model.list" :key="item.id">
           <v-layout align-center row fill-height mb-2>
             <v-flex shrink mr-1>
+              <priority-indicator
+                :index="item.priority"
+              />
               <div :class="`user-story__item user-story__item--${ item.level }`">
                 <v-layout align-center fill-height>
                   <v-flex grow>
@@ -24,9 +27,6 @@
             </v-flex>
             <v-flex grow text-xs-left align-center row fill-height>
               <div class="user-story__wysiwyg">
-                <priority-indicator
-                  :index="item.priority"
-                />
                 <span class="user-story--without-padding" v-html="augmented(item.markup)"></span>
                 <v-layout class="indicators"
                           align-center justify-start row fill-height>
