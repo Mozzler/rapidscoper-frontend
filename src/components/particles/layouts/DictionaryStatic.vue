@@ -3,7 +3,8 @@
     <div v-if="dictionary.length">
       <div class="user-story__block"
         v-for="item in dictionary"
-        :key="item.id">
+        :key="item.id"
+        :id="item.id">
         <h1>{{ item.name }}</h1>
         <div class="dictionary user-story mt-3">
           <template v-if="item.list.length">

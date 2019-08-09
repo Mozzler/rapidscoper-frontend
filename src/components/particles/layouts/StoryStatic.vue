@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :id="model.id">
     <h1>
       {{ model.name }}
     </h1>

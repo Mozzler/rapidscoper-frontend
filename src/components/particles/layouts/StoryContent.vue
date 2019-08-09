@@ -32,8 +32,7 @@ export default {
   data () {
     return {
       message: null,
-      scrollActive: false,
-      scrollableContainer: 'scrollable-layout'
+      scrollActive: false
     };
   },
   beforeMount () {
@@ -95,6 +94,20 @@ export default {
         ]
       };
       this.$socket.recreateWatchers('story', true, filter);
+    },
+    handleScroll ($event) {
+      if (!this.sections || !this.sections.length) {
+        return;
+      }
+
+      let offset = $event.target.scrollTop,
+        childOffsets = _.map($event.target.children, item => item.offsetTop),
+        index = _.findIndex(childOffsets, co => (co + 28) > offset);
+
+      index = index === -1 ? this.sections.length - 1 : index;
+
+      const url = this.$route.path.replace(this.activeSectionId, this.sections[index].id);
+      this.$router.replace(url);
     }
   }
 };
