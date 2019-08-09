@@ -11,7 +11,7 @@
                  ghost-class="replaceable">
         <v-list-tile
           v-for="(item, key) in items"  :key="key" class="sidebar__item"
-          :class="{'sidebar__item--active ': !replacement && active === itemToParam(item[indicator]) }"
+          :class="{'sidebar__item--active ': !replacement && String(active) === itemToParam(item[indicator]) }"
           @click="() => $emit('go', itemToParam(item.title || item.name), item.id)">
             <v-list-tile-content>
           <v-list-tile-title>
@@ -54,7 +54,7 @@ export default {
       default: null
     },
     active: {
-      type: String
+      type: [String, Number]
     },
     list: {
       type: Array
