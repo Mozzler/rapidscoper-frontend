@@ -1,9 +1,11 @@
 <template>
   <div class="header">
     <v-layout align-center justify-space-between row fill-height>
-      <v-flex>
+      <v-flex class="align-center">
         <div class="logo-container">
-          <logo-rapid-scope />
+          <router-link to="/" class="d-flex">
+            <logo-rapid-scope />
+          </router-link>
         </div>
       </v-flex>
       <v-flex text-sm-center>
