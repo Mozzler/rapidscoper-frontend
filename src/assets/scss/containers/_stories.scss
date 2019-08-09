@@ -175,4 +175,15 @@
   margin-bottom: 30px;
 }
 
+.scrollable-layout {
+  overflow: auto;
+  overflow-x: hidden;
+  max-height: 100vh;
+  padding-bottom: 24px;
+
+  &::-webkit-scrollbar {
+    width: 0;
+    background: transparent;
+  }
+}
 
