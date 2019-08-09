@@ -85,7 +85,7 @@ function sections (project, sections, type) {
   });
 }
 
-function stories (storyOrder, stories, dictionary) {
+function stories (storyOrder, stories, dictionary = null) {
   const sorted = sortStoriesByOrder(stories, storyOrder);
 
   return _.map(sorted, item => {
@@ -93,17 +93,22 @@ function stories (storyOrder, stories, dictionary) {
       'sectionId', 'teamId', 'projectId',
       'estimate', 'priority', 'labels', 'markup',
       'type', 'level');
-    const construction = getConstructionByType(basic.type);
-    const markup = replaceMarkup(basic.markup, dictionary);
 
-    return {
-      ...basic,
-      level: getStoryLevel(basic.parentStoryId, sorted),
-      template: construction ? construction.structure : '',
-      tail: '',
-      markup: markup,
-      placeholder: markup
-    };
+    if (dictionary !== null) {
+      const construction = getConstructionByType(basic.type);
+      const markup = replaceMarkup(basic.markup, dictionary);
+
+      _.assign(basic, {
+        template: construction ? construction.structure : '',
+        tail: '',
+        markup: markup,
+        placeholder: markup
+      });
+    }
+
+    return _.assign(basic, {
+      level: getStoryLevel(basic.parentStoryId, sorted)
+    });
   });
 }
 

@@ -32,10 +32,10 @@ export default {
 
   section (state) {
     return id => {
-      const { section, story, dictionary } = state.projectVersion;
+      const { section, story } = state.projectVersion;
       const current = _.find(section, item => item.id === id);
 
-      section.list = editor.stories(current.storyOrder, story, dictionary);
+      section.list = editor.stories(current.storyOrder, story);
 
       return section;
     };
