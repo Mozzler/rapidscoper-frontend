@@ -4,7 +4,9 @@
       {{ model.name }}
     </h1>
     <div class="mt-3 user-story__wysiwyg">
-      {{ model.description }}
+      <div :class="{'text-greyed' : !model.description}">
+        {{ model.description ? model.description : 'Description' }}
+      </div>
     </div>
     <div class="sidebar__title mt-4 mb-3 padding-0">
       user stories

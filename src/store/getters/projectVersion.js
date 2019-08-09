@@ -34,10 +34,9 @@ export default {
     return id => {
       const { section, story } = state.projectVersion;
       const current = _.find(section, item => item.id === id);
+      current.list = editor.stories(current.storyOrder, story);
 
-      section.list = editor.stories(current.storyOrder, story);
-
-      return section;
+      return current;
     };
   },
 
