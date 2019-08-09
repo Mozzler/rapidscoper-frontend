@@ -1,4 +1,4 @@
-function getConstructions () {
+function constructions () {
   return {
     'As a ...': {
       type: 'user',
@@ -35,13 +35,13 @@ function sortStoriesByOrder (list, order) {
 }
 
 function getConstructionByType (type) {
-  const constructions = getConstructions();
+  const cs = constructions();
 
-  const key = Object.keys(constructions).find(k => {
-    return constructions[k].type === type;
+  const key = Object.keys(cs).find(k => {
+    return cs[k].type === type;
   });
 
-  return constructions[key];
+  return cs[key];
 }
 
 // stupid code, but can't use recursion: leads to the
@@ -85,11 +85,30 @@ function sections (project, sections, type) {
   });
 }
 
-function stories (section, stories, dictionary) {
+function stories (storyOrder, stories, dictionary) {
+  const sorted = sortStoriesByOrder(stories, storyOrder);
 
+  return _.map(sorted, item => {
+    const basic = _.pick(item, 'id', 'parentStoryId',
+      'sectionId', 'teamId', 'projectId',
+      'estimate', 'priority', 'labels', 'markup',
+      'type', 'level');
+    const construction = getConstructionByType(basic.type);
+    const markup = replaceMarkup(basic.markup, dictionary);
+
+    return {
+      ...basic,
+      level: getStoryLevel(basic.parentStoryId, sorted),
+      template: construction ? construction.structure : '',
+      tail: '',
+      markup: markup,
+      placeholder: markup
+    };
+  });
 }
 
 export default {
   sections,
-  stories
+  stories,
+  constructions
 };

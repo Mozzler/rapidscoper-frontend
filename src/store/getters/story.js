@@ -12,7 +12,7 @@ export default {
     ];
 
     const dictionary = {
-      constructions: getConstructions(),
+      constructions: editor.constructions(),
       placeholders: {
         'actor': 'User Type',
         'requirement': 'Requirement Type',
@@ -36,34 +36,12 @@ export default {
     return id => {
       // find current section by id
       const section = _.find(rootState.entity.section.items, item => item.id === id);
-
       // find stories of this section
       const stories = _.filter(rootState.entity.story.items, item => item.sectionId === id);
-
+      // get dictionary words
       const dictionary = rootState.entity.dictionary.items;
 
-      // sort stories in accordance with storyOrder property
-      const sorted = sortStoriesByOrder(stories, section.storyOrder);
-
-
-      // format the response
-      return _.map(sorted, item => {
-        const basic = _.pick(item, 'id', 'parentStoryId',
-          'sectionId', 'teamId', 'projectId',
-          'estimate', 'priority', 'labels', 'markup',
-          'type', 'level');
-        const construction = getConstructionByType(basic.type);
-        const markup = replaceMarkup(basic.markup, dictionary);
-
-        return {
-          ...basic,
-          level: getStoryLevel(basic.parentStoryId, sorted),
-          template: construction ? construction.structure : '',
-          tail: '',
-          markup: markup,
-          placeholder: markup
-        };
-      });
+      return editor.stories(section.storyOrder, stories, dictionary);
     };
   },
 

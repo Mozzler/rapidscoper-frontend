@@ -1,18 +1,17 @@
 import filters from '../shared/filters';
+import editor from "../shared/editor";
 
 function reduce (list) {
   return _.reduce(list, (memo, item) => { return Number(memo) + Number(item.estimate) }, 0);
 }
 
 export default {
-  chapters (state, getters, rootState) {
-    let sectionsByType = (type) => {
-      return _.filter(state.projectVersion.section, item => item.type === type);
-    };
+  chapters (state) {
+    const { section, project } = state.projectVersion;
 
     return {
-      'user stories': sectionsByType('user'),
-      'technical stories': sectionsByType('technical'),
+      'user stories': editor.sections(project[0], section, 'user'),
+      'technical stories': editor.sections(project[0], section, 'technical'),
       'summary': [
         {
           id: 1,
@@ -23,7 +22,7 @@ export default {
           title: 'Estimate for labels'
         }
       ],
-      'dictionary': filters.chapters(state.projectVersion.section),
+      'dictionary': filters.chapters(state.projectVersion.dictionary)
       /*'': [{
         id: 3,
         title: 'Attachments'
@@ -31,7 +30,7 @@ export default {
     };
   },
 
-  section (state, getters, rootState) {
+  section (state) {
     return id => {
       const section = _.find(state.projectVersion.section, item => item.id === id);
       section.list = _.filter(state.projectVersion.story, item => item.sectionId === id);
@@ -40,7 +39,7 @@ export default {
     };
   },
 
-  sections (state, getters, rootState) {
+  sections (state) {
     return type => {
       const order = state.projectVersion.project[0].sectionOrder[type];
       return _.filter(state.projectVersion.section, item => order.includes(item.id));
@@ -76,12 +75,12 @@ export default {
     };
   },
 
-  dictionary (state, getters, rootState) {
+  dictionary (state) {
     const sections = filters.chapters(state.projectVersion.section);
     return filters.volumns(state.projectVersion.dictionary, sections);
   },
 
-  info (state, getters, rootState) {
+  info (state) {
     const info = state.projectVersion;
     let created = null;
 
@@ -97,7 +96,7 @@ export default {
     };
   },
 
-  comment (state, getters, rootState) {
+  comment (state) {
     return state.projectVersion.comment;
   }
 };
