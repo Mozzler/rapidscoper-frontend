@@ -32,6 +32,10 @@
 
       @include rapid-scroll;
     }
+
+    & * {
+      cursor: default !important;
+    }
   }
 
   .story-section {

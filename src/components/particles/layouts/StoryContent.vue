@@ -16,18 +16,24 @@
 
 <script>
 import StoryItem from '../../particles/forms/StoryItem';
-import Hint from "../lists/Hint";
+import Hint from '../lists/Hint';
+
+import ScrollMixin from '@/mixins/scroll';
 
 export default {
-  name: "StoryContent",
+  name: 'StoryContent',
   components: {
     StoryItem,
     Hint
   },
+  mixins: [
+    ScrollMixin
+  ],
   data () {
     return {
       message: null,
-      scrollActive: false
+      scrollActive: false,
+      scrollableContainer: 'scrollable-layout'
     };
   },
   beforeMount () {
@@ -35,11 +41,6 @@ export default {
   },
   beforeDestroy () {
     this.$root.$off('create-new-section');
-    this.setScrollListener('remove');
-  },
-  mounted () {
-    this.scrollToActiveSection();
-    this.setScrollListener();
   },
   computed: {
     sections () {
@@ -63,23 +64,6 @@ export default {
     }
   },
   methods: {
-    setScrollListener (type = 'add') {
-      this.$refs['scrollable-layout'][`${type}EventListener`]('scroll', this.handleScroll);
-    },
-    handleScroll ($event) {
-      if (!this.sections || !this.sections.length) {
-        return;
-      }
-
-      let offset = $event.target.scrollTop,
-          childOffsets = _.map($event.target.children, item => item.offsetTop),
-          index = _.findIndex(childOffsets, co => (co + 28) > offset);
-
-      index = index === -1 ? this.sections.length - 1 : index;
-
-      const url = this.$route.path.replace(this.activeSectionId, this.sections[index].id);
-      this.$router.replace(url);
-    },
     getSectionData () {
       const untitled = this.sections.filter(item => item.name.includes('Untitled'));
       const number = untitled.length;
@@ -111,17 +95,6 @@ export default {
         ]
       };
       this.$socket.recreateWatchers('story', true, filter);
-    },
-    scrollToActiveSection () {
-      const el = document.getElementById(this.activeSectionId);
-      if (el) {
-        el.scrollIntoView();
-      }
-    }
-  },
-  watch: {
-    activeSectionId () {
-      this.scrollToActiveSection();
     }
   }
 };

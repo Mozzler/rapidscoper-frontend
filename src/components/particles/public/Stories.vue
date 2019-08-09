@@ -29,11 +29,11 @@
 </template>
 
 <script>
-import StoryStatic from "../../particles/layouts/StoryStatic";
+import StoryStatic from '../../particles/layouts/StoryStatic';
 import { mapGetters } from 'vuex';
 
 export default {
-  name: "stories",
+  name: 'Stories',
   components: {
     StoryStatic
   },

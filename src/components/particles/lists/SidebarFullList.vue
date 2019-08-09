@@ -5,21 +5,33 @@
       v-for="(list, key) in chapters"
       :key="key"
       :title="key"
-      :list="list" />
+      :list="list"
+      :active="$route.params.section"
+      @go="(value, id) => goTo(id)"/>
   </div>
 </template>
 
 <script>
-import SidebarList from "../lists/SidebarList";
+import SidebarList from '../lists/SidebarList';
 
 export default {
-  name: "SidebarFullList",
+  name: 'SidebarFullList',
   components: {
     SidebarList
   },
   computed: {
     chapters () {
       return this.$store.getters['projectVersion/chapters'];
+    }
+  },
+  methods: {
+    goTo (id) {
+      this.$router.replace({
+        name: this.$route.name,
+        params: {
+          section: id
+        }
+      });
     }
   }
 };

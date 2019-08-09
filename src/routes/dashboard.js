@@ -21,7 +21,7 @@ export default [
     }
   },
   {
-    path: '/project/:projectName/:projectShareId/:token',
+    path: '/project/:projectShareId/:token/:section',
     name: 'shared-project',
     component: SharedProject
   },
