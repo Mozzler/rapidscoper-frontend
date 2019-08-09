@@ -62,6 +62,10 @@ export default {
         return this.beginnings;
       }
 
+      if (this.chapter === 'requirement') {
+        return _.filter(list, item => item.type === 'requirement' && !item.relatedDictionaryId);
+      }
+
       if (this.chapter === 'field') {
         list = this.dictionary['requirement'];
 
