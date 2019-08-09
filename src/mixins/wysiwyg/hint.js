@@ -98,7 +98,6 @@ export default {
       });
 
       if (index !== null) {
-        console.log('index');
         spans[index] = this.createSpan(chapter, text, false, false);
 
         if (chapter === 'requirement') {

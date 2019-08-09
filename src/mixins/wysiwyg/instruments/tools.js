@@ -81,7 +81,10 @@ export default {
 
       if (this.tab === 'edit') {
         this.$nextTick(() => {
-          document.getElementById(this.toolId).focus();
+          const el = document.getElementById(this.toolId);
+          if (el) {
+            el.focus();
+          }
           this.collapseToEnd();
         });
       } else {
@@ -97,16 +100,14 @@ export default {
       }
     }
   },
+  updated () {
+    this.activatePanel();
+  },
   beforeDestroy () {
     this.$root.$off('stop-tool-processing', this.stopProcessing);
   },
   watch: {
     toolId () {
-      this.$nextTick(() => {
-        this.activatePanel();
-      });
-    },
-    tab () {
       this.$nextTick(() => {
         this.activatePanel();
       });
