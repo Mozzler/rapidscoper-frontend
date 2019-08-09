@@ -66,9 +66,12 @@ export default {
       return this.$store.getters['projectVersion/chapters'];
     }
   },
+  mounted () {
+    this.handleScroll();
+  },
   methods: {
-    handleScroll ($event) {
-      const nodes = $event.target.querySelectorAll('*[id]');
+    handleScroll () {
+      const nodes = this.$refs['scrollable-layout'].querySelectorAll('*[id]');
       const node = _.find(nodes, item => item.getBoundingClientRect().top > -24);
 
       this.$router.replace({
