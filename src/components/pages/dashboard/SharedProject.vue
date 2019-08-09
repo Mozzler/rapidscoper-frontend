@@ -10,7 +10,7 @@
       <public-header />
       <sidebar-full-list />
       <story-content-static />
-      <comments />
+      <!--<comments />-->
     </template>
   </div>
 </template>

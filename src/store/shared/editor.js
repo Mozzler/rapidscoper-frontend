@@ -1,0 +1,95 @@
+function getConstructions () {
+  return {
+    'As a ...': {
+      type: 'user',
+      structure: '[beginning][actor][static-text="I can"][custom-1][static-text="so that"][custom-2]',
+      limits: 'user-story'
+    },
+    'The system must ...': {
+      type: 'technical',
+      structure: '[beginning][custom-1]',
+      limits: 'technical-story'
+    },
+    'Requires a ...': {
+      type: 'requirement',
+      structure: '[beginning][requirement][static-text="called"][field][custom-1]'
+    },
+    'When I ...': {
+      type: 'acceptance',
+      structure: '[beginning][custom-1][static-text="then I"][custom-2]'
+    }
+  };
+}
+
+function sortStoriesByOrder (list, order) {
+  let data = [];
+
+  _.each(order, orderId => {
+    const story = list.find(story => story.id === orderId);
+    if (!_.isUndefined(story)) {
+      data.push(story);
+    }
+  });
+
+  return data;
+}
+
+function getConstructionByType (type) {
+  const constructions = getConstructions();
+
+  const key = Object.keys(constructions).find(k => {
+    return constructions[k].type === type;
+  });
+
+  return constructions[key];
+}
+
+// stupid code, but can't use recursion: leads to the
+// 'Maximum call stack size exceeded error':
+// vue watcher can't create the recursive references
+function getStoryLevel (id, stories) {
+  if (id === null) {
+    return 0;
+  }
+
+  id = stories.find(item => item.id === id).parentStoryId;
+  if (id === null) {
+    return 1;
+  }
+
+  id = stories.find(item => item.id === id).parentStoryId;
+  if (id === null) {
+    return 2;
+  }
+}
+
+function replaceMarkup (markup, dictionary) {
+  const spans = markup.split('&nbsp;');
+
+  _.each(spans, (item, index) => {
+    const matched = item.match(/data-id="(.*?)"/);
+    if (matched) {
+      const dictionaryItem = _.find(dictionary, i => i.id === matched[1]);
+      const replaceable = item.match(/>(.*?)(?=<\/span>)/)[1];
+
+      spans[index] = item.replace(replaceable, dictionaryItem.name);
+    }
+  });
+
+  return spans.join('&nbsp;');
+}
+
+function sections (project, sections, type) {
+  return _.map(project.sectionOrder[type], sectionId => {
+    return _.find(sections, section => section.id === sectionId);
+  });
+}
+
+function stories (section, stories, dictionary) {
+
+}
+
+export default {
+  sections,
+  stories
+};

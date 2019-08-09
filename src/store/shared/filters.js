@@ -53,4 +53,7 @@ function volumns (dictionary, sections) {
   return sections;
 }
 
-export default { chapters, volumns };
+export default {
+  chapters,
+  volumns
+};

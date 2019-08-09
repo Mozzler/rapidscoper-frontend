@@ -24,10 +24,10 @@ export default {
         }
       ],
       'dictionary': filters.chapters(state.projectVersion.section),
-      '': [{
+      /*'': [{
         id: 3,
         title: 'Attachments'
-      }]
+      }]*/
     };
   },
 

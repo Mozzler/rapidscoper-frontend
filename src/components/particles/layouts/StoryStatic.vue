@@ -17,12 +17,7 @@
               <div :class="`user-story__item user-story__item--${ item.level }`">
                 <v-layout align-center fill-height>
                   <v-flex grow>
-                    <v-layout row
-                              align-center
-                              fill-height
-                              class="user-story__prefix">
-                      <div>#</div>
-                    </v-layout>
+                    <div>#</div>
                   </v-flex>
                 </v-layout>
               </div>
