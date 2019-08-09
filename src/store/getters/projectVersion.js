@@ -32,8 +32,10 @@ export default {
 
   section (state) {
     return id => {
-      const section = _.find(state.projectVersion.section, item => item.id === id);
-      section.list = _.filter(state.projectVersion.story, item => item.sectionId === id);
+      const { section, story, dictionary } = state.projectVersion;
+      const current = _.find(section, item => item.id === id);
+
+      section.list = editor.stories(current.storyOrder, story, dictionary);
 
       return section;
     };
@@ -41,8 +43,10 @@ export default {
 
   sections (state) {
     return type => {
-      const order = state.projectVersion.project[0].sectionOrder[type];
-      return _.filter(state.projectVersion.section, item => order.includes(item.id));
+      const sections = state.projectVersion.section;
+      const project = state.projectVersion.project[0];
+
+      return editor.sections(project, sections, type);
     };
   },
 

@@ -108,7 +108,7 @@ function stories (storyOrder, stories, dictionary) {
 }
 
 export default {
+  constructions,
   sections,
-  stories,
-  constructions
+  stories
 };
