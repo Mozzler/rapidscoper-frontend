@@ -66,11 +66,10 @@ export default {
         return;
       }
 
+      await this.$nextTick();
+      document.getElementById(addresserId).focus();
+      await this.$nextTick();
       this.hintEditor = null;
-
-      await this.$nextTick();
-      this.$refs[this.list[this.focused].id][0].focus();
-      await this.$nextTick();
 
       if (chapter === 'beginning') {
         this.list[this.focused].template = text.value;
@@ -80,7 +79,6 @@ export default {
           this.list[this.focused].level += 1;
           this.list[this.focused].parentStoryId = this.list[this.focused - 1].level === this.list[this.focused].level ?
             this.list[this.focused - 1].parentStoryId : this.list[this.focused - 1].id;
-          this.nextIdToFocus = false;
         }
 
         text = text.key;

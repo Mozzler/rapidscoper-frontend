@@ -1,23 +1,6 @@
 export default {
-  data () {
-    return {
-      nextIdToFocus: false
-    };
-  },
   methods: {
-    async stopProcessing () {
-      this.processing = null;
-      await this.$nextTick();
-
-      if (this.$refs[this.nextIdToFocus]) {
-        this.$refs[this.nextIdToFocus][0].focus();
-        document.execCommand('selectAll', false, null);
-        document.getSelection().collapseToEnd();
-        this.nextIdToFocus = false;
-      }
-    },
     async sendCreateStoryRequest (sublist, text = '') {
-      this.nextIdToFocus = true;
       await this.updateStory();
 
       this.processing = this.list[this.focused].id;

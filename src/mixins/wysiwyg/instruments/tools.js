@@ -15,9 +15,6 @@ export default {
       }
     };
   },
-  beforeMount () {
-    this.$root.$on('stop-tool-processing', this.stopProcessing);
-  },
   mounted () {
     this.initToolId();
   },
@@ -102,9 +99,6 @@ export default {
   },
   updated () {
     this.activatePanel();
-  },
-  beforeDestroy () {
-    this.$root.$off('stop-tool-processing', this.stopProcessing);
   },
   watch: {
     toolId () {
