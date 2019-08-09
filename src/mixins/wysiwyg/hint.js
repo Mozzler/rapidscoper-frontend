@@ -122,7 +122,7 @@ export default {
         data: this.list[this.focused]
       });
     },
-    submitField (chapter, text) {
+    async submitField (chapter, text) {
       if (typeof text !== 'string') {
         return;
       }
@@ -142,8 +142,7 @@ export default {
         };
       }
 
-      this.processing = this.list[this.focused].id;
-      this.$store.dispatch('entity/create', {
+      await this.$store.dispatch('entity/create', {
         entity: 'dictionary',
         data: {
           projectId: this.list[this.focused].projectId,
@@ -164,11 +163,14 @@ export default {
 
         this.list[this.focused].markup = spans.join('&nbsp;');
         this.processing = false;
-      }).then(() => {
-        this.$nextTick(() => {
-          document.getElementById(this.list[this.focused].id).focus();
-          this.collapseToEnd();
+
+        this.$store.commit('entity/update', {
+          entity: 'story',
+          data: this.list[this.focused]
         });
+      }).then(async () => {
+        await this.$nextTick();
+        document.getElementById(this.list[this.focused].id).focus();
       });
     }
   }

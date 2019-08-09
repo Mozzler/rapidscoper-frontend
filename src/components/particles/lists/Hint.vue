@@ -73,7 +73,7 @@ export default {
           item.type === 'requirement' && !item.relatedDictionaryId &&
           item.name === this.relatedDictionary);
 
-        return _.filter(list, item => item.relatedDictionaryId === parent.id);
+        return _.filter(list, item => parent && item.relatedDictionaryId === parent.id);
       }
 
       return list;
