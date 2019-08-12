@@ -17,7 +17,7 @@ export default {
     };
 
     if (!payload.cancelCommit) {
-      store.commit('create', data);
+      //store.commit('create', data);
     }
 
     return response.data;

@@ -3,7 +3,7 @@
        :tabindex="0"
        v-show="visible"
        @keydown.tab.exact="$event => tabComplete($event, items[focused])"
-       @keydown.enter.exact.prevent="$event => complete(filter)"
+       @keydown.enter.exact.prevent="$event => enterComplete($event, items[focused])"
        @keydown.up.exact="$event => navigate($event, -1)"
        @keydown.down.exact="$event => navigate($event, 1)"
        class="hint">
@@ -120,7 +120,10 @@ export default {
         this.focused = 0;
       }
       await this.$nextTick();
-      this.$refs.hint.focus();
+
+      if (this.$refs.hint) {
+        this.$refs.hint.focus();
+      }
     },
     navigate ($event, step) {
       $event.preventDefault();
@@ -148,6 +151,13 @@ export default {
         item = this.items[0];
       }
 
+      this.emit(item, storyId);
+    },
+    enterComplete () {
+      let item = !this.items.length ? this.filter : this.items[this.focused];
+      this.emit(item);
+    },
+    emit (item, storyId = this.storyId) {
       this.visible = false;
       this.$root.$emit('hint-complete', this.chapter, item, storyId);
       this.focused = null;

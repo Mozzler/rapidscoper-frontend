@@ -9,6 +9,10 @@ export default {
   chapters (state) {
     const { section, project } = state.projectVersion;
 
+    if (!project || !section) {
+      return;
+    }
+
     return {
       'user stories': editor.sections(project[0], section, 'user'),
       'technical stories': editor.sections(project[0], section, 'technical'),
