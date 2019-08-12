@@ -17,9 +17,6 @@
                 </div>
               </v-flex>
               <v-flex grow text-xs-left>
-                <div class="user-story__placeholder text-greyed">
-                  {{ !word.description  ? 'It is a description of this term' : '' }}
-                </div>
                 <div class="user-story__editable">
                   {{ word.description }}
                 </div>

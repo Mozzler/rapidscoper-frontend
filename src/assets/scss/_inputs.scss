@@ -204,4 +204,9 @@ input:-webkit-autofill:active  {
 
 .label-indicator {
   margin-left: 6px;
+  display: inline-block;
+}
+
+.label-indicator__text {
+  white-space: nowrap;
 }

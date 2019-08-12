@@ -1,10 +1,15 @@
 <template>
-  <span class="label-indicator">
-    <i v-for="(item, index) in namedLabels"
+  <div class="label-indicator">
+    <div v-for="(item, index) in namedLabels"
          :key="index"
-         :class="`user-story__label--short label--${type(item)}`">
-    </i>
-  </span>
+         :class="`user-story__label--short label--${type(item)}`"
+        @mouseover="() => mouseover(index)"
+        @mouseleave="mouseleave">
+      <div v-if="hovered === index" class="label-indicator__text">
+        {{ item | letters }}
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -23,7 +28,8 @@ export default {
   },
   data () {
     return {
-      namedLabels: []
+      namedLabels: [],
+      hovered: null
     };
   },
   beforeMount () {
@@ -34,6 +40,14 @@ export default {
   computed: {
     labels () {
       return this.$store.state.story.labels;
+    }
+  },
+  methods: {
+    mouseover (index) {
+      this.hovered = index;
+    },
+    mouseleave () {
+      this.hovered = null;
     }
   }
 };

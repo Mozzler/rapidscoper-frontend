@@ -1,5 +1,8 @@
 export default {
   filters: {
+    letters (str) {
+      return str.replace(/[^a-zA-Z]+/g, '');
+    },
     toDate (str) {
       const now = moment(new Date());
       const date = moment.unix(str);

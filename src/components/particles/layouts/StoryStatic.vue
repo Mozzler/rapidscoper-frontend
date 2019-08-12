@@ -3,15 +3,10 @@
     <h1>
       {{ model.name }}
     </h1>
-    <div class="mt-3 user-story__wysiwyg">
-      <div :class="{'text-greyed' : !model.description}">
-        {{ model.description ? model.description : 'Description' }}
-      </div>
+    <div v-if="model.description" class="mt-3 user-story__wysiwyg">
+      {{ model.description }}
     </div>
-    <div class="sidebar__title mt-4 mb-3 padding-0">
-      user stories
-    </div>
-    <div class="user-story">
+    <div class="user-story mt-4">
       <div v-if="model.list.length">
         <div v-for="item in model.list" :key="item.id">
           <v-layout align-center row fill-height mb-2>
