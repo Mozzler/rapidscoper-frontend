@@ -98,7 +98,9 @@ export default {
     }
   },
   updated () {
-    this.activatePanel();
+    if (this.hintEditor === null) {
+      this.activatePanel();
+    }
   },
   watch: {
     toolId () {

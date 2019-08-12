@@ -142,16 +142,27 @@ export default {
         };
       }
 
+      const data = {
+        projectId: this.list[this.focused].projectId,
+        teamId: this.list[this.focused].teamId,
+        name: text,
+        description: '',
+        type: replacement.type,
+        relatedDictionaryId: replacement.relatedDictionaryId
+      };
+
+      const existed = _.find(this.rawSections, item =>
+        item.name === data.name &&
+        item.relatedDictionaryId === data.relatedDictionaryId &&
+        item.type === data.type);
+
+      if (existed) {
+        return;
+      }
+
       await this.$store.dispatch('entity/create', {
         entity: 'dictionary',
-        data: {
-          projectId: this.list[this.focused].projectId,
-          teamId: this.list[this.focused].teamId,
-          name: text,
-          description: '',
-          type: replacement.type,
-          relatedDictionaryId: replacement.relatedDictionaryId
-        }
+        data: data
       }).then(response => {
         const children = this.$refs[this.list[this.focused].id][0].children;
         const node = _.find(children, item => item.className.includes(`user-story__editable--${chapter}`));

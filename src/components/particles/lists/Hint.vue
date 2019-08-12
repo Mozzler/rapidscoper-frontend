@@ -27,7 +27,7 @@
 
 <script>
 export default {
-  name: "Hint",
+  name: 'Hint',
   data () {
     return {
       visible: false,

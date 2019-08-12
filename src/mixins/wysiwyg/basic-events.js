@@ -10,8 +10,11 @@ export default {
     focusEvent (item, index) {
       this.focused = index;
       this.etalon = { ...item };
-      this.hintEditor = null;
       this.$store.commit('story/setActiveStoryOnTab', this.etalon.id);
+
+      if (this.etalon.id !== this.hintEditor) {
+        this.hintEditor = null;
+      }
     },
     keyupEvent ($event) {
       this.event = $event;
