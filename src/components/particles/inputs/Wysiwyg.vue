@@ -94,7 +94,7 @@
                    :id="item.id"
                    @focus="() => focusEvent(item, index)"
                    @keydown.enter.exact="createStory"
-                   @click="($event) => checkHint($event, item)"
+                   @click="($event) => checkHint($event, item, index)"
                    @keydown.down.exact="focusHint"
                    @keyup.exact="keyupEvent"
                    @keydown.esc.exact="() => hintEditor = null"

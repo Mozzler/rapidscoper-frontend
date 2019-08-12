@@ -52,7 +52,9 @@ export default {
 
       this.$root.$emit('set-hint-state', true, chapter, filter, position, this.list[this.focused].id, keyword);
     },
-    checkHint ($event, item) {
+    checkHint ($event, item, index) {
+      this.focusEvent(item, index);
+
       this.event = $event;
 
       let property = $event.target.className.replace('user-story__editable--', '');
