@@ -21,7 +21,6 @@ export default {
       this.dialog = false;
     },
     showModal () {
-      console.log('show-modal');
       this.dialog = true;
     },
     async submit () {

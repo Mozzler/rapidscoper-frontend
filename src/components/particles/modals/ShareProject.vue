@@ -19,17 +19,17 @@
 
         <v-card-text class="mt-3 padding-0">
           <v-flex align-self-center>
-            <template v-if="!shared.length">
+            <template v-if="!projectShare.length">
               <link-disabled-icon class="mr-4"/>
               <span>Public link access is disabled. </span>
               <span class="text-reference" @click="enable">Enable access</span>
             </template>
             <template v-else>
-              <div v-for="(item, index) in shared" :key="index">
+              <div v-for="(item, index) in projectShare" :key="index">
                 <link-icon class="mr-4"/>
                 <span class="text-reference" @click="() => copy(index)">Copy public link</span>
-                <input :value="item" class="input--hidden" :ref="`link-input-${index}`"/>
               </div>
+              <input class="input--hidden" :ref="'link'"/>
             </template>
           </v-flex>
           <v-divider
@@ -86,7 +86,6 @@ export default {
       link: null,
       period: null,
       permission: null,
-      shared: [],
       processing: false
     };
   },
@@ -106,6 +105,9 @@ export default {
     },
     permissions () {
       return this.$store.state.system.permissions;
+    },
+    projectShare () {
+      return this.$store.getters['entity/items']('projectShare');
     }
   },
   beforeMount () {
@@ -120,7 +122,9 @@ export default {
 
     },
     copy (index) {
-      this.$refs[`link-input-${index}`][0].select();
+      const shared = this.projectShare[index];
+      this.$refs.link.value = `${document.location.origin}/project/${shared.id}/${shared.token}`;
+      this.$refs.link.select();
       document.execCommand('copy');
     },
     enable () {
@@ -134,11 +138,7 @@ export default {
       };
 
       this.$store.dispatch('projectVersion/share', payload)
-        .then(response => {
-          const item = response.item;
-          const path = `${document.location.origin}/project/${item.id}/${item.token}`;
-          this.shared.push(path);
-
+        .then(() => {
           this.processing = false;
         });
     }

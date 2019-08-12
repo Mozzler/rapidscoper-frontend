@@ -2,14 +2,14 @@
   <div class="stories-container">
     <story-header @share-project="share"/>
     <story-sidebar />
-    <!--<circular-loader
+    <circular-loader
       cls="loader-shadow"
       :visible="loading"
     />
     <template v-if="!loading">
       <story-section />
       <story-content />
-    </template>-->
+    </template>
     <tool-section />
 
     <share-project-modal />
@@ -46,7 +46,8 @@ export default {
       loaded: {
         dictionary: false,
         section: false,
-        story: false
+        story: false,
+        projectShare: false
       }
     };
   },
@@ -58,12 +59,12 @@ export default {
       return _.first(this.$route.params.storyType.split('-'));
     }
   },
-  mounted () {
-    this.share();
-  },
   methods: {
     share () {
-      this.$root.$emit('share-project');
+      this.$store.commit('story/setActiveStoryOnTab', null);
+      this.$nextTick(() => {
+        this.$root.$emit('share-project');
+      });
     },
     fetchData () {
       this.processing = true;
@@ -71,6 +72,9 @@ export default {
 
       this.connect('dictionary', 'entity/setList', this.filter, true, () => {
         this.loaded['dictionary'] = true;
+      });
+      this.connect('projectShare', 'entity/setList', this.filter, true, () => {
+        this.loaded['projectShare'] = true;
       });
 
       let filter = JSON.parse(JSON.stringify(this.filter));

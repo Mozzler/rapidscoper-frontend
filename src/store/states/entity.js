@@ -23,4 +23,7 @@ export default {
   userProject: {
     items: []
   },
+  projectShare: {
+    items: []
+  }
 };
