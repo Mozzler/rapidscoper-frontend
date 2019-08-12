@@ -20,14 +20,23 @@
         <v-card-text class="mt-3 padding-0">
           <v-flex align-self-center>
             <template v-if="!projectShare.length">
-              <link-disabled-icon class="mr-4"/>
-              <span>Public link access is disabled. </span>
-              <span class="text-reference" @click="enable">Enable access</span>
+              <v-layout align-center justify-start row fill-height>
+                <link-disabled-icon class="mr-3"/>
+                <span>Public link access is disabled.&nbsp;</span>
+                <span class="text-reference" @click="enable">Enable access</span>
+              </v-layout>
             </template>
             <template v-else>
               <div v-for="(item, index) in projectShare" :key="index">
-                <link-icon class="mr-4"/>
-                <span class="text-reference" @click="() => copy(index)">Copy public link</span>
+                <v-layout align-center justify-space-between fill-height>
+                  <div>
+                    <link-icon class="mr-3"/>
+                    <span class="text-reference" @click="() => copy(index)">Copy public link</span>
+                  </div>
+                  <div @click="() => remove(item.id)">
+                    <v-icon class="cursor-pointer">delete</v-icon>
+                  </div>
+                </v-layout>
               </div>
               <input class="input--hidden" :ref="'link'"/>
             </template>
@@ -141,6 +150,16 @@ export default {
         .then(() => {
           this.processing = false;
         });
+    },
+    remove (id) {
+      this.processing = true;
+
+      this.$store.dispatch('entity/delete', {
+        entity: 'project-share',
+        id: id
+      }).then(() => {
+        this.processing = false;
+      });
     }
   }
 };

@@ -11,6 +11,13 @@ function normalizeId (data) {
   }
 }
 
+function toCamelCase (str) {
+  return str.split('-').map((item, index) => {
+    let modified = item.charAt(0).toUpperCase() + item.slice(1);
+    return index !== 0 ? modified : item;
+  }).join('');
+}
+
 export default {
   setList (state, payload) {
     payload.data.items = normalizeId(payload.data.items);
@@ -44,7 +51,9 @@ export default {
       deletable = payload.ids;
     }
 
-    state[payload.entity].items = _.filter(state[payload.entity].items,
+    let normalized = toCamelCase(payload.entity);
+
+    state[normalized].items = _.filter(state[normalized].items,
         item => !deletable.includes(item.id));
   },
   resetList (state, entity) {
