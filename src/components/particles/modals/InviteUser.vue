@@ -59,10 +59,7 @@ export default {
   ],
   data () {
     return {
-      user: null,
-      roles: [
-        'Manager', 'Member', 'Client'
-      ]
+      user: null
     };
   },
   methods: {
@@ -71,6 +68,11 @@ export default {
         role: 'Member',
         entity: null
       };
+    }
+  },
+  computed: {
+    roles () {
+      return this.$store.state.system.roles;
     }
   }
 };

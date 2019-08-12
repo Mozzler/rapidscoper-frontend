@@ -62,5 +62,10 @@ export default {
         document.getSelection().collapseToEnd();
       });
     }
-  }
+  },
+  computed: {
+    isMobileDevice () {
+      return this.$store.state.system.isMobileDevice;
+    }
+  },
 };

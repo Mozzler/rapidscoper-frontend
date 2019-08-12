@@ -47,9 +47,6 @@ export default {
   },
   data () {
     return {
-      roles: [
-        'Manager', 'Member', 'Client'
-      ],
       headers: [
         {
           text: 'user',
@@ -117,6 +114,9 @@ export default {
   computed: {
     userTeam () {
       return this.$store.getters['entity/items']('userTeam');
+    },
+    roles () {
+      return this.$store.state.system.roles;
     }
   }
 };

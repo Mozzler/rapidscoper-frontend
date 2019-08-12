@@ -92,7 +92,7 @@
                    :ref="item.id"
                    tabindex="0"
                    :id="item.id"
-                   @focus="() => focusEvent(item, index)"
+
                    @keydown.enter.exact="createStory"
                    @click="($event) => checkHint($event, item, index)"
                    @keydown.down.exact="focusHint"

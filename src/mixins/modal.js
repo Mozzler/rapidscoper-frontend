@@ -21,6 +21,7 @@ export default {
       this.dialog = false;
     },
     showModal () {
+      console.log('show-modal');
       this.dialog = true;
     },
     async submit () {
@@ -53,11 +54,6 @@ export default {
   },
   beforeDestroy () {
     this.$root.$off(this.$options.name, this.showModal);
-  },
-  computed: {
-    isMobileDevice () {
-      return this.$store.state.system.isMobileDevice;
-    }
   },
   watch: {
     dialog () {

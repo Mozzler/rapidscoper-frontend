@@ -1,14 +1,18 @@
 <template>
   <div class="stories-container">
-    <story-header />
+    <story-header @share-project="share"/>
     <story-sidebar />
-    <circular-loader
+    <!--<circular-loader
       cls="loader-shadow"
       :visible="loading"
     />
-    <story-section v-if="!loading" />
-    <story-content v-if="!loading" />
+    <template v-if="!loading">
+      <story-section />
+      <story-content />
+    </template>-->
     <tool-section />
+
+    <share-project-modal />
   </div>
 </template>
 
@@ -19,6 +23,7 @@ import StorySection from "../../particles/navigation/StorySection";
 import ToolSection from "../../particles/navigation/ToolSection";
 import StoryContent from "../../particles/layouts/StoryContent";
 import CircularLoader from "../../particles/loaders/Circular";
+import ShareProjectModal from '@/components/particles/modals/ShareProject';
 
 import LayoutMixin from "@/mixins/layout";
 
@@ -30,7 +35,8 @@ export default {
     StorySection,
     ToolSection,
     StoryContent,
-    CircularLoader
+    CircularLoader,
+    ShareProjectModal
   },
   mixins: [
     LayoutMixin
@@ -52,7 +58,13 @@ export default {
       return _.first(this.$route.params.storyType.split('-'));
     }
   },
+  mounted () {
+    this.share();
+  },
   methods: {
+    share () {
+      this.$root.$emit('share-project');
+    },
     fetchData () {
       this.processing = true;
       this.resetData();

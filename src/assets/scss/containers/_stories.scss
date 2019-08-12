@@ -159,14 +159,18 @@
 }
 
 .section__ref {
-  color: $primary;
+  @extend .text-reference;
   font-size: 12px;
   line-height: 14px;
-  cursor: pointer;
 
   &:hover {
     filter: brightness(0.9);
   }
+}
+
+.text-reference {
+  color: $primary;
+  cursor: pointer;
 }
 
 .content-container__header {

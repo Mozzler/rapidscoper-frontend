@@ -42,7 +42,7 @@ export default {
     UpgradeToPremiumModal,
     PaymentInfoModal,
     PaymentSuccessfullyModal,
-    IncorrectDataModal
+    IncorrectDataModal,
   },
   mixins: [
     ResizeMixin

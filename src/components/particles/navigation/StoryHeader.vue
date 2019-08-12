@@ -33,7 +33,7 @@
         <v-btn icon>
           <v-icon>visibility</v-icon>
         </v-btn>-->
-        <v-btn class="btn-rapid primary" large>
+        <v-btn class="btn-rapid primary" large @click="showModal">
           Share
         </v-btn>
       </v-flex>
@@ -113,6 +113,9 @@ export default {
     },
     toDashboard () {
       this.$router.push('/');
+    },
+    showModal () {
+      this.$emit('share-project');
     }
   },
   beforeMount () {
