@@ -14,7 +14,17 @@ export default {
       return this.$store.getters['entity/items']('dictionary');
     }
   },
+  beforeMount () {
+    this.$root.$on('focus-story', this.focusStory);
+  },
   methods: {
+    focusStory (id) {
+      this.$nextTick(() => {
+        if (this.$refs[id]) {
+          this.$refs[id][0].focus();
+        }
+      });
+    },
     hideHint () {
       //this.hintEditor = null;
     },

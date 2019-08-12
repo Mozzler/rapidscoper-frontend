@@ -72,7 +72,9 @@ function replaceMarkup (markup, dictionary) {
       const dictionaryItem = _.find(dictionary, i => i.id === matched[1]);
       const replaceable = item.match(/>(.*?)(?=<\/span>)/)[1];
 
-      spans[index] = item.replace(replaceable, dictionaryItem.name);
+      if (dictionaryItem) {
+        spans[index] = item.replace(replaceable, dictionaryItem.name);
+      }
     }
   });
 

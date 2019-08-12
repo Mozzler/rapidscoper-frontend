@@ -6,6 +6,7 @@
        @keydown.enter.exact.prevent="$event => enterComplete($event, items[focused])"
        @keydown.up.exact="$event => navigate($event, -1)"
        @keydown.down.exact="$event => navigate($event, 1)"
+       @keydown.delete.exact="del"
        class="hint">
     <div class="hint__item"
          v-for="(item, index) in items"
@@ -161,6 +162,9 @@ export default {
       this.visible = false;
       this.$root.$emit('hint-complete', this.chapter, item, storyId);
       this.focused = null;
+    },
+    del () {
+      this.$root.$emit('focus-story', this.storyId);
     }
   },
   beforeDestroy () {
