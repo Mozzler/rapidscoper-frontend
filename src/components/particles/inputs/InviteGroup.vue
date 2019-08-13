@@ -1,5 +1,12 @@
 <template>
   <div>
+    <circular-loader
+      cls="loader-shadow--without-padding transparent"
+      :size="50"
+      :width="5"
+      :visible="processing"
+    />
+
     <v-layout row>
       <v-flex grow>
         <div :class="{'input-group': !isMobileDevice}">
@@ -7,13 +14,12 @@
                         name="email"
                         v-model="email"
                         v-validate="'required|email|min:6|max:255'"
-                        :disabled="processing"
                         placeholder="Enter email to invite user"
+                        :error-messages="errors.first('email')"
                         solo
           ></v-text-field>
           <div class="select-in-input">
             <dropdown :list="roles"
-                      :disabled="processing"
                       :selected="role"
                       @update="value => role = value" />
           </div>
@@ -22,7 +28,6 @@
 
       <v-flex shrink pl-3 v-if="!isMobileDevice">
         <v-btn class="btn-rapid primary" large
-               :disabled="processing"
                @click="invite">
           Invite
         </v-btn>
@@ -30,7 +35,6 @@
     </v-layout>
     <v-flex shrink class="text-xs-right" v-if="isMobileDevice">
       <v-btn class="btn-rapid primary" large
-             :disabled="processing"
              @click="invite">
         Invite
       </v-btn>
@@ -40,11 +44,13 @@
 
 <script>
 import Dropdown from "../menus/Dropdown";
+import CircularLoader from "../../particles/loaders/Circular";
 
 export default {
   name: "InviteGroup",
   components: {
-    Dropdown
+    Dropdown,
+    CircularLoader
   },
   props: {
     entityId: {
@@ -65,6 +71,7 @@ export default {
   },
   beforeMount () {
     this.role = _.first(this.roles);
+    this.email = null;
   },
   computed: {
     roles () {
@@ -93,6 +100,7 @@ export default {
       });
 
       this.processing = false;
+      this.$emit('finish-processing');
     }
   }
 };
