@@ -1,7 +1,7 @@
 <template>
   <v-layout row justify-center>
     <v-dialog v-model="dialog" max-width="416" persistent
-              @keydown.enter.prevent.exact="() => submit(toStories)">
+              @keydown.enter.prevent.exact="() => submit('toStories')">
       <v-card class="modal-card">
 
         <circular-loader
@@ -62,7 +62,7 @@
             </v-btn>
             <v-btn class="btn-rapid primary" large
                    :disabled="processing"
-                   @click="() => submit(toStories)">
+                   @click="() => submit('toStories')">
               {{ isMobileDevice ? 'Create' : 'Create project' }}
             </v-btn>
           </v-flex>
@@ -123,8 +123,9 @@ export default {
         }
       };
     },
-    toStories () {
-
+    toStories (item) {
+      const url = `/projects/${item.id}/user-story/section/edit`;
+      this.$router.push(url);
     }
   },
   watch: {

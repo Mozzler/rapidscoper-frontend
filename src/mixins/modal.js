@@ -36,16 +36,14 @@ export default {
       const params = this.getPayload();
 
       this.$store.dispatch(params.action, params)
-        .then(() => {
+        .then((response) => {
           if (params.recreate) {
             this.$socket.recreateWatchers(params.entity);
           }
-        })
-        .then((response) => {
-          this.processing = false;
-          this.closeModal();
           if (cb !== null) {
-            cb(response.item);
+            this.processing = false;
+            this.closeModal();
+            this[cb](response.item);
           }
         })
         .catch(error => {
