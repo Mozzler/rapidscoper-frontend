@@ -16,14 +16,14 @@ export default {
     return {
       'user stories': editor.sections(project[0], section, 'user'),
       'technical stories': editor.sections(project[0], section, 'technical'),
-      'summary': [
+      'estimates': [
         {
           id: 1,
-          title: 'Estimate for priorities'
+          title: 'Priorities'
         },
         {
           id: 2,
-          title: 'Estimate for labels'
+          title: 'Labels'
         }
       ],
       'dictionary': filters.chapters(state.projectVersion.dictionary)

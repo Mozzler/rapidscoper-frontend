@@ -6,7 +6,7 @@
     <div v-if="model.description" class="mt-3 user-story__wysiwyg">
       {{ model.description }}
     </div>
-    <div class="user-story mt-4">
+    <div class="user-story mt-4 mb-5">
       <div v-if="model.list.length">
         <div v-for="item in model.list" :key="item.id">
           <v-layout align-center row fill-height mb-2>
@@ -41,7 +41,7 @@
           </v-layout>
         </div>
       </div>
-      <div class="text-greyed full-width text-sm-center mb-3" v-else>
+      <div class="text-greyed full-width text-sm-center" v-else>
         The list of stories is empty
       </div>
     </div>
