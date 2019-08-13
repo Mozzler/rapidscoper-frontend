@@ -52,6 +52,9 @@ export default {
       this.$store.dispatch('projectVersion/post', payload)
         .then(() => {
           this.processing = false;
+        })
+        .catch(error => {
+          this.$router.push('/');
         });
     }
   }

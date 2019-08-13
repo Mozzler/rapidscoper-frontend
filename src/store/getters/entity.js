@@ -31,5 +31,30 @@ export default {
 
       return list.length;
     };
+  },
+  projectsWithMembers (state) {
+    /*let projects = [...state.project.items];
+    let userProject = [...state.userProject.items];
+    let userInfo = [...state.userInfo.items];
+
+    return projects.map(item => {
+      const obj = { ...item };
+
+      const filtered = _.filter(userProject, user => user.projectId === item.id);
+      const members = filtered.map(item => item.userId);
+      console.log(_.first(members, 3));
+
+      obj.members = _.chain(userProject)
+        .filter(user => user.projectId === item.id)
+        .map(user => user.userId)
+        .first(3)
+        .filter(id => userInfo.userId === id)
+        .map(item => item.avatarUrl)
+        .value();
+
+      return obj;
+    });*/
+
+    return state.project.items;
   }
 };

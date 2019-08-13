@@ -85,7 +85,19 @@ export default {
       ]
     };
   },
+  beforeMount () {
+    this.fetchData();
+  },
+  beforeDestroy () {
+    this.$store.commit('entity/resetList', ['userInfo', 'userProject']);
+    this.$socket.disconnect(['userInfo', 'userProject']);
+  },
   methods: {
+    fetchData () {
+      this.$store.commit('entity/resetList', ['userInfo', 'userProject']);
+      this.connect('userInfo', 'entity/setList');
+      this.connect('userProject', 'entity/setList');
+    },
     showModal () {
       this.$root.$emit('create-project');
     },
@@ -99,7 +111,8 @@ export default {
       return this.$store.state.auth.user;
     },
     projects () {
-      const projects = this.$store.getters['entity/items']('project');
+      const projects = this.$store.getters['entity/projectsWithMembers'];
+
       return _.filter(projects, project => {
         let externalProject = project.createdUserId !== this.user.user_id;
         return this.sharedRoute ? externalProject : project;

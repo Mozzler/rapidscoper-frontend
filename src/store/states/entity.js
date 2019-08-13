@@ -14,9 +14,6 @@ export default {
   story: {
     items: []
   },
-  projectUser: {
-    items: []
-  },
   userTeam: {
     items: []
   },
@@ -24,6 +21,9 @@ export default {
     items: []
   },
   projectShare: {
+    items: []
+  },
+  userInfo: {
     items: []
   }
 };
