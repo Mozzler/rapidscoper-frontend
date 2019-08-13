@@ -23,7 +23,7 @@ export default {
     showModal () {
       this.dialog = true;
     },
-    async submit () {
+    async submit (cb = null) {
       this.processing = true;
 
       const result = await this.$validator.validate();
@@ -41,9 +41,12 @@ export default {
             this.$socket.recreateWatchers(params.entity);
           }
         })
-        .then(() => {
+        .then((response) => {
           this.processing = false;
           this.closeModal();
+          if (cb !== null) {
+            cb(response.item);
+          }
         })
         .catch(error => {
           this.processing = false;

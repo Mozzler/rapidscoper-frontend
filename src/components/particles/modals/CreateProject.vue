@@ -1,15 +1,25 @@
 <template>
   <v-layout row justify-center>
-    <v-dialog v-model="dialog" max-width="416" persistent>
+    <v-dialog v-model="dialog" max-width="416" persistent
+              @keydown.enter.prevent.exact="() => submit(toStories)">
       <v-card class="modal-card">
+
+        <circular-loader
+          cls="loader-shadow--without-padding transparent"
+          :size="50"
+          :width="5"
+          :visible="processing"
+        />
 
         <div class="modal-header">
           <v-text-field
-            name="Team Title"
+            ref="title"
+            name="Project Name"
             v-validate="'required|min:2|max:100'"
             v-model="data.title"
-            :error-messages="errors.first('Team Title')"
+            :error-messages="errors.first('Project Name')"
             :disabled="processing"
+            placeholder="Project name..."
             solo
             class="input-without-border"
           ></v-text-field>
@@ -52,7 +62,7 @@
             </v-btn>
             <v-btn class="btn-rapid primary" large
                    :disabled="processing"
-                   @click="submit">
+                   @click="() => submit(toStories)">
               {{ isMobileDevice ? 'Create' : 'Create project' }}
             </v-btn>
           </v-flex>
@@ -63,13 +73,16 @@
 </template>
 
 <script>
-import ModalMixin from '@/mixins/modal';
 import Dropdown from "../menus/Dropdown";
+import CircularLoader from "../../particles/loaders/Circular";
+
+import ModalMixin from '@/mixins/modal';
 
 export default {
   name: 'create-project',
   components: {
-    Dropdown
+    Dropdown,
+    CircularLoader
   },
   mixins: [
     ModalMixin
@@ -92,7 +105,7 @@ export default {
       this.data = {
         team: this.teams[0],
         policy: this.policies[0],
-        title: 'Untitled'
+        title: ''
       };
     },
     getPayload () {
@@ -109,6 +122,18 @@ export default {
           teamId: this.data.team.id
         }
       };
+    },
+    toStories () {
+
+    }
+  },
+  watch: {
+    dialog () {
+      if (this.dialog) {
+        this.$nextTick(() => {
+          this.$refs.title.focus();
+        });
+      }
     }
   }
 };
