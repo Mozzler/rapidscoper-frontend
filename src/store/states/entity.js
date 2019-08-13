@@ -25,5 +25,8 @@ export default {
   },
   userInfo: {
     items: []
+  },
+  invite: {
+    items: []
   }
 };

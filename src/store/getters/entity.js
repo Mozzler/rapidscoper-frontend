@@ -33,28 +33,31 @@ export default {
     };
   },
   projectsWithMembers (state) {
-    /*let projects = [...state.project.items];
-    let userProject = [...state.userProject.items];
-    let userInfo = [...state.userInfo.items];
+    return teamId => {
+      let projects = [...state.project.items];
+      let userProject = [...state.userProject.items];
+      let userInfo = [...state.userInfo.items];
 
-    return projects.map(item => {
-      const obj = { ...item };
+      if (teamId) {
+        projects = _.filter(projects, item => item.teamId === teamId);
+      }
 
-      const filtered = _.filter(userProject, user => user.projectId === item.id);
-      const members = filtered.map(item => item.userId);
-      console.log(_.first(members, 3));
+      return projects.map(item => {
+        const obj = { ...item };
 
-      obj.members = _.chain(userProject)
-        .filter(user => user.projectId === item.id)
-        .map(user => user.userId)
-        .first(3)
-        .filter(id => userInfo.userId === id)
-        .map(item => item.avatarUrl)
-        .value();
+        let three = _.chain(userProject)
+          .filter(user => user.projectId === item.id)
+          .map(v => v.userId)
+          .first(3)
+          .value();
 
-      return obj;
-    });*/
+        obj.members = _.map(three, id => {
+          let found = _.find(userInfo, info => info.userId === id);
+          return found ? found.avatarUrl : null;
+        });
 
-    return state.project.items;
+        return obj;
+      });
+    };
   }
 };

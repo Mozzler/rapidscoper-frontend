@@ -54,5 +54,5 @@ export default {
       return left === right;
     }
   }
-}
+};
 </script>

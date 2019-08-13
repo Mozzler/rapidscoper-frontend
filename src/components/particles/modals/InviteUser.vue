@@ -11,36 +11,9 @@
         </div>
 
         <v-card-text class="invite-user-card padding-0">
-          <v-layout row>
-            <v-flex grow>
-              <div :class="{'input-group': !isMobileDevice}">
-                <v-text-field class="full-width"
-                  name="user"
-                  v-model="user.entity"
-                  placeholder="Invite someone..."
-                  solo
-                ></v-text-field>
-                <div class="select-in-input">
-                  <dropdown :list="roles"
-                            :selected="user.role"
-                            @update="value => user.role = value" />
-                </div>
-              </div>
-            </v-flex>
-
-            <v-flex shrink pl-3 v-if="!isMobileDevice">
-              <v-btn class="btn-rapid primary" large
-                     @click="closeModal">
-                Invite
-              </v-btn>
-            </v-flex>
-          </v-layout>
-          <v-flex shrink class="text-xs-right" v-if="isMobileDevice">
-            <v-btn class="btn-rapid primary" large
-                   @click="closeModal">
-              Invite
-            </v-btn>
-          </v-flex>
+          <invite-group
+            :entityId="$route.params.name"
+            :entityType="`team`"/>
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -50,10 +23,11 @@
 <script>
 import ModalMixin from '@/mixins/modal';
 import Dropdown from "@/components/particles/menus/Dropdown";
+import InviteGroup from "../inputs/InviteGroup";
 
 export default {
   name: 'invite-user',
-  components: { Dropdown },
+  components: {InviteGroup, Dropdown },
   mixins: [
     ModalMixin
   ],
