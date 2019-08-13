@@ -70,11 +70,6 @@ export default {
           sortable: false,
           value: 'last changes'
         },
-        {
-          text: 'actions',
-          sortable: false,
-          value: 'actions'
-        }
       ]
     };
   },
@@ -112,6 +107,12 @@ export default {
         payload.params = {
           teamId: this.teamId
         };
+
+        this.headers.push({
+          text: 'actions',
+          sortable: false,
+          value: 'actions'
+        });
       }
 
       Promise.all([

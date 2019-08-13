@@ -70,8 +70,7 @@ export default {
     };
   },
   beforeMount () {
-    this.role = _.first(this.roles);
-    this.email = null;
+    this.initData();
   },
   computed: {
     roles () {
@@ -101,6 +100,11 @@ export default {
 
       this.processing = false;
       this.$emit('finish-processing');
+      this.initData();
+    },
+    initData () {
+      this.role = _.first(this.roles);
+      this.email = null;
     }
   }
 };

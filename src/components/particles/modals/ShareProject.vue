@@ -33,8 +33,15 @@
                     <link-icon class="mr-3"/>
                     <span class="text-reference" @click="() => copy(index)">Copy public link</span>
                   </div>
-                  <div @click="() => remove(item.id)">
-                    <v-icon class="cursor-pointer">delete</v-icon>
+                  <div>
+                    <v-layout row align-center justify-space-between fill-height>
+                      <dropdown :list="periods" class="mr-3"
+                                :selected="period"
+                                @update="value => updatePeriod(value, item.id)" />
+                      <div @click="() => remove(item.id)">
+                        <v-icon class="cursor-pointer">delete</v-icon>
+                      </div>
+                    </v-layout>
                   </div>
                 </v-layout>
               </div>
@@ -44,7 +51,9 @@
           <v-divider
             class="my-3" />
           <v-flex>
-            <div class="text-sm-center text-greyed">There are no invited users yet</div>
+            <div class="text-sm-center text-greyed">
+              There are no invited users yet
+            </div>
           </v-flex>
           <v-divider
             class="my-3" />
@@ -62,7 +71,9 @@
             </v-layout>
           </v-flex>
           <v-flex grow mt-5>
-            <invite-group />
+            <invite-group v-if="dialog"
+                          :entityId="$route.params.projectId"
+                          :entityType="`project`" />
           </v-flex>
         </v-card-text>
       </v-card>
@@ -147,6 +158,26 @@ export default {
       };
 
       this.$store.dispatch('projectVersion/share', payload)
+        .then(() => {
+          this.processing = false;
+        });
+    },
+    updatePeriod (period, id) {
+      this.period = period;
+      this.processing = true;
+
+      let ms = period.replace(/\D/g, '');
+
+      const payload = {
+        params: {
+          id: id
+        },
+        data: {
+          expiry: ms ? ms * 86400000 : null
+        }
+      };
+
+      this.$store.dispatch('projectVersion/update', payload)
         .then(() => {
           this.processing = false;
         });
