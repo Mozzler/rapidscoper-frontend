@@ -12,7 +12,7 @@
         <div class="text-size--16 font-weight-regular cursor-default">
           <span class="font-weight-bold">{{ info.projectName }}</span> |
           <span>Version: {{ info.version }}</span> |
-          <span>{{ info.created }}</span>
+          <span>{{ info.version === 0 ? current : info.created }}</span>
         </div>
       </v-flex>
       <v-flex text-xs-right />
@@ -30,7 +30,13 @@ export default {
   computed: {
     ...mapGetters({
       info: 'projectVersion/info'
-    })
+    }),
+    current () {
+      return moment().format("HH:mm A");
+    }
+  },
+  created () {
+    document.title = `${this.info.projectName} - Rapidscoper`;
   }
 };
 </script>

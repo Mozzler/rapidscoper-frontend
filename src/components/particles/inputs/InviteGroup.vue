@@ -103,7 +103,7 @@ export default {
       this.initData();
     },
     initData () {
-      this.role = _.first(this.roles);
+      this.role = _.find(this.roles, (item, index) => index === 1);
       this.email = null;
     }
   }

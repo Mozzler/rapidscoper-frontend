@@ -8,7 +8,7 @@
           :key="item.id"
           :id="item.id" />
       </template>
-      <div class="text-greyed full-width text-sm-center mb-3" v-else>
+      <div class="text-greyed full-width text-sm-center mb-3 noprint" v-else>
         The list of user stories is empty
       </div>
     </div>
@@ -21,7 +21,7 @@
           :key="item.id"
           :id="item.id" />
       </template>
-      <div class="text-greyed full-width text-sm-center mb-3" v-else>
+      <div class="text-greyed full-width text-sm-center mb-3 noprint" v-else>
         The list of technical stories is empty
       </div>
     </div>

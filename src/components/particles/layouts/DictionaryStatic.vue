@@ -24,7 +24,7 @@
             </v-layout>
           </template>
           <template v-else>
-            <div class="text-greyed full-width text-sm-center">
+            <div class="text-greyed full-width text-sm-center noprint">
               The list of items is empty
             </div>
           </template>
@@ -32,7 +32,7 @@
       </div>
     </div>
     <div v-else>
-      <div class="text-greyed full-width text-sm-center">
+      <div class="text-greyed full-width text-sm-center noprint">
         The list of dictionary phrases is empty
       </div>
     </div>

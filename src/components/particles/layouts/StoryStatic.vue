@@ -41,7 +41,7 @@
           </v-layout>
         </div>
       </div>
-      <div class="text-greyed full-width text-sm-center" v-else>
+      <div class="text-greyed full-width text-sm-center noprint" v-else>
         The list of stories is empty
       </div>
     </div>
