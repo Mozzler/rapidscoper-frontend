@@ -8,7 +8,7 @@
 
     <template v-if="!processing">
       <public-header />
-      <sidebar-full-list />
+      <sidebar-full-list  class="noprint"/>
       <story-content-static />
       <!--<comments />-->
     </template>
@@ -19,8 +19,8 @@
 import CircularLoader from '../../particles/loaders/Circular';
 import SidebarFullList from '../../particles/lists/SidebarFullList';
 import StoryContentStatic from '../../particles/layouts/StoryContentStatic';
-import PublicHeader from "../../particles/navigation/PublicHeader";
-import Comments from "../../particles/lists/Comments";
+import PublicHeader from '../../particles/navigation/PublicHeader';
+import Comments from '../../particles/lists/Comments';
 
 export default {
   name: "SharedProject",

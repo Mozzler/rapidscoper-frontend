@@ -1,0 +1,26 @@
+@media only print {
+    body {
+        -webkit-print-color-adjust: exact;
+    }
+    .noprint {
+      visibility: hidden;
+      display: none;
+    }
+    .stories-container--public {
+      display: block !important;
+
+      .scrollable-layout {
+        margin-top: 64px !important;
+        max-height: fit-content !important;
+      }
+      .content-container {
+        //page-break-after: always;
+      }
+      .content {
+        box-shadow: none !important;
+        margin: 0 !important;
+        padding: 0 48px !important;
+        overflow: hidden !important;
+      }
+    }
+}

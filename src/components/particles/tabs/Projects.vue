@@ -9,18 +9,20 @@
       cls="projects-table"
       :loading="initialization"
       :actions="true" />
-
   </div>
 </template>
 
 <script>
-import Dropdown from "../menus/Dropdown";
-import Navigation from "@/mixins/navigation";
-import UserDataTable from "../tables/UserDataTable";
+import Dropdown from '../menus/Dropdown';
+import Navigation from '@/mixins/navigation';
+import UserDataTable from '../tables/UserDataTable';
 
 export default {
   name: 'Projects',
-  components: {UserDataTable, Dropdown},
+  components: {
+    UserDataTable,
+    Dropdown
+  },
   mixins: [
     Navigation
   ],
@@ -30,15 +32,6 @@ export default {
       dropdown: ['Active'],
       loading: true
     };
-  },
-  /*computed: {
-    projects () {
-      return this.$store.getters['entity/items']('project')
-        .filter(item => item.teamId === this.activeTeamId);
-    },
-    activeTeamId () {
-      return this.$route.params.name;
-    }
-  }*/
+  }
 };
 </script>
