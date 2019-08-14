@@ -1,6 +1,6 @@
 @media only print {
     body {
-        -webkit-print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
     }
     .noprint {
       visibility: hidden;
@@ -8,6 +8,7 @@
     }
     .stories-container--public {
       display: block !important;
+      background-color: $white !important;
 
       .header {
         box-shadow: none;
