@@ -20,6 +20,7 @@
                 key="team name"
                 name="Team name"
                 placeholder="Team name"
+                ref="team-name"
                 v-model="data.name"
                 v-validate="'required|min:2|max:100'"
                 :disabled="processing"
@@ -61,6 +62,9 @@ export default {
         name: null
       }
     };
+  },
+  mounted () {
+    this.$refs['team-name'].focus();
   },
   methods: {
     initData () {

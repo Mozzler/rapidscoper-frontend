@@ -11,6 +11,7 @@
 
     <h1>
       <input v-model="name"
+             @click="click"
              @input="updateSectionName"
              @blur="() => updateStory('name')" />
     </h1>
@@ -21,6 +22,7 @@
       <div contenteditable
            class="user-story__editable"
            v-html="description"
+           @click="click"
            @input="event => updateSection('description', event)"
            @blur="() => updateStory('description')">
       </div>
@@ -70,6 +72,12 @@ export default {
     }
   },
   methods: {
+    click (event) {
+      this.$store.commit('story/setActiveStoryOnTab', null);
+      this.$nextTick(() => {
+        event.target.focus();
+      });
+    },
     updateSection (item, event) {
       this[item] = event.target.innerText;
 
