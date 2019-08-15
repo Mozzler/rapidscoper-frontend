@@ -17,6 +17,7 @@
 
   .content-container {
     grid-area: content-container;
+    @include rapid-scroll;
     z-index: 3;
 
     .content {
@@ -30,8 +31,6 @@
       overflow-x: hidden;
       overflow-y: auto;
       height: calc(100% - 50px);
-
-      @include rapid-scroll;
     }
 
     & * {

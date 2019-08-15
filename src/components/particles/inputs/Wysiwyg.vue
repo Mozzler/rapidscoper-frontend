@@ -43,7 +43,7 @@
         </div>
 
         <v-layout align-center row fill-height>
-          <v-flex shrink mr-1>
+          <v-flex shrink mr-1 align-self-baseline>
             <div :class="`user-story__item user-story__item--${ item.level }`">
               <v-layout align-center fill-height>
                 <v-flex shrink mr-2 v-if="tab === 'estimate'">

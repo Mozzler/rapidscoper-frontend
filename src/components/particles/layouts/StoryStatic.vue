@@ -10,7 +10,7 @@
       <div v-if="model.list.length">
         <div v-for="item in model.list" :key="item.id">
           <v-layout align-center row fill-height mb-2>
-            <v-flex shrink mr-1>
+            <v-flex shrink mr-1 align-self-baseline>
               <priority-indicator
                 :index="item.priority"
               />
