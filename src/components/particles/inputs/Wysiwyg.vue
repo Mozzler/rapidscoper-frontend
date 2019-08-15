@@ -44,6 +44,10 @@
 
         <v-layout align-center row fill-height>
           <v-flex shrink mr-1 align-self-baseline>
+            <priority-indicator
+              v-if="tab === 'priority'"
+              :index="item.priority"
+            />
             <div :class="`user-story__item user-story__item--${ item.level }`">
               <v-layout align-center fill-height>
                 <v-flex shrink mr-2 v-if="tab === 'estimate'">
@@ -119,18 +123,20 @@
 </template>
 
 <script>
-import ToolList from "../lists/ToolList";
-import CircularLoader from "../../particles/loaders/Circular";
+import ToolList from '../lists/ToolList';
+import CircularLoader from '../../particles/loaders/Circular';
+import PriorityIndicator from '../../particles/indicators/Priority';
 
-import WysiwygMixin from "@/mixins/wysiwyg";
-import Drag from "../icons/Drag";
+import WysiwygMixin from '@/mixins/wysiwyg';
+import Drag from '../icons/Drag';
 
 export default {
-  name: "Wysiwyg",
+  name: 'Wysiwyg',
   components: {
     Drag,
     ToolList,
-    CircularLoader
+    CircularLoader,
+    PriorityIndicator
   },
   mixins: [
     WysiwygMixin

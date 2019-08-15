@@ -9,7 +9,7 @@
 import Tools from '@/mixins/story';
 
 export default {
-  name: "priority",
+  name: 'priority',
   mixins: [
     Tools
   ],
@@ -19,17 +19,12 @@ export default {
       required: true
     }
   },
-  data () {
-    return {
-      priority: null
-    };
-  },
-  beforeMount () {
-    this.priority = this.priorities[this.index];
-  },
   computed: {
     priorities () {
       return this.$store.state.story.priority;
+    },
+    priority () {
+      return this.priorities[this.index];
     }
   }
 };
