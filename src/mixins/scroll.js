@@ -20,6 +20,18 @@ export default {
       if (el) {
         el.scrollIntoView();
       }
+    },
+    handleScroll () {
+      const container = this.$refs['scrollable-layout'];
+      const nodes = container.querySelectorAll(this.scrollSelector);
+      const node = _.find(nodes, item => item.getBoundingClientRect().top > -24);
+
+      this.$router.replace({
+        name: this.$route.name,
+        params: {
+          section: node.id
+        }
+      });
     }
   },
   watch: {

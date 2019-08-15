@@ -58,28 +58,17 @@ export default {
     DictionaryStatic,
     Stories
   },
+  data () {
+    return {
+      scrollSelector: '*[id]'
+    };
+  },
   mixins: [
     ScrollMixin
   ],
   computed: {
     sections () {
       return this.$store.getters['projectVersion/chapters'];
-    }
-  },
-  mounted () {
-    this.handleScroll();
-  },
-  methods: {
-    handleScroll () {
-      const nodes = this.$refs['scrollable-layout'].querySelectorAll('*[id]');
-      const node = _.find(nodes, item => item.getBoundingClientRect().top > -24);
-
-      this.$router.replace({
-        name: 'shared-project',
-        params: {
-          section: node.id
-        }
-      });
     }
   }
 };

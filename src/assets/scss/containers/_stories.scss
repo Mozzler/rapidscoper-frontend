@@ -17,11 +17,7 @@
 
   .content-container {
     grid-area: content-container;
-    @include rapid-scroll;
     z-index: 3;
-    overflow-x: hidden;
-    overflow-y: auto;
-    height: calc(100vh - 64px);
 
     .content {
       position: relative;
@@ -186,11 +182,11 @@
   overflow: auto;
   overflow-x: hidden;
   max-height: 100vh;
-  padding-bottom: 24px;
 
-  &::-webkit-scrollbar {
+  /*&::-webkit-scrollbar {
     width: 0;
     background: transparent;
-  }
+  }*/
+  @include rapid-scroll;
 }
 

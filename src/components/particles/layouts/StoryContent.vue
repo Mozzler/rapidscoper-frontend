@@ -1,7 +1,7 @@
 <template>
-  <div class="content-container">
+  <div class="content-container scrollable-layout" ref="scrollable-layout">
     <v-layout align-start justify-center row fill-height>
-      <div class="content" ref="scrollable-layout">
+      <div class="content" ref="layout-content">
         <story-item v-for="(story, index) in sections"
           :model="story"
           :key="index"
@@ -32,7 +32,8 @@ export default {
   data () {
     return {
       message: null,
-      scrollActive: false
+      scrollActive: false,
+      scrollSelector: '.user-story__block'
     };
   },
   beforeMount () {
@@ -94,20 +95,6 @@ export default {
         ]
       };
       this.$socket.recreateWatchers('story', true, filter);
-    },
-    handleScroll ($event) {
-      if (!this.sections || !this.sections.length) {
-        return;
-      }
-
-      let offset = $event.target.scrollTop,
-        childOffsets = _.map($event.target.children, item => item.offsetTop),
-        index = _.findIndex(childOffsets, co => (co + 28) > offset);
-
-      index = index === -1 ? this.sections.length - 1 : index;
-
-      const url = this.$route.path.replace(this.activeSectionId, this.sections[index].id);
-      this.$router.replace(url);
     }
   }
 };
