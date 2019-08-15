@@ -17,6 +17,7 @@
         <input class="user-story__input"
            :value="story.estimate"
            type="number"
+           @focus="focusEstimate"
            @input="$event => updateEstimate($event, story.id)"
            @blur="$event => submitEstimate($event, story.id)" />
         <span class="ml-2">{{ hours(story.estimate) }}</span>

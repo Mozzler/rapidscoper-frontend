@@ -12,6 +12,10 @@ export default {
         }
       };
     },
+    focusEstimate ($event) {
+      $event.focus();
+      $event.target.setSelectionRange(0, $event.target.value.length);
+    },
     updateEstimate ($event, id) {
       const payload = this.getEstimateData(id, $event.target.value);
       this.$store.commit('entity/update', payload);
