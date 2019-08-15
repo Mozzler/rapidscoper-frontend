@@ -11,8 +11,6 @@
       <story-content />
     </template>
     <tool-section />
-
-    <share-project-modal />
   </div>
 </template>
 
@@ -23,7 +21,6 @@ import StorySection from "../../particles/navigation/StorySection";
 import ToolSection from "../../particles/navigation/ToolSection";
 import StoryContent from "../../particles/layouts/StoryContent";
 import CircularLoader from "../../particles/loaders/Circular";
-import ShareProjectModal from '@/components/particles/modals/ShareProject';
 
 import LayoutMixin from "@/mixins/layout";
 
@@ -36,7 +33,6 @@ export default {
     ToolSection,
     StoryContent,
     CircularLoader,
-    ShareProjectModal
   },
   mixins: [
     LayoutMixin
