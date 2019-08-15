@@ -1,7 +1,22 @@
 <template>
   <v-menu offset-y>
     <template v-slot:activator="{ on }">
-      <span :class="{'text-bold': bold}">{{ toStr(selected, 'name') }}</span>
+      <template
+        :class="{
+          'text-bold': bold,
+          'cursor-default': !editable
+        }">
+        <input v-if="editable"
+          ref="project-input"
+          placeholder="Project"
+          class="user-story__editable-input"
+          @blur="blur"
+          @click="click"
+          v-model="project" />
+        <span v-else>
+          {{ project }}
+        </span>
+      </template>
       <v-btn icon v-on="on" class="dropdown-action">
         <v-icon>arrow_drop_down</v-icon>
       </v-btn>
@@ -23,7 +38,7 @@
 
 <script>
 export default {
-  name: "Dropdown",
+  name: 'Dropdown',
   props: {
     list: {
       type: Array,
@@ -36,9 +51,31 @@ export default {
     bold: {
       type: Boolean,
       default: false
+    },
+    editable: {
+      type: Boolean,
+      default: false
+    },
+    submit: {
+      type: Function,
+      default: () => {}
     }
   },
+  data () {
+    return {
+      project: null
+    };
+  },
+  mounted () {
+    this.initData();
+  },
   methods: {
+    resize () {
+      const input = this.$refs['project-input'];
+      if (input) {
+        input.style.width = input.value.length + 'ch';
+      }
+    },
     toStr (item, field) {
       if (typeof item === 'object') {
         return item[field];
@@ -52,6 +89,37 @@ export default {
       }
 
       return left === right;
+    },
+    click ($event) {
+      this.$store.commit('story/setActiveStoryOnTab', null);
+      this.$nextTick(() => {
+        $event.target.focus();
+      });
+    },
+    async blur () {
+      if (!this.project) {
+        this.initData();
+        return;
+      }
+
+      const response = await this.submit(this.project, this.selected.id);
+      if (response === 'error') {
+        this.initData();
+      }
+    },
+    initData () {
+      this.project = this.toStr(this.selected, 'name');
+    }
+  },
+  watch: {
+    project () {
+      this.resize();
+    },
+    selected: {
+      deep: true,
+      handler () {
+        this.initData();
+      }
     }
   }
 };

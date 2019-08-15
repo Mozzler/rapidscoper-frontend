@@ -41,9 +41,11 @@ export default {
   },
   beforeMount () {
     this.$root.$on('create-new-section', this.createSection);
+    this.$root.$on('show-error-message', this.setErrorMessage);
   },
   beforeDestroy () {
     this.$root.$off('create-new-section');
+    this.$root.$off('show-error-message');
   },
   computed: {
     sections () {
@@ -67,6 +69,9 @@ export default {
     }
   },
   methods: {
+    setErrorMessage (error) {
+      this.message = error;
+    },
     getSectionData () {
       const untitled = this.sections.filter(item => item.name.includes('Untitled'));
       const number = untitled.length;

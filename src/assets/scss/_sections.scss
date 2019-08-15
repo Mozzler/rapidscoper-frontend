@@ -98,7 +98,15 @@
   width: 100%;
 }
 
-.user-story__editable, .user-story__input {
+.user-story__editable-input {
+  display: inline-block;
+  min-width: 60px;
+  padding: 10px 0;
+}
+
+.user-story__editable,
+.user-story__input,
+.user-story__editable-input {
   caret-color: $light-blue;
 
   &:focus {

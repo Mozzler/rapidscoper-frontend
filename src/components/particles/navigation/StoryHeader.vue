@@ -8,6 +8,8 @@
         </v-btn>
         <span class="text-size--16">
           <dropdown :list="projects"
+                    :editable="true"
+                    :submit="submit"
                     :selected="currentProject"
                     @update="item => goToProject(item.name, item.id)" />
         </span>
@@ -67,8 +69,6 @@ export default {
   },
   data () {
     return {
-      project: 'Skellorbit',
-
       tabs: [
         'Edit', 'Estimates', 'Priorities', 'Labels', /*'Comments'*/
       ],
@@ -116,6 +116,29 @@ export default {
     },
     showModal () {
       this.$emit('share-project');
+    },
+    async submit (value, id) {
+      if (value === this.currentProject.name) {
+        return;
+      }
+
+      const data = {
+        entity: 'project',
+        params: {
+          id: id
+        },
+        data: {
+          name: value
+        }
+      };
+      try {
+        await this.$store.dispatch('entity/update', data);
+      } catch (error) {
+        if (error.response && error.response.data) {
+          this.$root.$emit('show-error-message', error.response.data[0].message);
+        }
+        return 'error';
+      }
     }
   },
   beforeMount () {
