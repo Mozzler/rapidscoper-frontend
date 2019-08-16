@@ -58,6 +58,10 @@ export default {
     },
     submitTool (propertyId) {
       const item = this.list.find(item => item.id === this.toolId);
+      if (item.priority === propertyId) {
+        propertyId = null;
+      }
+
       this.disabled = true;
       this.updateToolId(propertyId, item, this.tab);
     },
