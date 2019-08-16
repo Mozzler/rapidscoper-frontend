@@ -27,7 +27,7 @@
         <td>{{ props.item.updatedAt | toDate }}</td>
         <td>
           <v-layout align-center justify-space-between row fill-height>
-            <v-icon>share</v-icon>
+            <v-icon @click="() => share(props.item.id)">share</v-icon>
             <template>
               <v-icon @click="() => setStatus(props.item.id, 'archived')"
                       v-if="props.item.status !== 'archived'">
@@ -164,6 +164,9 @@ export default {
       this.processing = true;
       await this.$store.dispatch('entity/update', data);
       this.processing = false;
+    },
+    share (id) {
+      this.$root.$emit('share-project', id);
     }
   }
 };
