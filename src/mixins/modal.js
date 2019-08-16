@@ -7,7 +7,8 @@ export default {
   data () {
     return {
       dialog: false,
-      processing: false
+      processing: false,
+      params: null
     };
   },
   beforeMount () {
@@ -20,8 +21,9 @@ export default {
     closeModal () {
       this.dialog = false;
     },
-    showModal () {
+    showModal (params) {
       this.dialog = true;
+      this.params = params;
     },
     async submit (cb = null) {
       this.processing = true;

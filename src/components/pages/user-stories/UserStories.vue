@@ -59,7 +59,7 @@ export default {
     share () {
       this.$store.commit('story/setActiveStoryOnTab', null);
       this.$nextTick(() => {
-        this.$root.$emit('share-project');
+        this.$root.$emit('share-project', this.$route.params.projectId);
       });
     },
     fetchData () {

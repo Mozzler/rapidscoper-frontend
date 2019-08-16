@@ -93,6 +93,7 @@ export default {
     };
   },
   beforeMount () {
+    this.connect('projectShare', 'entity/setList');
     this.fetchData();
   },
   computed: {

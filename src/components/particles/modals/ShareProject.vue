@@ -72,7 +72,7 @@
           </v-flex>
           <v-flex grow mt-5>
             <invite-group v-if="dialog"
-                          :entityId="$route.params.projectId"
+                          :entityId="params"
                           :entityType="`project`" />
           </v-flex>
         </v-card-text>
@@ -110,14 +110,11 @@ export default {
     };
   },
   computed: {
-    projectId () {
-      return this.$route.params.projectId;
-    },
     projects () {
       return this.$store.getters['entity/items']('project');
     },
     project () {
-      return _.find(this.projects, item => item.id === this.projectId);
+      return _.find(this.projects, item => item.id === this.params);
     },
 
     periods () {
@@ -127,7 +124,8 @@ export default {
       return this.$store.state.system.permissions;
     },
     projectShare () {
-      return this.$store.getters['entity/items']('projectShare');
+      const shared = this.$store.getters['entity/items']('projectShare');
+      return _.filter(shared, item => item.projectId === this.params);
     }
   },
   beforeMount () {
