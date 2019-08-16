@@ -88,7 +88,10 @@ export default {
           }
 
           const selection = document.getSelection();
-          if (selection.anchorNode.id) {
+
+          if (selection.anchorNode === null) {
+            return;
+          } else if (selection.anchorNode.id) {
             this.collapseToEnd();
           } else {
             const range = document.createRange();
@@ -108,7 +111,7 @@ export default {
     }
   },
   updated () {
-    if (this.hintEditor === null) {
+    if (this.hintEditor === null && this.movable === null) {
       this.activatePanel();
     }
   },

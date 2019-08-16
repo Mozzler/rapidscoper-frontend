@@ -3,7 +3,6 @@
     <component :is="tab === 'edit' ? 'draggable' : 'div'"
                v-model="list"
                :clone="clone"
-               :move="movable"
                @start="start"
                ghost-class="user-story__draggable"
                @change="change">
@@ -71,10 +70,10 @@
                             align-center
                             fill-height
                             class="user-story__prefix">
-                    <div class="drag-icon" v-if="tab === 'edit'">
-                      <drag class="cursor-move"
-                            @mouseover="() => movable = item.id"
-                            @mouseleave="() => movable = null"/>
+                    <div class="drag-icon"
+                         v-if="tab === 'edit'"
+                        @click="() => startDragging(item.id)">
+                      <drag />
                     </div>
                     <div>#</div>
                   </v-layout>
@@ -210,6 +209,10 @@ export default {
       }
 
       this.replacement = null;
+    },
+    startDragging (id) {
+      this.movable = id;
+      this.$store.commit('story/setActiveStoryOnTab', null);
     }
   },
   watch: {
