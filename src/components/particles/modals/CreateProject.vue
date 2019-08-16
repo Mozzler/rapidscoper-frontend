@@ -102,8 +102,15 @@ export default {
   },
   methods: {
     initData () {
+      const params = this.$route.params;
+      let team = _.first(this.teams);
+
+      if (params.section === 'team') {
+        team = _.find(this.teams, item => item.id === params.name);
+      }
+
       this.data = {
-        team: this.teams[0],
+        team: team,
         policy: this.policies[0],
         title: ''
       };
