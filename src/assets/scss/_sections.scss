@@ -46,8 +46,6 @@
 }
 .user-story--active {
   background-color: $light-grey-1;
-  margin: 5px -8px;
-  padding: 3px 8px;
 
   &:focus {
     outline: none;
@@ -100,6 +98,7 @@
 .user-story__editable {
   position: relative;
   width: 100%;
+  word-wrap: break-word;
 }
 
 .user-story__editable-input {
@@ -186,7 +185,7 @@
 }
 
 .user-story__priority--short {
-  margin: -2px 0 0 -56px;
+  margin: -2px 0 0 -48px;
   position: absolute;
   background-color: red;
   border-radius: 0 2px 2px 0;

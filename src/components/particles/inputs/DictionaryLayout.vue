@@ -33,7 +33,7 @@
                        @blur="() => update(word.id, 'name')"
                   ></div>
                 </v-flex>
-                <v-flex grow text-xs-left>
+                <v-flex grow text-xs-left wrap>
                   <div class="user-story__placeholder text-greyed">
                     {{ !word.description  ? 'It is a description of this term' : '' }}
                   </div>

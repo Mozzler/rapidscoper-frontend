@@ -12,14 +12,14 @@
                       v-for="word in item.list"
                       :key="word.id">
               <v-flex shrink>
-                <div class="user-story__editable user-story__editable--after text-bold">
-                  {{ word.name }}
-                </div>
+                <div
+                  class="user-story__editable user-story__editable--after text-bold"
+                  v-html="word.name" />
               </v-flex>
-              <v-flex grow text-xs-left>
-                <div class="user-story__editable">
-                  {{ word.description }}
-                </div>
+              <v-flex text-xs-left wrap>
+                <div
+                  class="user-story__editable"
+                  v-html="word.description" />
               </v-flex>
             </v-layout>
           </template>
