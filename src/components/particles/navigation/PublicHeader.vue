@@ -32,7 +32,7 @@ export default {
       info: 'projectVersion/info'
     }),
     current () {
-      return moment().format("HH:mm A");
+      return moment().format("MMMM DD, YYYY HH:mm A");
     }
   },
   created () {
