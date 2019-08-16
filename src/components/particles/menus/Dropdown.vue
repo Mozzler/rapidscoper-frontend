@@ -3,6 +3,7 @@
     <template v-slot:activator="{ on }">
       <template>
         <div
+          v-if="editable"
           class="user-story__editable-input"
           :contenteditable="editable"
           :class="{
@@ -11,7 +12,8 @@
           }"
           @blur="blur"
           @click="editable ? click : null"
-          v-html="project" />
+          v-html="project"></div>
+        <span v-else> {{ project }} </span>
       </template>
       <v-btn icon v-on="on" class="dropdown-action">
         <v-icon>arrow_drop_down</v-icon>
