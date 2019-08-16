@@ -31,6 +31,10 @@ export default {
       const nodes = container.querySelectorAll(this.scrollSelector);
       const node = _.find(nodes, item => item.getBoundingClientRect().top > -1);
 
+      if (!node) {
+        return;
+      }
+
       this.frozen = true;
       this.$router.replace({
         name: this.$route.name,

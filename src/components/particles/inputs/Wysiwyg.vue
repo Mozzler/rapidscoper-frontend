@@ -87,14 +87,14 @@
                    v-html="item.placeholder"
                    readonly></div>
               <div class="user-story__editable"
+                   tabindex="0"
                    :contenteditable="processing !== item.id && tab === 'edit'"
                    :disabled="processing === item.id"
                    :class="{
                     'user-story__wysiwyg--disabled': tab !== 'edit',
-                    'text-dark-grey': beginning(item.markup)
+                    'text-dark-grey': !item.type && beginning(item.markup)
                    }"
                    :ref="item.id"
-                   tabindex="0"
                    :id="item.id"
                    @keydown.ctrl.86.exact="ctrlV"
                    @focus="() => focusEvent(item, index)"
