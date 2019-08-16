@@ -70,9 +70,8 @@
                             align-center
                             fill-height
                             class="user-story__prefix">
-                    <div class="drag-icon"
-                         v-if="tab === 'edit'"
-                        @click="() => startDragging(item.id)">
+                    <div class="drag-icon" v-if="tab === 'edit'"
+                         @mousedown="() => startDragging(item.id)">
                       <drag />
                     </div>
                     <div>#</div>
