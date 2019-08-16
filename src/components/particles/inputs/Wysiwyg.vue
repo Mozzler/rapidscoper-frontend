@@ -71,9 +71,8 @@
                             align-center
                             fill-height
                             class="user-story__prefix">
-                    <div class="drag-icon">
+                    <div class="drag-icon" v-if="tab === 'edit'">
                       <drag class="cursor-move"
-                            v-if="hovered === item.id && tab === 'edit'"
                             @mouseover="() => movable = item.id"
                             @mouseleave="() => movable = null"/>
                     </div>

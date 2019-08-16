@@ -38,7 +38,7 @@
 .user-story {
   border-radius: 4px;
   margin-bottom: 6px;
-  padding: 5px 8px;
+  padding: 5px 0;
   background-color: $white;
   position: relative;
   display: block;
@@ -46,6 +46,8 @@
 }
 .user-story--active {
   background-color: $light-grey-1;
+  margin: 5px -8px;
+  padding: 3px 8px;
 
   &:focus {
     outline: none;
@@ -69,6 +71,7 @@
 .user-story__wysiwyg {
   position: relative;
   width: 100%;
+  padding-right: 48px;
 }
 
 .user-story__input {
@@ -91,6 +94,7 @@
   position: absolute;
   width: 100%;
   color: $white;
+  padding-right: 48px;
 }
 
 .user-story__editable {
