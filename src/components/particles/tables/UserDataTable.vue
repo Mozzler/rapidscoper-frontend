@@ -25,10 +25,19 @@
           </v-layout>
         </td>
         <td>{{ props.item.updatedAt | toDate }}</td>
-        <td v-if="actions">
+        <td>
           <v-layout align-center justify-space-between row fill-height>
             <v-icon>share</v-icon>
-            <v-icon>archive</v-icon>
+            <template>
+              <v-icon @click="() => setStatus(props.item.id, 'archived')"
+                      v-if="props.item.status !== 'archived'">
+                archive
+              </v-icon>
+              <v-icon @click="() => setStatus(props.item.id, 'active')"
+                      v-else>
+                unarchive
+              </v-icon>
+            </template>
           </v-layout>
         </td>
       </tr>
@@ -38,8 +47,13 @@
 </template>
 
 <script>
+import CircularLoader from '../../particles/loaders/Circular';
+
 export default {
-  name: "UserDataTable",
+  name: 'UserDataTable',
+  components: {
+    CircularLoader
+  },
   props: {
     actions: {
       default: false
@@ -70,6 +84,11 @@ export default {
           sortable: false,
           value: 'last changes'
         },
+        {
+          text: 'actions',
+          sortable: false,
+          value: 'actions'
+        }
       ]
     };
   },
@@ -130,6 +149,21 @@ export default {
     goTo (item, id) {
       const url = `/projects/${id}/user-story/section/edit`;
       this.$router.push(url);
+    },
+    async setStatus (id, status) {
+      const data = {
+        entity: 'project',
+        params: {
+          id: id
+        },
+        data: {
+          status: status
+        }
+      };
+
+      this.processing = true;
+      await this.$store.dispatch('entity/update', data);
+      this.processing = false;
     }
   }
 };
