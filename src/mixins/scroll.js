@@ -1,4 +1,9 @@
 export default {
+  data () {
+    return {
+      frozen: false
+    };
+  },
   beforeDestroy () {
     this.setScrollListener('remove');
   },
@@ -18,14 +23,15 @@ export default {
     scrollToActiveSection () {
       const el = document.getElementById(this.activeSectionId);
       if (el) {
-        el.scrollIntoView();
+        el.scrollIntoView('smooth');
       }
     },
     handleScroll () {
       const container = this.$refs['scrollable-layout'];
       const nodes = container.querySelectorAll(this.scrollSelector);
-      const node = _.find(nodes, item => item.getBoundingClientRect().top > -24);
+      const node = _.find(nodes, item => item.getBoundingClientRect().top > -1);
 
+      this.frozen = true;
       this.$router.replace({
         name: this.$route.name,
         params: {
@@ -36,7 +42,11 @@ export default {
   },
   watch: {
     activeSectionId () {
-      this.scrollToActiveSection();
+      if (!this.frozen) {
+        this.scrollToActiveSection();
+      } else {
+        this.frozen = false;
+      }
     }
   }
 };
