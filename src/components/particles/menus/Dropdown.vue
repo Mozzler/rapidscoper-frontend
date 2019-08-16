@@ -1,21 +1,17 @@
 <template>
   <v-menu offset-y>
     <template v-slot:activator="{ on }">
-      <template
-        :class="{
-          'text-bold': bold,
-          'cursor-default': !editable
-        }">
-        <input v-if="editable"
-          ref="project-input"
-          placeholder="Project"
+      <template>
+        <div
           class="user-story__editable-input"
+          :contenteditable="editable"
+          :class="{
+            'text-bold': bold,
+            'cursor-default': !editable
+          }"
           @blur="blur"
-          @click="click"
-          v-model="project" />
-        <span v-else>
-          {{ project }}
-        </span>
+          @click="editable ? click : null"
+          v-html="project" />
       </template>
       <v-btn icon v-on="on" class="dropdown-action">
         <v-icon>arrow_drop_down</v-icon>
@@ -63,19 +59,13 @@ export default {
   },
   data () {
     return {
-      project: null
+      project: this.toStr(this.selected, 'name')
     };
   },
-  mounted () {
+  beforeMount () {
     this.initData();
   },
   methods: {
-    resize () {
-      const input = this.$refs['project-input'];
-      if (input) {
-        input.style.width = input.value.length + 'ch';
-      }
-    },
     toStr (item, field) {
       if (typeof item === 'object') {
         return item[field];
@@ -96,29 +86,29 @@ export default {
         $event.target.focus();
       });
     },
-    async blur () {
-      if (!this.project) {
-        this.initData();
+    async blur ($event) {
+      const text = $event.target.innerHTML.trim();
+      if (!text) {
+        this.initData($event);
         return;
       }
 
-      const response = await this.submit(this.project, this.selected.id);
+      const response = await this.submit(text, this.selected.id);
       if (response === 'error') {
-        this.initData();
+        this.initData($event);
       }
     },
-    initData () {
-      this.project = this.toStr(this.selected, 'name');
-    }
+    initData ($event = null) {
+      if ($event !== null) {
+        $event.target.innerHTML = this.project;
+      }
+    },
   },
   watch: {
-    project () {
-      this.resize();
-    },
     selected: {
       deep: true,
       handler () {
-        this.initData();
+        this.project = this.toStr(this.selected, 'name');
       }
     }
   }
