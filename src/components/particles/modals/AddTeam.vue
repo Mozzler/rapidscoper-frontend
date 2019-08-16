@@ -63,12 +63,14 @@ export default {
       }
     };
   },
-  mounted () {
-    this.$refs['team-name'].focus();
-  },
   methods: {
     initData () {
       this.data.name = null;
+    },
+    focusInput () {
+      this.$nextTick(() => {
+        this.$refs['team-name'].focus();
+      });
     },
     getPayload () {
       return {
@@ -77,6 +79,13 @@ export default {
         recreate: true,
         data: this.data
       };
+    }
+  },
+  watch: {
+    dialog () {
+      if (this.dialog) {
+        this.focusInput();
+      }
     }
   }
 };
