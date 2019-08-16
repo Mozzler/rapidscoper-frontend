@@ -30,15 +30,12 @@ export default {
       }
 
       this.list[this.focused].markup = this.event.target.innerHTML;
-      this.list[this.focused].placeholder = this.event.target.innerHTML;
       this.$refs[this.list[this.focused].id][0].classList.remove('text-dark-grey');
       this.collapseToEnd();
 
-      if (this.list[this.focused].type !== 'other') {
-        this.initPlaceholder();
-        this.initDictionary();
-        this.initStaticText();
-      }
+      this.initPlaceholder();
+      this.initDictionary();
+      this.initStaticText();
     },
     isEditable () {
       if (!this.event) {
@@ -47,7 +44,13 @@ export default {
 
       const focused = this.event.view.getSelection().focusNode;
       const node = focused ? this.event.view.getSelection().focusNode.parentElement : null;
-      return node && node.className.includes('custom');
+      const other = this.list[this.focused].type === 'other';
+
+      if (other) {
+        this.list[this.focused].placeholder = this.event.target.innerHTML;
+      }
+
+      return (node && node.className.includes('custom')) || other;
     },
     completeBeginning (shortcut) {
       const item = _.find(this.adjustedConstruction, item => item.shortcut === shortcut);
