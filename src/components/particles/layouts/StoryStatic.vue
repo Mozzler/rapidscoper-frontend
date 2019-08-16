@@ -24,7 +24,9 @@
             </v-flex>
             <v-flex grow text-xs-left align-center row fill-height>
               <div class="user-story__wysiwyg">
-                <span class="user-story--without-padding" v-html="augmented(item.markup)"></span>
+                <span class="user-story--without-padding word-break-word"
+                      v-html="augmented(item.markup)"
+                ></span>
                 <v-layout class="indicators"
                           align-center justify-start row fill-height>
                   <mark-indicator

@@ -82,7 +82,8 @@
               </v-layout>
             </div>
           </v-flex>
-          <v-flex grow text-xs-left align-center row fill-height>
+          <v-flex text-xs-left align-center row fill-height
+            class="word-break-word">
             <div class="user-story__wysiwyg">
               <div class="user-story__placeholder"
                    v-html="item.placeholder"

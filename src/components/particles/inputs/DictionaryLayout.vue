@@ -33,11 +33,11 @@
                        @blur="() => update(word.id, 'name')"
                   ></div>
                 </v-flex>
-                <v-flex grow text-xs-left wrap>
+                <v-flex text-xs-left wrap>
                   <div class="user-story__placeholder text-greyed">
                     {{ !word.description  ? 'It is a description of this term' : '' }}
                   </div>
-                  <div class="user-story__editable"
+                  <div class="user-story__editable word-break-word"
                        v-html="word.description"
                        :contenteditable="true"
                        :ref="`description-${word.id}`"

@@ -69,7 +69,6 @@
 .user-story__wysiwyg {
   position: relative;
   width: 100%;
-  padding-right: 48px;
 }
 
 .user-story__input {
@@ -92,13 +91,11 @@
   position: absolute;
   width: 100%;
   color: $white;
-  padding-right: 48px;
 }
 
 .user-story__editable {
   position: relative;
   width: 100%;
-  word-wrap: break-word;
 }
 
 .user-story__editable-input {

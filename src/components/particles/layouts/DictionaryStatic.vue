@@ -18,7 +18,7 @@
               </v-flex>
               <v-flex text-xs-left wrap>
                 <div
-                  class="user-story__editable"
+                  class="user-story__editable word-break-word"
                   v-html="word.description" />
               </v-flex>
             </v-layout>
