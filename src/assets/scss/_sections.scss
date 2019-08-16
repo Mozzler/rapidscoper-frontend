@@ -37,8 +37,7 @@
 
 .user-story {
   border-radius: 4px;
-  margin-bottom: 6px;
-  padding: 5px 0;
+  margin: 8px 0;
   background-color: $white;
   position: relative;
   display: block;
@@ -46,6 +45,8 @@
 }
 .user-story--active {
   background-color: $light-grey-1;
+  margin: -4px -8px;
+  padding: 4px 8px;
 
   &:focus {
     outline: none;
