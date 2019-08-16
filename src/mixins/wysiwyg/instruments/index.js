@@ -1,5 +1,5 @@
-import Estimate from "./estimate";
-import Tools from "./tools";
+import Estimate from './estimate';
+import Tools from './tools';
 
 export default {
   mixins: [

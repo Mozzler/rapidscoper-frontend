@@ -16,6 +16,26 @@ export default {
         this.hintEditor = null;
       }
     },
+    setText (text) {
+      _.assign(this.list[this.focused], {
+        markup: text,
+        placeholder: text,
+        type: 'other',
+        template: ''
+      });
+      this.collapseToEnd();
+    },
+    ctrlV ($event) {
+      $event.preventDefault();
+      $event.stopPropagation();
+
+      $event.target.classList.remove('text-dark-grey');
+      navigator.clipboard.readText()
+        .then(text => {
+          $event.target.innerHTML = text;
+          this.setText(text);
+        });
+    },
     keyupEvent ($event) {
       this.event = $event;
       this.setSiblings();

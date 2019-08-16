@@ -1,4 +1,4 @@
-import editor from "../shared/editor";
+import editor from '../shared/editor';
 
 export default {
   dictionary (state, getters, rootState) {

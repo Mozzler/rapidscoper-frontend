@@ -1,5 +1,5 @@
 import filters from '../shared/filters';
-import editor from "../shared/editor";
+import editor from '../shared/editor';
 
 function reduce (list) {
   return _.reduce(list, (memo, item) => { return Number(memo) + Number(item.estimate) }, 0);

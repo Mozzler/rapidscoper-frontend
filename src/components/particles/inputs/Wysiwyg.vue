@@ -96,6 +96,7 @@
                    :ref="item.id"
                    tabindex="0"
                    :id="item.id"
+                   @keydown.ctrl.86.exact="ctrlV"
                    @focus="() => focusEvent(item, index)"
                    @keydown.enter.exact="createStory"
                    @click="($event) => checkHint($event, item, index)"
