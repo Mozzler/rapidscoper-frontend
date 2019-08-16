@@ -59,7 +59,7 @@ export default {
     submitTool (propertyId) {
       const item = this.list.find(item => item.id === this.toolId);
       if (item.priority === propertyId) {
-        propertyId = null;
+        propertyId = -1;
       }
 
       this.disabled = true;
