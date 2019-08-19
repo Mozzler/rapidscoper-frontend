@@ -38,7 +38,7 @@
             </v-btn>
             <v-btn class="btn-rapid primary" large
                    :disabled="processing"
-                   @click="submit">
+                   @click="submit('redirect')">
               {{ isMobileDevice ? 'Create' : 'Create team' }}
             </v-btn>
           </v-flex>
@@ -79,6 +79,15 @@ export default {
         recreate: true,
         data: this.data
       };
+    },
+    redirect (item) {
+      this.$router.push({
+        name: 'dashboard',
+        params: {
+          section: 'team',
+          name: item.id
+        }
+      });
     }
   },
   watch: {
