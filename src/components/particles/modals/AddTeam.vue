@@ -1,6 +1,7 @@
 <template>
   <v-layout row justify-center>
-    <v-dialog v-model="dialog" max-width="416" persistent>
+    <v-dialog v-model="dialog" max-width="416" persistent
+              @keydown.enter.prevent.exact="() => submit('redirect')">
       <v-card class="modal-card">
 
         <div class="modal-header">
@@ -38,7 +39,7 @@
             </v-btn>
             <v-btn class="btn-rapid primary" large
                    :disabled="processing"
-                   @click="submit('redirect')">
+                   @click="() => submit('redirect')">
               {{ isMobileDevice ? 'Create' : 'Create team' }}
             </v-btn>
           </v-flex>
