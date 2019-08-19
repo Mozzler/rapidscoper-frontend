@@ -1,4 +1,12 @@
 export default {
+  computed: {
+    projects () {
+      return this.$store.getters['entity/items']('project');
+    },
+    project () {
+      return _.find(this.projects, project => project.id === this.$route.params.projectId);
+    }
+  },
   methods: {
     getObjectId () {
       const timestamp = (new Date().getTime() / 1000 | 0).toString(16);
@@ -6,6 +14,17 @@ export default {
       return timestamp + 'xxxxxxxxxxxxxxxx'.replace(/[x]/g, () => {
         return (Math.random() * 16 | 0).toString(16);
       }).toLowerCase();
+    },
+    getStoryIdentifier () {
+      let letter = this.$route.params.storyType.charAt(0).toUpperCase();
+      let number = (this.project.userStoryCount + 1).toString();
+      let zeros = '';
+
+      for (let i = number.length; i < 3 ; i++) {
+        zeros += '0';
+      }
+
+      return `${letter}${zeros}${number}`;
     },
     getPreviousAfterStoryId (index = this.focused) {
       return index === 0 ? 0 : this.list[index - 1].id;
@@ -41,6 +60,7 @@ export default {
       const data = {
         _id: uuid,
         id: uuid,
+        storyIdentifier: this.getStoryIdentifier(),
         parentStoryId: sublist ? this.list[this.focused].id : this.list[this.focused].parentStoryId,
         afterStoryId: sublist ? this.list[this.focused].id : this.getAfterStoryId(),
 
