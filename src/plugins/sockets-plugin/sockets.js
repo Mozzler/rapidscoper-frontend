@@ -103,7 +103,8 @@ class MongoSockets {
     });
     this.io.on('update_dataset', ({ list, model }) => {
       app.$root.$emit('dataset-updated', {
-        entity: model
+        entity: model,
+        state: false
       });
 
       store.commit('entity/setList', {

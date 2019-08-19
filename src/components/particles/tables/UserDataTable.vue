@@ -60,6 +60,10 @@ export default {
     },
     cls: {
       default: ''
+    },
+    filter: {
+      required: false,
+      default: null
     }
   },
   data () {
@@ -106,7 +110,7 @@ export default {
       return _.filter(this.projectsWithMembers, project => {
         if (this.route === 'shared-with-me') {
           return project.createdUserId !== this.user.user_id;
-        } else if (this.route === 'archived') {
+        } else if (this.route === 'archived' || this.filter === 'archived') {
           return project.status === 'archived';
         } else {
           return project.status === 'active';
@@ -124,8 +128,8 @@ export default {
     }
   },
   methods: {
-    datasetUpdated () {
-      this.updating = false;
+    datasetUpdated (data) {
+      this.updating = data.state;
     },
     fetchData () {
       this.processing = true;
@@ -178,9 +182,6 @@ export default {
   watch: {
     '$route.params.name' () {
       this.fetchData();
-
-      this.updating = true;
-      this.$socket.recreateWatchers('project', true);
     }
   }
 };

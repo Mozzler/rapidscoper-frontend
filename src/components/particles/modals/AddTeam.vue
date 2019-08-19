@@ -82,6 +82,11 @@ export default {
       };
     },
     redirect (item) {
+      this.$root.$emit('dataset-updated', {
+        entity: 'project',
+        state: true
+      });
+      this.$socket.recreateWatchers('project', true);
       this.$router.push({
         name: 'dashboard',
         params: {
