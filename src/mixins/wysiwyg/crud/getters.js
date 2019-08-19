@@ -1,5 +1,12 @@
 export default {
   methods: {
+    getObjectId () {
+      const timestamp = (new Date().getTime() / 1000 | 0).toString(16);
+
+      return timestamp + 'xxxxxxxxxxxxxxxx'.replace(/[x]/g, () => {
+        return (Math.random() * 16 | 0).toString(16);
+      }).toLowerCase();
+    },
     getPreviousAfterStoryId (index = this.focused) {
       return index === 0 ? 0 : this.list[index - 1].id;
     },
@@ -22,6 +29,8 @@ export default {
       }
     },
     getCreateRequestPayload (sublist = false, text = '') {
+      const uuid = this.getObjectId();
+
       if (!sublist) {
         const number = this.list[this.focused].level === 1 ? 3 : 1;
         const data = this.getSpanList(false).slice(0, number);
@@ -30,6 +39,8 @@ export default {
       }
 
       const data = {
+        _id: uuid,
+        id: uuid,
         parentStoryId: sublist ? this.list[this.focused].id : this.list[this.focused].parentStoryId,
         afterStoryId: sublist ? this.list[this.focused].id : this.getAfterStoryId(),
 
@@ -53,20 +64,20 @@ export default {
         data: data
       };
     },
-    getUpdateRequestPayload () {
+    getUpdateRequestPayload (focused = this.focused) {
       const data = {
-        type: this.list[this.focused].type,
-        markup: this.list[this.focused].markup,
-        afterStoryId: this.getPreviousAfterStoryId(),
-        parentStoryId: this.list[this.focused].parentStoryId,
-        level: this.list[this.focused].level
+        type: this.list[focused].type,
+        markup: this.list[focused].markup,
+        afterStoryId: this.getPreviousAfterStoryId(focused),
+        parentStoryId: this.list[focused].parentStoryId,
+        level: this.list[focused].level
       };
 
       return {
         entity: 'story',
         data: data,
         params: {
-          id: this.list[this.focused].id
+          id: this.list[focused].id
         }
       };
     },

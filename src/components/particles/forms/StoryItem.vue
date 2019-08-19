@@ -40,12 +40,12 @@
 </template>
 
 <script>
-import Wysiwyg from "../inputs/Wysiwyg";
-import ErrorHandler from "@/mixins/error-handler";
-import CircularLoader from "../../particles/loaders/Circular";
+import Wysiwyg from '../inputs/Wysiwyg';
+import ErrorHandler from '@/mixins/error-handler';
+import CircularLoader from '../../particles/loaders/Circular';
 
 export default {
-  name: "StoryItem",
+  name: 'StoryItem',
   components: {
     Wysiwyg,
     CircularLoader

@@ -13,7 +13,7 @@ export default {
     const response = await this._vm.$axios.post(`${payload.entity}/create`, payload.data);
     const data = {
       entity: actualEntity(payload.entity),
-      data: _.assign(payload.data, response.data.item)
+      data: _.assign({ ...payload.data }, response.data.item)
     };
 
     if (!payload.cancelCommit) {

@@ -127,8 +127,6 @@ export default {
     async create () {
       this.processing = true;
 
-      this.processing = true;
-
       let result = await this.$validator.validate();
 
       if (result) {

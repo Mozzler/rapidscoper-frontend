@@ -39,18 +39,14 @@
 </template>
 
 <script>
-  import Navigation from '@/mixins/navigation';
-  import ModalMixin from '@/mixins/modal';
+import Navigation from '@/mixins/navigation';
+import ModalMixin from '@/mixins/modal';
 
-  export default {
-    name: "delete-team",
-    mixins: [
-      Navigation,
-      ModalMixin
-    ],
-  }
+export default {
+  name: 'delete-team',
+  mixins: [
+    Navigation,
+    ModalMixin
+  ]
+};
 </script>
-
-<style scoped>
-
-</style>

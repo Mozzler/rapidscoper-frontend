@@ -1,18 +1,18 @@
 export default {
   methods: {
     async sendCreateStoryRequest (sublist, text = '') {
-      await this.updateStory();
-
-      this.processing = this.list[this.focused].id;
+      const focused = this.focused;
       const payload = this.getCreateRequestPayload(sublist, text);
-      const response = await this.$store.dispatch('entity/create', payload);
 
-      this.$socket.recreateWatchers('story', false);
-      this.processing = false;
+      this.$store.commit('entity/create', payload);
+      this.$store.commit('entity/reorder', payload.data);
+      this.$store.commit('story/setActiveStoryOnTab', payload.data.id);
 
-      return new Promise(resolve => {
-        resolve(response.item.id);
-      });
+      this.updateStory(focused);
+      this.$store.dispatch('entity/create', payload)
+        .then(() => {
+          this.$socket.recreateWatchers('story', false);
+        });
     },
     createStory ($event) {
       if (this.dictionary[this.next]) {
@@ -21,10 +21,7 @@ export default {
       }
 
       this.finishSentence($event);
-      this.sendCreateStoryRequest(false, $event.target.innerHTML)
-        .then((id) => {
-          this.$store.commit('story/setActiveStoryOnTab', id);
-        });
+      this.sendCreateStoryRequest(false, $event.target.innerHTML);
     },
     createSubstory ($event) {
       if (this.list[this.focused].level === 2) {
@@ -33,10 +30,7 @@ export default {
       }
 
       this.finishSentence($event, ':');
-      this.sendCreateStoryRequest(true, '')
-        .then((id) => {
-          this.$store.commit('story/setActiveStoryOnTab', id);
-        });
+      this.sendCreateStoryRequest(true, '');
     }
   }
 };

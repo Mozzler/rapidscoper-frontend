@@ -26,7 +26,6 @@ export default {
   create (state, payload) {
     payload.data = normalizeId(payload.data);
     const existed = _.filter(state[payload.entity].items, item => item.id === payload.data.id);
-
     if (!existed.length) {
       state[payload.entity].items.push(payload.data);
     }
@@ -70,5 +69,18 @@ export default {
         state[key].items = [];
       });
     }
+  },
+  reorder (state, payload) {
+    let section = _.find(state.section.items,item => item.id === payload.sectionId);
+    let index = _.indexOf(section.storyOrder, payload.afterStoryId);
+
+    let beginning = [...section.storyOrder];
+    let tail = beginning.splice(index + 1);
+
+    section.storyOrder = [
+      ...beginning,
+      ...[payload.id],
+      ...tail
+    ];
   }
 };
