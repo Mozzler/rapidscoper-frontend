@@ -4,7 +4,7 @@
     :items="projects"
     item-key="name"
     :hide-actions="true"
-    :loading="loading || processing"
+    :loading="loading || processing || updating"
     :class="`dashboard-table ${cls}`">
 
     <template v-slot:items="props">
@@ -65,6 +65,7 @@ export default {
   data () {
     return {
       processing: false,
+      updating: false,
       headers: [
         {
           text: 'project',
@@ -91,13 +92,18 @@ export default {
   },
   beforeMount () {
     this.connect('projectShare', 'entity/setList');
+    this.$root.$on('dataset-updated', this.datasetUpdated);
     this.fetchData();
   },
+  beforeDestroy () {
+    this.$root.$off('dataset-updated', this.datasetUpdated);
+  },
   computed: {
+    projectsWithMembers () {
+      return this.$store.getters['entity/projectsWithMembers'](this.teamId);
+    },
     projects () {
-      const projects = this.$store.getters['entity/projectsWithMembers'](this.teamId);
-
-      return _.filter(projects, project => {
+      return _.filter(this.projectsWithMembers, project => {
         let externalProject = project.createdUserId !== this.user.user_id;
         return this.sharedRoute ? externalProject : project;
       });
@@ -113,6 +119,9 @@ export default {
     }
   },
   methods: {
+    datasetUpdated () {
+      this.updating = false;
+    },
     fetchData () {
       this.processing = true;
 
@@ -159,6 +168,14 @@ export default {
     },
     share (id) {
       this.$root.$emit('share-project', id);
+    }
+  },
+  watch: {
+    '$route.params.name' () {
+      this.fetchData();
+
+      this.updating = true;
+      this.$socket.recreateWatchers('project', true);
     }
   }
 };

@@ -34,6 +34,7 @@ export default {
   },
   projectsWithMembers (state) {
     return teamId => {
+
       let projects = [...state.project.items];
       let userProject = [...state.userProject.items];
       let userInfo = [...state.userInfo.items];
