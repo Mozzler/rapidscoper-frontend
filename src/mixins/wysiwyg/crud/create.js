@@ -1,6 +1,6 @@
 export default {
   methods: {
-    async sendCreateStoryRequest (sublist, text = '') {
+    sendCreateStoryRequest (sublist, text = '') {
       const focused = this.focused;
       const payload = this.getCreateRequestPayload(sublist, text);
 
@@ -8,7 +8,6 @@ export default {
       this.$store.commit('entity/reorder', payload.data);
       this.$store.commit('story/setActiveStoryOnTab', payload.data.id);
 
-      this.updateStory(focused);
       this.$store.dispatch('entity/create', payload)
         .then(() => {
           this.$socket.recreateWatchers('story', false);
