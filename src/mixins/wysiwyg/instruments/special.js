@@ -1,12 +1,14 @@
 export default {
   methods: {
     setText (text) {
-      _.assign(this.list[this.focused], {
-        markup: text,
-        placeholder: text,
-        type: 'other',
-        template: ''
-      });
+      this.list[this.focused].markup += text;
+      this.list[this.focused].placeholder += text;
+
+      if (!this.list[this.focused].type) {
+        this.list[this.focused].type = 'other';
+        this.list[this.focused].template = '';
+      }
+
       this.collapseToEnd();
     },
     ctrlV ($event) {
@@ -19,6 +21,6 @@ export default {
           $event.target.innerHTML = text;
           this.setText(text);
         });
-    },
+    }
   }
-}
+};

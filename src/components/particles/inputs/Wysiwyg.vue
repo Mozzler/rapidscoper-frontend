@@ -96,6 +96,7 @@
                    }"
                    :ref="item.id"
                    :id="item.id"
+                   @keydown.shift.45.exact="ctrlV"
                    @keydown.ctrl.86.exact="ctrlV"
                    @focus="() => focusEvent(item, index)"
                    @keydown.enter.exact="createStory"
