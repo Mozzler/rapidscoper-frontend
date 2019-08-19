@@ -54,6 +54,8 @@ import AddTeamModal from "@/components/particles/modals/AddTeam";
 import Dropdown from "../menus/Dropdown";
 import SidebarList from "../lists/SidebarList";
 
+import { mapGetters } from 'vuex';
+
 export default {
   name: 'Sidebar',
   components: {
@@ -83,46 +85,49 @@ export default {
           number: 0,
           icon: 'share'
         },
-        /*{
+        {
           title: 'Archived',
-          number: 12,
+          number: 0,
           icon: 'archive'
-        }*/
+        }
       ]
     };
   },
   computed: {
+    ...mapGetters({
+      total: 'entity/total',
+      entity: 'entity/items'
+    }),
     teams () {
-      return this.$store.getters['entity/items']('team');
+      return this.entity('team');
     },
     user () {
       return this.$store.state.auth.user;
     },
-    projects () {
-      return this.$store.getters['entity/items']('project');
-    },
+
     totalProjects () {
-      return this.projects.length;
+      return this.total('project', item => item.status === 'active');
     },
     totalShared () {
-      return this.projects
-        .filter(item => item.createdUserId !== this.user.user_id)
-        .length
-        .toString();
+      return this.total('project', item => item.createdUserId !== this.user.user_id);
+    },
+    totalArchived () {
+      return this.total('project', item => item.status === 'archived');
     }
   },
   beforeMount () {
     this.items[0].number = this.totalProjects;
     this.items[1].number = this.totalShared;
+    this.items[2].number = this.totalArchived;
   },
   methods: {
-    toTeams (value, id) {
+    toTeams(value, id) {
       this.goTo(`/team/${id}`);
     },
     showAddTeamModal () {
       this.$root.$emit('add-team');
     },
-    handleDropdown (value) {
+    handleDropdown(value) {
       switch (value) {
         case 'Log out':
           this.$store.dispatch('auth/logout')
@@ -138,6 +143,9 @@ export default {
     },
     totalShared () {
       this.items[1].number = this.totalShared;
+    },
+    totalArchived () {
+      this.items[2].number = this.totalArchived;
     }
   }
 };

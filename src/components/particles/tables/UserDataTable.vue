@@ -104,8 +104,13 @@ export default {
     },
     projects () {
       return _.filter(this.projectsWithMembers, project => {
-        let externalProject = project.createdUserId !== this.user.user_id;
-        return this.sharedRoute ? externalProject : project;
+        if (this.route === 'shared-with-me') {
+          return project.createdUserId !== this.user.user_id;
+        } else if (this.route === 'archived') {
+          return project.status === 'archived';
+        } else {
+          return project.status === 'active';
+        }
       });
     },
     user () {
@@ -114,8 +119,8 @@ export default {
     teamId () {
       return this.$route.params.section === 'team' ? this.$route.params.name : null;
     },
-    sharedRoute () {
-      return this.$route.params.name === 'shared-with-me';
+    route () {
+      return this.$route.params.name;
     }
   },
   methods: {

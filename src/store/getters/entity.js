@@ -29,7 +29,7 @@ export default {
         list = list.filter(item => f(item));
       }
 
-      return list.length;
+      return list.length.toString();
     };
   },
   projectsWithMembers (state) {
