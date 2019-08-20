@@ -5,14 +5,23 @@
         <div class="user-story__block"
              v-for="section in dictionary"
              :key="section.id">
-          <h1>
-            <input class="user-story__editable"
-                   :disabled="section.type !== 'requirement'"
-                   :value="section.name"
-                   :ref="section.id"
-                   @input="$event => updateSectionName(section.id, $event)"
-                   @blur="() => update(section.id, 'name', false, section.name)" />
-          </h1>
+
+          <v-layout row fill-height align-center mt-2>
+            <v-flex>
+              <h1>
+                <input class="user-story__editable"
+                       :disabled="section.type !== 'requirement'"
+                       :value="section.name"
+                       :ref="section.id"
+                       @input="$event => updateSectionName(section.id, $event)"
+                       @blur="() => update(section.id, 'name', false, section.name)" />
+              </h1>
+            </v-flex>
+            <v-flex shrink v-if="deletable(section)">
+              <v-icon class="remove-icon cursor-pointer"
+                      @click="() => remove(section.id)"> remove_circle_outline </v-icon>
+            </v-flex>
+          </v-layout>
           <div class="dictionary user-story mt-3">
             <template v-if="section.list.length">
               <v-layout row fill-height mt-2
@@ -47,8 +56,9 @@
                        @blur="() => update(word.id, 'description')"
                   ></div>
                 </v-flex>
-                <v-flex shrink v-if="word.storyCount === 0">
-                  <v-icon class="remove-icon cursor-pointer"> remove_circle_outline </v-icon>
+                <v-flex shrink v-if="!word.storyCount">
+                  <v-icon class="remove-icon cursor-pointer"
+                          @click="() => remove(word.id)"> remove_circle_outline </v-icon>
                 </v-flex>
               </v-layout>
             </template>
@@ -103,6 +113,12 @@ export default {
     this.fetchData();
   },
   methods: {
+    deletable (section) {
+      let used = _.find(section.list, item => item.storyCount),
+          basic = ['Actor', 'Others'].includes(section.name);
+
+      return (!section.list.length || !used) && !basic;
+    },
     input ($event, id, property) {
       this.$store.commit('entity/update', {
         entity: 'dictionary',
@@ -159,6 +175,15 @@ export default {
     },
     focus (id) {
       this.focused = id;
+    },
+    remove (id) {
+      const data = {
+        entity: 'dictionary',
+        id: id
+      };
+
+      this.$store.commit('entity/delete', data);
+      this.$store.dispatch('entity/delete', data);
     }
   }
 };
