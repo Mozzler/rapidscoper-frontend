@@ -109,7 +109,7 @@ export default {
           this.$nextTick(() => {
             ref[0].focus();
 
-            if (this.range) {
+            if (this.tab === 'estimate' && this.range) {
               ref[0].setSelectionRange(0, this.range);
             }
           });
@@ -127,12 +127,6 @@ export default {
       this.$nextTick(() => {
         this.activatePanel();
       });
-    },
-    toolProcessing (newVal, oldVal) {
-      if (newVal === null && oldVal.id === this.toolId && this.tab === 'priority' && this.disabled) {
-        this.nextItem();
-        this.disabled = false;
-      }
     }
   }
 };

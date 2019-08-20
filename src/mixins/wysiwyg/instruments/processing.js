@@ -1,8 +1,10 @@
 export default {
+  data () {
+    return {
+      toolStack: {}
+    };
+  },
   computed: {
-    toolProcessing () {
-      return this.$store.state.story.toolProcessing;
-    },
     toolId () {
       return this.$store.state.story.activeStoryOnTab;
     },
@@ -22,16 +24,30 @@ export default {
     }
   },
   methods: {
-    updateToolId (propertyId, item, property) {
-      if (this.toolProcessing) {
-        return;
+    handleError (error, property, stack = 'stack') {
+      let id = error.config.params.id;
+      let msg = error.response && error.response.data && _.first(error.response.data);
+
+      if (msg) {
+        this.$root.$emit('show-error-message', msg.message);
       }
 
-      this.$store.commit('story/setToolProcessing', {
-        type: property,
-        id: this.toolId
+      this.$store.commit('entity/update', {
+        entity: 'story',
+        data: {
+          id: id,
+          [property]: this[stack][id]
+        }
       });
+
+      delete this[stack][id];
+    },
+    updateToolId (propertyId, item, property) {
       let query = null;
+      let id = this.toolId;
+
+      let found = _.find(this.list, item => item.id === id);
+      this.toolStack[id] = found[property];
 
       if (_.isArray(item[property])) {
         query = item[property].includes(propertyId) ?
@@ -41,15 +57,27 @@ export default {
         query = propertyId;
       }
 
+      this.$store.commit('entity/update', {
+        entity: 'story',
+        data: {
+          id: id,
+          [property]: query
+        }
+      });
+
+      this.nextItem();
       this.$store.dispatch('entity/update', {
         entity: 'story',
         params: {
-          id: this.toolId
+          id: id
         },
         data: {
           [property]: query
         }
-      });
+      }).then()
+        .catch(error => {
+          this.handleError(error, property, 'toolStack');
+        });
     }
   }
 };

@@ -51,23 +51,7 @@ export default {
         })
         .catch(error => {
           this.processing = null;
-          let id = error.config.params.id;
-          let msg = error.response && error.response.data && _.first(error.response.data);
-
-          if (msg) {
-            this.$root.$emit('show-error-message', msg.message);
-          }
-
-          let original = _.find(this.list, item => item.id === id);
-          this.$store.commit('entity/update', {
-            entity: 'story',
-            data: {
-              ...original,
-              estimate: this.stack[id]
-            }
-          });
-
-          delete this.stack[id];
+          this.handleError(error, 'estimate');
         });
     }
   }

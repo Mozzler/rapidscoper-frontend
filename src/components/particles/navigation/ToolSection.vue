@@ -32,7 +32,6 @@
         :active="story.priority"
         :list="priorities"
         :shortcutted="false"
-        :loader="toolProcessing && toolProcessing.type === 'priority'"
         @update="id => updateToolId(id, story, 'priority')" />
     </div>
 
@@ -50,7 +49,6 @@
         :list="labels"
         :shortcutted="false"
         :label-cls="'tool-block__label rounded'"
-        :loader="toolProcessing && toolProcessing.type === 'labels'"
         @update="id => updateToolId(id, story, 'labels')" />
     </div>
 
