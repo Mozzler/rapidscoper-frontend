@@ -27,3 +27,43 @@
     width: 90%;
   }
 }
+
+.label__item {
+  font-size: 14px;
+  line-height: 17px;
+  padding: 11px 16px;
+  border-radius: 2px;
+  margin-bottom: 8px;
+  cursor: pointer !important;
+
+  i {
+    font-size: 20px !important;
+    line-height: 14px !important;
+  }
+
+  &:hover {
+    filter: brightness(0.95);
+  }
+}
+
+.label__button {
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.palette {
+  background: $light-black;
+  padding: 4px;
+  top: 50px;
+}
+.palette__item {
+  margin: 8px;
+  min-width: 24px !important;
+  min-height: 24px !important;
+  border-radius: 2px;
+}
+
+.palette__item--action {
+  .v-icon {
+    font-size: 18px;
+  }
+}

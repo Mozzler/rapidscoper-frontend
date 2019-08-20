@@ -43,7 +43,7 @@
         <div class="section__title">
           Labels
         </div>
-        <div class="section__ref">
+        <div class="section__ref" @click="showSettingModal">
           Settings
         </div>
       </v-layout>
@@ -104,9 +104,15 @@ export default {
       return _.find(this.stories, item => item.id === this.toolId);
     }
   },
+  mounted () {
+    this.$root.$emit('settings');
+  },
   methods: {
     hours (str) {
       return Number(str) > 1 ? 'hours' : 'hour';
+    },
+    showSettingModal () {
+      this.$root.$emit('settings');
     }
   }
 };

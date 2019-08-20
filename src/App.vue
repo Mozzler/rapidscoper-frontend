@@ -15,6 +15,7 @@
       <payment-successfully-modal />
       <incorrect-data-modal />
       <share-project-modal />
+      <settings-modal />
     </template>
   </v-app>
 </template>
@@ -32,6 +33,7 @@ import PaymentInfoModal from '@/components/particles/modals/PaymentInfo';
 import PaymentSuccessfullyModal from '@/components/particles/modals/PaymentSuccessfully';
 import IncorrectDataModal from '@/components/particles/modals/IncorrectData';
 import ShareProjectModal from '@/components/particles/modals/ShareProject';
+import SettingsModal from "./components/particles/modals/Settings";
 
 export default {
   name: 'app',
@@ -45,7 +47,8 @@ export default {
     PaymentInfoModal,
     PaymentSuccessfullyModal,
     IncorrectDataModal,
-    ShareProjectModal
+    ShareProjectModal,
+    SettingsModal
   },
   mixins: [
     ResizeMixin

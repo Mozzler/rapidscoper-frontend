@@ -84,3 +84,9 @@ a {
 .word-break-word {
   word-break: break-word;
 }
+
+.text-white {
+  .v-icon {
+    color: $white !important;
+  }
+}

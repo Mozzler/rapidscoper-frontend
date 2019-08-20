@@ -52,5 +52,10 @@ export default {
 
       return editor.sections(project, sections, type);
     };
+  },
+
+  labels (state, getters, rootState) {
+    const phrases = rootState.entity.dictionary.items;
+    return _.filter(phrases, item => item.type === 'label');
   }
 };
