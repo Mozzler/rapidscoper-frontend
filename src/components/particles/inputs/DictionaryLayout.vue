@@ -47,6 +47,9 @@
                        @blur="() => update(word.id, 'description')"
                   ></div>
                 </v-flex>
+                <v-flex shrink v-if="word.storyCount === 0">
+                  <v-icon class="remove-icon cursor-pointer"> remove_circle_outline </v-icon>
+                </v-flex>
               </v-layout>
             </template>
             <template v-else>
