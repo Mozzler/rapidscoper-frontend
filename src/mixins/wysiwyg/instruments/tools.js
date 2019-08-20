@@ -6,6 +6,7 @@ export default {
   ],
   data () {
     return {
+      range: null,
       disabled: false,
       archived: null,
       elRef: {
@@ -42,7 +43,9 @@ export default {
         this.archived = focusedTab[0].value;
 
         if (this.tab === 'estimate') {
-          focusedTab[0].setSelectionRange(0, focusedTab[0].value.length);
+          let length = focusedTab[0].value.length;
+          focusedTab[0].setSelectionRange(0, length);
+          this.range = length;
         }
       }
 
@@ -105,6 +108,10 @@ export default {
         if (this.toolId && ref) {
           this.$nextTick(() => {
             ref[0].focus();
+
+            if (this.range) {
+              ref[0].setSelectionRange(0, this.range);
+            }
           });
         }
       }
