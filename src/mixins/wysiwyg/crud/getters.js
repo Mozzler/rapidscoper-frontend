@@ -47,6 +47,19 @@ export default {
         return list[startIndex].id;
       }
     },
+    getDictionaryIds (focused = this.focused) {
+      let spans = this.list[focused].markup.split('&nbsp;');
+      let ids = [];
+
+      _.each(spans, span => {
+        const matched = span.match(/data-id="(.*?)"/);
+        if (matched) {
+          ids.push(matched[1]);
+        }
+      });
+
+      return ids;
+    },
     getCreateRequestPayload (sublist = false, text = '') {
       const uuid = this.getObjectId();
 
@@ -90,7 +103,8 @@ export default {
         markup: this.list[focused].markup,
         afterStoryId: this.getPreviousAfterStoryId(focused),
         parentStoryId: this.list[focused].parentStoryId,
-        level: this.list[focused].level
+        level: this.list[focused].level,
+        dictionaryIds: this.getDictionaryIds(focused)
       };
 
       return {
