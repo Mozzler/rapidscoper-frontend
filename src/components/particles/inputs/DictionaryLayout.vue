@@ -18,8 +18,10 @@
               </h1>
             </v-flex>
             <v-flex shrink v-if="deletable(section)">
-              <v-icon class="remove-icon cursor-pointer"
-                      @click="() => remove(section.id)"> remove_circle_outline </v-icon>
+              <div class="cursor-pointer"
+                   @click="() => remove(section.id)">
+                <v-icon class="remove-icon"> remove </v-icon>
+              </div>
             </v-flex>
           </v-layout>
           <div class="dictionary user-story mt-3">
@@ -57,8 +59,10 @@
                   ></div>
                 </v-flex>
                 <v-flex shrink v-if="!word.storyCount">
-                  <v-icon class="remove-icon cursor-pointer"
-                          @click="() => remove(word.id)"> remove_circle_outline </v-icon>
+                  <div class="cursor-pointer "
+                       @click="() => remove(word.id)">
+                    <v-icon class="remove-icon"> remove </v-icon>
+                  </div>
                 </v-flex>
               </v-layout>
             </template>

@@ -21,3 +21,19 @@
 @import 'hint';
 @import 'print';
 @import 'typography';
+
+.remove-icon {
+  color: $error !important;
+  width: 25px !important;
+  height: 25px !important;
+  position: absolute;
+  top: -10px !important;
+
+  i {
+    font-size: 18px !important;
+  }
+
+  &:hover {
+    filter: brightness(0.9);
+  }
+}
