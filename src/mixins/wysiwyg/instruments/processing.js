@@ -5,6 +5,9 @@ export default {
     };
   },
   computed: {
+    toolProcessing () {
+      return this.$store.state.story.toolProcessing;
+    },
     toolId () {
       return this.$store.state.story.activeStoryOnTab;
     },
@@ -43,11 +46,13 @@ export default {
       delete this[stack][id];
     },
     updateToolId (propertyId, item, property) {
+      if (this.toolProcessing) {
+        return;
+      }
+
       let query = null;
       let id = this.toolId;
-
-      let found = _.find(this.list, item => item.id === id);
-      this.toolStack[id] = found[property];
+      this.toolStack[id] = item[property];
 
       if (_.isArray(item[property])) {
         query = item[property].includes(propertyId) ?
@@ -57,6 +62,11 @@ export default {
         query = propertyId;
       }
 
+      this.$store.commit('story/setToolProcessing', {
+        type: property,
+        id: id
+      });
+
       this.$store.commit('entity/update', {
         entity: 'story',
         data: {
@@ -65,7 +75,10 @@ export default {
         }
       });
 
-      this.nextItem();
+      if (_.has(this, 'nextItem') && this.tab !== 'labels') {
+        this.nextItem();
+      }
+
       this.$store.dispatch('entity/update', {
         entity: 'story',
         params: {
