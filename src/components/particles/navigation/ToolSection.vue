@@ -105,7 +105,7 @@ export default {
     }
   },
   mounted () {
-    this.$root.$emit('settings');
+    //this.$root.$emit('settings');
   },
   methods: {
     hours (str) {
