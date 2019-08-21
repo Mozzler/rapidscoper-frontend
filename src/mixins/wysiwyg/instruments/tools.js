@@ -1,4 +1,5 @@
 import Processing from './processing';
+import { mapGetters } from 'vuex';
 
 export default {
   mixins: [
@@ -20,8 +21,14 @@ export default {
     this.initToolId();
   },
   computed: {
+    ...mapGetters({
+      labelsTool: 'story/labels'
+    }),
+    priorityTool () {
+      return this.$store.state.story.priority;
+    },
     toolDictionary () {
-      return this.$store.state.story[this.tab];
+      return this[`${this.tab}Tool`];
     },
     storyOrder () {
       return _.chain(this.$store.getters['entity/items']('section'))

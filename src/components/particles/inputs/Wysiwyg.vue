@@ -29,7 +29,7 @@
            @keypress="$event => toolKey($event, item.id)">
 
         <div class="user-story__tools" v-if="(toolDictionary && toolId === item.id)">
-          <tool-list
+          <component :is="tab === 'labels' ? 'label-list' : 'tool-list'"
             :key="`tool-list-${item.id}`"
             :active="item[tab]"
             :list="toolDictionary"
@@ -127,6 +127,7 @@
 
 <script>
 import ToolList from '../lists/ToolList';
+import LabelList from '../lists/LabelList';
 import CircularLoader from '../../particles/loaders/Circular';
 import PriorityIndicator from '../../particles/indicators/Priority';
 
@@ -139,7 +140,8 @@ export default {
     Drag,
     ToolList,
     CircularLoader,
-    PriorityIndicator
+    PriorityIndicator,
+    LabelList
   },
   mixins: [
     WysiwygMixin
