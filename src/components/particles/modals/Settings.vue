@@ -26,12 +26,10 @@
                 :key="index">
                 <div>
                   <span>{{ index + 1 }}.&nbsp;</span>
-                  <span
+                  <input
                     class="user-story__editable"
-                    v-html="item.name"
-                    contenteditable="true"
-                    @blur="($event) => updateName($event, item)"
-                    @keyup.enter.exact.prevent="null" />
+                    v-model="item.name"
+                    @blur="($event) => updateName($event, item)" />
                 </div>
                 <div>
                   <v-menu v-model="item.show"
@@ -142,7 +140,7 @@ export default {
       });
     },
     updateName ($event, item) {
-      let payload = { name: $event.target.innerText };
+      let payload = { name: $event.target.value };
       let params = { id: item.id };
 
       this.submit({ data: payload }, 'update', params);
