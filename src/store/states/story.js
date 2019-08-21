@@ -7,5 +7,6 @@ export default {
   ],
   adjustConstructions: {},
   activeStoryOnTab: null,
-  toolProcessing: null
+  toolProcessing: null,
+  filterSidebar: true
 };

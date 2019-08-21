@@ -1,5 +1,28 @@
 <template>
   <div class="scrollable-layout" ref="scrollable-layout">
+    <div class="content-filter" v-if="sidebarFilter">
+      <v-layout align-start justify-space-between row fill-height>
+        <v-flex>
+          <v-layout align-start justify-center row fill-height>
+            <v-flex class="filter__item--mr">Filters:</v-flex>
+            <v-flex class="filter__item filter__item--mr">
+              <div>Priorities: </div>
+              <v-icon>add</v-icon>
+            </v-flex>
+            <v-flex class="filter__item filter__item--mr">
+              <div>Labels: </div>
+              <v-icon>add</v-icon>
+            </v-flex>
+            <v-flex class="text-greyed">Estimate time: 12 hours</v-flex>
+          </v-layout>
+        </v-flex>
+        <v-flex>
+          <div>
+            <input class="search-input" placeholder="Search" />
+          </div>
+        </v-flex>
+      </v-layout>
+    </div>
     <div class="content-container"
          v-for="(story, index) in sections"
          :key="index">
@@ -66,6 +89,9 @@ export default {
     storyType () {
       const splitted = this.$route.params.storyType.split('-');
       return _.first(splitted);
+    },
+    sidebarFilter () {
+      return this.$store.state.system.sidebarFilter;
     }
   },
   methods: {

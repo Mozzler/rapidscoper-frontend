@@ -153,3 +153,38 @@
     }
   }
 }
+
+.content-filter {
+  color: $black;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  height: 56px;
+  background: $white;
+  padding: 0 24px;
+  font-size: 14px;
+  font-weight: 500;
+
+  & div {
+    font-size: initial;
+  }
+}
+
+.filter__item {
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  background: rgba(249, 249, 249, 0.8);
+  border: 1px solid rgba(120, 57, 223, 0.4);
+  border-radius: 4px;
+  padding: 7px 12px;
+
+  .v-icon {
+    font-size: 18px;
+    font-weight: 500;
+    display: inline-block;
+    color: $black !important;
+  }
+}
+
+.filter__item--mr {
+  margin-right: 16px;
+}

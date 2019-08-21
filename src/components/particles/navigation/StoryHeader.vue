@@ -29,24 +29,30 @@
         </template>
       </v-flex>
       <v-flex text-xs-right>
-        <!--<v-btn icon>
-          <sort-icon />
-        </v-btn>
-        <v-btn icon>
-          <v-icon>visibility</v-icon>
-        </v-btn>-->
-        <v-btn class="btn-rapid primary" large @click="showModal">
-          Share
-        </v-btn>
+        <v-layout align-center justify-end row fill-height>
+          <div class="header-options"
+            :class="{'header-options--active': sidebarFilter}"
+            @click="() => setSidebarFilter(!sidebarFilter)">
+            <sort-icon />
+          </div>
+          <div class="header-options">
+            <v-icon>visibility</v-icon>
+          </div>
+          <v-btn class="btn-rapid primary" large @click="showModal">
+            Share
+          </v-btn>
+        </v-layout>
       </v-flex>
     </v-layout>
   </div>
 </template>
 
 <script>
-import SortIcon from "../icons/Filter";
-import Dropdown from "../menus/Dropdown";
+import SortIcon from '../icons/Filter';
+import Dropdown from '../menus/Dropdown';
 import Navigation from '@/mixins/navigation';
+
+import { mapMutations } from 'vuex';
 
 export default {
   name: "StoryHeader",
@@ -90,9 +96,15 @@ export default {
     },
     currentProject () {
       return this.projects.find(item => item.id === this.currentProjectId);
+    },
+    sidebarFilter () {
+      return this.$store.state.system.sidebarFilter;
     }
   },
   methods: {
+    ...mapMutations({
+      setSidebarFilter: 'setSidebarFilter'
+    }),
     setTab (item) {
       let params = this.$route.params;
       params.tab = item.toLowerCase();
