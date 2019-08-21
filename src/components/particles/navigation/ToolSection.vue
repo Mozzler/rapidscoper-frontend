@@ -47,10 +47,9 @@
           Settings
         </div>
       </v-layout>
-      <tool-list
+      <label-list
         :active="story.labels"
         :list="labels"
-        :shortcutted="false"
         :label-cls="'tool-block__label rounded'"
         :loader="toolProcessing &&
           toolProcessing.type === 'labels' &&
@@ -76,24 +75,28 @@
 </template>
 
 <script>
-import ToolList from "../lists/ToolList";
+import ToolList from '../lists/ToolList';
+import LabelList from '../lists/LabelList';
 
 import ProcessingMixin from '@/mixins/wysiwyg/instruments/processing';
 import EstimateMixin from '@/mixins/wysiwyg/instruments/estimate';
 
+import { mapGetters } from 'vuex';
+
 export default {
-  name: "ToolSection",
+  name: 'ToolSection',
   mixins: [
     ProcessingMixin,
     EstimateMixin
   ],
   components: {
-    ToolList
+    ToolList,
+    LabelList
   },
   computed: {
-    labels () {
-      return this.$store.state.story.labels;
-    },
+    ...mapGetters({
+      labels: 'story/labels'
+    }),
     priorities () {
       return this.$store.state.story.priority;
     },
@@ -103,9 +106,6 @@ export default {
     story () {
       return _.find(this.stories, item => item.id === this.toolId);
     }
-  },
-  mounted () {
-    //this.$root.$emit('settings');
   },
   methods: {
     hours (str) {

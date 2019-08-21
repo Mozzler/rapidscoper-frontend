@@ -16,7 +16,7 @@
 import Tools from '@/mixins/story';
 
 export default {
-  name: "priority",
+  name: 'priority',
   mixins: [
     Tools
   ],
