@@ -4,7 +4,6 @@ export default {
       return _.isEqual(this.etalon, this.list[focused]);
     },
     async updateStory (focused = this.focused) {
-      this.$store.commit('story/setActiveStoryOnTab', null);
       if (!this.list[focused]) {
         return;
       }
