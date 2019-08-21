@@ -27,7 +27,7 @@
                 <div>
                   <span>{{ index + 1 }}.&nbsp;</span>
                   <input
-                    class="user-story__editable"
+                    class="user-story__input-field"
                     v-model="item.name"
                     @blur="($event) => updateName($event, item)" />
                 </div>

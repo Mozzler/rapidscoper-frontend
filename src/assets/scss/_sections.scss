@@ -99,6 +99,10 @@
   width: 100%;
 }
 
+.user-story__input-field {
+  position: relative;
+}
+
 .user-story__editable-input {
   display: inline-block;
   min-width: 60px;
@@ -107,6 +111,7 @@
 
 .user-story__editable,
 .user-story__input,
+.user-story__input-field,
 .user-story__editable-input {
   caret-color: $light-blue;
 
