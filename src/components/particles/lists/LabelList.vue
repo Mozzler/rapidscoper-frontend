@@ -23,12 +23,16 @@
 
 <script>
 import CircularLoader from "../../particles/loaders/Circular";
+import Tools from '@/mixins/story';
 
 export default {
   name: 'LabelList',
   components: {
     CircularLoader
   },
+  mixins: [
+    Tools
+  ],
   props: {
     list: {
       required: true
@@ -47,13 +51,6 @@ export default {
     },
     minified: {
       default: false
-    }
-  },
-  methods: {
-    getStyle (index, colour) {
-      return this.active.includes(index) ?
-        `background: #${colour}` :
-        `border: 1px solid #${colour}`;
     }
   }
 };

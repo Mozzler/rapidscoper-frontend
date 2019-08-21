@@ -3,6 +3,7 @@
     <v-layout
       v-for="(value, key) in list"
       :class="`${labelCls} label--${type(key)}`"
+      :style="`background: ${background(value)}`"
       :key="value.index"
       align-center
       justify-space-between
@@ -53,6 +54,11 @@ export default {
     ...mapGetters({
       summary: 'projectVersion/summary'
     })
+  },
+  methods: {
+    background (value) {
+      return _.isObject(value) ? `#${value.colour}` : '';
+    }
   }
 };
 </script>

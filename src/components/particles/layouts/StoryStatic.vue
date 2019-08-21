@@ -51,13 +51,13 @@
 </template>
 
 <script>
-import PriorityIndicator from "../../particles/indicators/Priority";
-import LabelIndicator from "../../particles/indicators/Label";
-import MarkIndicator from "../../particles/indicators/Mark";
+import PriorityIndicator from '../../particles/indicators/Priority';
+import LabelIndicator from '../../particles/indicators/Label';
+import MarkIndicator from '../../particles/indicators/Mark';
 import Tools from '@/mixins/story';
 
 export default {
-  name: "StoryStatic",
+  name: 'StoryStatic',
   components: {
     PriorityIndicator,
     LabelIndicator,
@@ -74,12 +74,6 @@ export default {
   computed: {
     model () {
       return this.$store.getters['projectVersion/section'](this.id);
-    },
-    labels () {
-      return this.$store.state.story.labels;
-    },
-    priorities () {
-      return this.$store.state.story.priority;
     }
   },
   methods: {

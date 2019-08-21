@@ -2,24 +2,22 @@
   <div class="label-indicator">
     <div v-for="(item, index) in namedLabels"
          :key="index"
-         :class="`user-story__label--short label--${type(item)}`"
+         :class="`user-story__label--short`"
+         :style="`background: #${item ? item.colour : ''}`"
         @mouseover="() => mouseover(index)"
         @mouseleave="mouseleave">
       <div v-if="hovered === index" class="label-indicator__text">
-        {{ item | letters }}
+        {{ item.name }}
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import Tools from '@/mixins/story';
+import { mapGetters } from 'vuex';
 
 export default {
-  name: 'priority',
-  mixins: [
-    Tools
-  ],
+  name: 'labels',
   props: {
     list: {
       default: [],
@@ -38,9 +36,9 @@ export default {
     });
   },
   computed: {
-    labels () {
-      return this.$store.state.story.labels;
-    }
+    ...mapGetters({
+      labels: 'projectVersion/labels'
+    })
   },
   methods: {
     mouseover (index) {

@@ -55,7 +55,7 @@ export default {
 
   summary (state, getters, rootState) {
     return type => {
-      const keys = rootState.story[type];
+      const keys = type === 'labels' ? getters.labels : rootState.story[type];
       const stories = state.projectVersion.story;
       let result = {};
 
@@ -68,8 +68,11 @@ export default {
           }
         });
 
-        result[key] = {
+        const property = _.isObject(key) ? key.name : key;
+
+        result[property] = {
           estimate: reduce(filtered),
+          colour: _.isObject(key) ? key.colour : '',
           index: index
         };
       });
@@ -107,5 +110,10 @@ export default {
 
   comment (state) {
     return state.projectVersion.comment;
+  },
+
+  labels (state) {
+    const phrases = state.projectVersion.dictionary;
+    return editor.labels(phrases);
   }
 };

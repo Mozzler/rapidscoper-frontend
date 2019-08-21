@@ -114,8 +114,13 @@ function stories (storyOrder, stories, dictionary = null) {
   });
 }
 
+function labels (dictionary) {
+  return _.filter(dictionary, item => item.type === 'label');
+}
+
 export default {
   constructions,
   sections,
-  stories
+  stories,
+  labels
 };
