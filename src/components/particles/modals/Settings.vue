@@ -35,6 +35,7 @@
                 </div>
                 <div>
                   <v-menu v-model="item.show"
+                          :nudge-left="14"
                           :offset-y="true">
                     <template v-slot:activator="{ on }">
                       <v-icon v-on="on"
