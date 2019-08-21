@@ -109,7 +109,7 @@
                    @keydown.delete.exact="remove"
                    @keydown.186.shift.exact="createSubstory"
                    @keydown.tab.shift.exact="decreaseStoryLevel"
-                   @blur="() => updateStory(index)"
+
                    v-html="item.markup"></div>
               <circular-loader
                 cls="user-story__loader"

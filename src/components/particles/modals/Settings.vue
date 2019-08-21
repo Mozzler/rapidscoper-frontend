@@ -21,10 +21,17 @@
             <v-flex>
               <v-layout row justify-space-between align-center
                 v-for="(item, index) in list"
-                :class="`label__item label--${type(item.label)}`"
+                class="label__item"
+                :style="`background: ${item.colour}`"
                 :key="index">
                 <div>
-                  <span>{{ item.label }}</span>
+                  <span>{{ index + 1 }}.&nbsp;</span>
+                  <span
+                    class="user-story__editable"
+                    v-html="item.name"
+                    contenteditable="true"
+                    @blur="($event) => updateName($event, item)"
+                    @keyup.enter.exact.prevent="null" />
                 </div>
                 <div>
                   <v-menu v-model="item.show"
@@ -39,28 +46,30 @@
                     <div class="palette text-sm-center">
                       <div v-for="(color, index) in colors"
                            class="palette__item"
-                           :class="{'palette__item--action': item.selected === color}"
+                           :class="{'palette__item--action': item.colour === color}"
                            :key="index"
-                           :style="`background: ${color}`">
-                        <v-icon v-if="item.selected === color">
+                           :style="`background: ${color}`"
+                           @click="() => updateColor(item, color)">
+                        <v-icon v-if="item.colour === color">
                           check
                         </v-icon>
                       </div>
-                      <div class="palette__item palette__item--action text-white">
+                      <div class="palette__item palette__item--action text-white"
+                        @click="() => remove(item.id)">
                         <v-icon>delete</v-icon>
                       </div>
                     </div>
                   </v-menu>
                 </div>
               </v-layout>
-              <v-layout class="label__item label--outline label--grey">
-                <div>
-                  <span>Create new label</span>
-                </div>
+              <v-layout
+                class="label__item label--outline label--grey"
+                v-if="list.length < 8">
+                <div @click="createLabel">Create new label</div>
               </v-layout>
             </v-flex>
           </v-layout>
-          <v-layout row mt-4 justify-end>
+          <!---<v-layout row mt-4 justify-end>
             <v-btn class="btn-rapid mr-3" large outline
                    @click="closeModal">
               Cancel
@@ -69,7 +78,7 @@
                    @click="save">
               Save
             </v-btn>
-          </v-layout>
+          </v-layout>-->
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -103,25 +112,80 @@ export default {
     };
   },
   beforeMount () {
-    this.list = [...this.labels].map(item => {
-      return {
-        selected: '#FE9BA5',
-        label: item,
-        show: false
-      };
-    });
+    this.list = this.initData();
   },
   computed: {
     ...mapGetters({
-      labels: 'story/labels'
+      labels: 'story/labels',
+      projectItems: 'entity/items'
     }),
+    projects () {
+      return this.projectItems('project');
+    },
+    project () {
+      return _.find(this.projects, project => project.id === this.$route.params.projectId);
+    }
   },
   methods: {
     save () {
 
     },
     initData () {
+      return [...this.labels].map(item => {
+        const props = _.pick(item, 'id', 'name');
+        return {
+          ...props,
+          colour: `#${item.colour}`,
+          show: false
+        };
+      });
+    },
+    updateName ($event, item) {
+      let payload = { name: $event.target.innerText };
+      let params = { id: item.id };
 
+      this.submit({ data: payload }, 'update', params);
+    },
+    updateColor (item, colour) {
+      let payload = { colour: colour.replace('#', '') };
+      let params = { id: item.id };
+
+      item.colour = colour;
+      this.submit({ data: payload }, 'update', params);
+    },
+    remove (id) {
+      this.submit({ id: id }, 'delete');
+    },
+    createLabel () {
+      this.submit({
+        data: {
+          type: 'label',
+          colour: 'E5E5E5',
+          name: 'Create new label',
+          projectId: this.project.id,
+          teamId: this.project.teamId
+        }
+      }, 'create');
+    },
+    submit (payload = {}, action, params = {}) {
+      let data = {
+        entity: 'dictionary',
+        params: params,
+        ...payload
+      };
+
+      this.$store.dispatch(`entity/${action}`, {
+        ...data,
+        cancelCommit: false
+      });
+    }
+  },
+  watch: {
+    labels: {
+      deep: true,
+      handler () {
+        this.list = this.initData();
+      }
     }
   }
 };
