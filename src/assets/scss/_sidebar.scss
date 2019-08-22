@@ -162,6 +162,7 @@
   padding: 0 24px;
   font-size: 14px;
   font-weight: 500;
+  cursor: default;
 
   & div {
     font-size: initial;
@@ -182,9 +183,17 @@
     font-weight: 500;
     display: inline-block;
     color: $black !important;
+    cursor: pointer;
   }
 }
 
 .filter__item--mr {
   margin-right: 16px;
+}
+
+.filter__search {
+  padding: 7px 12px;
+  border: 1px solid #B3B3B3;
+  box-sizing: border-box;
+  border-radius: 4px;
 }
