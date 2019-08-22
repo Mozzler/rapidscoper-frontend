@@ -8,5 +8,10 @@ export default {
   adjustConstructions: {},
   activeStoryOnTab: null,
   toolProcessing: null,
-  filterSidebar: true
+  filterSidebar: true,
+  filters: {
+    labels: [],
+    priorities: [],
+    search: ''
+  }
 };

@@ -47,7 +47,6 @@ export default {
   },
   computed: {
     ...mapGetters({
-      //filters: 'story/filters',
       labels: 'story/labels',
       //time: 'story/time'
     }),

@@ -57,5 +57,9 @@ export default {
   labels (state, getters, rootState) {
     const phrases = rootState.entity.dictionary.items;
     return editor.labels(phrases);
+  },
+
+  filters (state, getters, rootState) {
+    return rootState.story.filters;
   }
 };

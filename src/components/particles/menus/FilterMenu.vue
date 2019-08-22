@@ -39,6 +39,7 @@
 
 <script>
 import ListMixin from '@/mixins/list';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'FilterMenu',
@@ -62,11 +63,21 @@ export default {
       default: ''
     }
   },
+  computed: {
+    ...mapGetters({
+      filters: 'story/filters'
+    }),
+    selected () {
+      return this.filters[this.type];
+    },
+    type () {
+      return this.title.toLowerCase();
+    }
+  },
   data () {
     return {
       show: null,
-      items: [],
-      selected: []
+      items: []
     };
   },
   beforeMount () {
@@ -74,11 +85,10 @@ export default {
   },
   methods: {
     initData () {
-      let type = this.title.toLowerCase();
       this.items = [...this.list];
 
       if (!this.items.length) {
-        this.items.push(`None ${type} to filter`);
+        this.items.push(`None ${this.type} to filter`);
       }
     },
     exists (index) {
@@ -90,19 +100,31 @@ export default {
       }
 
       const found = _.findIndex(this.selected, item => item === index);
+      let modified = [...this.selected];
 
       if (found === -1) {
-        this.selected.push(index);
+        modified.push(index);
       } else {
-        this.selected.splice(found, 1);
+        modified.splice(found, 1);
       }
+
+      this.$store.commit('story/updateFilters', {
+        type: this.type,
+        set: modified
+      });
     },
     adjusted (index, indexInSelected) {
       const tail = (indexInSelected + 1 < this.selected.length) ? '&nbsp;and&nbsp;' : '';
       return `<span class="text-bold">${this.list[index]}</span><span>${tail}</span>`;
     },
     unselect (indexInSelected) {
-      this.selected.splice(indexInSelected, 1);
+      let modified = [...this.selected];
+      modified.splice(indexInSelected, 1);
+
+      this.$store.commit('story/updateFilters', {
+        type: this.type,
+        set: modified
+      });
     }
   },
   watch: {
