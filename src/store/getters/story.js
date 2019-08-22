@@ -1,5 +1,22 @@
 import editor from '../shared/editor';
 
+function matches (stories) {
+  return (ids, cb = null, internal) => {
+    if (cb) {
+      internal = _.chain(stories)
+        .filter(cb)
+        .map(item => item.id)
+        .value();
+    }
+
+    if (ids.length) {
+      return _.intersection(ids, internal);
+    }
+
+    return internal;
+  };
+}
+
 export default {
   dictionary (state, getters, rootState) {
     const types = [
@@ -63,51 +80,47 @@ export default {
     return rootState.story.filters;
   },
 
+  matches (state, getters, rootState) {
+    let filters = state.filters;
+    let stories = rootState.entity.story.items;
+
+    return _.chain(stories)
+      .filter(item => {
+        let word = filters.search.toLowerCase();
+        let markup = item.markup
+          .replace(/<[^>]*>?/gm, '')
+          .replace(/&nbsp;/g, ' ')
+          .replace(/  +/g, ' ')
+          .toLowerCase();
+
+        return markup.includes(word);
+      })
+      .map(item => item.id)
+      .value();
+  },
+
   time (state, getters, rootState) {
     const filters = state.filters;
     if (!filters.priorities.length && !filters.labels.length && !filters.search) {
       return null;
     }
 
+    let ids = [];
     let stories = rootState.entity.story.items;
-    let lIds = [];
-    let pIds = [];
-    let sIds = [];
+    let f = matches(stories, ids);
 
     if (filters.priorities.length) {
-      lIds = _.chain(stories)
-        .filter(item => filters.priorities.includes(item.priority))
-        .map(item => item.id)
-        .value();
+      ids = f(ids, item => filters.priorities.includes(item.priority));
     }
 
     if (filters.labels.length) {
-      pIds = _.chain(stories)
-        .filter(item => {
-          let intersection = _.intersection(filters.labels, item.labels);
-          return !!intersection.length;
-        })
-        .map(item => item.id)
-        .value();
+      ids = f(ids, item => _.intersection(filters.labels, item.labels).length);
     }
 
     if (filters.search.length) {
-      sIds = _.chain(stories)
-        .filter(item => {
-          let word = filters.search.toLowerCase();
-          let markup = item.markup
-            .replace(/<[^>]*>?/gm, '')
-            .replace(/&nbsp;/g, ' ')
-            .replace(/  +/g, ' ')
-            .toLowerCase();
-
-          return markup.includes(word);
-        })
-        .map(item => item.id)
-        .value();
+      ids = f(ids, null, getters.matches);
     }
 
-    let ids = [...lIds, ...pIds, ...sIds];
     return _.chain(stories)
       .filter(story => ids.includes(story.id))
       .reduce((memo, item) => Number(memo) + Number(item.estimate), 0)
