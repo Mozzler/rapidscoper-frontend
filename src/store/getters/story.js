@@ -95,7 +95,11 @@ export default {
       sIds = _.chain(stories)
         .filter(item => {
           let word = filters.search.toLowerCase();
-          let markup = item.markup.toLowerCase();
+          let markup = item.markup
+            .replace(/<[^>]*>?/gm, '')
+            .replace(/&nbsp;/g, ' ')
+            .replace(/  +/g, ' ')
+            .toLowerCase();
 
           return markup.includes(word);
         })
