@@ -1,13 +1,15 @@
 <template>
   <v-flex class="filter__item filter__item--mr">
     <div class="mr-1">
-      <div>{{ title }}: </div>
-      <div v-for="(index, indexInSelected) in selected"
-         :key="index"
-         v-html="adjusted(index, indexInSelected)"
-         @click="() => unselect(indexInSelected)">
-        {{ adjusted(index, indexInSelected) }}
-      </div>
+      <v-layout align-start justify-center row fill-height>
+        <div>{{ title }}:&nbsp;</div>
+        <div v-for="(index, indexInSelected) in selected"
+           :key="index"
+           v-html="adjusted(index, indexInSelected)"
+           @click="() => unselect(indexInSelected)">
+          {{ adjusted(index, indexInSelected) }}
+        </div>
+      </v-layout>
     </div>
     <v-menu v-model="show"
             :nudge-bottom="nudgeBottom"
@@ -96,7 +98,7 @@ export default {
       }
     },
     adjusted (index, indexInSelected) {
-      const tail = (indexInSelected + 1 < this.selected.length) ? ' and ' : '';
+      const tail = (indexInSelected + 1 < this.selected.length) ? '&nbsp;and&nbsp;' : '';
       return `<span class="text-bold">${this.list[index]}</span><span>${tail}</span>`;
     },
     unselect (indexInSelected) {
