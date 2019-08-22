@@ -85,6 +85,10 @@ a {
   word-break: break-word;
 }
 
+.white-space-nowrap {
+  white-space: nowrap;
+}
+
 .text-white {
   .v-icon {
     color: $white !important;

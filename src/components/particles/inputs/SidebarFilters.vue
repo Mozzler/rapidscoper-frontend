@@ -19,30 +19,21 @@
       </v-layout>
     </v-flex>
     <v-flex shrink>
-      <v-layout align-center justify-center class="filter__search">
-        <v-icon class="mr-2">search</v-icon>
-        <input
-          v-model="search"
-          class="user-story__input-field"
-          placeholder="Search" />
-      </v-layout>
+      <filter-input />
     </v-flex>
   </v-layout>
 </template>
 
 <script>
 import FilterMenu from '../../particles/menus/FilterMenu';
+import FilterInput from '../../particles/inputs/FilterInput';
 import { mapGetters } from 'vuex';
 
 export default {
   name: 'SidebarFilters',
   components: {
-    FilterMenu
-  },
-  data () {
-    return {
-      search: null
-    };
+    FilterMenu,
+    FilterInput
   },
   computed: {
     ...mapGetters({

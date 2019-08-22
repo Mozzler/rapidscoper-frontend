@@ -72,6 +72,7 @@ export default {
     let stories = rootState.entity.story.items;
     let lIds = [];
     let pIds = [];
+    let sIds = [];
 
     if (filters.priorities.length) {
       lIds = _.chain(stories)
@@ -90,7 +91,19 @@ export default {
         .value();
     }
 
-    let ids = [...lIds, ...pIds];
+    if (filters.search.length) {
+      sIds = _.chain(stories)
+        .filter(item => {
+          let word = filters.search.toLowerCase();
+          let markup = item.markup.toLowerCase();
+
+          return markup.includes(word);
+        })
+        .map(item => item.id)
+        .value();
+    }
+
+    let ids = [...lIds, ...pIds, ...sIds];
     return _.chain(stories)
       .filter(story => ids.includes(story.id))
       .reduce((memo, item) => Number(memo) + Number(item.estimate), 0)
