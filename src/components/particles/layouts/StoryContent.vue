@@ -26,7 +26,6 @@ import Hint from '../lists/Hint';
 import SidebarFilters from '../../particles/inputs/SidebarFilters';
 
 import ScrollMixin from '@/mixins/scroll';
-import { mapGetters } from 'vuex';
 
 export default {
   name: 'StoryContent',
@@ -54,9 +53,6 @@ export default {
     this.$root.$off('show-error-message');
   },
   computed: {
-    ...mapGetters({
-      labels: 'story/labels'
-    }),
     sections () {
       return this.$store.getters['story/orderedSections'](this.projectId, this.storyType);
     },
@@ -79,9 +75,6 @@ export default {
     sidebarFilter () {
       return this.$store.state.system.sidebarFilter;
     },
-    priorities () {
-      return this.$store.state.story.priority;
-    },
   },
   methods: {
     setErrorMessage (error) {
@@ -101,13 +94,6 @@ export default {
           type: this.storyType
         }
       };
-    },
-    isEqual (left, right, field = 'id') {
-      if (typeof left === 'object' && typeof right === 'object') {
-        return left[field] === right[field];
-      }
-
-      return left === right;
     },
     async createSection () {
       const section = this.getSectionData();

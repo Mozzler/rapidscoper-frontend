@@ -1,7 +1,6 @@
 export default {
   methods: {
     toStr (item, field) {
-      console.log(item, field);
       if (typeof item === 'object') {
         return item[field];
       }

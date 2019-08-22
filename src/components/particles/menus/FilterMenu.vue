@@ -10,10 +10,13 @@
 
       <div class="dropdown-list">
         <v-list>
-          <v-list-tile v-for="(item, key) in items" :key="key" @click="$emit('update', item)"
-                       :class="{'v-list__tile--active': isEqual(selected, item)}">
+          <v-list-tile v-for="(item, index) in items"
+                       @click="() => select(index)"
+                       :key="index"
+                       :class="{'v-list__tile--active': exists(index)}">
             <v-list-tile-content>
-              <v-list-tile-title :class="{'item-active': isEqual(selected, item)}">
+              <v-list-tile-title
+                :class="{'item-active': exists(index)}">
                 <span>{{ toStr(item, field) }}</span>
               </v-list-tile-title>
             </v-list-tile-content>
@@ -42,20 +45,18 @@ export default {
     list: {
       default: []
     },
-    selected: {
-      default: null
-    },
     field: {
       default: 'name'
     },
     title: {
-      default: null
+      default: ''
     }
   },
   data () {
     return {
       show: null,
-      items: []
+      items: [],
+      selected: []
     };
   },
   beforeMount () {
@@ -63,10 +64,23 @@ export default {
   },
   methods: {
     initData () {
+      let type = this.title.toLowerCase();
       this.items = [...this.list];
 
       if (!this.items.length) {
-        this.items.push('None labels to filter');
+        this.items.push(`None ${type} to filter`);
+      }
+    },
+    exists (index) {
+      return this.selected.includes(index);
+    },
+    select (index) {
+      const found = _.findIndex(this.selected, item => item === index);
+
+      if (found === -1) {
+        this.selected.push(index);
+      } else {
+        this.selected.splice(found, 1);
       }
     }
   },

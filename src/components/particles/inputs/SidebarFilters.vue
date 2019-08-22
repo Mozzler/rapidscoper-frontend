@@ -34,17 +34,6 @@ export default {
   components: {
     FilterMenu
   },
-  data () {
-    return {
-      menu: {
-        priority: false,
-        labels: false
-      }
-    };
-  },
-  beforeMount () {
-    console.log(this.labels);
-  },
   computed: {
     ...mapGetters({
       labels: 'story/labels'

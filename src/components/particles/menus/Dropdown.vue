@@ -73,20 +73,6 @@ export default {
     this.initData();
   },
   methods: {
-    toStr (item, field) {
-      if (typeof item === 'object') {
-        return item[field];
-      }
-
-      return item;
-    },
-    isEqual (left, right, field = 'id') {
-      if (typeof left === 'object' && typeof right === 'object') {
-        return left[field] === right[field];
-      }
-
-      return left === right;
-    },
     click ($event) {
       this.$store.commit('story/setActiveStoryOnTab', null);
       this.$nextTick(() => {
