@@ -115,7 +115,7 @@ export default {
     },
     adjusted (index, indexInSelected) {
       const tail = (indexInSelected + 1 < this.selected.length) ? '&nbsp;and&nbsp;' : '';
-      return `<span class="text-bold">${this.list[index]}</span><span>${tail}</span>`;
+      return `<span class="text-bold">${this.toStr(this.list[index], 'name')}</span><span>${tail}</span>`;
     },
     unselect (indexInSelected) {
       let modified = [...this.selected];
