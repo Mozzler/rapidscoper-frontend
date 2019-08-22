@@ -37,7 +37,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      labels: 'projectVersion/labels'
+      labels: 'story/labels'
     })
   },
   methods: {

@@ -35,8 +35,13 @@
 </template>
 
 <script>
+import ListMixin from '@/mixins/list';
+
 export default {
   name: 'Dropdown',
+  mixins: [
+    ListMixin
+  ],
   props: {
     list: {
       type: Array,
@@ -104,7 +109,7 @@ export default {
       if ($event !== null) {
         $event.target.innerHTML = this.project;
       }
-    },
+    }
   },
   watch: {
     selected: {

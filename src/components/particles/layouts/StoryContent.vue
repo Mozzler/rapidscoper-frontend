@@ -1,49 +1,7 @@
 <template>
   <div class="scrollable-layout" ref="scrollable-layout">
     <div class="content-filter" v-if="sidebarFilter">
-      <v-layout align-center justify-space-between row fill-height>
-        <v-flex shrink>
-          <v-layout align-center justify-start row fill-height>
-            <v-flex class="filter__item--mr">
-              Filters:
-            </v-flex>
-            <v-flex class="filter__item filter__item--mr">
-              <div class="mr-1">Priorities: </div>
-              <v-menu v-model="menu.priority"
-                      :nudge-bottom="30"
-                      :nudge-left="86">
-                <template v-slot:activator="{ on }">
-                  <v-icon v-on="on">add</v-icon>
-                </template>
-
-                <div class="dropdown-list">
-                  <v-list>
-                    <v-list-tile v-for="(item, key) in priorities" :key="key" @click="$emit('update', item)"
-                                 :class="{'v-list__tile--active': isEqual(selected, item)}">
-                      <v-list-tile-content>
-                        <v-list-tile-title :class="{'item-active': isEqual(selected, item)}">
-                          <span>{{ item }}</span>
-                        </v-list-tile-title>
-                      </v-list-tile-content>
-                    </v-list-tile>
-                  </v-list>
-                </div>
-              </v-menu>
-            </v-flex>
-            <v-flex class="filter__item filter__item--mr">
-              <div class="mr-1">Labels: </div>
-              <v-icon>add</v-icon>
-            </v-flex>
-            <!--<v-flex class="text-greyed">Estimate time: 12 hours</v-flex>-->
-          </v-layout>
-        </v-flex>
-        <v-flex shrink>
-          <v-layout align-center justify-center class="filter__search">
-            <v-icon class="mr-2">search</v-icon>
-            <input class="search-input" placeholder="Search" />
-          </v-layout>
-        </v-flex>
-      </v-layout>
+      <sidebar-filters />
     </div>
     <div class="content-container"
          v-for="(story, index) in sections"
@@ -65,14 +23,17 @@
 <script>
 import StoryItem from '../../particles/forms/StoryItem';
 import Hint from '../lists/Hint';
+import SidebarFilters from '../../particles/inputs/SidebarFilters';
 
 import ScrollMixin from '@/mixins/scroll';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'StoryContent',
   components: {
     StoryItem,
-    Hint
+    Hint,
+    SidebarFilters
   },
   mixins: [
     ScrollMixin
@@ -82,10 +43,6 @@ export default {
       message: null,
       scrollActive: false,
       scrollSelector: '.user-story__block',
-      menu: {
-        priority: false,
-        labels: false
-      }
     };
   },
   beforeMount () {
@@ -97,6 +54,9 @@ export default {
     this.$root.$off('show-error-message');
   },
   computed: {
+    ...mapGetters({
+      labels: 'story/labels'
+    }),
     sections () {
       return this.$store.getters['story/orderedSections'](this.projectId, this.storyType);
     },
@@ -121,7 +81,7 @@ export default {
     },
     priorities () {
       return this.$store.state.story.priority;
-    }
+    },
   },
   methods: {
     setErrorMessage (error) {
