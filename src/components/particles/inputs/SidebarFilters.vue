@@ -41,14 +41,14 @@ export default {
   },
   data () {
     return {
-      search: null,
-      time: null
+      search: null
     };
   },
   computed: {
     ...mapGetters({
+      filters: 'story/filters',
       labels: 'story/labels',
-      //time: 'story/time'
+      time: 'story/time'
     }),
     priorities () {
       return this.$store.state.story.priority;

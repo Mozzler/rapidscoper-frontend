@@ -61,5 +61,39 @@ export default {
 
   filters (state, getters, rootState) {
     return rootState.story.filters;
+  },
+
+  time (state, getters, rootState) {
+    const filters = state.filters;
+    if (!filters.priorities.length && !filters.labels.length && !filters.search) {
+      return null;
+    }
+
+    let stories = rootState.entity.story.items;
+    let lIds = [];
+    let pIds = [];
+
+    if (filters.priorities.length) {
+      lIds = _.chain(stories)
+        .filter(item => filters.priorities.includes(item.priority))
+        .map(item => item.id)
+        .value();
+    }
+
+    if (filters.labels.length) {
+      pIds = _.chain(stories)
+        .filter(item => {
+          let intersection = _.intersection(filters.labels, item.labels);
+          return !!intersection.length;
+        })
+        .map(item => item.id)
+        .value();
+    }
+
+    let ids = [...lIds, ...pIds];
+    return _.chain(stories)
+      .filter(story => ids.includes(story.id))
+      .reduce((memo, item) => Number(memo) + Number(item.estimate), 0)
+      .value();
   }
 };
