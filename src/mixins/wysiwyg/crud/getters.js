@@ -1,7 +1,20 @@
+import { mapGetters } from 'vuex';
+
 export default {
   computed: {
+    ...mapGetters({
+      gIdentifier: 'story/identifier',
+      projectItems: 'entity/items'
+    }),
+    type () {
+      let type = this.$route.params.storyType.split('-');
+      return _.first(type);
+    },
+    identifier () {
+      return this.gIdentifier(this.type);
+    },
     projects () {
-      return this.$store.getters['entity/items']('project');
+      return this.projectItems('project');
     },
     project () {
       return _.find(this.projects, project => project.id === this.$route.params.projectId);
@@ -14,17 +27,6 @@ export default {
       return timestamp + 'xxxxxxxxxxxxxxxx'.replace(/[x]/g, () => {
         return (Math.random() * 16 | 0).toString(16);
       }).toLowerCase();
-    },
-    getStoryIdentifier () {
-      let letter = this.$route.params.storyType.charAt(0).toUpperCase();
-      let number = (this.project.userStoryCount + 1).toString();
-      let zeros = '';
-
-      for (let i = number.length; i < 3 ; i++) {
-        zeros += '0';
-      }
-
-      return `${letter}${zeros}${number}`;
     },
     getPreviousAfterStoryId (index = this.focused) {
       return index === 0 ? 0 : this.list[index - 1].id;
@@ -73,7 +75,8 @@ export default {
       const data = {
         _id: uuid,
         id: uuid,
-        storyIdentifier: this.getStoryIdentifier(),
+        type: this.type,
+        storyIdentifier: this.identifier,
         parentStoryId: sublist ? this.list[this.focused].id : this.list[this.focused].parentStoryId,
         afterStoryId: sublist ? this.list[this.focused].id : this.getAfterStoryId(),
 

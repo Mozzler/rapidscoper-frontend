@@ -1,7 +1,6 @@
 export default {
   methods: {
     sendCreateStoryRequest (sublist, text = '') {
-      const focused = this.focused;
       const payload = this.getCreateRequestPayload(sublist, text);
 
       this.$store.commit('entity/create', payload);

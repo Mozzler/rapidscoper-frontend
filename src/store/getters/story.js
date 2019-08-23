@@ -125,5 +125,29 @@ export default {
       .filter(story => ids.includes(story.id))
       .reduce((memo, item) => Number(memo) + Number(item.estimate), 0)
       .value();
+  },
+
+  identifier (state, getters, rootState) {
+    return type => {
+      let stories = rootState.entity.story.items;
+      let max = _.chain(stories)
+        .filter(item => item.type === type)
+        .map(item => {
+          let id = item.storyIdentifier.replace(/\D/g, '');
+          return Number(id);
+        })
+        .max()
+        .value();
+
+      let letter = type.charAt(0).toUpperCase();
+      let number = (max + 1).toString();
+      let zeros = '';
+
+      for (let i = number.length; i < 3; i++) {
+        zeros += '0';
+      }
+
+      return `${letter}${zeros}${number}`;
+    };
   }
 };

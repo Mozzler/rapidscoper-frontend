@@ -90,7 +90,7 @@ export default {
     activatePanel () {
       const ref = this.$refs[`${this.elRef[this.tab]}-${this.toolId}`];
 
-      if (this.tab === 'edit') {
+      if (this.tab === 'edit' && this.focused) {
         this.$nextTick(() => {
           const el = document.getElementById(this.toolId);
           if (el) {
