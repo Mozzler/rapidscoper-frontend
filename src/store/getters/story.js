@@ -131,7 +131,6 @@ export default {
     return type => {
       let stories = rootState.entity.story.items;
       let max = _.chain(stories)
-        .filter(item => item.type === type)
         .map(item => {
           let id = item.storyIdentifier.replace(/\D/g, '');
           return Number(id);
