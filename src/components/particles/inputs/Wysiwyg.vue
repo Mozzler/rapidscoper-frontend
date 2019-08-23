@@ -93,8 +93,7 @@
                    }"
                    :ref="item.id"
                    :id="item.id"
-                   @keydown.shift.45.exact="ctrlV"
-                   @keydown.ctrl.86.exact="ctrlV"
+                   @paste="ctrlV"
                    @focus="() => focusEvent(item, index)"
                    @keydown.enter.exact="createStory"
                    @click="($event) => checkHint($event, item, index)"
@@ -105,7 +104,6 @@
                    @keydown.delete.exact="remove"
                    @keydown.186.shift.exact="createSubstory"
                    @keydown.tab.shift.exact="decreaseStoryLevel"
-
                    v-html="item.markup"></div>
               <circular-loader
                 cls="user-story__loader"
