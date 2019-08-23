@@ -1,12 +1,6 @@
 <template>
   <div class="tool-block__text"
        :class="{'tool-block__text--minified': minified}">
-    <circular-loader
-      cls="loader-shadow--without-padding transparent"
-      :size="50"
-      :width="5"
-      :visible="loader"
-    />
     <div v-for="(item, index) in list"
          :key="index"
          :class="labelCls"

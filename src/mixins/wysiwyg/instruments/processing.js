@@ -5,9 +5,6 @@ export default {
     };
   },
   computed: {
-    toolProcessing () {
-      return this.$store.state.story.toolProcessing;
-    },
     toolId () {
       return this.$store.state.story.activeStoryOnTab;
     },
@@ -46,10 +43,6 @@ export default {
       delete this[stack][id];
     },
     updateToolId (propertyId, item, property) {
-      if (this.toolProcessing) {
-        return;
-      }
-
       let query = null;
       let id = this.toolId;
       this.toolStack[id] = item[property];
@@ -61,11 +54,6 @@ export default {
       } else {
         query = propertyId;
       }
-
-      this.$store.commit('story/setToolProcessing', {
-        type: property,
-        id: id
-      });
 
       this.$store.commit('entity/update', {
         entity: 'story',

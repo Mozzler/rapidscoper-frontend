@@ -22,6 +22,7 @@
               <v-layout row justify-space-between align-center
                 v-for="(item, index) in list"
                 class="label__item"
+                :class="{ 'label--outline label--grey': !item.colour }"
                 :style="`background: ${item.colour}`"
                 :key="index">
                 <div>
@@ -29,7 +30,7 @@
                   <input
                     class="user-story__input-field"
                     v-model="item.name"
-                    @blur="($event) => updateName($event, item)" />
+                    :id="item.id" />
                 </div>
                 <div>
                   <v-menu v-model="item.show"
@@ -62,9 +63,10 @@
                 </div>
               </v-layout>
               <v-layout
+                @click="createLabel"
                 class="label__item label--outline label--grey"
                 v-if="list.length < 8">
-                <div @click="createLabel">Create new label</div>
+                <div>Create new label</div>
               </v-layout>
             </v-flex>
           </v-layout>
@@ -107,7 +109,8 @@ export default {
         '#FE9BA5', '#D7AC8D', '#FADCA2', '#9BE1CA',
         '#9FCEF8', '#C4ABED', '#FAAAD5', '#E5E5E5'
       ],
-      list: []
+      list: [],
+      focused: null
     };
   },
   beforeMount () {
@@ -126,15 +129,12 @@ export default {
     }
   },
   methods: {
-    save () {
-
-    },
     initData () {
       return [...this.labels].map(item => {
         const props = _.pick(item, 'id', 'name');
         return {
           ...props,
-          colour: `#${item.colour}`,
+          colour: item.colour ? `#${item.colour}` : null,
           show: false
         };
       });
@@ -155,16 +155,18 @@ export default {
     remove (id) {
       this.submit({ id: id }, 'delete');
     },
-    createLabel () {
-      this.submit({
+    async createLabel () {
+      const response = await this.submit({
         data: {
           type: 'label',
-          colour: 'E5E5E5',
+          colour: '',
           name: 'Create new label',
           projectId: this.project.id,
           teamId: this.project.teamId
         }
       }, 'create');
+
+      this.focused = response.item.id;
     },
     submit (payload = {}, action, params = {}) {
       let data = {
@@ -173,7 +175,7 @@ export default {
         ...payload
       };
 
-      this.$store.dispatch(`entity/${action}`, {
+      return this.$store.dispatch(`entity/${action}`, {
         ...data,
         cancelCommit: false
       });
@@ -184,6 +186,15 @@ export default {
       deep: true,
       handler () {
         this.list = this.initData();
+      }
+    },
+    focused () {
+      let el = document.getElementById(this.focused);
+      if (el) {
+        this.$nextTick(() => {
+          el.focus();
+          el.setSelectionRange(0, el.value.length);
+        });
       }
     }
   }

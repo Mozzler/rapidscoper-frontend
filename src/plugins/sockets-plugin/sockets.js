@@ -90,10 +90,6 @@ class MongoSockets {
             data: response.fullDocument
           });
 
-          if (response.model === 'story') {
-            app.$store.commit('story/setToolProcessing', null);
-          }
-
           if (response.model === 'section') {
             app.$root.$emit('stop-processing');
           }

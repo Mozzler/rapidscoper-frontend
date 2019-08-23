@@ -7,7 +7,6 @@ export default {
   ],
   adjustConstructions: {},
   activeStoryOnTab: null,
-  toolProcessing: null,
   filterSidebar: true,
   filters: {
     labels: [],

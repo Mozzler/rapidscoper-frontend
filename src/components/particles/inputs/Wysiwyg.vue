@@ -35,10 +35,6 @@
             :list="toolDictionary"
             :minified="true"
             :label-cls="'tool-block__label--minified'"
-            :loader="toolProcessing &&
-              tab === 'labels' &&
-              toolProcessing.type === 'labels' &&
-              toolProcessing.id === item.id"
             @update="id => submitTool(id)"/>
         </div>
 

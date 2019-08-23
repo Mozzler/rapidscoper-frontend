@@ -1,12 +1,6 @@
 <template>
   <div class="tool-block__text"
     :class="{'tool-block__text--minified': minified}">
-    <circular-loader
-      cls="loader-shadow--without-padding transparent"
-      :size="50"
-      :width="5"
-      :visible="loader"
-    />
     <div v-for="(item, index) in list"
          :class="`${labelCls} label--${type(item)} ${outline(index)}`"
          :key="index"
@@ -25,13 +19,9 @@
 
 <script>
 import Tools from '@/mixins/story';
-import CircularLoader from "../../particles/loaders/Circular";
 
 export default {
-  name: "ToolList",
-  components: {
-    CircularLoader
-  },
+  name: 'ToolList',
   props: {
     list: {
       required: true
@@ -47,9 +37,6 @@ export default {
     },
     shortcutted: {
       default: true
-    },
-    loader: {
-      default: false
     },
     minified: false
   },
