@@ -18,9 +18,8 @@
               </h1>
             </v-flex>
             <v-flex shrink v-if="deletable(section)">
-              <div class="cursor-pointer"
-                   @click="() => remove(section.id)">
-                <v-icon class="remove-icon"> remove </v-icon>
+              <div @click="() => remove(section.id)">
+                <v-icon class="remove-icon remove-icon--header" small> delete </v-icon>
               </div>
             </v-flex>
           </v-layout>
@@ -32,7 +31,11 @@
                         :class="{
                           'user-story--active': focused === word.id
                         }">
-
+                <v-flex shrink v-if="!word.storyCount">
+                  <div @click="() => remove(word.id)">
+                    <v-icon class="remove-icon" small> delete </v-icon>
+                  </div>
+                </v-flex>
                 <v-flex shrink>
                   <div class="user-story__editable user-story__editable--after text-bold"
                        v-html="word.name"
@@ -57,12 +60,6 @@
                        @keydown.enter.exact.prevent="() => update(word.id, 'description', true)"
                        @blur="() => update(word.id, 'description')"
                   ></div>
-                </v-flex>
-                <v-flex shrink v-if="!word.storyCount">
-                  <div class="cursor-pointer "
-                       @click="() => remove(word.id)">
-                    <v-icon class="remove-icon"> remove </v-icon>
-                  </div>
                 </v-flex>
               </v-layout>
             </template>
