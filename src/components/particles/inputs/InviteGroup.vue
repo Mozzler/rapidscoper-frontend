@@ -102,7 +102,17 @@ export default {
 
       try {
         const data = this.getRequestData();
-        await this.$store.dispatch('entity/create', data);
+        const response = await this.$store.dispatch('entity/create', data);
+
+        this.$store.commit('entity/create', {
+          entity: 'invite',
+          data: response.item
+        });
+        this.$store.commit('entity/create', {
+          entity: 'userInfo',
+          data: response.userInfo
+        });
+
       } catch (error) {
         let msg = _.first(error.response.data);
         this.$root.$emit('show-error-message', msg.message);
