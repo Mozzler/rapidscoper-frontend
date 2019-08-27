@@ -102,6 +102,7 @@ export default {
     },
     getUpdateRequestPayload (focused = this.focused) {
       const data = {
+        id: this.list[focused].id,
         type: this.list[focused].type,
         markup: this.list[focused].markup,
         afterStoryId: this.getPreviousAfterStoryId(focused),

@@ -4,7 +4,7 @@ export default {
       return _.isEqual(this.etalon, this.list[focused]);
     },
     async updateStory (focused = this.focused) {
-      if (!this.list[focused]) {
+      if (!this.list[focused] || this.equal(focused)) {
         return;
       }
 
@@ -17,6 +17,7 @@ export default {
 
       const payload = this.getUpdateRequestPayload(focused);
 
+      this.$store.commit('entity/update', payload);
       await this.$store.dispatch('entity/update', payload);
       this.processing = false;
     }

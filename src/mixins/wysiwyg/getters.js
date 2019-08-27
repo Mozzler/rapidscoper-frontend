@@ -100,8 +100,8 @@ export default {
       const list = length ? item.list[length - 1] : null;
       return list ? this.getElementToFocus(list, ++level, length - 1, path) : path;
     },
-    getParentDictionary () {
-      const children = this.$refs[this.list[this.focused].id][0].children;
+    getParentDictionary (focused = this.focused) {
+      const children = this.$refs[this.list[focused].id][0].children;
       const div = _.find(children, item => item.className === 'user-story__editable--requirement');
 
       return _.find(this.sections, item => item.name === div.innerText);

@@ -106,13 +106,15 @@ export default {
       }
 
       this.event = $event;
-      this.list[this.focused].markup = this.list[this.focused].markup + character;
+      this.list[this.focused].markup = $event.target.innerHTML + character;
 
       this.setSiblings();
       this.setCustomText(true);
 
       this.resetPlaceholder();
       this.collapseToEnd();
+
+      this.updateStory();
     },
     setCustomText (editable = false) {
       const [list, tail] = this.getLineParticles();

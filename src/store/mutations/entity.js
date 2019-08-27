@@ -35,8 +35,13 @@ export default {
     payload.data = normalizeId(payload.data);
 
     _.each(state[entity].items, (item, index) => {
-      const after = moment(payload.data.createdAt).isAfter(item.createdAt);
-      if (item.id === payload.data.id && after) {
+      if (item.id === payload.data.id) {
+        if (payload.data.updatedAt) {
+          const after = moment(payload.data.updatedAt).isAfter(item.updatedAt);
+          if (!after) {
+            return;
+          }
+        }
         _.assign(item, payload.data);
       }
     });

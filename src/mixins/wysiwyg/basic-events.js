@@ -36,6 +36,11 @@ export default {
       this.initPlaceholder();
       this.initDictionary();
       this.initStaticText();
+
+      this.$store.commit('entity/update', {
+        entity: 'story',
+        data: this.list[this.focused]
+      });
     },
     isEditable () {
       if (!this.event) {

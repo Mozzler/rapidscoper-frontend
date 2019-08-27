@@ -95,7 +95,7 @@ export default {
 
         text = text.key;
       } else {
-        this.submitField(chapter, text);
+        this.submitField(chapter, text, this.focused);
       }
 
       let spans = this.getSpanList(false);
@@ -134,7 +134,7 @@ export default {
         data: this.list[this.focused]
       });
     },
-    async submitField (chapter, text) {
+    async submitField (chapter, text, focused) {
       if (typeof text !== 'string') {
         return;
       }
@@ -146,7 +146,7 @@ export default {
 
       // block of `field`-type always have the relatedDictionaryId
       if (chapter === 'field') {
-        const parentDictionary = this.getParentDictionary();
+        const parentDictionary = this.getParentDictionary(focused);
 
         replacement = {
           type: 'requirement',
@@ -172,29 +172,30 @@ export default {
         return;
       }
 
-      await this.$store.dispatch('entity/create', {
+      const response = await this.$store.dispatch('entity/create', {
         entity: 'dictionary',
         data: data
-      }).then(response => {
-        const children = this.$refs[this.list[this.focused].id][0].children;
-        const node = _.find(children, item => item.className.includes(`user-story__editable--${chapter}`));
-        node.setAttribute('data-id', response.item.id);
-
-        const spans = this.list[this.focused].markup.split('&nbsp;');
-        const index = _.findIndex(spans, item => item.includes(`user-story__editable--${chapter}`));
-        spans[index] = node.outerHTML;
-
-        this.list[this.focused].markup = spans.join('&nbsp;');
-        this.processing = false;
-
-        this.$store.commit('entity/update', {
-          entity: 'story',
-          data: this.list[this.focused]
-        });
-      }).then(async () => {
-        await this.$nextTick();
-        document.getElementById(this.list[this.focused].id).focus();
       });
+
+      const el = document.getElementById(this.list[this.focused].id);
+      const children = el.children;
+      const node = _.find(children, item => item.className.includes(`user-story__editable--${chapter}`));
+      node.setAttribute('data-id', response.item.id);
+
+      const spans = el.innerHTML.split('&nbsp;');
+      const index = _.findIndex(spans, item => item.includes(`user-story__editable--${chapter}`));
+      spans[index] = node.outerHTML;
+
+      this.list[this.focused].markup = spans.join('&nbsp;');
+      this.processing = false;
+
+      this.$store.commit('entity/update', {
+        entity: 'story',
+        data: this.list[this.focused]
+      });
+
+      await this.$nextTick();
+      document.getElementById(this.list[this.focused].id).focus();
     }
   }
 };

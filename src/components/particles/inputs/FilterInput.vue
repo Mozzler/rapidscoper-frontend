@@ -5,14 +5,15 @@
       v-model="search"
       @focus="() => searchFocused = true"
       @blur="() => searchFocused = false"
+      @keyup.enter.exact="find"
       class="user-story__input-field"
       placeholder="Search" />
 
     <v-flex shrink>
       <v-layout align-center row fill-height v-if="true" class="icon-group">
         <div class="text-greyed white-space-nowrap">0 of 0 | </div>
-        <v-icon>keyboard_arrow_down</v-icon>
-        <v-icon>keyboard_arrow_up</v-icon>
+        <v-icon @click="() => find(true)">keyboard_arrow_down</v-icon>
+        <v-icon @click="() => find(false)">keyboard_arrow_up</v-icon>
         <v-icon>cancel</v-icon>
       </v-layout>
     </v-flex>
@@ -43,6 +44,11 @@ export default {
           set: value
         });
       }
+    }
+  },
+  methods: {
+    find (direction = true) {
+      console.log(window.find(this.search, true, direction));
     }
   }
 };
