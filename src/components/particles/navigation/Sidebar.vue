@@ -127,7 +127,7 @@ export default {
     showAddTeamModal () {
       this.$root.$emit('add-team');
     },
-    handleDropdown(value) {
+    handleDropdown (value) {
       switch (value) {
         case 'Log out':
           this.$store.dispatch('auth/logout')

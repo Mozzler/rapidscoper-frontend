@@ -177,6 +177,8 @@ export default {
         data: data
       });
 
+      await this.$nextTick();
+
       const el = document.getElementById(this.list[this.focused].id);
       const children = el.children;
       const node = _.find(children, item => item.className.includes(`user-story__editable--${chapter}`));
