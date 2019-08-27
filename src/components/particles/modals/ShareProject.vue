@@ -22,7 +22,7 @@
             <template v-if="!projectShare.length">
               <v-layout align-center justify-start row fill-height>
                 <link-disabled-icon class="mr-3"/>
-                <span>Public link access is disabled.&nbsp;</span>
+                <span class="cursor-default">Public link access is disabled.&nbsp;</span>
                 <span class="text-reference" @click="enable">Enable access</span>
               </v-layout>
             </template>
@@ -63,18 +63,22 @@
               </div>
               <div v-else>
                 <v-layout
+                  class="mb-3"
                   v-for="user in invited"
                   :key="user.id"
                   row fill-height align-center justify-space-between>
-                  <v-flex shrink>
-                    <img :src="user.avatarUrl" />
+                  <v-flex shrink class="invited__flex">
+                    <img
+                      class="invited__img"
+                      :src="user.avatarUrl" />
                     <div>{{ user.email }}</div>
                   </v-flex>
-                  <v-flex shrink>
+                  <v-flex shrink class="invited__flex">
                     <dropdown
                       :list="roles"
-                      :selected="user.role" />
-                    <v-icon>delete</v-icon>
+                      :selected="user.role"
+                      @update="value => updateRole(value, user.id)" />
+                    <v-icon @click="() => removeInvite(user.id)">delete</v-icon>
                   </v-flex>
                 </v-layout>
               </div>
@@ -85,13 +89,13 @@
           <v-flex>
             <v-layout align-center justify-space-between>
               <v-flex grow>
-                <span>Client's permission</span>
+                <span class="cursor-default">Client's permission</span>
               </v-flex>
               <v-flex shrink>
                 <dropdown
                   :list="permissions"
                   :selected="permission"
-                  @update="value => handleDropdown(value)" />
+                  @update="value => updatePermission(value)" />
               </v-flex>
             </v-layout>
           </v-flex>
@@ -163,6 +167,15 @@ export default {
     this.permission = _.first(this.permissions);
   },
   methods: {
+    removeInvite (id) {
+      const data = {
+        entity: 'invite',
+        id: id
+      };
+
+      this.$store.commit('entity/delete', data);
+      this.$store.dispatch('entity/delete', data);
+    },
     getParams (entity, params = {}) {
       return {
         entity: entity,
@@ -173,14 +186,13 @@ export default {
       this.processing = true;
 
       const requests = [];
-      const projectId = this.$route.params.projectId;
       const data = [
         this.getParams('user-info', {
-          projectId: projectId
+          projectId: this.params
         }),
         this.getParams('invite', {
           entityType: 'project',
-          entityId: projectId
+          entityId: this.params
         })
       ];
 
@@ -197,8 +209,17 @@ export default {
     initData () {
       this.link = null;
     },
-    handleDropdown () {
-
+    updatePermission (value) {
+      this.permission = value;
+      this.$store.dispatch('entity/update', {
+        entity: 'project',
+        data: {
+          clientPermissions: value.type
+        },
+        params: {
+          id: this.params
+        }
+      });
     },
     copy (index) {
       const shared = this.projectShare[index];
@@ -240,6 +261,17 @@ export default {
         .then(() => {
           this.processing = false;
         });
+    },
+    updateRole (value, id) {
+      this.$store.dispatch('entity/update', {
+        entity: 'invite',
+        data: {
+          role: value.toLowerCase().replace(/ /g, '-')
+        },
+        params: {
+          id: id
+        }
+      });
     },
     remove (id) {
       this.processing = true;

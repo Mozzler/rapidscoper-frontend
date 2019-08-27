@@ -13,7 +13,7 @@
           @blur="blur"
           @click="editable ? click : null"
           v-html="project"></div>
-        <span v-else> {{ project }} </span>
+        <span class="cursor-default" v-else> {{ project }} </span>
       </template>
       <v-btn icon v-on="on" class="dropdown-action">
         <v-icon>arrow_drop_down</v-icon>
@@ -22,10 +22,10 @@
     <div class="dropdown-list">
       <v-list>
         <v-list-tile v-for="(item, key) in list" :key="key" @click="$emit('update', item)"
-          :class="{'v-list__tile--active': isEqual(selected, item)}">
+          :class="{'v-list__tile--active': isEqual(selected, item, field)}">
           <v-list-tile-content>
-            <v-list-tile-title :class="{'item-active': isEqual(selected, item)}">
-              <span>{{ toStr(item, 'name') }}</span>
+            <v-list-tile-title :class="{'item-active': isEqual(selected, item, field)}">
+              <span>{{ toStr(item, field) }}</span>
             </v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
@@ -62,6 +62,10 @@ export default {
     submit: {
       type: Function,
       default: () => {}
+    },
+    field: {
+      type: String,
+      default: 'name'
     }
   },
   data () {
@@ -101,7 +105,7 @@ export default {
     selected: {
       deep: true,
       handler () {
-        this.project = this.toStr(this.selected, 'name');
+        this.project = this.toStr(this.selected, this.field);
       }
     }
   }
