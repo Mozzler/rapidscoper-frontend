@@ -100,7 +100,7 @@ export default {
           id: id
         },
         data: {
-          role: role.toLowerCase().replace(/ /g, '-')
+          role: role.type
         }
       });
     }

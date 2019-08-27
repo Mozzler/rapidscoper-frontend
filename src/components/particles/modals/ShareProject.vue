@@ -78,7 +78,10 @@
                       :list="roles"
                       :selected="user.role"
                       @update="value => updateRole(value, user.id)" />
-                    <v-icon @click="() => removeInvite(user.id)">delete</v-icon>
+                    <v-icon
+                      class="ml-3"
+                      @click="() => removeInvite(user.id)"
+                    >delete</v-icon>
                   </v-flex>
                 </v-layout>
               </div>
@@ -262,11 +265,19 @@ export default {
           this.processing = false;
         });
     },
-    updateRole (value, id) {
+    updateRole (role, id) {
+      this.$store.commit('entity/update', {
+        entity: 'invite',
+        data: {
+          id: id,
+          role: role.type
+        }
+      });
+
       this.$store.dispatch('entity/update', {
         entity: 'invite',
         data: {
-          role: value.toLowerCase().replace(/ /g, '-')
+          role: role.type
         },
         params: {
           id: id

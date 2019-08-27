@@ -2,7 +2,16 @@ export default {
   isMobileDevice: false,
   sidebarFilter: true,
   periods: ['Unexpired', '1 day', '2 days', '3 days', '7 days'],
-  roles: ['Manager', 'Member', 'Client'],
+  roles: [{
+    name: 'Manager',
+    type: 'manager'
+  }, {
+    name: 'Member',
+    type: 'member'
+  }, {
+    name: 'Client',
+    type: 'client'
+  }],
   permissions: [{
     name: 'View only',
     type: 'view'

@@ -78,6 +78,19 @@ export default {
     }
   },
   methods: {
+    getRequestData () {
+      return {
+        entity: 'invite',
+        data: {
+          entityId: this.entityId,
+          entityType: this.entityType,
+          expiry: null,
+          role: this.role.type,
+          email: this.email
+        },
+        cancelCommit: true
+      };
+    },
     async invite () {
       this.processing = true;
       let result = await this.$validator.validate();
@@ -87,17 +100,13 @@ export default {
         return;
       }
 
-      const response = await this.$store.dispatch('entity/create', {
-        entity: 'invite',
-        data: {
-          entityId: this.entityId,
-          entityType: this.entityType,
-          expiry: null,
-          role: this.role.toLowerCase(),
-          email: this.email
-        },
-        cancelCommit: true
-      });
+      try {
+        const data = this.getRequestData();
+        await this.$store.dispatch('entity/create', data);
+      } catch (error) {
+        let msg = _.first(error.response.data);
+        this.$root.$emit('show-error-message', msg.message);
+      }
 
       this.processing = false;
       this.$emit('finish-processing');
