@@ -1,15 +1,21 @@
+import { mapMutations } from 'vuex';
+
 export default {
   beforeCreate () {
-    window.addEventListener('resize', this.updateDevice);
+    window.addEventListener('resize', this.resize);
   },
   beforeMount () {
-    this.updateDevice();
+    this.resize();
   },
   methods: {
-    updateDevice () {
-      this.$nextTick(() => {
-        this.$store.commit('updateDevice', window.innerWidth < 767);
-      });
+    ...mapMutations('system', [
+      'updateDevice'
+    ]),
+    async resize () {
+      await this.$nextTick();
+
+      let width = window.innerWidth < 767;
+      this.updateDevice(width);
     }
   },
   beforeDestroy () {

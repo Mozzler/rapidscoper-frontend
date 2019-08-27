@@ -35,9 +35,10 @@
                   </div>
                   <div>
                     <v-layout row align-center justify-space-between fill-height>
-                      <dropdown :list="periods" class="mr-3"
-                                :selected="period"
-                                @update="value => updatePeriod(value, item.id)" />
+                      <dropdown
+                        :list="periods" class="mr-3"
+                        :selected="period"
+                        @update="value => updatePeriod(value, item.id)" />
                       <div @click="() => remove(item.id)">
                         <v-icon class="cursor-pointer">delete</v-icon>
                       </div>
@@ -51,9 +52,33 @@
           <v-divider
             class="my-3" />
           <v-flex>
-            <div class="text-sm-center text-greyed">
-              There are no invited users yet
+            <div v-if="processing" class="text-greyed text-sm-center">
+              Loading ...
             </div>
+            <template v-else>
+              <div
+                v-if="!invited.length"
+                class="text-sm-center text-greyed">
+                There are no invited users yet
+              </div>
+              <div v-else>
+                <v-layout
+                  v-for="user in invited"
+                  :key="user.id"
+                  row fill-height align-center justify-space-between>
+                  <v-flex shrink>
+                    <img :src="user.avatarUrl" />
+                    <div>{{ user.email }}</div>
+                  </v-flex>
+                  <v-flex shrink>
+                    <dropdown
+                      :list="roles"
+                      :selected="user.role" />
+                    <v-icon>delete</v-icon>
+                  </v-flex>
+                </v-layout>
+              </div>
+            </template>
           </v-flex>
           <v-divider
             class="my-3" />
@@ -71,9 +96,10 @@
             </v-layout>
           </v-flex>
           <v-flex grow mt-5>
-            <invite-group v-if="dialog"
-                          :entityId="params"
-                          :entityType="`project`" />
+            <invite-group
+              v-if="dialog"
+              :entityId="params"
+              :entityType="`project`" />
           </v-flex>
         </v-card-text>
       </v-card>
@@ -85,9 +111,11 @@
 import ModalMixin from '@/mixins/modal';
 import Dropdown from '../menus/Dropdown';
 import InviteGroup from '@/components/particles/inputs/InviteGroup';
-import LinkDisabledIcon from "../icons/LinkDisabled";
-import LinkIcon from "../icons/Link";
-import CircularLoader from "../../particles/loaders/Circular";
+import LinkDisabledIcon from '../icons/LinkDisabled';
+import LinkIcon from '../icons/Link';
+import CircularLoader from '../../particles/loaders/Circular';
+
+import { mapState, mapGetters } from 'vuex';
 
 export default {
   name: 'share-project',
@@ -110,21 +138,23 @@ export default {
     };
   },
   computed: {
+    ...mapState('system', [
+      'permissions',
+      'periods',
+      'roles'
+    ]),
+    ...mapGetters('entity', [
+      'items',
+      'invited'
+    ]),
     projects () {
-      return this.$store.getters['entity/items']('project');
+      return this.items('project');
     },
     project () {
       return _.find(this.projects, item => item.id === this.params);
     },
-
-    periods () {
-      return this.$store.state.system.periods;
-    },
-    permissions () {
-      return this.$store.state.system.permissions;
-    },
     projectShare () {
-      const shared = this.$store.getters['entity/items']('projectShare');
+      const shared = this.items('projectShare');
       return _.filter(shared, item => item.projectId === this.params);
     }
   },
@@ -133,6 +163,37 @@ export default {
     this.permission = _.first(this.permissions);
   },
   methods: {
+    getParams (entity, params = {}) {
+      return {
+        entity: entity,
+        params: params
+      };
+    },
+    fetchData () {
+      this.processing = true;
+
+      const requests = [];
+      const projectId = this.$route.params.projectId;
+      const data = [
+        this.getParams('user-info', {
+          projectId: projectId
+        }),
+        this.getParams('invite', {
+          entityType: 'project',
+          entityId: projectId
+        })
+      ];
+
+      _.each(data, item => {
+        this.$store.dispatch('entity/read', item);
+        requests.push(this.$store.dispatch('entity/read', item));
+      });
+
+      Promise.all(requests)
+        .then(() => {
+          this.processing = false;
+        });
+    },
     initData () {
       this.link = null;
     },
@@ -189,6 +250,13 @@ export default {
       }).then(() => {
         this.processing = false;
       });
+    }
+  },
+  watch: {
+    dialog () {
+      if (this.dialog) {
+        this.fetchData();
+      }
     }
   }
 };

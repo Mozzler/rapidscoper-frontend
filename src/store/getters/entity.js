@@ -60,5 +60,23 @@ export default {
         return obj;
       });
     };
+  },
+  invited (state, getters, rootState) {
+    const invite = rootState.entity.invite.items;
+    const info = rootState.entity.userInfo.items;
+
+    return _.map(invite, item => {
+      let data = {
+        id: item.id,
+        role: uppercased(item.role),
+        email: item.email
+      };
+
+      let user = _.find(info, inf => inf.email === item.email);
+      data.avatarUrl = user && user.avatarUrl ? user.avatarUrl :
+        require('@/assets/img/default-user.png');
+
+      return data;
+    });
   }
 };

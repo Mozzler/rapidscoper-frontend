@@ -43,11 +43,11 @@
 </template>
 
 <script>
-import Dropdown from "../menus/Dropdown";
-import CircularLoader from "../../particles/loaders/Circular";
+import Dropdown from '../menus/Dropdown';
+import CircularLoader from '../../particles/loaders/Circular';
 
 export default {
-  name: "InviteGroup",
+  name: 'InviteGroup',
   components: {
     Dropdown,
     CircularLoader
@@ -87,7 +87,7 @@ export default {
         return;
       }
 
-      await this.$store.dispatch('entity/create', {
+      const response = await this.$store.dispatch('entity/create', {
         entity: 'invite',
         data: {
           entityId: this.entityId,
@@ -95,7 +95,8 @@ export default {
           expiry: null,
           role: this.role.toLowerCase(),
           email: this.email
-        }
+        },
+        cancelCommit: true
       });
 
       this.processing = false;
