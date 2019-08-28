@@ -1,13 +1,11 @@
 <template>
   <div class="user-story__block"
-    :id="model.id"
-    :class="{'user-story__block--blur': stories.length === 0}">
+    :id="model.id">
 
     <circular-loader
       cls="loader-shadow--without-padding"
       :size="50"
-      :width="5"
-      :visible="stories.length === 0" />
+      :width="5" />
 
     <h1>
       <input v-model="name"

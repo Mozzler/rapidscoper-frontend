@@ -93,14 +93,13 @@ function stories (storyOrder, stories, dictionary = null, filters = {}) {
   const filtered = _.filter(sorted, story => {
     let priority = filters.priorities.length &&
       !filters.priorities.includes(story.priority);
-    let labels = filters.labels.length &&
-      !_.intersection(filters.labels, story.labels);
+
+    let included = _.find(filters.labels, filter => !story.labels.includes(filter));
+    let labels = filters.labels.length && !_.isUndefined(included);
 
     if (priority || labels) {
       return false;
     }
-
-    console.log(story);
 
     return story;
   });

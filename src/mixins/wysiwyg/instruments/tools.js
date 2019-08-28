@@ -46,7 +46,7 @@ export default {
     },
     selectTool (id) {
       const focusedTab = this.$refs[`${this.elRef[this.tab]}-${this.toolId}`];
-      if (focusedTab) {
+      if (focusedTab && focusedTab.length) {
         this.archived = focusedTab[0].value;
 
         if (this.tab === 'estimate') {
@@ -118,7 +118,7 @@ export default {
           }
         });
       } else {
-        if (this.toolId && ref) {
+        if (this.toolId && ref && ref[0]) {
           this.$nextTick(() => {
             ref[0].focus();
 
