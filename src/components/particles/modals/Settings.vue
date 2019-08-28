@@ -141,16 +141,31 @@ export default {
       });
     },
     updateName ($event, item) {
-      let payload = { name: $event.target.value };
+      let payload = {
+        name: $event.target.value,
+        id: item.id
+      };
       let params = { id: item.id };
 
+      this.$store.commit(`entity/update`, {
+        entity: 'dictionary',
+        data: payload
+      });
       this.submit({ data: payload }, 'update', params);
     },
     updateColor (item, colour) {
-      let payload = { colour: colour.replace('#', '') };
+      let payload = {
+        colour: colour.replace('#', ''),
+        id: item.id
+      };
       let params = { id: item.id };
 
       item.colour = colour;
+
+      this.$store.commit(`entity/update`, {
+        entity: 'dictionary',
+        data: payload
+      });
       this.submit({ data: payload }, 'update', params);
     },
     remove (id) {
