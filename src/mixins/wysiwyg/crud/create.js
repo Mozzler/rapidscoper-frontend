@@ -1,16 +1,17 @@
 export default {
   methods: {
-    sendCreateStoryRequest (sublist, text = '') {
+    async sendCreateStoryRequest (sublist, text = '') {
       const payload = this.getCreateRequestPayload(sublist, text);
 
       this.$store.commit('entity/create', payload);
       this.$store.commit('entity/reorder', payload.data);
       this.$store.commit('story/setActiveStoryOnTab', payload.data.id);
 
-      this.$store.dispatch('entity/create', payload)
-        .then(() => {
-          this.$socket.recreateWatchers('story', false);
-        });
+      await this.$nextTick();
+      document.getElementById(payload.data.id).focus();
+
+      await this.$store.dispatch('entity/create', payload);
+      this.$socket.recreateWatchers('story', false);
     },
     createStory ($event) {
       if (this.dictionary[this.next]) {

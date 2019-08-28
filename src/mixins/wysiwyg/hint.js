@@ -155,8 +155,8 @@ export default {
       }
 
       const data = {
-        projectId: this.list[this.focused].projectId,
-        teamId: this.list[this.focused].teamId,
+        projectId: this.list[focused].projectId,
+        teamId: this.list[focused].teamId,
         name: text,
         description: '',
         type: replacement.type,
@@ -179,7 +179,7 @@ export default {
 
       await this.$nextTick();
 
-      const el = document.getElementById(this.list[this.focused].id);
+      const el = document.getElementById(this.list[focused].id);
       const children = el.children;
       const node = _.find(children, item => item.className.includes(`user-story__editable--${chapter}`));
       node.setAttribute('data-id', response.item.id);
@@ -188,12 +188,12 @@ export default {
       const index = _.findIndex(spans, item => item.includes(`user-story__editable--${chapter}`));
       spans[index] = node.outerHTML;
 
-      this.list[this.focused].markup = spans.join('&nbsp;');
+      this.list[focused].markup = spans.join('&nbsp;');
       this.processing = false;
 
       this.$store.commit('entity/update', {
         entity: 'story',
-        data: this.list[this.focused]
+        data: this.list[focused]
       });
 
       await this.$nextTick();
