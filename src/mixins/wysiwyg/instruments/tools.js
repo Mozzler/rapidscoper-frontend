@@ -59,7 +59,14 @@ export default {
       this.$store.commit('story/setActiveStoryOnTab', id);
     },
     toolKey ($event) {
-      const letters = _.map(this.toolDictionary, item => item.charAt(0).toLowerCase());
+      const letters = _.map(this.toolDictionary, (item, index) => {
+        if (_.isObject(item)) {
+          return (index + 1).toString();
+        } else {
+          return item.charAt(0).toLowerCase();
+        }
+      });
+
       let found = _.indexOf(letters, $event.key);
 
       if (found !== -1) {
