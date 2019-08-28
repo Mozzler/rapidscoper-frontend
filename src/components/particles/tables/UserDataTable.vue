@@ -20,7 +20,7 @@
         <td>
           <v-layout align-center justify-start row fill-height>
             <img v-for="(item, index) in props.item.members"
-                 :src="item ? item : '@/assets/img/default-user.png'"
+                 :src="item ? item : require('@/assets/img/default-user.png')"
                  :key="index"/>
           </v-layout>
         </td>
