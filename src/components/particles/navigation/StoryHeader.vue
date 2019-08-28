@@ -103,7 +103,7 @@ export default {
   },
   methods: {
     ...mapMutations({
-      setSidebarFilter: 'setSidebarFilter'
+      setSidebarFilter: 'system/setSidebarFilter'
     }),
     setTab (item) {
       let params = this.$route.params;

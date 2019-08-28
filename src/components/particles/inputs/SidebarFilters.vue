@@ -18,9 +18,9 @@
         </v-flex>
       </v-layout>
     </v-flex>
-    <v-flex shrink>
+    <!--<v-flex shrink>
       <filter-input />
-    </v-flex>
+    </v-flex>-->
   </v-layout>
 </template>
 

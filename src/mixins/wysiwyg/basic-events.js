@@ -30,8 +30,6 @@ export default {
         return this.completeBeginning(this.event.key);
       }
 
-      console.log($event.keyCode);
-
       this.list[this.focused].markup = this.event.target.innerHTML;
       this.$refs[this.list[this.focused].id][0].classList.remove('text-dark-grey');
       this.collapseToEnd();
