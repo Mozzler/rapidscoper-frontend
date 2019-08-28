@@ -172,10 +172,11 @@ export default {
       this.submit({ id: id }, 'delete');
     },
     async createLabel () {
+      const color = this.colors[this.labels.length].replace('#', '');
       const response = await this.submit({
         data: {
           type: 'label',
-          colour: '',
+          colour: color,
           name: 'Create new label',
           projectId: this.project.id,
           teamId: this.project.teamId
