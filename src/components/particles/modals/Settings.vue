@@ -30,7 +30,8 @@
                   <input
                     class="user-story__input-field"
                     v-model="item.name"
-                    :id="item.id" />
+                    :id="item.id"
+                    @blur="($event) => updateName($event, item)" />
                 </div>
                 <div>
                   <v-menu v-model="item.show"
