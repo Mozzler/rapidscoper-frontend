@@ -36,8 +36,8 @@ export default {
 
     _.each(state[entity].items, (item, index) => {
       if (item.id === payload.data.id) {
-        if (payload.data.updatedAt) {
-          const after = moment(payload.data.updatedAt).isAfter(item.updatedAt);
+        if (payload.data.createdAt) {
+          const after = moment(payload.data.createdAt).isAfter(item.createdAt);
           if (!after) {
             return;
           }
