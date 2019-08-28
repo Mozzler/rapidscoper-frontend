@@ -68,7 +68,6 @@ export default {
       });
 
       let found = _.indexOf(letters, $event.key);
-
       if (found !== -1) {
         this.submitTool(found);
       }

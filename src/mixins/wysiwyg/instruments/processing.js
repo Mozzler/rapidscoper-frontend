@@ -74,7 +74,8 @@ export default {
         },
         data: {
           [property]: query
-        }
+        },
+        cancelCommit: true
       }).then()
         .catch(error => {
           this.handleError(error, property, 'toolStack');
