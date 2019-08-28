@@ -16,7 +16,7 @@ export default {
         this.hintEditor = null;
       }
     },
-    keyupEvent ($event) {
+    async keyupEvent ($event) {
       this.event = $event;
       this.setSiblings();
 

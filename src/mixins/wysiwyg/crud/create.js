@@ -1,6 +1,16 @@
 export default {
   methods: {
+    resetFocusedAutocomplete () {
+      this.list[this.focused].placeholder = this.list[this.focused].markup;
+      this.list[this.focused].tail = '';
+
+      this.$store.commit('entity/update', {
+        entity: 'story',
+        data: this.list[this.focused]
+      });
+    },
     async sendCreateStoryRequest (sublist, text = '') {
+      this.resetFocusedAutocomplete();
       const payload = this.getCreateRequestPayload(sublist, text);
 
       this.$store.commit('entity/create', payload);

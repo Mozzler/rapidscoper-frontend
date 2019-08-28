@@ -42,6 +42,7 @@ export default {
             return;
           }
         }
+
         _.assign(item, payload.data);
       }
     });

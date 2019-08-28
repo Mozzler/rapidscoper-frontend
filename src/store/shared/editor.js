@@ -102,9 +102,9 @@ function stories (storyOrder, stories, dictionary = null) {
 
       _.assign(basic, {
         template: construction ? construction.structure : '',
-        tail: '',
+        tail: item.tail ? item.tail : '',
         markup: markup,
-        placeholder: markup
+        placeholder: item.placeholder ? item.placeholder : markup
       });
     }
 
