@@ -29,7 +29,7 @@
                         v-for="word in section.list"
                         :key="word.id"
                         :class="{
-                          'user-story--active': focused === word.id
+                          'user-story--active m-0': focused === word.id
                         }">
                 <v-flex shrink v-if="!word.storyCount">
                   <div @click="() => remove(word.id)">
