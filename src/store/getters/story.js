@@ -57,8 +57,10 @@ export default {
       const stories = _.filter(rootState.entity.story.items, item => item.sectionId === id);
       // get dictionary words
       const dictionary = rootState.entity.dictionary.items;
+      // get filters
+      const filters = rootState.story.filters;
 
-      return editor.stories(section.storyOrder, stories, dictionary);
+      return editor.stories(section.storyOrder, stories, dictionary, filters);
     };
   },
 

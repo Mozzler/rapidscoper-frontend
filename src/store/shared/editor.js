@@ -87,10 +87,25 @@ function sections (project, sections, type) {
   });
 }
 
-function stories (storyOrder, stories, dictionary = null) {
+function stories (storyOrder, stories, dictionary = null, filters = {}) {
   const sorted = sortStoriesByOrder(stories, storyOrder);
 
-  return _.map(sorted, item => {
+  const filtered = _.filter(sorted, story => {
+    let priority = filters.priorities.length &&
+      !filters.priorities.includes(story.priority);
+    let labels = filters.labels.length &&
+      !_.intersection(filters.labels, story.labels);
+
+    if (priority || labels) {
+      return false;
+    }
+
+    console.log(story);
+
+    return story;
+  });
+
+  return _.map(filtered, item => {
     const basic = _.pick(item, 'id', 'parentStoryId',
       'sectionId', 'teamId', 'projectId',
       'estimate', 'priority', 'labels', 'markup',

@@ -76,7 +76,7 @@ export default {
     },
     sidebarFilter () {
       return this.$store.state.system.sidebarFilter;
-    },
+    }
   },
   methods: {
     setErrorMessage (error) {
