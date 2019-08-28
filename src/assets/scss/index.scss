@@ -25,11 +25,10 @@
 
 .remove-icon {
   color: $error !important;
-  width: 25px !important;
-  height: 25px !important;
   position: absolute;
   top: 4px !important;
   left: -15px !important;
+  cursor: pointer;
 
   i {
     font-size: 18px !important;

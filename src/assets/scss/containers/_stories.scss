@@ -1,3 +1,11 @@
+.layout-container-public {
+  .content-container {
+    & * {
+      cursor: default !important;
+    }
+  }
+}
+
 .stories-container--base {
   display: grid;
   grid-auto-rows: 64px calc(100vh - 64px);
@@ -26,10 +34,6 @@
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
       width: 100%;
       margin: 24px 10%;
-    }
-
-    & * {
-      cursor: default !important;
     }
   }
 

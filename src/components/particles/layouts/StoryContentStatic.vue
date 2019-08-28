@@ -1,5 +1,5 @@
 <template>
-  <div class="scrollable-layout" ref="scrollable-layout">
+  <div class="scrollable-layout layout-container-public" ref="scrollable-layout">
     <div class="content-container">
       <v-layout align-start justify-center row fill-height>
         <div class="content">
