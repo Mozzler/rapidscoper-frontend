@@ -1,6 +1,6 @@
 export default {
   isMobileDevice: false,
-  sidebarFilter: true,
+  sidebarFilter: false,
   periods: ['Unexpired', '1 day', '2 days', '3 days', '7 days'],
   roles: [{
     name: 'Manager',

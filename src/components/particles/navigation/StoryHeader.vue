@@ -38,7 +38,7 @@
           <div class="header-options">
             <v-icon>visibility</v-icon>
           </div>
-          <v-btn class="btn-rapid primary" large @click="showModal">
+          <v-btn class="btn-rapid primary ml-2" large @click="showModal">
             Share
           </v-btn>
         </v-layout>

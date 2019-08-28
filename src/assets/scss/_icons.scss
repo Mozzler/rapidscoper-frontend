@@ -20,6 +20,7 @@
 
 .header-icon {
   padding-right: 16px;
+
   .v-icon {
     color: $primary !important;
     margin-top: 2px;
@@ -28,8 +29,10 @@
 
 .header-options {
   display: flex;
-  padding: 13px;
+  padding: 18px 10px;
   cursor: pointer !important;
+  border-bottom: 3px solid $white;
+  margin: 0 3px;
 
   .v-icon {
     color: rgba(0, 0, 0, 0.8);
@@ -41,7 +44,17 @@
 }
 
 .header-options--active {
-  border-bottom: 2px solid $primary;
+  border-color: $primary;
+  position: relative;
+  background-color: $light-primary;
+
+  .v-icon {
+    color: $primary;
+  }
+
+  svg {
+    fill: $primary;
+  }
 }
 
 .dropdown-action {
