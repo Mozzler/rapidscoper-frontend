@@ -1,21 +1,23 @@
 <template>
-  <div class="scrollable-layout" ref="scrollable-layout">
+  <div>
     <div class="content-filter" v-if="sidebarFilter">
       <sidebar-filters />
     </div>
-    <div class="content-container"
-         v-for="(story, index) in sections"
-         :key="index">
-      <v-layout align-start justify-center row fill-height>
-        <div class="content" ref="layout-content">
-          <story-item
-            :model="story"
-            ref="storyItem"
-            @show-error="value => message = value"/>
-        </div>
-        <hint />
-        <alert :message="message" />
-      </v-layout>
+    <div class="scrollable-layout" ref="scrollable-layout">
+      <div class="content-container"
+           v-for="(story, index) in sections"
+           :key="index">
+        <v-layout align-start justify-center row fill-height>
+          <div class="content" ref="layout-content">
+            <story-item
+              :model="story"
+              ref="storyItem"
+              @show-error="value => message = value"/>
+          </div>
+          <hint />
+          <alert :message="message" />
+        </v-layout>
+      </div>
     </div>
   </div>
 </template>
