@@ -115,6 +115,7 @@ function stories (storyOrder, stories, dictionary = null, filters = {}) {
       const markup = replaceMarkup(basic.markup, dictionary);
 
       _.assign(basic, {
+        labels: basic.labels ? basic.labels : [],
         template: construction ? construction.structure : '',
         tail: item.tail ? item.tail : '',
         markup: markup,

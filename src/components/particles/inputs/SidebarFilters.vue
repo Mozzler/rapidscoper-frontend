@@ -8,6 +8,7 @@
         <filter-menu
           title="Priorities"
           nudge-left="86"
+          strategy="or"
           :list="priorities" />
         <filter-menu
           title="Labels"

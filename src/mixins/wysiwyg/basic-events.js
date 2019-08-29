@@ -50,7 +50,7 @@ export default {
 
       const focused = this.event.view.getSelection().focusNode;
       const node = focused ? this.event.view.getSelection().focusNode.parentElement : null;
-      const other = this.list[this.focused].type === 'other';
+      const other = this.list[this.focused] && this.list[this.focused].type === 'other';
 
       if (other) {
         this.list[this.focused].placeholder = this.event.target.innerHTML;

@@ -61,6 +61,9 @@ export default {
     },
     title: {
       default: ''
+    },
+    strategy: {
+      default: 'and'
     }
   },
   computed: {
@@ -114,7 +117,7 @@ export default {
       });
     },
     adjusted (index, indexInSelected) {
-      const tail = (indexInSelected + 1 < this.selected.length) ? '&nbsp;and&nbsp;' : '';
+      const tail = (indexInSelected + 1 < this.selected.length) ? `&nbsp;${ this.strategy }&nbsp;` : '';
       return `<span class="text-bold">${this.toStr(this.list[index], 'name')}</span><span>${tail}</span>`;
     },
     unselect (indexInSelected) {

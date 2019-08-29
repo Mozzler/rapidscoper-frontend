@@ -21,7 +21,7 @@ export default {
       return labelState ? '' : 'label--outline';
     },
     getStyle (index, colour) {
-      return this.active.includes(index) ?
+      return this.active && this.active.includes(index) ?
         `background: #${colour}` :
         `border: 1px solid #${colour}`;
     }
