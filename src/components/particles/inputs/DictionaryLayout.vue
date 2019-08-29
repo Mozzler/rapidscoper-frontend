@@ -25,7 +25,8 @@
           </v-layout>
           <div class="dictionary user-story mt-3">
             <template v-if="section.list.length">
-              <v-layout row fill-height mt-2
+              <v-layout class="position-relative"
+                        row fill-height mt-2
                         v-for="word in section.list"
                         :key="word.id"
                         :class="{
