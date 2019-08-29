@@ -132,7 +132,7 @@ export default {
         case 'Log out':
           this.$store.dispatch('auth/logout')
             .then(() => {
-              this.$router.push('/signup');
+              this.$router.push('/login');
             });
       }
     }

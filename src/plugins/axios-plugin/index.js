@@ -24,7 +24,7 @@ VueAxiosPlugin.install = (Vue, options) => {
         store.dispatch('auth/logout')
           .then(() => app.$socket.disconnect())
           .then(() => {
-            app.$router.push('/signup');
+            app.$router.push('/login');
           });
       } else {
         return Promise.reject(error);

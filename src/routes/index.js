@@ -32,7 +32,7 @@ router.beforeEach((to, from, next) => {
   } else if (to.meta.guest && authenticated) {
     next('/');
   } else if (to.meta.requiresAuth && !authenticated) {
-    next('/signup');
+    next('/login');
   } else {
     next();
   }
