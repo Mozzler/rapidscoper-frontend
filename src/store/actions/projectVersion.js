@@ -19,5 +19,14 @@ export default {
 
     const response = await this._vm.$axios.put('project-share/update', payload.data, params);
     return response.data;
+  },
+  async view (store, payload) {
+    try {
+      const response = await this._vm.$axios.get('project-version/view', payload);
+      store.commit('setProjectSnapshot', response.data);
+      return response.data;
+    } catch (error) {
+      return Promise.reject(error.response);
+    }
   }
 };

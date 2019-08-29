@@ -1,3 +1,4 @@
 export default {
-  projectVersion: {}
+  projectVersion: {},
+  snapshot: {}
 };
