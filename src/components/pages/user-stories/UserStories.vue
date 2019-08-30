@@ -137,9 +137,6 @@ export default {
       this[fetch]();
     }
   },
-  beforeMount () {
-    this.fetch();
-  },
   beforeDestroy () {
     this.resetData();
   },
