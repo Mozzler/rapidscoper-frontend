@@ -79,5 +79,22 @@ export default {
 
       return data;
     });
+  },
+  link (state, getters, rootState, rootGetters) {
+    return projectId => {
+      let items = rootState.entity.projectShare.items;
+      let shared = _.find(items, item => item.projectId === projectId);
+
+      let roles = rootState.system.roles;
+      let periods = rootGetters['system/periods'];
+
+      if (shared) {
+        shared = { ...shared };
+        shared.role = _.find(roles, role => shared.role === role.type);
+        shared.expiry = _.find(periods, period => shared.expiry === period.type);
+      }
+
+      return shared;
+    };
   }
 };

@@ -155,7 +155,7 @@ export default {
     loaded: {
       deep: true,
       handler () {
-        if (this.loaded.dictionary && this.loaded.section && this.loaded.story) {
+        if (this.loaded.dictionary && this.loaded.section && this.loaded.story && this.loaded.projectShare) {
           this.processing = false;
           this.fixRoute();
         }

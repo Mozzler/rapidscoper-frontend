@@ -25,7 +25,6 @@ export default {
   },
   create (state, payload) {
     payload.data = normalizeId(payload.data);
-    console.log(payload);
     const existed = _.filter(state[payload.entity].items, item => item.id === payload.data.id);
     if (!existed.length) {
       state[payload.entity].items.push(payload.data);
@@ -37,13 +36,6 @@ export default {
 
     _.each(state[entity].items, (item, index) => {
       if (item.id === payload.data.id) {
-        if (payload.data.createdAt) {
-          const after = moment(payload.data.createdAt).isAfter(item.createdAt);
-          if (!after) {
-            return;
-          }
-        }
-
         _.assign(item, payload.data);
       }
     });
