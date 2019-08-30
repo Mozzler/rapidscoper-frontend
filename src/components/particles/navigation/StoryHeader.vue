@@ -44,7 +44,6 @@
           </div>
           <v-btn class="btn-rapid primary ml-2"
                  large
-                 v-if="!storyViewMode"
                  @click="showModal">
             Share
           </v-btn>

@@ -1,18 +1,31 @@
 <template>
   <div :class="{
-      'stories-container--public': storyViewMode,
       'stories-container': !storyViewMode,
+      'stories-container--public': storyViewMode
     }">
-    <story-header @share-project="share"/>
-    <editable-layout v-if="!storyViewMode" />
-    <readable-layout v-else />
+    <circular-loader
+      cls="loader-shadow--without-padding transparent"
+      :size="50"
+      :width="5"
+      :visible="processing" />
+
+    <story-header
+      @share-project="share"/>
+
+    <editable-mode-layout
+      v-if="!storyViewMode"
+      @processing="state => processing = state" />
+    <readable-mode-layout
+      v-else-if="storyViewMode"
+      @processing="state => processing = state"/>
   </div>
 </template>
 
 <script>
 import StoryHeader from '../../particles/navigation/StoryHeader';
-import EditableLayout from '../../particles/layouts/mode/Editable';
-import ReadableLayout from '../../particles/layouts/mode/Readable';
+import EditableModeLayout from '../../particles/layouts/mode/Editable';
+import ReadableModeLayout from '../../particles/layouts/mode/Readable';
+import CircularLoader from '../../particles/loaders/Circular';
 
 import { mapState } from 'vuex';
 
@@ -20,8 +33,19 @@ export default {
   name: 'UserStories',
   components: {
     StoryHeader,
-    EditableLayout,
-    ReadableLayout
+    EditableModeLayout,
+    ReadableModeLayout,
+    CircularLoader
+  },
+  data () {
+    return {
+      processing: true
+    };
+  },
+  computed: {
+    ...mapState({
+      storyViewMode: state => state.system.storyViewMode
+    })
   },
   methods: {
     share () {
@@ -30,11 +54,6 @@ export default {
         this.$root.$emit('share-project', this.$route.params.projectId);
       });
     }
-  },
-  computed: {
-    ...mapState({
-      storyViewMode: state => state.system.storyViewMode
-    })
   }
 };
 </script>

@@ -1,10 +1,6 @@
 <template>
   <div class="display-contents">
     <story-sidebar />
-    <circular-loader
-      cls="loader-shadow"
-      :visible="loading"
-    />
     <template v-if="!loading">
       <story-section />
       <story-content />
@@ -18,7 +14,6 @@ import StorySidebar from '../../../particles/navigation/USidebar';
 import StorySection from '../../../particles/navigation/StorySection';
 import ToolSection from '../../../particles/navigation/ToolSection';
 import StoryContent from '../../../particles/layouts/StoryContent';
-import CircularLoader from '../../../particles/loaders/Circular';
 
 import LayoutMixin from '@/mixins/layout';
 
@@ -28,8 +23,7 @@ export default {
     StorySidebar,
     StorySection,
     ToolSection,
-    StoryContent,
-    CircularLoader
+    StoryContent
   },
   mixins: [
     LayoutMixin
@@ -55,6 +49,7 @@ export default {
   methods: {
     fetchData () {
       this.processing = true;
+      this.$emit('processing', true);
       this.resetData();
 
       this.connect('dictionary', 'entity/setList', this.filter, true, () => {
@@ -111,6 +106,7 @@ export default {
       handler () {
         if (this.loaded.dictionary && this.loaded.section && this.loaded.story) {
           this.processing = false;
+          this.$emit('processing', false);
           this.fixRoute();
         }
       }

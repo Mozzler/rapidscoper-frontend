@@ -38,9 +38,6 @@ export default {
   components: {
     StoryStatic
   },
-  beforeMount () {
-    console.log(this.entity);
-  },
   computed: {
     ...mapGetters({
       sections: 'projectVersion/sections'

@@ -1,11 +1,6 @@
 <template>
-  <div>
-    <circular-loader
-      cls="loader-shadow"
-      :visible="loading"
-    />
-    <sidebar-full-list
-      class="noprint" />
+  <div class="display-contents">
+    <sidebar-full-list class="noprint"/>
     <story-content-static />
   </div>
 </template>
@@ -13,46 +8,42 @@
 <script>
 import SidebarFullList from '../../../particles/lists/SidebarFullList';
 import StoryContentStatic from '../../../particles/layouts/StoryContentStatic';
-import CircularLoader from '../../../particles/loaders/Circular';
 
 export default {
   name: 'Readable',
   components: {
     SidebarFullList,
-    StoryContentStatic,
-    CircularLoader
+    StoryContentStatic
   },
   provide: {
-    entity: 'snapshot'
+    'entity': 'snapshot'
   },
   data () {
     return {
-      loading: false
+      processing: true
     };
   },
   beforeMount () {
     this.fetchData();
   },
   methods: {
-    async fetchData () {
-      this.loading = true;
-      await this.$store.dispatch('projectVersion/view', this.params);
-      this.loading = false;
-    }
-  },
-  computed: {
-    params () {
-      return {
+    fetchData () {
+      const payload = {
         params: {
           id: this.$route.params.projectId,
           version: 0
         }
       };
-    }
-  },
-  watch: {
-    projectId () {
-      this.fetchData();
+      this.$emit('processing', true);
+
+      this.$store.dispatch('projectVersion/view', payload)
+        .then(() => {
+          this.$emit('processing', false);
+        })
+        .catch(error => {
+          this.$router.push('/');
+          this.$emit('processing', false);
+        });
     }
   }
 };
