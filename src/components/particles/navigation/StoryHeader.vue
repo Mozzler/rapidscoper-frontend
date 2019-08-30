@@ -16,7 +16,10 @@
       </v-flex>
       <v-flex>
         <template v-if="tabsPanel && !storyViewMode">
-          <v-tabs fixed-tabs class="tabs stories-tabs" v-model="activeTab">
+          <v-tabs fixed-tabs
+                  class="tabs stories-tabs"
+                  hide-slider
+                  v-model="activeTab">
             <v-tab v-for="tab in tabs" :key="tab" @click="setTab(tab)">
               {{ tab }}
             </v-tab>
