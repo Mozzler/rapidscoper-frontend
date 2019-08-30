@@ -7,36 +7,38 @@ function reduce (list) {
 
 export default {
   chapters (state) {
-    const { section, project } = state.projectVersion;
+    return (entity) => {
+      const { section, project } = state[entity];
 
-    if (!project || !section) {
-      return;
-    }
+      if (!project || !section) {
+        return;
+      }
 
-    return {
-      'user stories': editor.sections(project[0], section, 'user'),
-      'technical stories': editor.sections(project[0], section, 'technical'),
-      'estimates': [
-        {
-          id: 1,
-          title: 'Priorities'
-        },
-        {
-          id: 2,
-          title: 'Labels'
-        }
-      ],
-      'dictionary': filters.chapters(state.projectVersion.dictionary)
-      /*'': [{
-        id: 3,
-        title: 'Attachments'
-      }]*/
+      return {
+        'user stories': editor.sections(project[0], section, 'user'),
+        'technical stories': editor.sections(project[0], section, 'technical'),
+        'estimates': [
+          {
+            id: 1,
+            title: 'Priorities'
+          },
+          {
+            id: 2,
+            title: 'Labels'
+          }
+        ],
+        'dictionary': filters.chapters(state[entity].dictionary)
+        /*'': [{
+          id: 3,
+          title: 'Attachments'
+        }]*/
+      };
     };
   },
 
   section (state) {
-    return id => {
-      const { section, story } = state.projectVersion;
+    return (id, entity) => {
+      const { section, story } = state[entity];
       const current = _.find(section, item => item.id === id);
       current.list = editor.stories(current.storyOrder, story);
 
@@ -45,18 +47,18 @@ export default {
   },
 
   sections (state) {
-    return type => {
-      const sections = state.projectVersion.section;
-      const project = state.projectVersion.project[0];
+    return (type, entity) => {
+      const sections = state[entity].section;
+      const project = state[entity].project[0];
 
       return editor.sections(project, sections, type);
     };
   },
 
   summary (state, getters, rootState) {
-    return type => {
+    return (type, entity) => {
       const keys = type === 'labels' ? getters.labels : rootState.story[type];
-      const stories = state.projectVersion.story;
+      const stories = state[entity].story;
       let result = {};
 
       _.each(keys, (key, index) => {
@@ -86,25 +88,29 @@ export default {
   },
 
   dictionary (state) {
-    const dictionary = state.projectVersion.dictionary;
-    const chapters = filters.chapters(dictionary);
+    return (entity) => {
+      const dictionary = state[entity].dictionary;
+      const chapters = filters.chapters(dictionary);
 
-    return filters.volumns(dictionary, chapters);
+      return filters.volumns(dictionary, chapters);
+    };
   },
 
   info (state) {
-    const info = state.projectVersion;
-    let created = null;
+    return (entity) => {
+      const info = state[entity];
+      let created = null;
 
-    if (info && info.projectShare) {
-      let unix = moment.unix(info.projectShare[0].createdAt);
-      created = unix.format("MMMM DD, YYYY hh:mm A");
-    }
+      if (info && info.projectShare) {
+        let unix = moment.unix(info.projectShare[0].createdAt);
+        created = unix.format("MMMM DD, YYYY hh:mm A");
+      }
 
-    return {
-      projectName: info && info.project ? info.project[0].name : null,
-      version: info && info.projectShare ? info.projectShare[0].versionNumber : null,
-      created: created
+      return {
+        projectName: info && info.project ? info.project[0].name : null,
+        version: info && info.projectShare ? info.projectShare[0].versionNumber : null,
+        created: created
+      };
     };
   },
 
@@ -113,7 +119,9 @@ export default {
   },
 
   labels (state) {
-    const phrases = state.projectVersion.dictionary;
-    return editor.labels(phrases);
+    return (entity) => {
+      const phrases = state[entity].dictionary;
+      return editor.labels(phrases);
+    };
   }
 };

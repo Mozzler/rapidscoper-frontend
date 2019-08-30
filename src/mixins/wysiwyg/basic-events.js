@@ -3,7 +3,8 @@ export default {
     return {
       focused: null,
       editor: null,
-      etalon: null
+      etalon: null,
+      blocked: false
     };
   },
   methods: {
@@ -16,9 +17,8 @@ export default {
         this.hintEditor = null;
       }
     },
-    async keyupEvent ($event) {
+    keydownEvent ($event) {
       this.event = $event;
-      this.setSiblings();
 
       if (this.isEditable()) {
         return;
@@ -30,7 +30,31 @@ export default {
         return this.completeBeginning(this.event.key);
       }
 
-      this.list[this.focused].markup = this.event.target.innerHTML;
+      if (this.event.code.includes('Digit') ||
+        this.event.code.includes('Key') ||
+        this.event.code.includes('Space')) {
+
+        $event.preventDefault();
+        this.blocked = true;
+
+        if (this.event.code.includes('Space')) {
+          this.list[this.focused].markup += '&nbsp;';
+        } else {
+          this.list[this.focused].markup += this.event.key;
+        }
+        $event.target.innerHTML = this.list[this.focused].markup;
+      }
+    },
+    async keyupEvent ($event) {
+      this.event = $event;
+      this.setSiblings();
+
+      if (!this.blocked) {
+        this.list[this.focused].markup = this.event.target.innerHTML;
+      } else {
+        this.blocked = false;
+      }
+
       this.$refs[this.list[this.focused].id][0].classList.remove('text-dark-grey');
       this.collapseToEnd();
 

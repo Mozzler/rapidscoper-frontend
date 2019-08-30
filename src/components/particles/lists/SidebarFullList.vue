@@ -13,6 +13,7 @@
 
 <script>
 import SidebarList from '../lists/SidebarList';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'SidebarFullList',
@@ -20,8 +21,11 @@ export default {
     SidebarList
   },
   computed: {
+    ...mapGetters({
+      chapterGetter: 'projectVersion/chapters'
+    }),
     chapters () {
-      return this.$store.getters['projectVersion/chapters'];
+      return this.chapterGetter('projectVersion');
     }
   },
   methods: {

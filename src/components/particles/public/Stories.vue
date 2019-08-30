@@ -42,10 +42,10 @@ export default {
       sections: 'projectVersion/sections'
     }),
     user () {
-      return this.sections('user');
+      return this.sections('user', 'projectVersion');
     },
     technical () {
-      return this.sections('technical');
+      return this.sections('technical', 'projectVersion');
     }
   }
 };

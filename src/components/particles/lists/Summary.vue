@@ -48,7 +48,7 @@ export default {
     };
   },
   beforeMount () {
-    this.list = this.summary(this.collection);
+    this.list = this.summary(this.collection, 'projectVersion');
   },
   computed: {
     ...mapGetters({

@@ -1,5 +1,8 @@
 <template>
-  <div class="stories-container">
+  <div :class="{
+      'stories-container--public': storyViewMode,
+      'stories-container': !storyViewMode,
+    }">
     <story-header @share-project="share"/>
     <editable-layout v-if="!storyViewMode" />
     <readable-layout v-else />

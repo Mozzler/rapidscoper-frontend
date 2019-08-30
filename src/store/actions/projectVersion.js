@@ -22,7 +22,7 @@ export default {
   },
   async view (store, payload) {
     try {
-      const response = await this._vm.$axios.get('project-version/view', payload);
+      const response = await this._vm.$axios.get('project/snapshot', payload);
       store.commit('setProjectSnapshot', response.data);
       return response.data;
     } catch (error) {

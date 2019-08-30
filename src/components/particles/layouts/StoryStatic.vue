@@ -56,6 +56,8 @@ import LabelIndicator from '../../particles/indicators/Label';
 import MarkIndicator from '../../particles/indicators/Mark';
 import Tools from '@/mixins/story';
 
+import { mapGetters } from 'vuex';
+
 export default {
   name: 'StoryStatic',
   components: {
@@ -72,8 +74,11 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      section: 'projectVersion/section'
+    }),
     model () {
-      return this.$store.getters['projectVersion/section'](this.id);
+      return this.section(this.id, 'projectVersion');
     }
   },
   methods: {
