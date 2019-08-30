@@ -4,7 +4,8 @@
       cls="loader-shadow"
       :visible="loading"
     />
-    <sidebar-full-list  class="noprint"/>
+    <sidebar-full-list
+      class="noprint" />
     <story-content-static />
   </div>
 </template>
@@ -20,6 +21,9 @@ export default {
     SidebarFullList,
     StoryContentStatic,
     CircularLoader
+  },
+  provide: {
+    entity: 'snapshot'
   },
   data () {
     return {

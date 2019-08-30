@@ -57,7 +57,7 @@ export default {
 
   summary (state, getters, rootState) {
     return (type, entity) => {
-      const keys = type === 'labels' ? getters.labels : rootState.story[type];
+      const keys = type === 'labels' ? getters.labels(entity) : rootState.story[type];
       const stories = state[entity].story;
       let result = {};
 

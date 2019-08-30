@@ -60,6 +60,7 @@ import { mapGetters } from 'vuex';
 
 export default {
   name: 'StoryStatic',
+  inject: ['entity'],
   components: {
     PriorityIndicator,
     LabelIndicator,
@@ -78,7 +79,7 @@ export default {
       section: 'projectVersion/section'
     }),
     model () {
-      return this.section(this.id, 'projectVersion');
+      return this.section(this.id, this.entity);
     }
   },
   methods: {

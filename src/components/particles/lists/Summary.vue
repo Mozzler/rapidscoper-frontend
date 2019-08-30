@@ -24,7 +24,8 @@ import Tools from '@/mixins/story';
 import { mapGetters } from 'vuex';
 
 export default {
-  name: "SummaryList",
+  name: 'SummaryList',
+  inject: ['entity'],
   mixins: [
     Tools
   ],
@@ -48,7 +49,7 @@ export default {
     };
   },
   beforeMount () {
-    this.list = this.summary(this.collection, 'projectVersion');
+    this.list = this.summary(this.collection, this.entity);
   },
   computed: {
     ...mapGetters({

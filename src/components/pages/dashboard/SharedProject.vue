@@ -23,7 +23,10 @@ import PublicHeader from '../../particles/navigation/PublicHeader';
 import Comments from '../../particles/lists/Comments';
 
 export default {
-  name: "SharedProject",
+  name: 'SharedProject',
+  provide: {
+    entity: 'projectVersion'
+  },
   components: {
     CircularLoader,
     SidebarFullList,

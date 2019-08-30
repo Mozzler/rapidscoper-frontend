@@ -34,6 +34,7 @@ import { mapGetters } from 'vuex';
 
 export default {
   name: 'Stories',
+  inject: ['entity'],
   components: {
     StoryStatic
   },
@@ -42,10 +43,10 @@ export default {
       sections: 'projectVersion/sections'
     }),
     user () {
-      return this.sections('user', 'projectVersion');
+      return this.sections('user', this.entity);
     },
     technical () {
-      return this.sections('technical', 'projectVersion');
+      return this.sections('technical', this.entity);
     }
   }
 };

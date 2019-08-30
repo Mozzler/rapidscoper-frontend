@@ -55,6 +55,7 @@ import { mapGetters } from 'vuex';
 
 export default {
   name: 'StoryContentPublic',
+  inject: ['entity'],
   components: {
     SummaryList,
     DictionaryStatic,
@@ -73,7 +74,7 @@ export default {
       chapter: 'projectVersion/info'
     }),
     sections () {
-      return this.chapter('projectVersion');
+      return this.chapter(this.entity);
     }
   }
 };

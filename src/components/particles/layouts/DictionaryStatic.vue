@@ -40,11 +40,17 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
-  name: "DictionaryStatic",
+  name: 'DictionaryStatic',
+  inject: ['entity'],
   computed: {
+    ...mapGetters({
+      dictionaryGetter: 'projectVersion/dictionary'
+    }),
     dictionary () {
-      return this.$store.getters['projectVersion/dictionary'];
+      return this.dictionaryGetter(this.entity);
     }
   }
 };

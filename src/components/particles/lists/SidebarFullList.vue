@@ -17,6 +17,7 @@ import { mapGetters } from 'vuex';
 
 export default {
   name: 'SidebarFullList',
+  inject: ['entity'],
   components: {
     SidebarList
   },
@@ -25,7 +26,7 @@ export default {
       chapterGetter: 'projectVersion/chapters'
     }),
     chapters () {
-      return this.chapterGetter('projectVersion');
+      return this.chapterGetter(this.entity);
     }
   },
   methods: {

@@ -87,8 +87,9 @@ function sections (project, sections, type) {
   });
 }
 
-function conformity (filters, story) {
-  let priority = null, labels = null;
+function conformity (filters = {}, story) {
+  let priority = null;
+  let labels = null;
 
   if (filters.priorities) {
     priority = filters.priorities.length && !filters.priorities.includes(story.priority);
@@ -107,7 +108,7 @@ function stories (storyOrder, stories, dictionary = null, filters = null) {
   const sorted = sortStoriesByOrder(stories, storyOrder);
 
   const filtered = _.filter(sorted, story => {
-    if (filters !== null && !conformity(story)) {
+    if (filters !== null && !conformity(filters, story)) {
       return;
     }
 
