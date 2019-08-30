@@ -25,6 +25,7 @@ export default {
   },
   create (state, payload) {
     payload.data = normalizeId(payload.data);
+    console.log(payload);
     const existed = _.filter(state[payload.entity].items, item => item.id === payload.data.id);
     if (!existed.length) {
       state[payload.entity].items.push(payload.data);

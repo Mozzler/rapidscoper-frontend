@@ -7,7 +7,7 @@
           cls="loader-shadow--without-padding transparent"
           :size="50"
           :width="5"
-          :visible="processing"
+          :visible="processing || updating"
         />
 
         <div class="modal-header">
@@ -31,7 +31,9 @@
                 <v-layout align-center justify-space-between fill-height>
                   <div>
                     <link-icon class="mr-3"/>
-                    <span class="text-reference" @click="() => copy(index)">Copy public link</span>
+                    <span class="text-reference" @click="() => copy(index)">
+                      Copy public link
+                    </span>
                   </div>
                   <div>
                     <v-layout row align-center justify-space-between fill-height>
@@ -141,7 +143,8 @@ export default {
       link: null,
       period: null,
       permission: null,
-      processing: false
+      processing: false,
+      updating: false
     };
   },
   computed: {
@@ -185,29 +188,21 @@ export default {
         params: params
       };
     },
-    fetchData () {
+    async fetchData () {
       this.processing = true;
 
-      const requests = [];
-      const data = [
-        this.getParams('user-info', {
-          projectId: this.params
-        }),
-        this.getParams('invite', {
-          entityType: 'project',
-          entityId: this.params
-        })
-      ];
-
-      _.each(data, item => {
-        this.$store.dispatch('entity/read', item);
-        requests.push(this.$store.dispatch('entity/read', item));
+      const userInfo = this.getParams('user-info', {
+        projectId: this.params
+      });
+      const invited = this.getParams('invite', {
+        entityType: 'project',
+        entityId: this.params
       });
 
-      Promise.all(requests)
-        .then(() => {
-          this.processing = false;
-        });
+      await this.$store.dispatch('entity/read', userInfo);
+      await this.$store.dispatch('entity/read', invited);
+
+      this.processing = false;
     },
     initData () {
       this.link = null;
@@ -230,8 +225,8 @@ export default {
       this.$refs.link.select();
       document.execCommand('copy');
     },
-    enable () {
-      this.processing = true;
+    async enable () {
+      this.updating = true;
 
       const payload = {
         projectId: this.project.id,
@@ -240,14 +235,12 @@ export default {
         expiry: null
       };
 
-      this.$store.dispatch('projectVersion/share', payload)
-        .then(() => {
-          this.processing = false;
-        });
+      await this.$store.dispatch('projectVersion/share', payload);
+      this.updating = false;
     },
-    updatePeriod (period, id) {
+    async updatePeriod (period, id) {
       this.period = period;
-      this.processing = true;
+      this.updating = true;
 
       let ms = period.replace(/\D/g, '');
 
@@ -260,12 +253,12 @@ export default {
         }
       };
 
-      this.$store.dispatch('projectVersion/update', payload)
-        .then(() => {
-          this.processing = false;
-        });
+      await this.$store.dispatch('projectVersion/update', payload);
+      this.updating = false;
     },
-    updateRole (role, id) {
+    async updateRole (role, id) {
+      this.updating = true;
+
       this.$store.commit('entity/update', {
         entity: 'invite',
         data: {
@@ -274,7 +267,7 @@ export default {
         }
       });
 
-      this.$store.dispatch('entity/update', {
+      await this.$store.dispatch('entity/update', {
         entity: 'invite',
         data: {
           role: role.type
@@ -283,16 +276,18 @@ export default {
           id: id
         }
       });
-    },
-    remove (id) {
-      this.processing = true;
 
-      this.$store.dispatch('entity/delete', {
+      this.updating = false;
+    },
+    async remove (id) {
+      this.updating = true;
+
+      await this.$store.dispatch('entity/delete', {
         entity: 'project-share',
         id: id
-      }).then(() => {
-        this.processing = false;
       });
+
+      this.updating = false;
     }
   },
   watch: {

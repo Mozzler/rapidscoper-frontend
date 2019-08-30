@@ -10,6 +10,13 @@ export default {
   },
   async share (store, payload) {
     const response = await this._vm.$axios.post('project-share/create', payload);
+
+    let data = {
+      entity: 'projectShare',
+      data: response.data.item
+    };
+
+    store.commit('entity/create', data, { root: true });
     return response.data;
   },
   async update (store, payload) {

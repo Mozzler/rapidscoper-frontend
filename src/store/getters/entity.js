@@ -64,11 +64,12 @@ export default {
   invited (state, getters, rootState) {
     const invite = rootState.entity.invite.items;
     const info = rootState.entity.userInfo.items;
+    const roles = rootState.system.roles;
 
     return _.map(invite, item => {
       let data = {
         id: item.id,
-        role: uppercased(item.role),
+        role: _.find(roles, role => item.role === role.type),
         email: item.email
       };
 
