@@ -49,7 +49,11 @@ export default {
   sections (state) {
     return (type, entity) => {
       const sections = state[entity].section;
-      const project = state[entity].project[0];
+      const project = _.first(state[entity].project);
+
+      if (!project || !sections) {
+        return [];
+      }
 
       return editor.sections(project, sections, type);
     };
