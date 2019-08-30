@@ -133,25 +133,8 @@ export default {
         });
     },
     fetch () {
-      let fetch = null;
-
-      if (!this.storyViewMode) {
-        let sections = this.sections && _.first(this.sections);
-        let equal = sections ? sections.projectId === this.activeProjectId : null;
-        if (!equal) {
-          fetch = 'fetchData';
-        }
-      } else {
-        let project = this.$store.state.projectVersion.snapshot.project;
-        let equal = project && _.first(project).id === this.activeProjectId;
-        if (!equal) {
-          fetch = 'fetchSnapshot';
-        }
-      }
-
-      if (fetch) {
-        this[fetch]();
-      }
+      let fetch = this.storyViewMode ? 'fetchSnapshot' : 'fetchData';
+      this[fetch]();
     }
   },
   beforeMount () {
@@ -165,7 +148,9 @@ export default {
       this.fetchData();
     },
     storyViewMode () {
-      this.fetch();
+      if (this.storyViewMode) {
+        this.fetchSnapshot();
+      }
     },
     loaded: {
       deep: true,
