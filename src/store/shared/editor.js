@@ -108,7 +108,7 @@ function stories (storyOrder, stories, dictionary = null, filters = null) {
   const sorted = sortStoriesByOrder(stories, storyOrder);
 
   const filtered = _.filter(sorted, story => {
-    if (filters !== null && !conformity(filters, story)) {
+    if (filters !== null && conformity(filters, story)) {
       return;
     }
 

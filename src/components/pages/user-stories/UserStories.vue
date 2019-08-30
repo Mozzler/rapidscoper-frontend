@@ -4,20 +4,19 @@
       'stories-container--public': storyViewMode
     }">
     <circular-loader
-      cls="loader-shadow--without-padding transparent"
-      :size="50"
-      :width="5"
-      :visible="processing" />
+      cls="loader-shadow"
+      :visible="loading"
+    />
 
     <story-header
       @share-project="share"/>
 
     <editable-mode-layout
       v-if="!storyViewMode"
-      @processing="state => processing = state" />
+      :processing="loading" />
     <readable-mode-layout
       v-else-if="storyViewMode"
-      @processing="state => processing = state"/>
+      :processing="loading" />
   </div>
 </template>
 
@@ -27,6 +26,7 @@ import EditableModeLayout from '../../particles/layouts/mode/Editable';
 import ReadableModeLayout from '../../particles/layouts/mode/Readable';
 import CircularLoader from '../../particles/loaders/Circular';
 
+import LayoutMixin from '@/mixins/layout';
 import { mapState } from 'vuex';
 
 export default {
@@ -37,15 +37,30 @@ export default {
     ReadableModeLayout,
     CircularLoader
   },
+  mixins: [
+    LayoutMixin
+  ],
   data () {
     return {
-      processing: true
+      processing: true,
+      loaded: {
+        dictionary: false,
+        section: false,
+        story: false,
+        projectShare: false
+      }
     };
   },
   computed: {
     ...mapState({
       storyViewMode: state => state.system.storyViewMode
-    })
+    }),
+    sections () {
+      return this.$store.getters['entity/items']('section');
+    },
+    storyType () {
+      return _.first(this.$route.params.storyType.split('-'));
+    }
   },
   methods: {
     share () {
@@ -53,6 +68,113 @@ export default {
       this.$nextTick(() => {
         this.$root.$emit('share-project', this.$route.params.projectId);
       });
+    },
+    fetchData () {
+      this.processing = true;
+      this.resetData();
+
+      this.connect('dictionary', 'entity/setList', this.filter, true, () => {
+        this.loaded['dictionary'] = true;
+      });
+      this.connect('projectShare', 'entity/setList', this.filter, true, () => {
+        this.loaded['projectShare'] = true;
+      });
+
+      let filter = JSON.parse(JSON.stringify(this.filter));
+      filter.$or[0]['fullDocument.type'] = this.storyType;
+      this.connect('section', 'entity/setList', filter, true, () => {
+        this.loaded['section'] = true;
+        let orderList = _.chain(this.sections)
+          .map(item => item.storyOrder)
+          .flatten()
+          .value();
+
+        let filter = JSON.parse(JSON.stringify(this.filter));
+        filter.$or[0] = { 'fullDocument._id': { '$in': orderList } };
+
+        this.connect('story', 'entity/setList', filter, true, () => {
+          this.loaded['story'] = true;
+        });
+      });
+    },
+    resetData () {
+      this.loaded = {
+        dictionary: false,
+        section: false,
+        story: false
+      };
+
+      this.$store.commit('entity/resetList', ['dictionary', 'section', 'story']);
+    },
+    fixRoute () {
+      let stub = this.$route.params.section === 'section';
+
+      if (this.sections.length && stub) {
+        const url = this.$route.path.replace('section', this.sections[0].id);
+        this.$router.replace(url);
+      }
+    },
+    fetchSnapshot () {
+      const payload = {
+        params: {
+          id: this.$route.params.projectId,
+          version: 0
+        }
+      };
+      this.processing = true;
+
+      this.$store.dispatch('projectVersion/view', payload)
+        .then(() => {
+          this.processing = false;
+        })
+        .catch(error => {
+          this.processing = false;
+          this.$router.push('/');
+        });
+    },
+    fetch () {
+      let fetch = null;
+
+      if (!this.storyViewMode) {
+        let sections = this.sections && _.first(this.sections);
+        let equal = sections ? sections.projectId === this.activeProjectId : null;
+        if (!equal) {
+          fetch = 'fetchData';
+        }
+      } else {
+        let project = this.$store.state.projectVersion.snapshot.project;
+        let equal = project && _.first(project).id === this.activeProjectId;
+        if (!equal) {
+          fetch = 'fetchSnapshot';
+        }
+      }
+
+      if (fetch) {
+        this[fetch]();
+      }
+    }
+  },
+  beforeMount () {
+    this.fetch();
+  },
+  beforeDestroy () {
+    this.resetData();
+  },
+  watch: {
+    storyType () {
+      this.fetchData();
+    },
+    storyViewMode () {
+      this.fetch();
+    },
+    loaded: {
+      deep: true,
+      handler () {
+        if (this.loaded.dictionary && this.loaded.section && this.loaded.story) {
+          this.processing = false;
+          this.fixRoute();
+        }
+      }
     }
   }
 };

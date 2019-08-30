@@ -37,7 +37,7 @@
     <div v-else>
       <v-divider class="my-3" />
       <div class="text-sm-center text-greyed">
-        <span v-if="filters.priorities || priorities.labels">
+        <span v-if="filters.priorities.length || filters.labels.length">
           There are no stories for the selected filters
         </span>
         <span v-else>There are no stories in the sections yet</span>

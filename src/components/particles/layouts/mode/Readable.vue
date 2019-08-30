@@ -1,5 +1,5 @@
 <template>
-  <div class="display-contents">
+  <div class="display-contents" v-if="!processing">
     <sidebar-full-list class="noprint"/>
     <story-content-static />
   </div>
@@ -18,32 +18,9 @@ export default {
   provide: {
     'entity': 'snapshot'
   },
-  data () {
-    return {
-      processing: true
-    };
-  },
-  beforeMount () {
-    this.fetchData();
-  },
-  methods: {
-    fetchData () {
-      const payload = {
-        params: {
-          id: this.$route.params.projectId,
-          version: 0
-        }
-      };
-      this.$emit('processing', true);
-
-      this.$store.dispatch('projectVersion/view', payload)
-        .then(() => {
-          this.$emit('processing', false);
-        })
-        .catch(error => {
-          this.$router.push('/');
-          this.$emit('processing', false);
-        });
+  props: {
+    processing: {
+      default: false
     }
   }
 };
