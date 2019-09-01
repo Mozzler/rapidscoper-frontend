@@ -99,6 +99,7 @@
                    @click="($event) => checkHint($event, item, index)"
                    @keydown.down.exact="focusHint"
                    @keyup.exact="keyupEvent"
+                   @keydown="keydownEvent"
                    @keydown.esc.exact="() => hintEditor = null"
                    @keydown.tab.exact="fixStaticText"
                    @keydown.delete.exact="remove"
