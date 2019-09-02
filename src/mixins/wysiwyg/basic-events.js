@@ -45,19 +45,19 @@ export default {
       }
     },
     async keyupEvent ($event) {
-      this.list[this.focused].markup = this.event.target.innerHTML;
-
       this.event = $event;
       this.setSiblings();
 
-      if (!this.blocked) {
-        this.list[this.focused].markup = this.event.target.innerHTML;
-      } else {
-        this.blocked = false;
+      if (this.isEditable()) {
+        return;
       }
 
-      this.$refs[this.list[this.focused].id][0].classList.remove('text-dark-grey');
-      this.collapseToEnd();
+      if (!this.list[this.focused].markup.length &&
+        this.shortcutList.includes(this.event.key)) {
+        $event.preventDefault();
+        return this.completeBeginning(this.event.key);
+      }
+
       let printable = this.printable($event.which);
       if (!printable) {
         this.list[this.focused].markup = this.event.target.innerHTML;

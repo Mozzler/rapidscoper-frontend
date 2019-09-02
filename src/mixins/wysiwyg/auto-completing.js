@@ -42,7 +42,7 @@ export default {
       const [line, tail] = this.getLineParticles();
       const text = this.dictionary.placeholders[this.next];
 
-      if (!tail && text) {
+      if (!tail.replace('&nbsp;', '') && text) {
         this.list[this.focused].tail = this.createSpan(this.next, `&nbsp;${text}`, true, false);
         this.list[this.focused].placeholder = line + this.list[this.focused].tail;
       } else {
