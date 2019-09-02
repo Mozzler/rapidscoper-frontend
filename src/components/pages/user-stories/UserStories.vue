@@ -9,6 +9,7 @@
     />
 
     <story-header
+      :class="{'noprint': storyViewMode}"
       @share-project="share"/>
 
     <editable-mode-layout
