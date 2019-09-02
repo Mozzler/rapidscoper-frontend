@@ -31,8 +31,8 @@ export default {
       return value === 'less than minute ago' ? value : `${beginning}${Math.trunc(value)} ${ending} ago`;
     },
     withoutDots (str) {
-      const s = str ? (typeof str === 'string' ? str : str.name) : str;
-      return s ? s.replace(/\.../g, '') : s;
+      let s = str ? (typeof str === 'string' ? str : str.name) : str;
+      return s ? s.replace(/\.../g, '').trim() : s;
     }
   },
   methods: {
@@ -47,8 +47,9 @@ export default {
       const cls = `user-story__editable--${type}${greyed ? ' text-greyed' : ''}`;
       const props = `readonly contenteditable="${editable}"`;
       const attr = this.getAttr(text);
+      const withoutDots = this.$options.filters.withoutDots(text);
 
-      return `<span class="${cls}" ${props} ${attr}>${ this.$options.filters.withoutDots(text) }</span>&nbsp;`;
+      return `<span class="${cls}" ${props} ${attr}>${ withoutDots }</span>&nbsp;`;
     },
     shortcut (item) {
       const exp = new RegExp(this.filter, 'i');

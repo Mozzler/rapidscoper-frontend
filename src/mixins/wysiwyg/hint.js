@@ -114,11 +114,9 @@ export default {
           spans = spans.filter((item, i) => i <= index);
         }
 
-        this.list[this.focused].markup = spans
-          .map(item => item.replace(/&nbsp;/gi, ''))
-          .join('&nbsp;');
+        this.list[this.focused].markup = spans.join('&nbsp;');
       } else {
-        let t = spans.join('');
+        let t = spans.join('&nbsp;');
         let span = this.createSpan(chapter, text, false, false);
         this.list[this.focused].markup = `${t}${!t ? '' : '&nbsp;'}${span}`;
 
@@ -184,7 +182,7 @@ export default {
       const node = _.find(children, item => item.className.includes(`user-story__editable--${chapter}`));
       node.setAttribute('data-id', response.item.id);
 
-      const spans = el.innerHTML.split('&nbsp;');
+      const spans = this.getSpanList(false);
       const index = _.findIndex(spans, item => item.includes(`user-story__editable--${chapter}`));
       spans[index] = node.outerHTML;
 

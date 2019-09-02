@@ -29,10 +29,20 @@
       user stories
     </div>
 
-    <div>
+    <div v-if="stories.length">
       <wysiwyg
         :sectionId="model.id"
         :stories="stories"/>
+    </div>
+    <div v-else>
+      <v-divider class="my-3" />
+      <div class="text-sm-center text-greyed">
+        <span v-if="filters.priorities.length || filters.labels.length">
+          There are no stories for the selected filters
+        </span>
+        <span v-else>There are no stories in the sections yet</span>
+      </div>
+      <v-divider class="my-3" />
     </div>
   </div>
 </template>
@@ -41,6 +51,8 @@
 import Wysiwyg from '../inputs/Wysiwyg';
 import ErrorHandler from '@/mixins/error-handler';
 import CircularLoader from '../../particles/loaders/Circular';
+
+import { mapState } from 'vuex';
 
 export default {
   name: 'StoryItem',
@@ -65,6 +77,9 @@ export default {
     };
   },
   computed: {
+    ...mapState({
+      filters: state => state.story.filters
+    }),
     stories () {
       return this.$store.getters['story/content'](this.model.id);
     }

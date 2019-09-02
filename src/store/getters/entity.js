@@ -64,11 +64,12 @@ export default {
   invited (state, getters, rootState) {
     const invite = rootState.entity.invite.items;
     const info = rootState.entity.userInfo.items;
+    const roles = rootState.system.roles;
 
     return _.map(invite, item => {
       let data = {
         id: item.id,
-        role: uppercased(item.role),
+        role: _.find(roles, role => item.role === role.type),
         email: item.email
       };
 
@@ -78,5 +79,22 @@ export default {
 
       return data;
     });
+  },
+  link (state, getters, rootState, rootGetters) {
+    return projectId => {
+      let items = rootState.entity.projectShare.items;
+      let shared = _.find(items, item => item.projectId === projectId);
+
+      let roles = rootState.system.roles;
+      let periods = rootGetters['system/periods'];
+
+      if (shared) {
+        shared = { ...shared };
+        shared.role = _.find(roles, role => shared.role === role.type);
+        shared.expiry = _.find(periods, period => shared.expiry === period.type);
+      }
+
+      return shared;
+    };
   }
 };

@@ -93,8 +93,16 @@ a {
   white-space: nowrap;
 }
 
+.position-relative {
+  position: relative;
+}
+
 .text-white {
   .v-icon {
     color: $white !important;
   }
+}
+
+.display-contents {
+  display: contents;
 }

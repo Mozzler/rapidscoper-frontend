@@ -21,16 +21,19 @@
 </template>
 
 <script>
-import LogoRapidScope from "../icons/LogoRapidScope";
+import LogoRapidScope from '../icons/LogoRapidScope';
 import { mapGetters } from 'vuex';
 
 export default {
-  name: "PublicHeader",
+  name: 'PublicHeader',
   components: { LogoRapidScope },
   computed: {
     ...mapGetters({
-      info: 'projectVersion/info'
+      infoGetter: 'projectVersion/info'
     }),
+    info () {
+      return this.infoGetter('projectVersion');
+    },
     current () {
       return moment().format("MMMM DD, YYYY HH:mm A");
     }

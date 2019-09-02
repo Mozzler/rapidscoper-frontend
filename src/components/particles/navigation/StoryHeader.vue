@@ -15,8 +15,11 @@
         </span>
       </v-flex>
       <v-flex>
-        <template v-if="tabsPanel">
-          <v-tabs fixed-tabs class="tabs stories-tabs" v-model="activeTab">
+        <template v-if="tabsPanel && !storyViewMode">
+          <v-tabs fixed-tabs
+                  class="tabs stories-tabs"
+                  hide-slider
+                  v-model="activeTab">
             <v-tab v-for="tab in tabs" :key="tab" @click="setTab(tab)">
               {{ tab }}
             </v-tab>
@@ -30,15 +33,21 @@
       </v-flex>
       <v-flex text-xs-right>
         <v-layout align-center justify-end row fill-height>
-          <div class="header-options"
+          <div
+            v-if="!storyViewMode"
+            class="header-options"
             :class="{'header-options--active': sidebarFilter}"
             @click="() => setSidebarFilter(!sidebarFilter)">
             <sort-icon />
           </div>
-          <div class="header-options">
+          <div class="header-options"
+               :class="{'header-options--active': storyViewMode}"
+               @click="() => setStoryViewMode(!storyViewMode)">
             <v-icon>visibility</v-icon>
           </div>
-          <v-btn class="btn-rapid primary ml-2" large @click="showModal">
+          <v-btn class="btn-rapid primary ml-2"
+                 large
+                 @click="showModal">
             Share
           </v-btn>
         </v-layout>
@@ -53,9 +62,10 @@ import Dropdown from '../menus/Dropdown';
 import Navigation from '@/mixins/navigation';
 
 import { mapMutations } from 'vuex';
+import { mapState } from 'vuex';
 
 export default {
-  name: "StoryHeader",
+  name: 'StoryHeader',
   components: {
     SortIcon,
     Dropdown
@@ -85,6 +95,10 @@ export default {
     this.activeTab = this.tabs.indexOf(this.tab);
   },
   computed: {
+    ...mapState({
+      sidebarFilter: state => state.system.sidebarFilter,
+      storyViewMode: state => state.system.storyViewMode
+    }),
     tab () {
       return this.toTitle(this.$route.params.tab);
     },
@@ -96,14 +110,12 @@ export default {
     },
     currentProject () {
       return this.projects.find(item => item.id === this.currentProjectId);
-    },
-    sidebarFilter () {
-      return this.$store.state.system.sidebarFilter;
     }
   },
   methods: {
     ...mapMutations({
-      setSidebarFilter: 'system/setSidebarFilter'
+      setSidebarFilter: 'system/setSidebarFilter',
+      setStoryViewMode: 'system/setStoryViewMode'
     }),
     setTab (item) {
       let params = this.$route.params;

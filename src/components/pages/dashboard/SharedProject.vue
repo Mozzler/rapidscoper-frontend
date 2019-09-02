@@ -19,11 +19,15 @@
 import CircularLoader from '../../particles/loaders/Circular';
 import SidebarFullList from '../../particles/lists/SidebarFullList';
 import StoryContentStatic from '../../particles/layouts/StoryContentStatic';
+
 import PublicHeader from '../../particles/navigation/PublicHeader';
 import Comments from '../../particles/lists/Comments';
 
 export default {
-  name: "SharedProject",
+  name: 'SharedProject',
+  provide: {
+    'entity': 'projectVersion'
+  },
   components: {
     CircularLoader,
     SidebarFullList,

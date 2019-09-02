@@ -36,7 +36,7 @@ export default {
       this.$store.dispatch('auth/logout')
         .then(() => this.$socket.disconnect())
         .then(() => {
-          this.$router.push('/signup');
+          this.$router.push('/login');
         });
     }
   }

@@ -13,15 +13,20 @@
 
 <script>
 import SidebarList from '../lists/SidebarList';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'SidebarFullList',
+  inject: ['entity'],
   components: {
     SidebarList
   },
   computed: {
+    ...mapGetters({
+      chapterGetter: 'projectVersion/chapters'
+    }),
     chapters () {
-      return this.$store.getters['projectVersion/chapters'];
+      return this.chapterGetter(this.entity);
     }
   },
   methods: {

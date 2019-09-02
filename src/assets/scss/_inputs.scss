@@ -79,6 +79,8 @@
 
 .input--hidden {
   height: 0;
+  position: absolute;
+  cursor: default;
 }
 
 .editor {

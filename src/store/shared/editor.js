@@ -64,7 +64,11 @@ function getStoryLevel (id, stories) {
 }
 
 function replaceMarkup (markup, dictionary) {
-  const spans = markup.split('&nbsp;');
+  let spans = markup.split('</span>');
+
+  spans = _.map(spans, span => {
+    return span.includes('<span') ? `${span}</span>` : span;
+  });
 
   _.each(spans, (item, index) => {
     const matched = item.match(/data-id="(.*?)"/);
@@ -78,7 +82,7 @@ function replaceMarkup (markup, dictionary) {
     }
   });
 
-  return spans.join('&nbsp;');
+  return spans.join('');
 }
 
 function sections (project, sections, type) {
@@ -87,18 +91,29 @@ function sections (project, sections, type) {
   });
 }
 
-function stories (storyOrder, stories, dictionary = null, filters = {}) {
+function conformity (filters = {}, story) {
+  let priority = null;
+  let labels = null;
+
+  if (filters.priorities) {
+    priority = filters.priorities.length && !filters.priorities.includes(story.priority);
+  }
+
+  if (filters.labels) {
+    let included = _.find(filters.labels, filter => !story.labels.includes(filter));
+    labels = filters.labels.length && !_.isUndefined(included);
+  }
+
+  // doesn't match the label or priority filters
+  return priority || labels;
+}
+
+function stories (storyOrder, stories, dictionary = null, filters = null) {
   const sorted = sortStoriesByOrder(stories, storyOrder);
 
   const filtered = _.filter(sorted, story => {
-    let priority = filters.priorities.length &&
-      !filters.priorities.includes(story.priority);
-
-    let included = _.find(filters.labels, filter => !story.labels.includes(filter));
-    let labels = filters.labels.length && !_.isUndefined(included);
-
-    if (priority || labels) {
-      return false;
+    if (filters !== null && conformity(filters, story)) {
+      return;
     }
 
     return story;
@@ -115,6 +130,7 @@ function stories (storyOrder, stories, dictionary = null, filters = {}) {
       const markup = replaceMarkup(basic.markup, dictionary);
 
       _.assign(basic, {
+        labels: basic.labels ? basic.labels : [],
         template: construction ? construction.structure : '',
         tail: item.tail ? item.tail : '',
         markup: markup,

@@ -51,8 +51,11 @@ import SummaryList from '../../particles/lists/Summary';
 import Stories from '../../particles/public/Stories';
 import ScrollMixin from '@/mixins/scroll';
 
+import { mapGetters } from 'vuex';
+
 export default {
-  name: "StoryContentPublic",
+  name: 'StoryContentPublic',
+  inject: ['entity'],
   components: {
     SummaryList,
     DictionaryStatic,
@@ -67,8 +70,11 @@ export default {
     ScrollMixin
   ],
   computed: {
+    ...mapGetters({
+      chapter: 'projectVersion/info'
+    }),
     sections () {
-      return this.$store.getters['projectVersion/chapters'];
+      return this.chapter(this.entity);
     }
   }
 };

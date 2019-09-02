@@ -3,7 +3,8 @@ export default {
     return {
       focused: null,
       editor: null,
-      etalon: null
+      etalon: null,
+      blocked: false
     };
   },
   methods: {
@@ -16,9 +17,16 @@ export default {
         this.hintEditor = null;
       }
     },
-    async keyupEvent ($event) {
+    printable (keycode) {
+      return (keycode > 47 && keycode < 58) || // number keys
+      (keycode === 32 || keycode === 13) || // spacebar & return key(s)
+      (keycode > 64 && keycode < 91) || // letter keys
+      (keycode > 95 && keycode < 112) || // numpad keys
+      (keycode > 185 && keycode < 193) || // ;=,-./` (in order)
+      (keycode > 218 && keycode < 223);
+    },
+    keydownEvent ($event) {
       this.event = $event;
-      this.setSiblings();
 
       if (this.isEditable()) {
         return;
@@ -30,9 +38,33 @@ export default {
         return this.completeBeginning(this.event.key);
       }
 
-      this.list[this.focused].markup = this.event.target.innerHTML;
+      let printable = this.printable($event.which);
+      if (printable) {
+        $event.preventDefault();
+        let story = this.list[this.focused];
+        let key = $event.key;
+
+        if (key === ' ') {
+          story.markup += '&nbsp;';
+        } else {
+          story.markup += key;
+        }
+
+        story.placeholder = story.markup + story.tail;
+        this.collapseToEnd();
+      }
+    },
+    async keyupEvent ($event) {
+      this.event = $event;
+      this.setSiblings();
+
+      let printable = this.printable($event.which);
+      if (!printable) {
+        this.list[this.focused].markup = this.event.target.innerHTML;
+        this.collapseToEnd();
+      }
+
       this.$refs[this.list[this.focused].id][0].classList.remove('text-dark-grey');
-      this.collapseToEnd();
 
       this.initPlaceholder();
       this.initDictionary();
@@ -50,7 +82,7 @@ export default {
 
       const focused = this.event.view.getSelection().focusNode;
       const node = focused ? this.event.view.getSelection().focusNode.parentElement : null;
-      const other = this.list[this.focused].type === 'other';
+      const other = this.list[this.focused] && this.list[this.focused].type === 'other';
 
       if (other) {
         this.list[this.focused].placeholder = this.event.target.innerHTML;

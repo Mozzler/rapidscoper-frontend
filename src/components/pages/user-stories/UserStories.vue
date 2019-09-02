@@ -1,44 +1,49 @@
 <template>
-  <div class="stories-container">
-    <story-header @share-project="share"/>
-    <story-sidebar />
+  <div :class="{
+      'stories-container': !storyViewMode,
+      'stories-container--public': storyViewMode
+    }">
     <circular-loader
       cls="loader-shadow"
       :visible="loading"
     />
-    <template v-if="!loading">
-      <story-section />
-      <story-content />
-    </template>
-    <tool-section />
+
+    <story-header
+      :class="{'noprint': storyViewMode}"
+      @share-project="share"/>
+
+    <editable-mode-layout
+      v-if="!storyViewMode"
+      :processing="loading" />
+    <readable-mode-layout
+      v-else-if="storyViewMode"
+      :processing="loading" />
   </div>
 </template>
 
 <script>
-import StoryHeader from "../../particles/navigation/StoryHeader";
-import StorySidebar from "../../particles/navigation/USidebar";
-import StorySection from "../../particles/navigation/StorySection";
-import ToolSection from "../../particles/navigation/ToolSection";
-import StoryContent from "../../particles/layouts/StoryContent";
-import CircularLoader from "../../particles/loaders/Circular";
+import StoryHeader from '../../particles/navigation/StoryHeader';
+import EditableModeLayout from '../../particles/layouts/mode/Editable';
+import ReadableModeLayout from '../../particles/layouts/mode/Readable';
+import CircularLoader from '../../particles/loaders/Circular';
 
-import LayoutMixin from "@/mixins/layout";
+import LayoutMixin from '@/mixins/layout';
+import { mapState } from 'vuex';
 
 export default {
-  name: "UserStories",
+  name: 'UserStories',
   components: {
     StoryHeader,
-    StorySidebar,
-    StorySection,
-    ToolSection,
-    StoryContent,
-    CircularLoader,
+    EditableModeLayout,
+    ReadableModeLayout,
+    CircularLoader
   },
   mixins: [
     LayoutMixin
   ],
   data () {
     return {
+      processing: true,
       loaded: {
         dictionary: false,
         section: false,
@@ -48,6 +53,9 @@ export default {
     };
   },
   computed: {
+    ...mapState({
+      storyViewMode: state => state.system.storyViewMode
+    }),
     sections () {
       return this.$store.getters['entity/items']('section');
     },
@@ -106,6 +114,28 @@ export default {
         const url = this.$route.path.replace('section', this.sections[0].id);
         this.$router.replace(url);
       }
+    },
+    fetchSnapshot () {
+      const payload = {
+        params: {
+          id: this.$route.params.projectId,
+          version: 0
+        }
+      };
+      this.processing = true;
+
+      this.$store.dispatch('projectVersion/view', payload)
+        .then(() => {
+          this.processing = false;
+        })
+        .catch(error => {
+          this.processing = false;
+          this.$router.push('/');
+        });
+    },
+    fetch () {
+      let fetch = this.storyViewMode ? 'fetchSnapshot' : 'fetchData';
+      this[fetch]();
     }
   },
   beforeDestroy () {
@@ -115,10 +145,15 @@ export default {
     storyType () {
       this.fetchData();
     },
+    storyViewMode () {
+      if (this.storyViewMode) {
+        this.fetchSnapshot();
+      }
+    },
     loaded: {
       deep: true,
       handler () {
-        if (this.loaded.dictionary && this.loaded.section && this.loaded.story) {
+        if (this.loaded.dictionary && this.loaded.section && this.loaded.story && this.loaded.projectShare) {
           this.processing = false;
           this.fixRoute();
         }

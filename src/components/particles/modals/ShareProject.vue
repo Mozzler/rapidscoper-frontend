@@ -7,7 +7,7 @@
           cls="loader-shadow--without-padding transparent"
           :size="50"
           :width="5"
-          :visible="processing"
+          :visible="processing || updating"
         />
 
         <div class="modal-header">
@@ -19,7 +19,7 @@
 
         <v-card-text class="mt-3 padding-0">
           <v-flex align-self-center>
-            <template v-if="!projectShare.length">
+            <template v-if="!shared">
               <v-layout align-center justify-start row fill-height>
                 <link-disabled-icon class="mr-3"/>
                 <span class="cursor-default">Public link access is disabled.&nbsp;</span>
@@ -27,25 +27,25 @@
               </v-layout>
             </template>
             <template v-else>
-              <div v-for="(item, index) in projectShare" :key="index">
-                <v-layout align-center justify-space-between fill-height>
-                  <div>
-                    <link-icon class="mr-3"/>
-                    <span class="text-reference" @click="() => copy(index)">Copy public link</span>
-                  </div>
-                  <div>
-                    <v-layout row align-center justify-space-between fill-height>
-                      <dropdown
-                        :list="periods" class="mr-3"
-                        :selected="period"
-                        @update="value => updatePeriod(value, item.id)" />
-                      <div @click="() => remove(item.id)">
-                        <v-icon class="cursor-pointer">delete</v-icon>
-                      </div>
-                    </v-layout>
-                  </div>
-                </v-layout>
-              </div>
+              <v-layout align-center justify-space-between fill-height>
+                <div>
+                  <link-icon class="mr-3"/>
+                  <span class="text-reference" @click="() => copy()">
+                    Copy public link
+                  </span>
+                </div>
+                <div>
+                  <v-layout row align-center justify-space-between fill-height>
+                    <dropdown class="mr-3"
+                      :list="periods"
+                      :selected="shared.expiry"
+                      @update="value => updatePeriod(value)" />
+                    <div @click="remove">
+                      <v-icon class="cursor-pointer">delete</v-icon>
+                    </div>
+                  </v-layout>
+                </div>
+              </v-layout>
               <input class="input--hidden" :ref="'link'"/>
             </template>
           </v-flex>
@@ -97,7 +97,7 @@
               <v-flex shrink>
                 <dropdown
                   :list="permissions"
-                  :selected="permission"
+                  :selected="clientPermissions"
                   @update="value => updatePermission(value)" />
               </v-flex>
             </v-layout>
@@ -138,21 +138,23 @@ export default {
   ],
   data () {
     return {
-      link: null,
-      period: null,
       permission: null,
-      processing: false
+      processing: false,
+      updating: false
     };
   },
   computed: {
     ...mapState('system', [
       'permissions',
-      'periods',
       'roles'
     ]),
     ...mapGetters('entity', [
       'items',
-      'invited'
+      'invited',
+      'link'
+    ]),
+    ...mapGetters('system', [
+      'periods'
     ]),
     projects () {
       return this.items('project');
@@ -160,16 +162,22 @@ export default {
     project () {
       return _.find(this.projects, item => item.id === this.params);
     },
-    projectShare () {
-      const shared = this.items('projectShare');
-      return _.filter(shared, item => item.projectId === this.params);
+    shared () {
+      return this.link(this.params);
+    },
+    clientPermissions () {
+      if (!this.project) {
+        return _.first(this.permissions);
+      }
+
+      const permission = _.find(this.permissions, permission => permission.type === this.project.clientPermissions);
+      return permission || _.first(this.permissions);
     }
   },
-  beforeMount () {
-    this.period = _.first(this.periods);
-    this.permission = _.first(this.permissions);
-  },
   methods: {
+    initData () {
+
+    },
     removeInvite (id) {
       const data = {
         entity: 'invite',
@@ -185,53 +193,29 @@ export default {
         params: params
       };
     },
-    fetchData () {
+    async fetchData () {
       this.processing = true;
 
-      const requests = [];
-      const data = [
-        this.getParams('user-info', {
-          projectId: this.params
-        }),
-        this.getParams('invite', {
-          entityType: 'project',
-          entityId: this.params
-        })
-      ];
-
-      _.each(data, item => {
-        this.$store.dispatch('entity/read', item);
-        requests.push(this.$store.dispatch('entity/read', item));
+      const userInfo = this.getParams('user-info', {
+        projectId: this.params
+      });
+      const invited = this.getParams('invite', {
+        entityType: 'project',
+        entityId: this.params
       });
 
-      Promise.all(requests)
-        .then(() => {
-          this.processing = false;
-        });
+      await this.$store.dispatch('entity/read', userInfo);
+      await this.$store.dispatch('entity/read', invited);
+
+      this.processing = false;
     },
-    initData () {
-      this.link = null;
-    },
-    updatePermission (value) {
-      this.permission = value;
-      this.$store.dispatch('entity/update', {
-        entity: 'project',
-        data: {
-          clientPermissions: value.type
-        },
-        params: {
-          id: this.params
-        }
-      });
-    },
-    copy (index) {
-      const shared = this.projectShare[index];
-      this.$refs.link.value = `${document.location.origin}/project/${shared.id}/${shared.token}`;
+    copy () {
+      this.$refs.link.value = `${document.location.origin}/project/${this.shared.id}/${this.shared.token}`;
       this.$refs.link.select();
       document.execCommand('copy');
     },
-    enable () {
-      this.processing = true;
+    async enable () {
+      this.updating = true;
 
       const payload = {
         projectId: this.project.id,
@@ -240,32 +224,42 @@ export default {
         expiry: null
       };
 
-      this.$store.dispatch('projectVersion/share', payload)
-        .then(() => {
-          this.processing = false;
-        });
+      await this.$store.dispatch('projectVersion/share', payload);
+      this.updating = false;
     },
-    updatePeriod (period, id) {
-      this.period = period;
-      this.processing = true;
+    async updatePermission (value) {
+      this.updating = true;
 
-      let ms = period.replace(/\D/g, '');
+      await this.$store.dispatch('entity/update', {
+        entity: 'project',
+        data: {
+          clientPermissions: value.type
+        },
+        params: {
+          id: this.params
+        }
+      });
+
+      this.updating = false;
+    },
+    async updatePeriod (period) {
+      this.updating = true;
 
       const payload = {
         params: {
-          id: id
+          id: this.shared.id
         },
         data: {
-          expiry: ms ? ms * 86400000 : null
+          expiry: period.type
         }
       };
 
-      this.$store.dispatch('projectVersion/update', payload)
-        .then(() => {
-          this.processing = false;
-        });
+      await this.$store.dispatch('projectVersion/update', payload);
+      this.updating = false;
     },
-    updateRole (role, id) {
+    async updateRole (role, id) {
+      this.updating = true;
+
       this.$store.commit('entity/update', {
         entity: 'invite',
         data: {
@@ -274,7 +268,7 @@ export default {
         }
       });
 
-      this.$store.dispatch('entity/update', {
+      await this.$store.dispatch('entity/update', {
         entity: 'invite',
         data: {
           role: role.type
@@ -283,16 +277,18 @@ export default {
           id: id
         }
       });
-    },
-    remove (id) {
-      this.processing = true;
 
-      this.$store.dispatch('entity/delete', {
+      this.updating = false;
+    },
+    async remove () {
+      this.updating = true;
+
+      await this.$store.dispatch('entity/delete', {
         entity: 'project-share',
-        id: id
-      }).then(() => {
-        this.processing = false;
+        id: this.shared.id
       });
+
+      this.updating = false;
     }
   },
   watch: {

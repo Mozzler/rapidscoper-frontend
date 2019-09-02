@@ -71,10 +71,19 @@
 
 .stories-tabs {
   margin-top: 16px;
+
+  .v-tabs__container {
+    justify-content: center;
+  }
+
+  .v-tabs__item--active {
+    padding-top: 8px !important;
+    border-bottom: 3px solid;
+  }
 }
 
 .mini-sidebar {
   background: $white;
-  box-shadow: 1px 0px 0px rgba(0, 0, 0, 0.1);
+  box-shadow: 1px 0 0 rgba(0, 0, 0, 0.1);
 }
 

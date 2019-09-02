@@ -69,6 +69,8 @@ export default {
       const sections = rootState.entity.section.items;
       const project = _.find(rootState.entity.project.items, item => item.id === id);
 
+      console.log();
+
       return editor.sections(project, sections, type);
     };
   },
