@@ -41,7 +41,7 @@ export default {
 
       if (this.next.includes('static-text')) {
         const [type, text] = this.getStaticTextByType();
-        this.list[this.focused].markup = this.getSpanList() + `&nbsp;` + this.createSpan(type, text, false);
+        this.list[this.focused].markup += this.createSpan(type, text, false);
       }
 
       this.resetPlaceholder();

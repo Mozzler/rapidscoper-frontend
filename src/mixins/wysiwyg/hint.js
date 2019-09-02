@@ -114,11 +114,9 @@ export default {
           spans = spans.filter((item, i) => i <= index);
         }
 
-        this.list[this.focused].markup = spans
-          .map(item => item.replace(/&nbsp;/gi, ''))
-          .join('&nbsp;');
+        this.list[this.focused].markup = spans.join('&nbsp;');
       } else {
-        let t = spans.join('');
+        let t = spans.join('&nbsp;');
         let span = this.createSpan(chapter, text, false, false);
         this.list[this.focused].markup = `${t}${!t ? '' : '&nbsp;'}${span}`;
 

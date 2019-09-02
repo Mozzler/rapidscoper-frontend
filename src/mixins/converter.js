@@ -32,7 +32,7 @@ export default {
     },
     withoutDots (str) {
       let s = str ? (typeof str === 'string' ? str : str.name) : str;
-      return s ? s.replace(/\.../g, '') : s;
+      return s ? s.replace(/\.../g, '').trim() : s;
     }
   },
   methods: {
