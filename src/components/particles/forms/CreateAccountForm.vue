@@ -97,12 +97,7 @@ export default {
     }
   },
   beforeMount () {
-    const filter = {
-      $or: [
-        { 'fullDocument.userId': this.authorized.user_id }
-      ]
-    };
-    this.connect('user', 'auth/update', filter, false);
+    this.connect('user', 'auth/update', null, false);
   },
   methods: {
     handleImage ($event) {

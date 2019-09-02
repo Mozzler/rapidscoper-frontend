@@ -65,13 +65,6 @@ export default {
     },
     authenticated () {
       return this.user !== null;
-    },
-    filter () {
-      return {
-        $or: [
-          { 'fullDocument.userId': this.authenticated ? this.user.user_id : null }
-        ]
-      };
     }
   },
   beforeDestroy () {
@@ -80,7 +73,7 @@ export default {
   methods: {
     initConnect () {
       if (this.authenticated && this.user.access_token) {
-        this.connect('user', 'auth/update', this.filter);
+        this.connect('user', 'auth/update');
         this.connect('team', 'entity/setList');
       }
     }

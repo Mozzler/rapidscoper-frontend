@@ -92,13 +92,7 @@ export default {
         });
     },
     login () {
-      const filter = {
-        $or: [
-          { 'fullDocument.userId': this.authorized.user_id }
-        ]
-      };
-
-      this.connect('user', 'auth/update', filter, true, () => {
+      this.connect('user', 'auth/update', null, true, () => {
         const props = this.authorized.firstName && this.authorized.lastName;
         const url = !props ? '/create-account' : '/';
 
