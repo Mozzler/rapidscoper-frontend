@@ -49,6 +49,7 @@ export default {
         this.resetPlaceholder();
       }
     },
+    // construction like 'so that' or 'I can'
     initStaticText () {
       let completion = null;
 
@@ -65,7 +66,9 @@ export default {
 
       if (completion !== null) {
         const [text, type] = this.getStaticTextByType(completion);
-        this.list[this.focused].tail = this.createSpan(text, type, true);
+
+        const tail = this.getTail().replace(/&nbsp;/gi, '');
+        this.list[this.focused].tail = `${tail.length ? '&nbsp;' : ''}` + this.createSpan(text, type, true);
         this.list[this.focused].placeholder = this.list[this.focused].markup + this.list[this.focused].tail;
       }
     },
@@ -89,18 +92,9 @@ export default {
         const [type, text] = this.getStaticTextByType();
         this.list[this.focused].markup += this.createSpan(type, text, false);
       }
-
-      this.$store.commit('entity/update', {
-        entity: 'story',
-        data: {
-          id: this.list[this.focused].id,
-          markup: this.list[this.focused].markup
-        }
-      });
     },
     finishSentence ($event, character = '') {
       $event.preventDefault();
-      console.log('finish sentence');
 
       if (!this.getSpanList()) {
         return false;

@@ -27,11 +27,11 @@ export default {
     },
     getSpanList (joined = true) {
       const spans = this.list[this.focused].markup
-        .split('</span>')
+        .split('</span>&nbsp;')
         .filter(item => item.includes('<span'))
         .map(item => `${item}</span>`);
 
-      return !joined ? spans : spans.join('');
+      return !joined ? spans : spans.join('&nbsp;');
     },
     getTail () {
       return this.list[this.focused].markup

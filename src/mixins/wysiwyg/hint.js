@@ -184,7 +184,7 @@ export default {
       const node = _.find(children, item => item.className.includes(`user-story__editable--${chapter}`));
       node.setAttribute('data-id', response.item.id);
 
-      const spans = el.innerHTML.split('&nbsp;');
+      const spans = this.getSpanList(false);
       const index = _.findIndex(spans, item => item.includes(`user-story__editable--${chapter}`));
       spans[index] = node.outerHTML;
 

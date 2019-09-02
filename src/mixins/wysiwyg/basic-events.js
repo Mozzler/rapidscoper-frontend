@@ -28,6 +28,16 @@ export default {
     keydownEvent ($event) {
       this.event = $event;
 
+      if (this.isEditable()) {
+        return;
+      }
+
+      if (!this.list[this.focused].markup.length &&
+        this.shortcutList.includes(this.event.key)) {
+        $event.preventDefault();
+        return this.completeBeginning(this.event.key);
+      }
+
       let printable = this.printable($event.which);
       if (printable) {
         $event.preventDefault();
@@ -47,16 +57,6 @@ export default {
     async keyupEvent ($event) {
       this.event = $event;
       this.setSiblings();
-
-      if (this.isEditable()) {
-        return;
-      }
-
-      if (!this.list[this.focused].markup.length &&
-        this.shortcutList.includes(this.event.key)) {
-        $event.preventDefault();
-        return this.completeBeginning(this.event.key);
-      }
 
       let printable = this.printable($event.which);
       if (!printable) {

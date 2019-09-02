@@ -30,7 +30,7 @@ export default {
       }
 
       this.finishSentence($event);
-      //this.sendCreateStoryRequest(false, $event.target.innerHTML);
+      this.sendCreateStoryRequest(false, $event.target.innerHTML);
     },
     createSubstory ($event) {
       if (this.list[this.focused].level === 2) {
@@ -39,7 +39,7 @@ export default {
       }
 
       this.finishSentence($event, ':');
-      //this.sendCreateStoryRequest(true, '');
+      this.sendCreateStoryRequest(true, '');
     }
   }
 };
