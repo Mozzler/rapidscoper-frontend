@@ -14,10 +14,10 @@
               ref="storyItem"
               @show-error="value => message = value"/>
           </div>
-          <hint />
           <alert :message="message" />
         </v-layout>
       </div>
+      <hint />
     </div>
   </div>
 </template>

@@ -65,7 +65,7 @@ export default {
 
       if (completion !== null) {
         const [text, type] = this.getStaticTextByType(completion);
-        this.list[this.focused].tail = this.createSpan(text, `&nbsp;${type}`, true);
+        this.list[this.focused].tail = this.createSpan(text, type, true);
         this.list[this.focused].placeholder = this.list[this.focused].markup + this.list[this.focused].tail;
       }
     },
@@ -100,6 +100,7 @@ export default {
     },
     finishSentence ($event, character = '') {
       $event.preventDefault();
+      console.log('finish sentence');
 
       if (!this.getSpanList()) {
         return false;
@@ -107,6 +108,7 @@ export default {
 
       this.event = $event;
       this.list[this.focused].markup = $event.target.innerHTML + character;
+      this.list[this.focused].placeholder = this.list[this.focused].markup;
 
       this.setSiblings();
       this.setCustomText(true);
@@ -120,7 +122,7 @@ export default {
       const [list, tail] = this.getLineParticles();
 
       if (tail) {
-        const text = this.createSpan(this.next, `&nbsp;${tail}`, false, editable);
+        const text = this.createSpan(this.next, tail, false, editable);
         this.list[this.focused].markup = list + (this.next ? text : ':');
       }
     }

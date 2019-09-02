@@ -17,35 +17,36 @@ export default {
         this.hintEditor = null;
       }
     },
+    printable (keycode) {
+      return (keycode > 47 && keycode < 58) || // number keys
+      (keycode === 32 || keycode === 13) || // spacebar & return key(s)
+      (keycode > 64 && keycode < 91) || // letter keys
+      (keycode > 95 && keycode < 112) || // numpad keys
+      (keycode > 185 && keycode < 193) || // ;=,-./` (in order)
+      (keycode > 218 && keycode < 223);
+    },
     keydownEvent ($event) {
       this.event = $event;
 
-      if (this.isEditable()) {
-        return;
-      }
-
-      if (!this.list[this.focused].markup.length &&
-        this.shortcutList.includes(this.event.key)) {
+      let printable = this.printable($event.which);
+      if (printable) {
         $event.preventDefault();
-        return this.completeBeginning(this.event.key);
-      }
+        let story = this.list[this.focused];
+        let key = $event.key;
 
-      if (this.event.code.includes('Digit') ||
-        this.event.code.includes('Key') ||
-        this.event.code.includes('Space')) {
-
-        $event.preventDefault();
-        this.blocked = true;
-
-        if (this.event.code.includes('Space')) {
-          this.list[this.focused].markup += '&nbsp;';
+        if (key === ' ') {
+          story.markup += '&nbsp;';
         } else {
-          this.list[this.focused].markup += this.event.key;
+          story.markup += key;
         }
-        $event.target.innerHTML = this.list[this.focused].markup;
+
+        story.placeholder = story.markup + story.tail;
+        this.collapseToEnd();
       }
     },
     async keyupEvent ($event) {
+      this.list[this.focused].markup = this.event.target.innerHTML;
+
       this.event = $event;
       this.setSiblings();
 
@@ -57,6 +58,13 @@ export default {
 
       this.$refs[this.list[this.focused].id][0].classList.remove('text-dark-grey');
       this.collapseToEnd();
+      let printable = this.printable($event.which);
+      if (!printable) {
+        this.list[this.focused].markup = this.event.target.innerHTML;
+        this.collapseToEnd();
+      }
+
+      this.$refs[this.list[this.focused].id][0].classList.remove('text-dark-grey');
 
       this.initPlaceholder();
       this.initDictionary();

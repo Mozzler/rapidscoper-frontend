@@ -64,7 +64,11 @@ function getStoryLevel (id, stories) {
 }
 
 function replaceMarkup (markup, dictionary) {
-  const spans = markup.split('&nbsp;');
+  let spans = markup.split('</span>');
+
+  spans = _.map(spans, span => {
+    return span.includes('<span') ? `${span}</span>` : span;
+  });
 
   _.each(spans, (item, index) => {
     const matched = item.match(/data-id="(.*?)"/);
@@ -78,7 +82,7 @@ function replaceMarkup (markup, dictionary) {
     }
   });
 
-  return spans.join('&nbsp;');
+  return spans.join('');
 }
 
 function sections (project, sections, type) {

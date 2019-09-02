@@ -37,9 +37,7 @@ export default {
       return this.list[this.focused].markup
         .split('</span>')
         .filter(item => !item.includes('<span'))
-        .join('')
-        .replace(/&nbsp;/g, '')
-        .trim();
+        .join('');
     },
     getStaticTextByType (str = this.next) {
       return str
