@@ -11,7 +11,12 @@
         notifications
       </v-icon>-->
       <div class="sidebar-header__img">
-        <img :src="user.avatarUrl"/>
+        <img :src="avatar ? avatar.avatarUrl : require('@/assets/img/default-user.png')"/>
+        <circular-loader
+          cls="loader-shadow--without-padding transparent"
+          :size="20"
+          :width="3"
+          :visible="!avatar" />
       </div>
       <div class="text-bold">
         {{ user.firstName ? user.firstName : ''}} {{ user.lastName ? user.lastName : '' }}
@@ -50,9 +55,10 @@
 <script>
 import LogoRapidScope from '../icons/LogoRapidScope';
 import Navigation from '@/mixins/navigation';
-import AddTeamModal from "@/components/particles/modals/AddTeam";
-import Dropdown from "../menus/Dropdown";
-import SidebarList from "../lists/SidebarList";
+import AddTeamModal from '@/components/particles/modals/AddTeam';
+import Dropdown from '../menus/Dropdown';
+import SidebarList from '../lists/SidebarList';
+import CircularLoader from '../../particles/loaders/Circular';
 
 import { mapGetters } from 'vuex';
 
@@ -62,7 +68,8 @@ export default {
     SidebarList,
     LogoRapidScope,
     AddTeamModal,
-    Dropdown
+    Dropdown,
+    CircularLoader
   },
   mixins: [
     Navigation
@@ -104,7 +111,14 @@ export default {
     user () {
       return this.$store.state.auth.user;
     },
+    avatar () {
+      const userInfo = this.entity('userInfo');
+      const filtered = userInfo ?
+        _.find(userInfo, item => item.userId === this.user.user_id) :
+        null;
 
+      return filtered;
+    },
     totalProjects () {
       return this.total('project', item => item.status === 'active');
     },
