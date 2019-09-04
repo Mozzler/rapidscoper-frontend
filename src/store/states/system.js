@@ -6,7 +6,7 @@ export default {
     state: true,
     x: 0,
     y: 0,
-    content: '',
+    markup: '',
     item: null
   },
   periods: ['Unexpired', '1 day', '2 days', '3 days', '7 days'],

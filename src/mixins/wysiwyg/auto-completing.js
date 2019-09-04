@@ -117,7 +117,7 @@ export default {
 
       if (tail) {
         const text = this.createSpan(this.next, tail, false, editable);
-        this.list[this.focused].markup = list + (this.next ? text : ':');
+        this.list[this.focused].markup = list + `&nbsp;` + (this.next ? text : ':');
       }
     }
   }

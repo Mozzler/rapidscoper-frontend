@@ -120,7 +120,8 @@ export default {
         storyId: this.comment.item.id,
         sectionId: this.comment.item.sectionId,
         teamId: this.comment.item.teamId,
-        projectId: this.comment.item.projectId
+        projectId: this.comment.item.projectId,
+        markup: this.comment.item.markup
       };
 
       this.processing = true;

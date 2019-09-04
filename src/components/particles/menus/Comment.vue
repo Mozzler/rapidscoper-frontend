@@ -1,8 +1,7 @@
 <template>
   <div
-    v-if="comment.state"
-    class="comment-dialog"
     ref="comment"
+    class="comment-dialog"
     @click="writeComment">
     <comment-icon class="mr-1"/>
     <span>Comment</span>
@@ -18,6 +17,11 @@ export default {
   components: {
     CommentIcon
   },
+  data () {
+    return {
+      show: false
+    };
+  },
   computed: {
     ...mapState('system', [
       'comment'
@@ -31,8 +35,12 @@ export default {
   watch: {
     comment: {
       deep: true,
-      handler () {
-        let style = this.$refs.comment.style;
+      async handler () {
+        this.show = this.comment.state;
+
+        await this.$nextTick();
+
+        const style = this.$refs.comment.style;
         style.top = `${this.comment.y}px`;
         style.left = `${this.comment.x}px`;
       }

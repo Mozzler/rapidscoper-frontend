@@ -32,6 +32,11 @@ export default {
     },
     withoutDots (str) {
       let s = str ? (typeof str === 'string' ? str : str.name) : str;
+
+      if (s.indexOf('&nbsp;') === 0) {
+        s = s.slice(6);
+      }
+
       return s ? s.replace(/\.../g, '').trim() : s;
     }
   },
