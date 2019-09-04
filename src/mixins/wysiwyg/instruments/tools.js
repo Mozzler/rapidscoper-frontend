@@ -105,7 +105,7 @@ export default {
 
           const selection = document.getSelection();
 
-          if (selection.anchorNode === null) {
+          if (selection.anchorNode === null || !document.getSelection.toString.length) {
             return;
           } else if (selection.anchorNode.id) {
             this.collapseToEnd();
@@ -131,6 +131,7 @@ export default {
     }
   },
   updated () {
+    console.log('updated');
     if (this.hintEditor === null && this.movable === null) {
       this.activatePanel();
     }

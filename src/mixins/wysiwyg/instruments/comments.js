@@ -10,8 +10,10 @@ export default {
     ...mapMutations('system', [ 'setComment' ]),
     selectEvent ($event, id) {
       const selection = $event.view.getSelection();
-      let data = null;
 
+      console.log(selection.type);
+
+      let data = null;
       let content = selection.getRangeAt(0).cloneContents();
 
       if (content.childNodes.length) {
@@ -44,8 +46,20 @@ export default {
         };
       }
 
-      console.log(data.markup);
       this.setComment(data);
+    },
+    commentStory (id) {
+      let story = _.find(this.list, story => story.id === id);
+      let data = {
+        state: null,
+        x: 0,
+        y: 0,
+        item: story,
+        markup: story.markup
+      };
+
+      this.setComment(data);
+      this.$root.$emit('write-comment');
     }
   }
 };

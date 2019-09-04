@@ -2,6 +2,7 @@
   <div
     ref="comment"
     class="comment-dialog"
+    :class="{'comment-dialog--invisible': !comment.state}"
     @click="writeComment">
     <comment-icon class="mr-1"/>
     <span>Comment</span>
@@ -10,7 +11,7 @@
 
 <script>
 import CommentIcon from '../icons/Comment';
-import { mapState } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 
 export default {
   name: 'Comment',
@@ -28,7 +29,13 @@ export default {
     ])
   },
   methods: {
+    ...mapMutations('system', [
+      'setComment'
+    ]),
     writeComment () {
+      this.setComment({
+        state: null
+      });
       this.$root.$emit('write-comment');
     }
   },

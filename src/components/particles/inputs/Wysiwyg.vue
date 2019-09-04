@@ -69,15 +69,16 @@
                             class="user-story__prefix">
                     <template v-if="tab === 'edit'">
                       <div
-                        v-if="comment.state === null"
-                        class="icon drag-icon"
-                       @mousedown="() => startDragging(item.id)">
-                        <drag-icon />
-                      </div>
-                      <div
-                        v-if="list[focused] && comment.state === list[focused].id"
+                        v-if="comment.state === item.id"
+                        @click="() => commentStory(item.id)"
                         class="icon">
                         <comment-icon />
+                      </div>
+                      <div
+                        v-else
+                        class="icon drag-icon"
+                        @mousedown="() => startDragging(item.id)">
+                        <drag-icon />
                       </div>
                     </template>
                     <div>#</div>
