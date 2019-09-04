@@ -62,11 +62,10 @@ export default {
   },
   computed: {
     ...mapGetters({
-      'storyComments': 'story/comments'
+      'storyComments': 'projectVersion/comments'
     }),
     comments () {
-      //return this.storyComments(this.entity);
-      return [];
+      return this.storyComments(this.entity);
     }
   }
 };

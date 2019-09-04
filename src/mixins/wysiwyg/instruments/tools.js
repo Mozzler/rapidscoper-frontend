@@ -131,7 +131,6 @@ export default {
     }
   },
   updated () {
-    console.log('updated');
     if (this.hintEditor === null && this.movable === null) {
       this.activatePanel();
     }
