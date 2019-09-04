@@ -14,19 +14,15 @@ export default {
     'x', 'y',
     'visible'
   ],
-  data() {
+  data () {
     return {
       state: this.visible
-    }
+    };
   },
   watch: {
-    visible() {
+    visible () {
       this.state = this.visible;
     }
   }
-}
+};
 </script>
-
-<style scoped>
-
-</style>

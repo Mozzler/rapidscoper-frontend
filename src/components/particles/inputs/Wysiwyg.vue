@@ -67,10 +67,19 @@
                             align-center
                             fill-height
                             class="user-story__prefix">
-                    <div class="drag-icon" v-if="tab === 'edit'"
-                         @mousedown="() => startDragging(item.id)">
-                      <drag />
-                    </div>
+                    <template v-if="tab === 'edit'">
+                      <div
+                        v-if="comment.state === null"
+                        class="icon drag-icon"
+                       @mousedown="() => startDragging(item.id)">
+                        <drag-icon />
+                      </div>
+                      <div
+                        v-if="list[focused] && comment.state === list[focused].id"
+                        class="icon">
+                        <comment-icon />
+                      </div>
+                    </template>
                     <div>#</div>
                   </v-layout>
                 </v-flex>
@@ -100,6 +109,7 @@
                    @keydown.down.exact="focusHint"
                    @keyup.exact="keyupEvent"
                    @keydown="keydownEvent"
+                   @mouseup="$event => selectEvent($event, item.id)"
                    @keydown.esc.exact="() => hintEditor = null"
                    @keydown.tab.exact="fixStaticText"
                    @keydown.delete.exact="remove"
@@ -128,16 +138,18 @@ import CircularLoader from '../../particles/loaders/Circular';
 import PriorityIndicator from '../../particles/indicators/Priority';
 
 import WysiwygMixin from '@/mixins/wysiwyg';
-import Drag from '../icons/Drag';
+import DragIcon from '../icons/Drag';
+import CommentIcon from '../icons/Comment';
 
 export default {
   name: 'Wysiwyg',
   components: {
-    Drag,
     ToolList,
     CircularLoader,
     PriorityIndicator,
-    LabelList
+    LabelList,
+    CommentIcon,
+    DragIcon
   },
   mixins: [
     WysiwygMixin

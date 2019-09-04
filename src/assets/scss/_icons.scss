@@ -82,13 +82,19 @@
 }
 
 .stories-container {
-  .drag-icon {
+  .icon {
     min-width: 20px;
     display: flex;
 
     svg {
-      cursor: move !important;
+      cursor: pointer;
     }
+  }
+}
+
+.drag-icon {
+  svg {
+    cursor: move !important;
   }
 }
 

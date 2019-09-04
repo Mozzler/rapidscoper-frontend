@@ -18,3 +18,34 @@
   color: $black;
   margin-bottom: 4px;
 }
+
+.comment-dialog {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  background-color: $light-black;
+  color: $white;
+  font-size: 12px;
+  line-height: 14px;
+  padding: 5px;
+  z-index: 6;
+  border-radius: 2px;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+
+  svg {
+    fill: $white;
+  }
+
+  &:after {
+    content:'';
+    position: absolute;
+    width: 0;
+    height: 0;
+    top: 100%;
+    left: calc(50% - 6px);
+    border-top: solid 4px $light-black;
+    border-left: solid 6px transparent;
+    border-right: solid 6px transparent;
+  }
+}

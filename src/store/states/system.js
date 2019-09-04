@@ -2,6 +2,12 @@ export default {
   isMobileDevice: false,
   sidebarFilter: false,
   storyViewMode: false,
+  comment: {
+    state: true,
+    x: 500,
+    y: 500,
+    content: ''
+  },
   periods: ['Unexpired', '1 day', '2 days', '3 days', '7 days'],
   roles: [{
     name: 'Manager',

@@ -60,13 +60,16 @@
     input {
       width: 90%;
     }
+
+    .v-icon {
+      font-size: 18px;
+    }
   }
 
   .modal-close-btn {
     position: absolute !important;
     top: -16px;
     right: -18px;
-
   }
 
   .modal-row {

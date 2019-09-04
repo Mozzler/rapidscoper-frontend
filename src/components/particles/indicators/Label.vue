@@ -24,6 +24,7 @@ export default {
       required: true
     }
   },
+  inject: ['entity'],
   data () {
     return {
       namedLabels: [],
@@ -37,8 +38,11 @@ export default {
   },
   computed: {
     ...mapGetters({
-      labels: 'story/labels'
-    })
+      storyLabels: 'projectVersion/labels'
+    }),
+    labels () {
+      return this.storyLabels(this.entity);
+    }
   },
   methods: {
     mouseover (index) {

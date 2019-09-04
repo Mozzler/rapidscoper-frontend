@@ -7,5 +7,8 @@ export default {
   },
   setStoryViewMode (state, data) {
     state.storyViewMode = data;
+  },
+  setComment (state, data) {
+    _.assign(state.comment, data);
   }
 };

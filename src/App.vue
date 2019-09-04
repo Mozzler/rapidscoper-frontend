@@ -16,6 +16,7 @@
       <incorrect-data-modal />
       <share-project-modal />
       <settings-modal />
+      <write-comment />
     </template>
   </v-app>
 </template>
@@ -33,11 +34,13 @@ import PaymentInfoModal from '@/components/particles/modals/PaymentInfo';
 import PaymentSuccessfullyModal from '@/components/particles/modals/PaymentSuccessfully';
 import IncorrectDataModal from '@/components/particles/modals/IncorrectData';
 import ShareProjectModal from '@/components/particles/modals/ShareProject';
-import SettingsModal from "./components/particles/modals/Settings";
+import SettingsModal from '@/components/particles/modals/Settings';
+import WriteComment from '@/components/particles/modals/WriteComment';
 
 export default {
   name: 'app',
   components: {
+    WriteComment,
     InviteUserModal,
     CreateProjectModal,
     DeleteTeamModal,
@@ -74,6 +77,7 @@ export default {
     initConnect () {
       if (this.authenticated && this.user.access_token) {
         this.connect('user', 'auth/update');
+        this.connect('userInfo', 'entity/setList');
         this.connect('team', 'entity/setList');
       }
     }

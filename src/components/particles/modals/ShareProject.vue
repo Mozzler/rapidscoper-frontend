@@ -196,17 +196,12 @@ export default {
     async fetchData () {
       this.processing = true;
 
-      const userInfo = this.getParams('user-info', {
-        projectId: this.params
-      });
       const invited = this.getParams('invite', {
         entityType: 'project',
         entityId: this.params
       });
 
-      await this.$store.dispatch('entity/read', userInfo);
       await this.$store.dispatch('entity/read', invited);
-
       this.processing = false;
     },
     copy () {
