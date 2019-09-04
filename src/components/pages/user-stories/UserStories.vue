@@ -48,7 +48,8 @@ export default {
         dictionary: false,
         section: false,
         story: false,
-        projectShare: false
+        projectShare: false,
+        comment: false
       }
     };
   },
@@ -74,6 +75,9 @@ export default {
       this.processing = true;
       this.resetData();
 
+      this.connect('comment', 'entity/setList', this.filter, true, () => {
+        this.loaded['comment'] = true;
+      });
       this.connect('dictionary', 'entity/setList', this.filter, true, () => {
         this.loaded['dictionary'] = true;
       });
@@ -153,7 +157,8 @@ export default {
     loaded: {
       deep: true,
       handler () {
-        if (this.loaded.dictionary && this.loaded.section && this.loaded.story && this.loaded.projectShare) {
+        let loaded = _.every(this.loaded, item => item);
+        if (loaded) {
           this.processing = false;
           this.fixRoute();
         }

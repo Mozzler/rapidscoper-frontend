@@ -28,5 +28,8 @@ export default {
   },
   invite: {
     items: []
+  },
+  comment: {
+    items: []
   }
 };

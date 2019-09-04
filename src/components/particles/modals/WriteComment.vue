@@ -1,7 +1,7 @@
 <template>
   <v-layout row justify-center>
     <v-dialog v-model="dialog" max-width="416">
-      <v-card class="modal-card">
+      <v-card class="modal-card modal-card--short">
         <div class="modal-header">
           <v-layout row fill-height align-center>
             <img
@@ -9,12 +9,13 @@
               :src="info ? info.avatarUrl : null" />
             <span>{{ info ? info.name : null }}</span>
           </v-layout>
-          <v-btn icon class="modal-close-btn">
-            <v-icon>visibility</v-icon>
+          <v-btn icon class="modal-close-btn" @click="setVisibility">
+            <v-icon v-if="visible">visibility</v-icon>
+            <v-icon class="primary-icon" v-else>visibility_off</v-icon>
           </v-btn>
         </div>
 
-        <v-card-text class="mt-4 padding-0">
+        <v-card-text class="mt-3 padding-0">
           <div>
             <circular-loader
               cls="loader-shadow--without-padding transparent"
@@ -28,7 +29,7 @@
                 <div :class="{'input-group': !isMobileDevice}">
                   <v-textarea
                     name="comment"
-                    v-model="comment"
+                    v-model="content"
                     v-validate="'required|min:2|max:255'"
                     label="Write a comment ..."
                     :error-messages="errors.first('comment')"
@@ -41,6 +42,7 @@
 
               <v-flex shrink pl-3 v-if="!isMobileDevice">
                 <v-btn class="btn-rapid primary" large
+                       :disabled="processing"
                        @click="send">
                   Send
                 </v-btn>
@@ -48,6 +50,7 @@
             </v-layout>
             <v-flex shrink class="text-xs-right" v-if="isMobileDevice">
               <v-btn class="btn-rapid primary" large
+                     :disabled="processing"
                      @click="send">
                 Send
               </v-btn>
@@ -63,7 +66,11 @@
 import ModalMixin from '@/mixins/modal';
 import CircularLoader from '../../particles/loaders/Circular';
 
-import { mapState, mapGetters } from 'vuex';
+import {
+  mapState,
+  mapGetters,
+  mapActions
+} from 'vuex';
 
 export default {
   name: 'write-comment',
@@ -75,7 +82,9 @@ export default {
   ],
   data () {
     return {
-      comment: ''
+      content: '',
+      visible: true,
+      processing: false
     };
   },
   computed: {
@@ -85,6 +94,9 @@ export default {
     ...mapGetters('entity', [
       'items'
     ]),
+    ...mapState('system', [
+      'comment'
+    ]),
     userInfo () {
       return this.items('userInfo');
     },
@@ -93,11 +105,36 @@ export default {
     }
   },
   methods: {
+    ...mapActions('entity', [
+      'create'
+    ]),
     initData () {
-      this.message = '';
+      this.content = '';
     },
-    send () {
+    async send () {
+      let payload = {
+        status: 'active',
+        content: this.content,
+        visibleToClient: this.visible,
+        parentCommentId: null,
+        storyId: this.comment.item.id,
+        sectionId: this.comment.item.sectionId,
+        teamId: this.comment.item.teamId,
+        projectId: this.comment.item.projectId
+      };
 
+      this.processing = true;
+
+      await this.create({
+        entity: 'comment',
+        data: payload
+      });
+
+      this.processing = false;
+      this.closeModal();
+    },
+    setVisibility () {
+      this.visible = !this.visible;
     }
   }
 };

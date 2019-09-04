@@ -50,7 +50,6 @@
 
 
 .modal-card {
-
   padding: 24px;
 
   .modal-header {
@@ -87,5 +86,13 @@
     button {
       max-width: 60px;
     }
+  }
+}
+
+.modal-card--short {
+  padding: 16px !important;
+
+  .v-textarea {
+    margin-bottom: -14px;
   }
 }

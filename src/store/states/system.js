@@ -4,9 +4,10 @@ export default {
   storyViewMode: false,
   comment: {
     state: true,
-    x: 500,
-    y: 500,
-    content: ''
+    x: 0,
+    y: 0,
+    content: '',
+    item: null
   },
   periods: ['Unexpired', '1 day', '2 days', '3 days', '7 days'],
   roles: [{

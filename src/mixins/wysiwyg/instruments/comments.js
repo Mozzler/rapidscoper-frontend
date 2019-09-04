@@ -19,14 +19,16 @@ export default {
           state: id,
           x: rect.left,
           y: rect.top - 27,
-          content: selection.anchorNode
+          content: selection.toString(),
+          item: this.list[this.focused]
         };
       } else {
         data = {
           state: null,
           x: 0,
           y: 0,
-          content: ''
+          content: '',
+          item: null
         };
       }
 
