@@ -86,7 +86,7 @@ export default {
   data () {
     return {
       tabs: [
-        'Edit', 'Estimates', 'Priorities', 'Labels', /*'Comments'*/
+        'Edit', 'Estimates', 'Priorities', 'Labels', 'Comments'
       ],
       activeTab: null
     };

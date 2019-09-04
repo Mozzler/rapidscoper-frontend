@@ -24,16 +24,21 @@
             />
 
             <v-layout row>
-              <v-flex grow>
-                <v-text-field class="full-width"
-                              name="message"
-                              v-model="message"
-                              v-validate="'required|min:6|max:255'"
-                              placeholder="Write a comment..."
-                              :error-messages="errors.first('message')"
-                              solo
-                ></v-text-field>
+              <v-flex>
+                <div :class="{'input-group': !isMobileDevice}">
+                  <v-textarea
+                    name="comment"
+                    v-model="comment"
+                    v-validate="'required|min:2|max:255'"
+                    label="Write a comment ..."
+                    :error-messages="errors.first('comment')"
+                    solo
+                    rows="1"
+                    auto-grow
+                  ></v-textarea>
+                </div>
               </v-flex>
+
               <v-flex shrink pl-3 v-if="!isMobileDevice">
                 <v-btn class="btn-rapid primary" large
                        @click="send">
@@ -70,7 +75,7 @@ export default {
   ],
   data () {
     return {
-      message: ''
+      comment: ''
     };
   },
   computed: {

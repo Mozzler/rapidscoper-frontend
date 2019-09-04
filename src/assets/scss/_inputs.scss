@@ -2,6 +2,19 @@
   @include rapid-input;
 }
 
+.v-textarea {
+  .v-label {
+    top: inherit !important;
+  }
+
+  textarea {
+    min-height: 40px;
+    height: 40px;
+    line-height: 24px;
+    margin: 0 !important;
+  }
+}
+
 .v-input {
   &.v-input--is-focused .v-input__control {
     .v-input__slot {
@@ -13,6 +26,11 @@
     .v-input__slot {
       border-color: $red;
     }
+  }
+
+  &:not(.v-textarea) {
+    min-height: 40px !important;
+    position: absolute !important;
   }
 }
 
@@ -62,10 +80,6 @@
 .input-group {
   display: block;
   position: relative;
-
-  .v-input {
-    position: absolute !important;
-  }
 
   .full-width {
     width: 100%;

@@ -22,8 +22,8 @@
 
 <script>
 import ModalMixin from '@/mixins/modal';
-import Dropdown from "@/components/particles/menus/Dropdown";
-import InviteGroup from "../inputs/InviteGroup";
+import Dropdown from '@/components/particles/menus/Dropdown';
+import InviteGroup from '../inputs/InviteGroup';
 
 export default {
   name: 'invite-user',
