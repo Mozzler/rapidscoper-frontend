@@ -5,27 +5,38 @@
       <story-section />
       <story-content />
     </template>
-    <tool-section />
+    <tool-section v-if="!isCommentTab" />
+    <comments v-else />
   </div>
 </template>
 
 <script>
 import StorySidebar from '../../../particles/navigation/USidebar';
 import StorySection from '../../../particles/navigation/StorySection';
-import ToolSection from '../../../particles/navigation/ToolSection';
 import StoryContent from '../../../particles/layouts/StoryContent';
+import Comments from '../../lists/Comments';
+import ToolSection from '../../navigation/ToolSection';
 
 export default {
   name: 'Editable',
+  provide: {
+    'entity': 'entity'
+  },
   components: {
+    ToolSection,
+    Comments,
     StorySidebar,
     StorySection,
-    ToolSection,
     StoryContent
   },
   props: {
     processing: {
       default: false
+    }
+  },
+  computed: {
+    isCommentTab () {
+      return this.$route.params.tab === 'comments';
     }
   }
 };

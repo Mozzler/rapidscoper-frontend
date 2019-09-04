@@ -118,14 +118,28 @@ export default {
     };
   },
 
-  comment (state) {
-    return state.projectVersion.comment;
-  },
-
   labels (state) {
     return (entity) => {
       const phrases = state[entity].dictionary;
       return editor.labels(phrases);
+    };
+  },
+
+  comments (state, getters, rootState) {
+    return (entity) => {
+      let comments = rootState[entity].comment;
+      let userInfo = rootState[entity].userInfo;
+
+      return _.map(comments, comment => {
+        let user = _.find(userInfo, user => user.id === comment.createdUserId);
+
+        return {
+          avatarUrl: user.avatarUrl,
+          name: user.name,
+          text: comment.content,
+          time: comment.createdAt
+        };
+      });
     };
   }
 };
