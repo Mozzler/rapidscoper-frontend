@@ -4,13 +4,13 @@
       comments
     </div>
 
-    <template v-if="comments && comments.length">
+    <template v-if="list.length">
       <div class="mt-3">
         <dropdown :list="dropdown" :selected="active"
                   @update="value => active = value"/>
       </div>
       <div
-        v-for="(item, index) in comments"
+        v-for="(item, index) in list"
         :key="index">
         <v-divider horizontal></v-divider>
         <div class="comment">
@@ -46,11 +46,13 @@
 
 <script>
 import Dropdown from '../menus/Dropdown';
-import { mapGetters } from 'vuex';
 
 export default {
   name: 'Comments',
   inject: ['entity'],
+  props: [
+    'source'
+  ],
   components: {
     Dropdown
   },
@@ -61,11 +63,8 @@ export default {
     };
   },
   computed: {
-    ...mapGetters({
-      'storyComments': 'projectVersion/comments'
-    }),
-    comments () {
-      return this.storyComments(this.entity);
+    list () {
+      return this.source(this.entity);
     }
   }
 };

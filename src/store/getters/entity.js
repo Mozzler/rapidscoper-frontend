@@ -1,3 +1,5 @@
+import editor from '../shared/editor';
+
 function uppercased (str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
@@ -95,6 +97,18 @@ export default {
       }
 
       return shared;
+    };
+  },
+  comments (state) {
+    return entity => {
+      let comment = state.comment;
+      let userInfo = state.userInfo;
+
+      if (!comment || !userInfo) {
+        return [];
+      }
+
+      return editor.comments(comment.items, userInfo.items);
     };
   }
 };

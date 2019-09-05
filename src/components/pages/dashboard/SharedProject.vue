@@ -10,7 +10,8 @@
       <public-header />
       <sidebar-full-list  class="noprint"/>
       <story-content-static />
-      <comments />
+      <comments
+        :source="commentGetter" />
     </template>
   </div>
 </template>
@@ -22,6 +23,8 @@ import StoryContentStatic from '../../particles/layouts/StoryContentStatic';
 
 import PublicHeader from '../../particles/navigation/PublicHeader';
 import Comments from '../../particles/lists/Comments';
+
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'SharedProject',
@@ -41,6 +44,9 @@ export default {
     };
   },
   computed: {
+    ...mapGetters({
+      commentGetter: 'projectVersion/comments'
+    }),
     params () {
       return this.$route.params;
     }

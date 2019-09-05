@@ -125,24 +125,12 @@ export default {
     };
   },
 
-  comments (state, getters, rootState) {
-    return (entity) => {
-      let comments = rootState[entity].comment;
-      let userInfo = rootState[entity].userInfo;
+  comments (state) {
+    return entity => {
+      let comments = state[entity].comment;
+      let userInfo = state[entity].userInfo;
 
-      if (!comments || !userInfo) {
-        return [];
-      }
-
-      return _.map(comments.items, comment => {
-        let user = _.find(userInfo.items, user => user.userId === comment.createdUserId);
-        return {
-          avatarUrl: user.avatarUrl,
-          name: user.name,
-          text: comment.content,
-          time: comment.createdAt
-        };
-      });
+      return editor.comments(comments, userInfo);
     };
   }
 };

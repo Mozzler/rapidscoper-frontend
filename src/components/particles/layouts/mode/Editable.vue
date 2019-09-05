@@ -5,8 +5,11 @@
       <story-section />
       <story-content />
     </template>
-    <tool-section v-if="!isCommentTab" />
-    <comments v-else />
+    <tool-section
+      v-if="!isCommentTab" />
+    <comments
+      :source="commentGetter"
+      v-else />
   </div>
 </template>
 
@@ -16,6 +19,8 @@ import StorySection from '../../../particles/navigation/StorySection';
 import StoryContent from '../../../particles/layouts/StoryContent';
 import Comments from '../../lists/Comments';
 import ToolSection from '../../navigation/ToolSection';
+
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'Editable',
@@ -35,6 +40,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      commentGetter: 'entity/comments'
+    }),
     isCommentTab () {
       return this.$route.params.tab === 'comments';
     }

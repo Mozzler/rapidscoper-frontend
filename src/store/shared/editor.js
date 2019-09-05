@@ -148,9 +148,23 @@ function labels (dictionary) {
   return _.filter(dictionary, item => item.type === 'label');
 }
 
+function comments (commentList, userInfoList) {
+  return _.map(commentList, comment => {
+    let user = _.find(userInfoList, u => u.userId === comment.createdUserId);
+
+    return {
+      avatarUrl: user.avatarUrl,
+      name: user.name,
+      text: comment.content,
+      time: comment.createdAt
+    };
+  });
+}
+
 export default {
   constructions,
   sections,
   stories,
-  labels
+  labels,
+  comments
 };

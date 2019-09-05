@@ -2,7 +2,8 @@
   <div class="display-contents" v-if="!processing">
     <sidebar-full-list class="noprint"/>
     <story-content-static />
-    <comments />
+    <comments
+      :source="commentGetter" />
   </div>
 </template>
 
@@ -10,6 +11,8 @@
 import SidebarFullList from '../../../particles/lists/SidebarFullList';
 import StoryContentStatic from '../../../particles/layouts/StoryContentStatic';
 import Comments from '../../lists/Comments';
+
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'Readable',
@@ -25,6 +28,11 @@ export default {
     processing: {
       default: false
     }
+  },
+  computed: {
+    ...mapGetters({
+      commentGetter: 'projectVersion/comments'
+    })
   }
 };
 </script>
