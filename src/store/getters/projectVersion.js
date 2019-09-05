@@ -127,15 +127,15 @@ export default {
 
   comments (state, getters, rootState) {
     return (entity) => {
-      let comments = rootState[entity].comment.items;
-      let userInfo = rootState[entity].userInfo.items;
+      let comments = rootState[entity].comment;
+      let userInfo = rootState[entity].userInfo;
 
-      if (!comments.length || !userInfo.length) {
-        return;
+      if (!comments || !userInfo) {
+        return [];
       }
 
-      return _.map(comments, comment => {
-        let user = _.find(userInfo, user => user.userId === comment.createdUserId);
+      return _.map(comments.items, comment => {
+        let user = _.find(userInfo.items, user => user.userId === comment.createdUserId);
         return {
           avatarUrl: user.avatarUrl,
           name: user.name,
