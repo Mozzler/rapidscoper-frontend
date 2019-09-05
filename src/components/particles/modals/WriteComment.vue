@@ -26,7 +26,7 @@
 
             <v-layout row>
               <v-flex>
-                <div :class="{'input-group': !isMobileDevice}">
+                <div :class="{'input-group rapid-textarea': !isMobileDevice}">
                   <v-textarea
                     name="comment"
                     v-model="content"
