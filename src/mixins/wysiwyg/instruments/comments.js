@@ -25,32 +25,31 @@ export default {
         _.each(content.childNodes, node => {
           if (node.nodeType === 1) {
             markup += node.outerHTML;
-          }
-          if (node.nodeType === 3) {
-            markup += node.data.replace(/ /, '~~~~~~~~~~~~');
-            console.dir(markup);
+          } else if (node.nodeType === 3) {
+            if (node.textContent.charCodeAt(0) === 160) {
+              markup += `&nbsp;`;
+            }
           }
         });
 
-/*
         data = {
           state: id,
           x: rect.left + 15,
           y: rect.top - 30,
           item: _.find(this.list, item => item.id === id),
-          markup: markup.replace(/  +/g, '&nbsp;')
-        };*/
+          markup: markup
+        };
       } else {
-        /*data = {
+        data = {
           state: null,
           x: 0,
           y: 0,
           markup: '',
           item: null
-        };*/
+        };
       }
 
-      //this.setComment(data);
+      this.setComment(data);
     },
     commentStory (id) {
       let story = _.find(this.list, story => story.id === id);

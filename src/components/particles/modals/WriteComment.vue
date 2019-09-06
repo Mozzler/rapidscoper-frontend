@@ -128,37 +128,29 @@ export default {
         teamId: this.comment.item.teamId,
         projectId: this.comment.item.projectId
       };
-/*
+
       const response = await this.create({
         entity: 'comment',
         data: payload
-      });*/
-
-      let text = `<span class="commented-text" data-comment-id="2">${this.comment.markup}</span>`;
-      let markup = this.comment.item.markup.replace(this.comment.markup, text);
+      });
 
       let splitted = this.comment.markup.split('<span')
         .filter(item => item)
-        .map(item => `<span${item}`);
+        .map(item => item.includes('span>') ? `<span${item}` : item);
 
       let first = _.first(splitted).replace(/<span[^>]*>/, '');
-      let last = _.last(splitted).replace('</span>', '');
+      let last = _.last(splitted).replace('<\/span>', '');
 
       if (splitted.length >= 2) {
         splitted[0] = first;
         splitted[splitted.length - 1] = last;
 
-        markup = splitted.map(span => {
-          console.log(span[span.length - 1], span[span.length - 1] === ' ');
-          if (span[span.length - 1] === ' ') {
-            span[span.length - 1] = '&nbsp';
-          }
-          return span;
-        }).join('');
+        this.comment.markup = splitted.join('');
       }
 
-      console.log('\n\n', markup, '\n~~~~~~~~~~~~~~~~~~~\n', this.comment.item.markup.includes(markup));
-/*
+      let text = `<span class="commented-text" data-comment-id="${response.item.id}">${this.comment.markup}</span>`;
+      let markup = this.comment.item.markup.replace(this.comment.markup, text);
+
       await this.update({
         entity: 'story',
         data: {
@@ -167,7 +159,7 @@ export default {
         params: {
           id: this.comment.item.id
         }
-      });*/
+      });
 
       this.processing = false;
       this.closeModal();
