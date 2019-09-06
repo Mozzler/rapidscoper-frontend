@@ -2,7 +2,7 @@
   <div
     ref="comment"
     class="comment-dialog"
-    :class="{'comment-dialog--invisible': !comment.state}"
+    :class="{'comment-dialog--invisible': !show}"
     @click="writeComment">
     <comment-icon class="mr-1"/>
     <span>Comment</span>
@@ -26,16 +26,17 @@ export default {
   computed: {
     ...mapState('system', [
       'comment'
-    ])
+    ]),
+    isCommentsTab () {
+      return this.$route.params.tab === 'comments';
+    }
   },
   methods: {
     ...mapMutations('system', [
       'setComment'
     ]),
     writeComment () {
-      this.setComment({
-        state: null
-      });
+      this.setComment({ state: null });
       this.$root.$emit('write-comment');
     }
   },
@@ -50,6 +51,12 @@ export default {
         const style = this.$refs.comment.style;
         style.top = `${this.comment.y}px`;
         style.left = `${this.comment.x}px`;
+      }
+    },
+    isCommentsTab () {
+      if (!this.isCommentsTab) {
+        this.show = false;
+        this.setComment({ state: null });
       }
     }
   }

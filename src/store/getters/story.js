@@ -59,8 +59,10 @@ export default {
       const dictionary = rootState.entity.dictionary.items;
       // get filters
       const filters = rootState.story.filters;
+      // get comments
+      const comments = rootState.entity.comments;
 
-      return editor.stories(section.storyOrder, stories, dictionary, filters);
+      return editor.stories(section.storyOrder, stories, comments, dictionary, filters);
     };
   },
 

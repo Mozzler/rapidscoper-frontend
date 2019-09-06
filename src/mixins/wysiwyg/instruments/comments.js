@@ -9,9 +9,11 @@ export default {
   methods: {
     ...mapMutations('system', [ 'setComment' ]),
     selectEvent ($event, id) {
-      const selection = $event.view.getSelection();
+      if (this.tab !== 'comments') {
+        return;
+      }
 
-      console.log(selection.type);
+      const selection = $event.view.getSelection();
 
       let data = null;
       let content = selection.getRangeAt(0).cloneContents();

@@ -67,15 +67,15 @@
                             align-center
                             fill-height
                             class="user-story__prefix">
-                    <template v-if="tab === 'edit'">
+                    <template>
                       <div
-                        v-if="comment.state === item.id"
+                        v-if="comment.state === item.id && tab === 'comments'"
                         @click="() => commentStory(item.id)"
                         class="icon">
                         <comment-icon />
                       </div>
                       <div
-                        v-else
+                        v-else-if="tab === 'edit'"
                         class="icon drag-icon"
                         @mousedown="() => startDragging(item.id)">
                         <drag-icon />
@@ -93,12 +93,12 @@
               <div class="user-story__placeholder"
                    v-html="item.placeholder"
                    readonly></div>
-              <div class="user-story__editable"
+              <div v-if="tab === 'edit'"
+                   class="user-story__editable"
                    tabindex="0"
                    :contenteditable="processing !== item.id && tab === 'edit'"
                    :disabled="processing === item.id"
                    :class="{
-                    'user-story__wysiwyg--disabled': tab !== 'edit',
                     'text-dark-grey': !item.type && beginning(item.markup)
                    }"
                    :ref="item.id"
@@ -110,7 +110,6 @@
                    @keydown.down.exact="focusHint"
                    @keyup.exact="keyupEvent"
                    @keydown="keydownEvent"
-                   @mouseup="$event => selectEvent($event, item.id)"
                    @keydown.esc.exact="() => hintEditor = null"
                    @keydown.tab.exact="fixStaticText"
                    @keydown.delete.exact="remove"
@@ -118,6 +117,11 @@
                    @keydown.tab.shift.exact="decreaseStoryLevel"
                    @blur="() => updateStory(index)"
                    v-html="item.markup"></div>
+              <div v-else
+                   class="user-story__editable"
+                   @mouseup="$event => selectEvent($event, item.id)"
+                   v-html="item.markup">
+              </div>
               <circular-loader
                 cls="user-story__loader"
                 :size="10"

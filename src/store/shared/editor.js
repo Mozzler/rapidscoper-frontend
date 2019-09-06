@@ -108,7 +108,7 @@ function conformity (filters = {}, story) {
   return priority || labels;
 }
 
-function stories (storyOrder, stories, dictionary = null, filters = null) {
+function stories (storyOrder, stories, comments, dictionary = null, filters = null) {
   const sorted = sortStoriesByOrder(stories, storyOrder);
 
   const filtered = _.filter(sorted, story => {

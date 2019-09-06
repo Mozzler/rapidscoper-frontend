@@ -97,6 +97,10 @@
 .user-story__editable {
   position: relative;
   width: 100%;
+
+  span[contenteditable] {
+    outline: none;
+  }
 }
 
 .user-story__input-field {

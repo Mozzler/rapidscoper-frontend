@@ -38,9 +38,9 @@ export default {
 
   section (state) {
     return (id, entity) => {
-      const { section, story } = state[entity];
+      const { section, story, comment } = state[entity];
       const current = _.find(section, item => item.id === id);
-      current.list = editor.stories(current.storyOrder, story);
+      current.list = editor.stories(current.storyOrder, story, comment);
 
       return current;
     };
