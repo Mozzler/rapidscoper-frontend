@@ -69,6 +69,7 @@ import CircularLoader from '../../particles/loaders/Circular';
 import {
   mapState,
   mapGetters,
+  mapMutations,
   mapActions
 } from 'vuex';
 
@@ -102,16 +103,21 @@ export default {
     },
     info () {
       return _.find(this.userInfo, info => info.userId === this.user.user_id);
-    }
+    },
   },
   methods: {
     ...mapActions('entity', [
       'create'
     ]),
+    ...mapMutations('entity', [
+      'update'
+    ]),
     initData () {
       this.content = '';
     },
     async send () {
+      this.processing = true;
+
       let payload = {
         status: 'active',
         content: this.content,
@@ -120,16 +126,48 @@ export default {
         storyId: this.comment.item.id,
         sectionId: this.comment.item.sectionId,
         teamId: this.comment.item.teamId,
-        projectId: this.comment.item.projectId,
-        markup: this.comment.item.markup
+        projectId: this.comment.item.projectId
       };
-
-      this.processing = true;
-
-      await this.create({
+/*
+      const response = await this.create({
         entity: 'comment',
         data: payload
-      });
+      });*/
+
+      let text = `<span class="commented-text" data-comment-id="2">${this.comment.markup}</span>`;
+      let markup = this.comment.item.markup.replace(this.comment.markup, text);
+
+      let splitted = this.comment.markup.split('<span')
+        .filter(item => item)
+        .map(item => `<span${item}`);
+
+      let first = _.first(splitted).replace(/<span[^>]*>/, '');
+      let last = _.last(splitted).replace('</span>', '');
+
+      if (splitted.length >= 2) {
+        splitted[0] = first;
+        splitted[splitted.length - 1] = last;
+
+        markup = splitted.map(span => {
+          console.log(span[span.length - 1], span[span.length - 1] === ' ');
+          if (span[span.length - 1] === ' ') {
+            span[span.length - 1] = '&nbsp';
+          }
+          return span;
+        }).join('');
+      }
+
+      console.log('\n\n', markup, '\n~~~~~~~~~~~~~~~~~~~\n', this.comment.item.markup.includes(markup));
+/*
+      await this.update({
+        entity: 'story',
+        data: {
+          markup: markup
+        },
+        params: {
+          id: this.comment.item.id
+        }
+      });*/
 
       this.processing = false;
       this.closeModal();

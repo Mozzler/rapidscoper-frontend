@@ -60,7 +60,7 @@ export default {
       // get filters
       const filters = rootState.story.filters;
       // get comments
-      const comments = rootState.entity.comments;
+      const comments = rootState.entity.comment.items;
 
       return editor.stories(section.storyOrder, stories, comments, dictionary, filters);
     };
@@ -70,8 +70,6 @@ export default {
     return (id, type) => {
       const sections = rootState.entity.section.items;
       const project = _.find(rootState.entity.project.items, item => item.id === id);
-
-      console.log();
 
       return editor.sections(project, sections, type);
     };

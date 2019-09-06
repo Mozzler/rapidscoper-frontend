@@ -119,6 +119,8 @@
                    v-html="item.markup"></div>
               <div v-else
                    class="user-story__editable"
+                   :contenteditable="true"
+                   @keypress.prevent
                    @mouseup="$event => selectEvent($event, item.id)"
                    v-html="item.markup">
               </div>
