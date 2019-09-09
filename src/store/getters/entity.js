@@ -104,10 +104,6 @@ export default {
       let comment = state.comment;
       let userInfo = state.userInfo;
 
-      if (!comment || !userInfo) {
-        return [];
-      }
-
       return editor.comments(comment.items, userInfo.items);
     };
   }

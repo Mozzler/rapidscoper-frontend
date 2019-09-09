@@ -149,9 +149,12 @@ function labels (dictionary) {
 }
 
 function comments (commentList, userInfoList) {
+  if (!commentList || !userInfoList) {
+    return;
+  }
+
   return _.map(commentList, comment => {
     let user = _.find(userInfoList, u => u.userId === comment.createdUserId);
-
     return {
       avatarUrl: user.avatarUrl,
       name: user.name,

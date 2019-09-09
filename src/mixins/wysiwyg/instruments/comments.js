@@ -32,11 +32,12 @@ export default {
           }
         });
 
+        let item = _.find(this.list, item => item.id === id);
         data = {
           state: id,
           x: rect.left + 15,
           y: rect.top - 30,
-          item: _.find(this.list, item => item.id === id),
+          item: { ...item },
           markup: markup
         };
       } else {

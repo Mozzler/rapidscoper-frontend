@@ -103,19 +103,18 @@ export default {
     },
     info () {
       return _.find(this.userInfo, info => info.userId === this.user.user_id);
-    },
+    }
   },
   methods: {
     ...mapActions('entity', [
-      'create'
-    ]),
-    ...mapMutations('entity', [
+      'create',
       'update'
     ]),
     initData () {
       this.content = '';
     },
     async send () {
+      let comment = { ...this.comment };
       this.processing = true;
 
       let payload = {
@@ -123,33 +122,35 @@ export default {
         content: this.content,
         visibleToClient: this.visible,
         parentCommentId: null,
-        storyId: this.comment.item.id,
-        sectionId: this.comment.item.sectionId,
-        teamId: this.comment.item.teamId,
-        projectId: this.comment.item.projectId
+        storyId: comment.item.id,
+        sectionId: comment.item.sectionId,
+        teamId: comment.item.teamId,
+        projectId: comment.item.projectId
       };
 
-      const response = await this.create({
+      /*const response = await this.create({
         entity: 'comment',
         data: payload
-      });
+      });*/
 
-      let splitted = this.comment.markup.split('<span')
+      let splitted = comment.markup.split('<span')
         .filter(item => item)
         .map(item => item.includes('span>') ? `<span${item}` : item);
 
       let first = _.first(splitted).replace(/<span[^>]*>/, '');
       let last = _.last(splitted).replace('<\/span>', '');
 
+      console.log(first, last);
+
       if (splitted.length >= 2) {
         splitted[0] = first;
         splitted[splitted.length - 1] = last;
 
-        this.comment.markup = splitted.join('');
+        comment.markup = splitted.join('');
       }
-
-      let text = `<span class="commented-text" data-comment-id="${response.item.id}">${this.comment.markup}</span>`;
-      let markup = this.comment.item.markup.replace(this.comment.markup, text);
+/*
+      let text = `<span class="commented-text" data-comment-id="${response.item.id}">${comment.markup}</span>`;
+      let markup = comment.item.markup.replace(comment.markup, text);
 
       await this.update({
         entity: 'story',
@@ -157,12 +158,12 @@ export default {
           markup: markup
         },
         params: {
-          id: this.comment.item.id
+          id: comment.item.id
         }
       });
 
       this.processing = false;
-      this.closeModal();
+      this.closeModal();*/
     },
     setVisibility () {
       this.visible = !this.visible;
