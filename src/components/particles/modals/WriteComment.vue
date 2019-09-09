@@ -128,10 +128,10 @@ export default {
         projectId: comment.item.projectId
       };
 
-      /*const response = await this.create({
+      const response = await this.create({
         entity: 'comment',
         data: payload
-      });*/
+      });
 
       let splitted = comment.markup.split('<span')
         .filter(item => item)
@@ -140,15 +140,13 @@ export default {
       let first = _.first(splitted).replace(/<span[^>]*>/, '');
       let last = _.last(splitted).replace('<\/span>', '');
 
-      console.log(first, last);
-
       if (splitted.length >= 2) {
         splitted[0] = first;
         splitted[splitted.length - 1] = last;
 
         comment.markup = splitted.join('');
       }
-/*
+
       let text = `<span class="commented-text" data-comment-id="${response.item.id}">${comment.markup}</span>`;
       let markup = comment.item.markup.replace(comment.markup, text);
 
@@ -163,7 +161,7 @@ export default {
       });
 
       this.processing = false;
-      this.closeModal();*/
+      this.closeModal();
     },
     setVisibility () {
       this.visible = !this.visible;

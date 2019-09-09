@@ -155,9 +155,10 @@ function comments (commentList, userInfoList) {
 
   return _.map(commentList, comment => {
     let user = _.find(userInfoList, u => u.userId === comment.createdUserId);
+
     return {
-      avatarUrl: user.avatarUrl,
-      name: user.name,
+      avatarUrl: user ? user.avatarUrl : null,
+      name: user ? user.name : null,
       text: comment.content,
       time: comment.createdAt
     };
