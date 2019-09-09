@@ -22,12 +22,21 @@ export default {
         let rect = selection.getRangeAt(0).getBoundingClientRect();
         let markup = '';
 
-        _.each(content.childNodes, node => {
+        _.each(content.childNodes, (node, index) => {
+          if (index === 0) {
+            console.log(node);
+          }
           if (node.nodeType === 1) {
             markup += node.outerHTML;
           } else if (node.nodeType === 3) {
             if (node.textContent.charCodeAt(0) === 160) {
               markup += `&nbsp;`;
+            } else { // the text was selected
+              if (selection && selection.focusNode) {
+                let div = selection.focusNode.parentNode.outerHTML;
+                let replaceable = div.match(/(<span[^>]*>)/);
+                markup += `${replaceable[0]}${node.textContent}</span>`;
+              }
             }
           }
         });

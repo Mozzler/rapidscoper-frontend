@@ -69,7 +69,6 @@ import CircularLoader from '../../particles/loaders/Circular';
 import {
   mapState,
   mapGetters,
-  mapMutations,
   mapActions
 } from 'vuex';
 
@@ -133,21 +132,20 @@ export default {
         data: payload
       });
 
-      let splitted = comment.markup.split('<span')
+      let shards = comment.markup.split('<span')
         .filter(item => item)
         .map(item => item.includes('span>') ? `<span${item}` : item);
 
-      let first = _.first(splitted).replace(/<span[^>]*>/, '');
-      let last = _.last(splitted).replace('<\/span>', '');
+      _.each(shards, (shard, index) => {
+        if (index === 0) {
+          shards[index] = shards[index].replace(/<span[^>]*>/, '');
+        }
+        if (index === shards.length - 1) {
+          shards[index] = shards[index].replace('<\/span>', '');
+        }
+      });
 
-      if (splitted.length >= 2) {
-        splitted[0] = first;
-        splitted[splitted.length - 1] = last;
-
-        comment.markup = splitted.join('');
-      }
-
-      let text = `<span class="commented-text" data-comment-id="${response.item.id}">${comment.markup}</span>`;
+      let text = `<i class="commented-text" data-comment-id="${response.item.id}">${comment.markup}</i>`;
       let markup = comment.item.markup.replace(comment.markup, text);
 
       await this.update({

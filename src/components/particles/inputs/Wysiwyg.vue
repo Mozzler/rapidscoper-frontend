@@ -71,12 +71,12 @@
                       <div
                         v-if="comment.state === item.id && tab === 'comments'"
                         @click="() => commentStory(item.id)"
-                        class="icon">
+                        class="story-icon icon">
                         <comment-icon />
                       </div>
                       <div
                         v-else-if="tab === 'edit'"
-                        class="icon drag-icon"
+                        class="story-icon icon drag-icon"
                         @mousedown="() => startDragging(item.id)">
                         <drag-icon />
                       </div>
