@@ -155,12 +155,25 @@ function comments (commentList, userInfoList) {
 
   return _.map(commentList, comment => {
     let user = _.find(userInfoList, u => u.userId === comment.createdUserId);
+    let time = moment.unix(comment.createdAt);
+    const diff = time.diff(moment(), 'days');
+    switch (diff) {
+      case 0:
+        time = time.format("[Today at] h:mm a");
+        break;
+      case -1:
+        time = time.format("[Yesterday at] h:mm a");
+        break;
+      default:
+        time = time.format("D MMM YYYY [at] h:mm a");
+        break;
+    }
 
     return {
       avatarUrl: user ? user.avatarUrl : null,
       name: user ? user.name : null,
       text: comment.content,
-      time: comment.createdAt
+      time
     };
   });
 }
