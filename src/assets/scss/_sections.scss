@@ -94,6 +94,18 @@
   color: $white;
 }
 
+.user-story__comment {
+  position: absolute;
+  width: 100%;
+}
+
+.user-story__comment-item {
+  position: absolute;
+  background-color: $light-yellow;
+  z-index: 0;
+  height: 20px;
+}
+
 .user-story__editable {
   position: relative;
   width: 100%;

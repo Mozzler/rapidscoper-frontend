@@ -1,6 +1,6 @@
 export default {
   methods: {
-    getStaticText (increments = 1) {
+    getStaticText(increments = 1) {
       const nodes = this.$refs[this.list[this.focused].id][0].childNodes;
       nodes.filter = [].filter;
 
@@ -25,7 +25,7 @@ export default {
 
       return index + increments < templates.length ? templates[index + increments] : null;
     },
-    getSpanList (joined = true) {
+    getSpanList(joined = true) {
       const spans = this.list[this.focused].markup
         .split('</span>&nbsp;')
         .filter(item => item.includes('<span'))
@@ -33,21 +33,21 @@ export default {
 
       return !joined ? spans : spans.join('&nbsp;');
     },
-    getTail () {
+    getTail() {
       return this.list[this.focused].markup
         .split('</span>')
         .filter(item => !item.includes('<span'))
         .join('');
     },
-    getStaticTextByType (str = this.next) {
+    getStaticTextByType(str = this.next) {
       return str
         .split('=')
         .map(item => item.replace(/"|\]/g, ''));
     },
-    getCurrentSpan () {
+    getCurrentSpan() {
       const node = this.event.view.getSelection().focusNode;
 
-      if (!this.list[this.focused].markup || !this.list[this.focused].template || !node ||  !node.previousSibling) {
+      if (!this.list[this.focused].markup || !this.list[this.focused].template || !node || !node.previousSibling) {
         this.list[this.focused].template = '';
         return null;
       }
@@ -64,7 +64,7 @@ export default {
 
       return this.classToType(current);
     },
-    getNextSpan () {
+    getNextSpan() {
       const parts = this.list[this.focused].template
         .split(/[[(.*)\]]/)
         .filter(item => !!item.trim());
@@ -81,10 +81,10 @@ export default {
       const next = parts.indexOf(this.previous) + 1;
       return parts[next];
     },
-    getLineParticles () {
+    getLineParticles() {
       return [this.getSpanList(), this.getTail()];
     },
-    getElementToFocus (item, level, index, path = 'this') {
+    getElementToFocus(item, level, index, path = 'this') {
       const length = item.list.length;
 
       let start = 'editor';
@@ -98,7 +98,7 @@ export default {
       const list = length ? item.list[length - 1] : null;
       return list ? this.getElementToFocus(list, ++level, length - 1, path) : path;
     },
-    getParentDictionary (focused = this.focused) {
+    getParentDictionary(focused = this.focused) {
       const children = this.$refs[this.list[focused].id][0].children;
       const div = _.find(children, item => item.className === 'user-story__editable--requirement');
 

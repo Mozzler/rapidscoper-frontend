@@ -6,10 +6,9 @@
                @start="start"
                ghost-class="user-story__draggable"
                @change="change">
-      <div v-for="(item, index) in list"
-           :key="`wysiwyg-${ item.id }`">
+      <div v-for="(item, index) in list" :key="`wysiwyg-${ item.id }`">
 
-      <div class="user-story"
+        <div class="user-story"
            :class="{
              'user-story--active': toolId === item.id,
              'cursor-pointer': (tab !== 'edit' && tab !== 'estimate'),
@@ -89,7 +88,7 @@
           </v-flex>
           <v-flex text-xs-left align-center row fill-height
             class="word-break-word">
-            <div class="user-story__wysiwyg">
+            <div class="user-story__wysiwyg" :id="`wysiwyg-${item.id}`">
               <div class="user-story__placeholder"
                    v-html="item.placeholder"
                    readonly></div>

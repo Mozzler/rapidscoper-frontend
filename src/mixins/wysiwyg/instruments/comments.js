@@ -14,49 +14,39 @@ export default {
       }
 
       const selection = $event.view.getSelection();
+      const content = selection.getRangeAt(0).cloneContents();
 
-      let data = null;
-      let content = selection.getRangeAt(0).cloneContents();
+      let data = {
+        state: null,
+        x: 0,
+        y: 0,
+        markup: '',
+        item: null
+      };
 
       if (content.childNodes.length) {
-        let rect = selection.getRangeAt(0).getBoundingClientRect();
-        let markup = '';
+        const item = _.find(this.list, item => item.id === id);
+        const rect = selection.getRangeAt(0).getBoundingClientRect();
 
-        _.each(content.childNodes, (node, index) => {
-          if (index === 0) {
-            console.log(node);
-          }
-          if (node.nodeType === 1) {
-            markup += node.outerHTML;
-          } else if (node.nodeType === 3) {
-            if (node.textContent.charCodeAt(0) === 160) {
-              markup += `&nbsp;`;
-            } else { // the text was selected
-              if (selection && selection.focusNode) {
-                let div = selection.focusNode.parentNode.outerHTML;
-                let replaceable = div.match(/(<span[^>]*>)/);
-                markup += `${replaceable[0]}${node.textContent}</span>`;
-              }
-            }
-          }
+        let parent = document.getElementById(`wysiwyg-${item.id}`);
+        let parentRect = parent.getBoundingClientRect();
+
+        let node = document.createElement('div');
+        node.className = 'user-story__comment-item';
+        _.assign(node.style, {
+          left: `${rect.left - parentRect.left}px`,
+          top: `${rect.top - parentRect.top - 2}px`,
+          width: `${rect.width}px`
         });
 
-        let item = _.find(this.list, item => item.id === id);
-        data = {
+        parent.prepend(node);
+
+        _.assign(data, {
           state: id,
           x: rect.left + 15,
           y: rect.top - 30,
-          item: { ...item },
-          markup: markup
-        };
-      } else {
-        data = {
-          state: null,
-          x: 0,
-          y: 0,
-          markup: '',
-          item: null
-        };
+          item: { ...item }
+        });
       }
 
       this.setComment(data);
