@@ -30,7 +30,10 @@ export default {
       data: response.data.item
     };
 
-    store.commit('update', data);
+    if (!payload.cancelCommit) {
+      store.commit('update', data);
+    }
+
     return response.data;
   },
   async delete (store, payload) {
