@@ -4,6 +4,7 @@ import v4 from 'uuid';
 
 import Vue from 'vue';
 import VueTelInput from 'vue-tel-input';
+import Draggable from 'vuedraggable';
 import Alert from '@/components/particles/alerts/alert';
 
 import './plugins';
@@ -19,6 +20,9 @@ import ErrorHandler from '@/mixins/error-handler';
 
 Vue.component('vue-tel-input', VueTelInput);
 Vue.component('alert', Alert);
+Vue.component('draggable', Draggable);
+
+Vue.prototype.uuid = v4;
 
 Vue.config.productionTip = false;
 window._ = _;
@@ -27,8 +31,6 @@ window.moment = moment;
 Vue.mixin(ConverterMixin);
 Vue.mixin(SocketMixin);
 Vue.mixin(ErrorHandler);
-
-Vue.prototype.uuid = v4;
 
 let main = new Vue({
   el: '#app',

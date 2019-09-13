@@ -36,5 +36,10 @@
 
 .loader-shadow--without-padding {
   @include loader-position(0px, 0px);
+
+  &.transparent {
+    background-color: transparent;
+  }
 }
+
 

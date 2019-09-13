@@ -6,6 +6,12 @@
   border-radius: 4px;
 }
 
+table {
+  &.v-table {
+    position: relative;
+  }
+}
+
 .dashboard-table {
   margin-top: 24px;
   cursor: default;

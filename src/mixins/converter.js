@@ -1,5 +1,8 @@
 export default {
   filters: {
+    letters (str) {
+      return str.replace(/[^a-zA-Z]+/g, '');
+    },
     toDate (str) {
       const now = moment(new Date());
       const date = moment.unix(str);
@@ -28,8 +31,13 @@ export default {
       return value === 'less than minute ago' ? value : `${beginning}${Math.trunc(value)} ${ending} ago`;
     },
     withoutDots (str) {
-      const s = str ? (typeof str === 'string' ? str : str.name) : str;
-      return s ? s.replace(/\.../g, '') : s;
+      let s = str ? (typeof str === 'string' ? str : str.name) : str;
+
+      if (s.indexOf('&nbsp;') === 0) {
+        s = s.slice(6);
+      }
+
+      return s ? s.replace(/\.../g, '').trim() : s;
     }
   },
   methods: {
@@ -37,14 +45,33 @@ export default {
       const value = item.key || item.name;
       return shortcut ? this.shortcut(value) : value;
     },
+    getAttr (field) {
+      return _.isObject(field) ? `data-id="${field.id}"` : '';
+    },
     createSpan (type, text, greyed = false, editable = false, clickable = false) {
       const cls = `user-story__editable--${type}${greyed ? ' text-greyed' : ''}`;
       const props = `readonly contenteditable="${editable}"`;
+      const attr = this.getAttr(text);
+      const withoutDots = this.$options.filters.withoutDots(text);
 
-      return `<span class="${cls}" ${props}>${ this.$options.filters.withoutDots(text) }</span>&nbsp;`;
+      return `<span class="${cls}" ${props} ${attr}>${ withoutDots }</span>&nbsp;`;
     },
     shortcut (item) {
-      return `<span class='text-underlined'>${item.charAt(0)}</span><span>${item.slice(1)}</span>`;
+      const exp = new RegExp(this.filter, 'i');
+      let markup = item.replace(exp, "<span class='text-black'>$&</span>");
+
+      return `<span class="shortcut text-greyed">${markup}</span>`;
+    },
+    collapseToEnd () {
+      this.$nextTick(() => {
+        document.execCommand('selectAll', false, null);
+        document.getSelection().collapseToEnd();
+      });
     }
-  }
+  },
+  computed: {
+    isMobileDevice () {
+      return this.$store.state.system.isMobileDevice;
+    }
+  },
 };

@@ -3,9 +3,10 @@
        :tabindex="0"
        v-show="visible"
        @keydown.tab.exact="$event => tabComplete($event, items[focused])"
-       @keydown.enter.exact.prevent="$event => complete(filter)"
+       @keydown.enter.exact.prevent="$event => enterComplete($event, items[focused])"
        @keydown.up.exact="$event => navigate($event, -1)"
        @keydown.down.exact="$event => navigate($event, 1)"
+       @keydown.delete.exact="del"
        class="hint">
     <div class="hint__item"
          v-for="(item, index) in items"
@@ -13,8 +14,9 @@
          :ref="`hint-item-${index}`"
          :class="{'hint__item--active': focused === index}"
          @click="$event => tabComplete($event, item)">
-      <span class="hint__item-text"
-            v-html="getStrFromObj(item, chapter === 'beginning')" />
+      <span :class="`hint__item-text underlined--${chapter}`"
+            v-html="getStrFromObj(item, chapter === 'beginning')">
+      </span>
     </div>
     <div class="hint__item hint__bordered"
          v-if="(filter && !inList) && this.chapter !== 'beginning'"
@@ -26,14 +28,15 @@
 
 <script>
 export default {
-  name: "Hint",
+  name: 'Hint',
   data () {
     return {
       visible: false,
       focused: null,
       chapter: null,
       filter: null,
-      storyId: null
+      storyId: null,
+      relatedDictionary: null
     };
   },
   mounted () {
@@ -54,10 +57,31 @@ export default {
         return [];
       }
 
-      return this.chapter === 'beginning' ? this.beginnings : this.dictionary[this.chapter];
+      let list = this.dictionary[this.chapter];
+
+      if (this.chapter === 'beginning') {
+        return this.beginnings;
+      }
+
+      if (this.chapter === 'requirement') {
+        return _.filter(list, item => item.type === 'requirement' && !item.relatedDictionaryId);
+      }
+
+      if (this.chapter === 'field') {
+        list = this.dictionary['requirement'];
+
+        const parent = _.find(list, item =>
+          item.type === 'requirement' && !item.relatedDictionaryId &&
+          item.name === this.relatedDictionary);
+
+        return _.filter(list, item => parent && item.relatedDictionaryId === parent.id);
+      }
+
+      return list;
     },
     items () {
       const keyword = this.filter ? this.filter.toLowerCase() : '';
+
       return this.list.filter(item => {
         const data = this.getStrFromObj(item);
         return data.toLowerCase().includes(keyword, 0);
@@ -78,7 +102,7 @@ export default {
       $event.preventDefault();
       this.complete(value);
     },
-    async setHintState (visible, chapter = null, filter = null, position = null, storyId = null) {
+    async setHintState (visible, chapter = null, filter = null, position = null, storyId = null, relatedDictionary = null) {
       Object.assign(this.$refs.hint.style, {
         left: position.left + 'px',
         top: position.top + 'px'
@@ -88,6 +112,7 @@ export default {
       this.chapter = chapter;
       this.filter = filter;
       this.storyId = storyId;
+      this.relatedDictionary = relatedDictionary;
 
       await this.$nextTick();
     },
@@ -96,7 +121,10 @@ export default {
         this.focused = 0;
       }
       await this.$nextTick();
-      this.$refs.hint.focus();
+
+      if (this.$refs.hint) {
+        this.$refs.hint.focus();
+      }
     },
     navigate ($event, step) {
       $event.preventDefault();
@@ -124,9 +152,19 @@ export default {
         item = this.items[0];
       }
 
+      this.emit(item, storyId);
+    },
+    enterComplete () {
+      let item = !this.items.length ? this.filter : this.items[this.focused];
+      this.emit(item);
+    },
+    emit (item, storyId = this.storyId) {
       this.visible = false;
       this.$root.$emit('hint-complete', this.chapter, item, storyId);
       this.focused = null;
+    },
+    del () {
+      this.$root.$emit('focus-story', this.storyId);
     }
   },
   beforeDestroy () {

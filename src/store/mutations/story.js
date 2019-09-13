@@ -5,7 +5,7 @@ export default {
   setActiveStoryOnTab (state, data) {
     state.activeStoryOnTab = data;
   },
-  setActiveEditorId (state, data) {
-    state.activeEditorId = data;
+  updateFilters (state, data) {
+    state.filters[data.type] = data.set;
   }
 };

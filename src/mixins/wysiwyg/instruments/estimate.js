@@ -1,15 +1,58 @@
 export default {
+  data () {
+    return {
+      stack: {}
+    };
+  },
   methods: {
-    updateEstimate ($event, id) {
-      this.$store.dispatch('entity/update', {
+    getEstimateData (id, estimate) {
+      return {
         data: {
-          'estimate': $event.target.value
+          'estimate': estimate,
+          id: id
         },
         entity: 'story',
         params: {
           id: id
         }
-      });
+      };
+    },
+    focusEstimate ($event) {
+      $event.focus();
+      $event.target.setSelectionRange(0, $event.target.value.length);
+    },
+    updateEstimate ($event, id) {
+      const payload = this.getEstimateData(id, $event.target.value);
+      this.range = null;
+      this.$store.commit('entity/update', payload);
+    },
+    navigate (action) {
+      return action === null ? null : this[action]();
+    },
+    blur ($event, action) {
+      $event.target.blur();
+      this.navigate(action);
+    },
+    submitEstimate ($event, id, action = null) {
+      if (Number(this.archived) === Number($event.target.value)) {
+        return this.navigate(action);
+      }
+
+      if (!_.has(this.stack, id)) {
+        this.stack[id] = this.archived;
+      }
+
+      this.processing = id;
+
+      const payload = this.getEstimateData(id, $event.target.value);
+      this.$store.dispatch('entity/update', payload)
+        .then(() => {
+          this.processing = null;
+        })
+        .catch(error => {
+          this.processing = null;
+          this.handleError(error, 'estimate');
+        });
     }
   }
-}
+};

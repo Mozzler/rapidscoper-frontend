@@ -1,49 +1,65 @@
 <template>
-  <div class="content-container">
-    <v-layout align-start justify-center row fill-height>
-      <div class="content" ref="scrollable-layout">
-        <story-item v-for="(story, index) in sections"
-          :model="story"
-          :key="index"
-          ref="storyItem"
-          @show-error="value => message = value"/>
+  <div>
+    <div class="content-filter" v-if="sidebarFilter">
+      <sidebar-filters />
+    </div>
+    <div class="scrollable-layout" ref="scrollable-layout">
+      <div class="content-container"
+           v-for="(story, index) in sections"
+           :key="index">
+        <v-layout align-start justify-center row fill-height>
+          <div class="content" ref="layout-content">
+            <story-item
+              :model="story"
+              ref="storyItem"
+              @show-error="value => message = value"/>
+          </div>
+          <alert :message="message" />
+        </v-layout>
       </div>
+      <comment />
       <hint />
-      <alert :message="message" />
-    </v-layout>
+    </div>
   </div>
 </template>
 
 <script>
 import StoryItem from '../../particles/forms/StoryItem';
-import Hint from "../lists/Hint";
+import Hint from '../lists/Hint';
+import Comment from '../menus/Comment';
+import SidebarFilters from '../../particles/inputs/SidebarFilters';
+
+import ScrollMixin from '@/mixins/scroll';
 
 export default {
-  name: "StoryContent",
+  name: 'StoryContent',
   components: {
     StoryItem,
-    Hint
+    Hint,
+    SidebarFilters,
+    Comment
   },
+  mixins: [
+    ScrollMixin
+  ],
   data () {
     return {
       message: null,
-      scrollActive: false
+      scrollActive: false,
+      scrollSelector: '.user-story__block',
     };
   },
   beforeMount () {
     this.$root.$on('create-new-section', this.createSection);
+    this.$root.$on('show-error-message', this.setErrorMessage);
   },
   beforeDestroy () {
     this.$root.$off('create-new-section');
-    this.setScrollListener('remove');
-  },
-  mounted () {
-    this.scrollToActiveSection();
-    this.setScrollListener();
+    this.$root.$off('show-error-message');
   },
   computed: {
     sections () {
-      return this.$store.getters['entity/items']('section');
+      return this.$store.getters['story/orderedSections'](this.projectId, this.storyType);
     },
     activeSectionId () {
       return this.$route.params.section;
@@ -61,24 +77,13 @@ export default {
       const splitted = this.$route.params.storyType.split('-');
       return _.first(splitted);
     },
+    sidebarFilter () {
+      return this.$store.state.system.sidebarFilter;
+    }
   },
   methods: {
-    setScrollListener (type = 'add') {
-      this.$refs['scrollable-layout'][`${type}EventListener`]('scroll', this.handleScroll);
-    },
-    handleScroll ($event) {
-      if (!this.sections || !this.sections.length) {
-        return;
-      }
-
-      let offset = $event.target.scrollTop,
-          childOffsets = _.map($event.target.children, item => item.offsetTop),
-          index = _.findIndex(childOffsets, co => (co + 28) > offset);
-
-      index = index === -1 ? this.sections.length - 1 : index;
-
-      const url = this.$route.path.replace(this.activeSectionId, this.sections[index].id);
-      this.$router.replace(url);
+    setErrorMessage (error) {
+      this.message = error;
     },
     getSectionData () {
       const untitled = this.sections.filter(item => item.name.includes('Untitled'));
@@ -111,17 +116,6 @@ export default {
         ]
       };
       this.$socket.recreateWatchers('story', true, filter);
-    },
-    scrollToActiveSection () {
-      const el = document.getElementById(this.activeSectionId);
-      if (el) {
-        el.scrollIntoView();
-      }
-    }
-  },
-  watch: {
-    activeSectionId () {
-      this.scrollToActiveSection();
     }
   }
 };

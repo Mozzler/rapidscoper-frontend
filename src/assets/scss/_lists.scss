@@ -1,0 +1,17 @@
+.invited__flex {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex-flow: row wrap;
+  font-size: 14px;
+
+  img {
+    width: 24px;
+    height: 24px;
+    margin: 0 16px 0 0;
+  }
+
+  .v-icon {
+    cursor: pointer
+  }
+}

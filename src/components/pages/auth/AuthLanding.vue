@@ -7,7 +7,7 @@ npm run ser<template>
           <v-flex  offset-xs2 xs8 offset-sm3 sm6 offset-md4 md4>
             <v-container pa-0 class="signup-container">
               <h1 class="sign-up-header">{{ authType }}</h1>
-              <v-btn block large @click="signupWithGoogle"
+              <!--<v-btn block large @click="signupWithGoogle"
                      class="btn-rapid social">
                 <logo-google class="social-button-icon"/>
                 <span>{{ authType }} With Google</span>
@@ -18,8 +18,8 @@ npm run ser<template>
               </v-btn>
               <p class="signup-text-1" v-if="emailFormVisible && authType === 'Sign Up'">
                 Or just <a href="" @click="showEmailForm">{{ authType }} with Email</a>
-              </p>
-              <auth-form v-else :type="authType"/>
+              </p>-->
+              <auth-form :type="authType"/>
               <p class="signup-text-2">By continuing, you agree to our
                 <a href="http://www.google.com">Terms of Service</a>
                 and

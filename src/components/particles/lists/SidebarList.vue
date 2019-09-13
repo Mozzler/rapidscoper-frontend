@@ -1,14 +1,20 @@
 <template>
   <div>
-    <div v-if="title" class="sidebar__title" @click="() => $emit('menu')">
+    <div v-if="title" class="sidebar__title"
+         @click="() => $emit('menu')">
       {{ title }}
     </div>
-    <v-list v-if="list.length">
-      <v-list-tile
-        v-for="(item, key) in list"  :key="key" class="sidebar__item"
-        :class="{'sidebar__item--active ': active === itemToParam(item[indicator]) }"
-        @click="() => $emit('go', itemToParam(item.title || item.name), item.id)">
-        <v-list-tile-content>
+    <v-list v-if="items.length" class="sidebar__list">
+      <component :is="reorder ? 'draggable' : 'div'"
+                 v-model="items"
+                 @start="start"
+                 @end="end"
+                 ghost-class="replaceable">
+        <v-list-tile
+          v-for="(item, key) in items"  :key="key" class="sidebar__item"
+          :class="{'sidebar__item--active ': !replacement && String(active) === itemToParam(item[indicator]) }"
+          @click="() => $emit('go', itemToParam(item.title || item.name), item.id)">
+            <v-list-tile-content>
           <v-list-tile-title>
             <v-layout align-center justify-space-between row fill-height>
               <span> {{ item.title || item.name }}
@@ -21,6 +27,7 @@
           </v-list-tile-title>
         </v-list-tile-content>
       </v-list-tile>
+      </component>
     </v-list>
     <div v-if="btn"
       class="sidebar__btn"
@@ -48,7 +55,7 @@ export default {
       default: null
     },
     active: {
-      type: String
+      type: [String, Number]
     },
     list: {
       type: Array
@@ -62,6 +69,34 @@ export default {
     indicator: {
       type: String,
       default: 'id'
+    },
+    reorder: {
+      default: null
+    }
+  },
+  data () {
+    return {
+      items: this.list,
+      replacement: false
+    };
+  },
+  methods: {
+    start () {
+      this.replacement = true;
+    },
+    end ($event) {
+      this.replacement = false;
+      this.reorder($event, list => {
+        this.items = list;
+      });
+    }
+  },
+  watch: {
+    list: {
+      deep: true,
+      handler () {
+        this.items = this.list;
+      }
     }
   }
 };

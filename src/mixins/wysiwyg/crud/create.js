@@ -1,36 +1,26 @@
 export default {
-  data () {
-    return {
-      nextIdToFocus: false
-    };
-  },
-  beforeMount () {
-    this.$root.$on('stop-processing', this.stopProcessing);
-  },
-  beforeDestroy () {
-    this.$root.$off('stop-processing', this.stopProcessing);
-  },
   methods: {
-    async stopProcessing () {
-      this.processing = null;
-       await this.$nextTick();
+    resetFocusedAutocomplete () {
+      this.list[this.focused].placeholder = this.list[this.focused].markup;
+      this.list[this.focused].tail = '';
 
-      if (this.$refs[this.nextIdToFocus]) {
-        this.$refs[this.nextIdToFocus][0].focus();
-        document.execCommand('selectAll', false, null);
-        document.getSelection().collapseToEnd();
-        this.nextIdToFocus = false;
-      }
+      this.$store.commit('entity/update', {
+        entity: 'story',
+        data: this.list[this.focused]
+      });
     },
     async sendCreateStoryRequest (sublist, text = '') {
-      this.nextIdToFocus = true;
-      await this.updateStory();
-
-      this.processing = this.list[this.focused].id;
+      this.resetFocusedAutocomplete();
       const payload = this.getCreateRequestPayload(sublist, text);
-      const response = await this.$store.dispatch('entity/create', payload);
-      this.nextIdToFocus = response.item.id;
 
+      this.$store.commit('entity/create', payload);
+      this.$store.commit('entity/reorder', payload.data);
+      this.$store.commit('story/setActiveStoryOnTab', payload.data.id);
+
+      await this.$nextTick();
+      document.getElementById(payload.data.id).focus();
+
+      await this.$store.dispatch('entity/create', payload);
       this.$socket.recreateWatchers('story', false);
     },
     createStory ($event) {

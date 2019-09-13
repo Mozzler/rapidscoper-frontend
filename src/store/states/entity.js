@@ -14,13 +14,22 @@ export default {
   story: {
     items: []
   },
-  projectUser: {
-    items: []
-  },
   userTeam: {
     items: []
   },
   userProject: {
     items: []
   },
+  projectShare: {
+    items: []
+  },
+  userInfo: {
+    items: []
+  },
+  invite: {
+    items: []
+  },
+  comment: {
+    items: []
+  }
 };

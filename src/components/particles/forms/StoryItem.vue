@@ -1,16 +1,15 @@
 <template>
   <div class="user-story__block"
-    :id="model.id"
-    :class="{'user-story__block--blur': stories.length === 0}">
+    :id="model.id">
 
     <circular-loader
       cls="loader-shadow--without-padding"
       :size="50"
-      :width="5"
-      :visible="stories.length === 0" />
+      :width="5" />
 
     <h1>
       <input v-model="name"
+             @click="click"
              @input="updateSectionName"
              @blur="() => updateStory('name')" />
     </h1>
@@ -18,8 +17,10 @@
       <div class="user-story__placeholder text-greyed">
         {{ !description ? 'Describe this section' : '' }}
       </div>
-      <div contenteditable class="user-story__editable"
+      <div contenteditable
+           class="user-story__editable"
            v-html="description"
+           @click="click"
            @input="event => updateSection('description', event)"
            @blur="() => updateStory('description')">
       </div>
@@ -28,21 +29,33 @@
       user stories
     </div>
 
-    <div>
+    <div v-if="stories.length">
       <wysiwyg
         :sectionId="model.id"
         :stories="stories"/>
+    </div>
+    <div v-else>
+      <v-divider class="my-3" />
+      <div class="text-sm-center text-greyed">
+        <span v-if="filters.priorities.length || filters.labels.length">
+          There are no stories for the selected filters
+        </span>
+        <span v-else>There are no stories in the sections yet</span>
+      </div>
+      <v-divider class="my-3" />
     </div>
   </div>
 </template>
 
 <script>
-import Wysiwyg from "../inputs/Wysiwyg";
-import ErrorHandler from "@/mixins/error-handler";
-import CircularLoader from "../../particles/loaders/Circular";
+import Wysiwyg from '../inputs/Wysiwyg';
+import ErrorHandler from '@/mixins/error-handler';
+import CircularLoader from '../../particles/loaders/Circular';
+
+import { mapState } from 'vuex';
 
 export default {
-  name: "StoryItem",
+  name: 'StoryItem',
   components: {
     Wysiwyg,
     CircularLoader
@@ -64,11 +77,20 @@ export default {
     };
   },
   computed: {
+    ...mapState({
+      filters: state => state.story.filters
+    }),
     stories () {
       return this.$store.getters['story/content'](this.model.id);
     }
   },
   methods: {
+    click (event) {
+      this.$store.commit('story/setActiveStoryOnTab', null);
+      this.$nextTick(() => {
+        event.target.focus();
+      });
+    },
     updateSection (item, event) {
       this[item] = event.target.innerText;
 

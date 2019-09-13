@@ -2,9 +2,9 @@
   border: 1px solid $grey;
   box-shadow: none !important;
   font-size: 14px !important;
-  height: 40px !important;
   min-height: auto;
   border-radius: 4px !important;
+  height: 40px !important;
 }
 
 @mixin label-generator() {
@@ -29,19 +29,19 @@
 }
 
 @mixin rapid-scroll () {
+  overflow-y: auto;
+
   &::-webkit-scrollbar {
     width: 10px;
   }
 
   &::-webkit-scrollbar-track {
-    border-radius: 3px;
-    box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    box-shadow: inset 0 0 4px rgba(0,0,0,0.2);
   }
 
   &::-webkit-scrollbar-thumb {
     background-color: rgba($primary, 0.7);
     outline: 1px solid slategrey;
-    border-radius: 3px;
   }
 }
 

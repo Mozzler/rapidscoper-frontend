@@ -84,15 +84,16 @@ class MongoSockets {
       switch (response.operationType) {
         case 'update':
         case 'insert':
+          if (this.streams[response.model] === response.streamId && response.model === 'story') {
+            return;
+          }
+
           const commit = this.getCommitType(response.model, response.operationType);
+
           store.commit(commit, {
             entity: response.model,
             data: response.fullDocument
           });
-
-          if (response.model === 'story') {
-            app.$root.$emit('stop-tool-processing', response.fullDocument._id);
-          }
 
           if (response.model === 'section') {
             app.$root.$emit('stop-processing');
@@ -102,6 +103,11 @@ class MongoSockets {
       }
     });
     this.io.on('update_dataset', ({ list, model }) => {
+      app.$root.$emit('dataset-updated', {
+        entity: model,
+        state: false
+      });
+
       store.commit('entity/setList', {
         entity: model,
         data: list

@@ -19,6 +19,11 @@ export default {
     outline (index) {
       const labelState = _.isArray(this.active) ? this.active.includes(index) : index === this.active;
       return labelState ? '' : 'label--outline';
+    },
+    getStyle (index, colour) {
+      return this.active && this.active.includes(index) ?
+        `background: #${colour}` :
+        `border: 1px solid #${colour}`;
     }
   }
 };

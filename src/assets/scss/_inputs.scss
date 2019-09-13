@@ -2,6 +2,19 @@
   @include rapid-input;
 }
 
+.v-textarea {
+  .v-label {
+    top: inherit !important;
+  }
+
+  textarea {
+    min-height: 40px;
+    height: 40px;
+    line-height: 24px;
+    margin: 0 !important;
+  }
+}
+
 .v-input {
   &.v-input--is-focused .v-input__control {
     .v-input__slot {
@@ -75,6 +88,12 @@
     top: 3px;
     right: 6px;
   }
+}
+
+.input--hidden {
+  height: 0;
+  position: absolute;
+  cursor: default;
 }
 
 .editor {
@@ -176,4 +195,46 @@ input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active  {
   -webkit-box-shadow: 0 0 0 30px white inset !important;
+}
+
+.mark__text {
+  font-size: 12px;
+  line-height: 14px;
+  color: rgba(0, 0, 0, 0.7);
+  font-style: normal;
+}
+
+.mark__icon {
+  padding-right: 2px;
+}
+
+.indicators {
+  margin-left: 17px;
+  display: inline-block;
+}
+
+.mark-indicator, .label-indicator {
+  display: inline-block;
+}
+
+.mark-indicator {
+  margin-right: 10px;
+}
+
+.label-indicator {
+  margin-left: 6px;
+  display: inline-block;
+}
+
+.label-indicator__text {
+  white-space: nowrap;
+}
+
+.rapid-textarea {
+  .v-input {
+    position: relative !important;
+  }
+  .v-input__slot {
+    min-height: max-content !important;
+  }
 }

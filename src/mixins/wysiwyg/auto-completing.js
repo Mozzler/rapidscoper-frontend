@@ -42,13 +42,14 @@ export default {
       const [line, tail] = this.getLineParticles();
       const text = this.dictionary.placeholders[this.next];
 
-      if (!tail && text) {
+      if (!tail.replace('&nbsp;', '') && text) {
         this.list[this.focused].tail = this.createSpan(this.next, `&nbsp;${text}`, true, false);
         this.list[this.focused].placeholder = line + this.list[this.focused].tail;
       } else {
         this.resetPlaceholder();
       }
     },
+    // construction like 'so that' or 'I can'
     initStaticText () {
       let completion = null;
 
@@ -65,7 +66,9 @@ export default {
 
       if (completion !== null) {
         const [text, type] = this.getStaticTextByType(completion);
-        this.list[this.focused].tail = this.createSpan(text, `&nbsp;${type}`, true);
+
+        const tail = this.getTail().replace(/&nbsp;/gi, '');
+        this.list[this.focused].tail = `${tail.length ? '&nbsp;' : ''}` + this.createSpan(text, type, true);
         this.list[this.focused].placeholder = this.list[this.focused].markup + this.list[this.focused].tail;
       }
     },
@@ -98,20 +101,23 @@ export default {
       }
 
       this.event = $event;
-      this.list[this.focused].markup = this.list[this.focused].markup + character;
+      this.list[this.focused].markup = $event.target.innerHTML + character;
+      this.list[this.focused].placeholder = this.list[this.focused].markup;
 
       this.setSiblings();
       this.setCustomText(true);
 
       this.resetPlaceholder();
       this.collapseToEnd();
+
+      this.updateStory();
     },
     setCustomText (editable = false) {
       const [list, tail] = this.getLineParticles();
 
       if (tail) {
-        const text = this.createSpan(this.next, `&nbsp;${tail}`, false, editable);
-        this.list[this.focused].markup = list + (this.next ? text : ':');
+        const text = this.createSpan(this.next, tail, false, editable);
+        this.list[this.focused].markup = list + `&nbsp;` + (this.next ? text : ':');
       }
     }
   }

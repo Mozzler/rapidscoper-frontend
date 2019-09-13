@@ -21,10 +21,9 @@ export default {
     },
     cls: {
       type: String,
-      default: ''
+      default: 'loader-shadow'
     },
     visible: {
-      type: Boolean,
       default: false
     }
   }

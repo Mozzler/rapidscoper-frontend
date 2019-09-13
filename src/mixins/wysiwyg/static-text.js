@@ -35,7 +35,7 @@ export default {
         let completion = this.getStaticText(1);
         if (completion && completion.includes('static-text')) {
           const [type, text] = this.getStaticTextByType(completion);
-          this.list[this.focused].markup = this.list[this.focused].markup + this.createSpan(type, text);
+          this.list[this.focused].markup += this.createSpan(type, text);
         }
       }
 

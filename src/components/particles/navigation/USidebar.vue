@@ -8,7 +8,9 @@
     />
     <icon-list
       :title="imp.title"
-      :list="imp.list" />
+      :list="imp.list"
+      :activeIcon="activeIcon"
+      @click="click"/>
   </div>
 </template>
 
@@ -55,7 +57,13 @@ export default {
           if (section === 'technical-story') {
             return 'technical-requirements-icon';
           }
+          break;
+        case this.$route.name === 'dictionary':
+          return 'book-icon';
       }
+    },
+    dictionarySections () {
+      return this.$store.getters['dictionary/sections'];
     }
   },
   methods: {
@@ -72,10 +80,18 @@ export default {
               storyType: item === 'functional-requirements-icon' ?
                 'user-story' : 'technical-story',
               section: 'section',
-              tab: this.$route.params.tab
+              tab: this.$route.params.tab ? this.$route.params.tab : 'edit'
             }
           };
           break;
+        case 'book-icon':
+          data = {
+            name: 'dictionary',
+            params: {
+              projectId: this.$route.params.projectId,
+              section: _.first(this.dictionarySections).id
+            }
+          };
       }
 
       this.$router.push(data);

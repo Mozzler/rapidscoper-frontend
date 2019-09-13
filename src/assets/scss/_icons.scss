@@ -20,9 +20,41 @@
 
 .header-icon {
   padding-right: 16px;
+
   .v-icon {
     color: $primary !important;
     margin-top: 2px;
+  }
+}
+
+.header-options {
+  display: flex;
+  padding: 18px 10px;
+  cursor: pointer !important;
+  border-bottom: 3px solid $white;
+  margin: 0 3px;
+
+  .v-icon {
+    color: rgba(0, 0, 0, 0.8);
+    user-select: none;
+  }
+
+  svg {
+    fill: rgba(0, 0, 0, 0.8);
+  }
+}
+
+.header-options--active {
+  border-color: $primary;
+  position: relative;
+  background-color: $light-primary;
+
+  .v-icon {
+    color: $primary;
+  }
+
+  svg {
+    fill: $primary;
   }
 }
 
@@ -37,4 +69,41 @@
   };
 }
 
+.logo-container {
+  margin-left: 20px;
+  display: flex;
 
+  svg {
+    width: 72px;
+    &:hover {
+      filter: brightness(0.9);
+    }
+  }
+}
+
+.stories-container {
+  .icon {
+    min-width: 20px;
+    display: flex;
+
+    svg {
+      cursor: pointer;
+    }
+  }
+  .story-icon {
+    position: absolute;
+    margin-left: -20px;
+  }
+}
+
+.drag-icon {
+  svg {
+    cursor: move !important;
+  }
+}
+
+.icon-group {
+  .v-icon {
+    cursor: pointer;
+  }
+}

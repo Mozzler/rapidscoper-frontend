@@ -27,19 +27,17 @@ export default {
     },
     getSpanList (joined = true) {
       const spans = this.list[this.focused].markup
-        .split('</span>')
+        .split('</span>&nbsp;')
         .filter(item => item.includes('<span'))
         .map(item => `${item}</span>`);
 
-      return !joined ? spans : spans.join('');
+      return !joined ? spans : spans.join('&nbsp;');
     },
     getTail () {
       return this.list[this.focused].markup
         .split('</span>')
         .filter(item => !item.includes('<span'))
-        .join('')
-        .replace(/&nbsp;/g, '')
-        .trim();
+        .join('');
     },
     getStaticTextByType (str = this.next) {
       return str
@@ -99,6 +97,12 @@ export default {
 
       const list = length ? item.list[length - 1] : null;
       return list ? this.getElementToFocus(list, ++level, length - 1, path) : path;
+    },
+    getParentDictionary (focused = this.focused) {
+      const children = this.$refs[this.list[focused].id][0].children;
+      const div = _.find(children, item => item.className === 'user-story__editable--requirement');
+
+      return _.find(this.sections, item => item.name === div.innerText);
     }
   }
 };

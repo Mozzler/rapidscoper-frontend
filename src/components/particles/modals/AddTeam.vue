@@ -1,6 +1,7 @@
 <template>
   <v-layout row justify-center>
-    <v-dialog v-model="dialog" max-width="416" persistent>
+    <v-dialog v-model="dialog" max-width="416" persistent
+              @keydown.enter.prevent.exact="() => submit('redirect')">
       <v-card class="modal-card">
 
         <div class="modal-header">
@@ -20,6 +21,7 @@
                 key="team name"
                 name="Team name"
                 placeholder="Team name"
+                ref="team-name"
                 v-model="data.name"
                 v-validate="'required|min:2|max:100'"
                 :disabled="processing"
@@ -37,7 +39,7 @@
             </v-btn>
             <v-btn class="btn-rapid primary" large
                    :disabled="processing"
-                   @click="submit">
+                   @click="() => submit('redirect')">
               {{ isMobileDevice ? 'Create' : 'Create team' }}
             </v-btn>
           </v-flex>
@@ -66,6 +68,11 @@ export default {
     initData () {
       this.data.name = null;
     },
+    focusInput () {
+      this.$nextTick(() => {
+        this.$refs['team-name'].focus();
+      });
+    },
     getPayload () {
       return {
         entity: 'team',
@@ -73,6 +80,27 @@ export default {
         recreate: true,
         data: this.data
       };
+    },
+    redirect (item) {
+      this.$root.$emit('dataset-updated', {
+        entity: 'project',
+        state: true
+      });
+      this.$socket.recreateWatchers('project', true);
+      this.$router.push({
+        name: 'dashboard',
+        params: {
+          section: 'team',
+          name: item.id
+        }
+      });
+    }
+  },
+  watch: {
+    dialog () {
+      if (this.dialog) {
+        this.focusInput();
+      }
     }
   }
 };

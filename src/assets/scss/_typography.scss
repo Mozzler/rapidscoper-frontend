@@ -22,6 +22,14 @@ a {
   color: rgba($black, 0.6) !important;
 }
 
+.text-dark-grey {
+  color: $dark-grey;
+}
+
+.text-black {
+  color: $black;
+}
+
 .text-primary {
   color: $primary !important;
 }
@@ -53,10 +61,58 @@ a {
   }
 }
 
+.m-0 {
+  margin: 0 !important;
+}
+
 .cursor-pointer {
-  cursor: pointer;
+  cursor: pointer !important;
+}
+
+.cursor-default {
+  cursor: default;
+}
+
+.cursor-move {
+  cursor: move !important;
 }
 
 .text-underlined {
   text-decoration: underline;
+}
+
+.text-uppercased {
+  text-transform: uppercase;
+}
+
+.word-break-word {
+  word-break: break-word;
+}
+
+.white-space-nowrap {
+  white-space: nowrap;
+}
+
+.position-relative {
+  position: relative;
+}
+
+.text-white {
+  .v-icon {
+    color: $white !important;
+  }
+}
+
+.display-contents {
+  display: contents;
+
+}
+
+.primary-icon {
+  color: $primary !important;
+}
+
+.commented-text {
+  background-color: $light-yellow;
+  color: $black;
 }

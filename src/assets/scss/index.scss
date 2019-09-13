@@ -5,7 +5,6 @@
 @import 'mixins';
 
 @import 'layout';
-@import 'typography';
 @import 'buttons';
 @import 'headers';
 @import 'inputs';
@@ -15,8 +14,36 @@
 @import 'navigation';
 @import 'tables';
 @import 'selects';
+@import 'comments';
 @import 'cards';
 @import 'labels';
 @import 'sidebar';
 @import 'hint';
+@import 'lists';
+@import 'print';
+@import 'typography';
 
+.remove-icon {
+  color: $error !important;
+  position: absolute;
+  top: 4px !important;
+  left: -15px !important;
+  cursor: pointer;
+
+  i {
+    font-size: 18px !important;
+  }
+
+  &:hover {
+    filter: brightness(0.9);
+  }
+}
+
+.remove-icon--header {
+  top: 10px !important;
+  left: -23px !important;
+}
+
+.search-selected {
+  background-color: rgba(250, 220, 162, 0.7);
+}

@@ -11,6 +11,13 @@ function normalizeId (data) {
   }
 }
 
+function toCamelCase (str) {
+  return str.split('-').map((item, index) => {
+    let modified = item.charAt(0).toUpperCase() + item.slice(1);
+    return index !== 0 ? modified : item;
+  }).join('');
+}
+
 export default {
   setList (state, payload) {
     payload.data.items = normalizeId(payload.data.items);
@@ -19,7 +26,6 @@ export default {
   create (state, payload) {
     payload.data = normalizeId(payload.data);
     const existed = _.filter(state[payload.entity].items, item => item.id === payload.data.id);
-
     if (!existed.length) {
       state[payload.entity].items.push(payload.data);
     }
@@ -30,7 +36,7 @@ export default {
 
     _.each(state[entity].items, (item, index) => {
       if (item.id === payload.data.id) {
-        _.assign(state[payload.entity].items[index], payload.data);
+        _.assign(item, payload.data);
       }
     });
   },
@@ -44,7 +50,9 @@ export default {
       deletable = payload.ids;
     }
 
-    state[payload.entity].items = _.filter(state[payload.entity].items,
+    let normalized = toCamelCase(payload.entity);
+
+    state[normalized].items = _.filter(state[normalized].items,
         item => !deletable.includes(item.id));
   },
   resetList (state, entity) {
@@ -61,5 +69,18 @@ export default {
         state[key].items = [];
       });
     }
+  },
+  reorder (state, payload) {
+    let section = _.find(state.section.items,item => item.id === payload.sectionId);
+    let index = _.indexOf(section.storyOrder, payload.afterStoryId);
+
+    let beginning = [...section.storyOrder];
+    let tail = beginning.splice(index + 1);
+
+    section.storyOrder = [
+      ...beginning,
+      ...[payload.id],
+      ...tail
+    ];
   }
 };

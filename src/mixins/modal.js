@@ -7,7 +7,8 @@ export default {
   data () {
     return {
       dialog: false,
-      processing: false
+      processing: false,
+      params: null
     };
   },
   beforeMount () {
@@ -20,10 +21,11 @@ export default {
     closeModal () {
       this.dialog = false;
     },
-    showModal () {
+    showModal (params) {
       this.dialog = true;
+      this.params = params;
     },
-    async submit () {
+    async submit (cb = null) {
       this.processing = true;
 
       const result = await this.$validator.validate();
@@ -36,14 +38,15 @@ export default {
       const params = this.getPayload();
 
       this.$store.dispatch(params.action, params)
-        .then(() => {
+        .then((response) => {
           if (params.recreate) {
             this.$socket.recreateWatchers(params.entity);
           }
-        })
-        .then(() => {
-          this.processing = false;
-          this.closeModal();
+          if (cb !== null) {
+            this.processing = false;
+            this.closeModal();
+            this[cb](response.item);
+          }
         })
         .catch(error => {
           this.processing = false;
@@ -53,11 +56,6 @@ export default {
   },
   beforeDestroy () {
     this.$root.$off(this.$options.name, this.showModal);
-  },
-  computed: {
-    isMobileDevice () {
-      return this.$store.state.system.isMobileDevice;
-    }
   },
   watch: {
     dialog () {

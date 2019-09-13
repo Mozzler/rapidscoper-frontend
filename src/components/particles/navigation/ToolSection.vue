@@ -1,5 +1,5 @@
 <template>
-  <div class="tool-section pt-4" v-if="activeStory">
+  <div class="tool-section pt-4" v-if="story">
     <div class="tool-block">
       <div class="section__title">
         ID
@@ -14,7 +14,13 @@
         Estimate
       </div>
       <div class="tool-block__text">
-        {{ story.estimate | hours }}
+        <input class="user-story__input"
+           :value="story.estimate"
+           type="number"
+           @focus="focusEstimate"
+           @input="$event => updateEstimate($event, story.id)"
+           @blur="$event => submitEstimate($event, story.id)" />
+        <span class="ml-2">{{ hours(story.estimate) }}</span>
       </div>
     </div>
 
@@ -22,12 +28,11 @@
       <div class="section__title">
         Priority
       </div>
-      <div class="tool-block__text">
-        <tool-list
-          :active="story.priority"
-          :list="priorities"
-          :shortcutted="false" />
-      </div>
+      <tool-list
+        :active="story.priority"
+        :list="priorities"
+        :shortcutted="false"
+        @update="id => updateToolId(id, story, 'priority')" />
     </div>
 
     <div class="tool-block">
@@ -35,15 +40,15 @@
         <div class="section__title">
           Labels
         </div>
-        <div class="section__ref">
+        <div class="section__ref" @click="showSettingModal">
           Settings
         </div>
       </v-layout>
-      <tool-list
+      <label-list
         :active="story.labels"
         :list="labels"
-        :shortcutted="false"
-        :label-cls="'tool-block__label rounded'" />
+        :label-cls="'tool-block__label rounded'"
+        @update="id => updateToolId(id, story, 'labels')" />
     </div>
 
     <!--<div class="tool-block">
@@ -64,37 +69,45 @@
 </template>
 
 <script>
-import ToolList from "../lists/ToolList";
+import ToolList from '../lists/ToolList';
+import LabelList from '../lists/LabelList';
+
+import ProcessingMixin from '@/mixins/wysiwyg/instruments/processing';
+import EstimateMixin from '@/mixins/wysiwyg/instruments/estimate';
+
+import { mapGetters } from 'vuex';
+
 export default {
-  name: "ToolSection",
-  components: { ToolList },
-  filters: {
-    hours (str) {
-      const estimate = `${str} hour`;
-      return Number(str) > 1 ? `${estimate}s` : estimate;
-    }
+  name: 'ToolSection',
+  mixins: [
+    ProcessingMixin,
+    EstimateMixin
+  ],
+  components: {
+    ToolList,
+    LabelList
   },
   computed: {
-    labels () {
-      return this.$store.state.story.labels;
-    },
+    ...mapGetters({
+      labels: 'story/labels'
+    }),
     priorities () {
       return this.$store.state.story.priority;
-    },
-    activeStory () {
-      return this.$store.state.story.activeStoryOnTab ||
-        this.$store.state.story.activeEditorId;
     },
     stories () {
       return this.$store.getters['entity/items']('story');
     },
     story () {
-      return _.find(this.stories, item => item.id === this.activeStory);
+      return _.find(this.stories, item => item.id === this.toolId);
+    }
+  },
+  methods: {
+    hours (str) {
+      return Number(str) > 1 ? 'hours' : 'hour';
+    },
+    showSettingModal () {
+      this.$root.$emit('settings');
     }
   }
 };
 </script>
-
-<style scoped>
-
-</style>

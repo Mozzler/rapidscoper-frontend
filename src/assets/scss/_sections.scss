@@ -37,8 +37,7 @@
 
 .user-story {
   border-radius: 4px;
-  margin-bottom: 15px;
-  padding: 2px;
+  margin: 8px 0;
   background-color: $white;
   position: relative;
   display: block;
@@ -46,6 +45,8 @@
 }
 .user-story--active {
   background-color: $light-grey-1;
+  margin: -4px -8px;
+  padding: 4px 8px;
 
   &:focus {
     outline: none;
@@ -53,12 +54,17 @@
 }
 
 .user-story__tools {
-  padding: 0 24px;
+  padding: 0 16px;
+  margin-bottom: 2px;
 }
 
 .user-story__prefix {
   color: rgba(0, 0, 0, 0.7);
-  cursor: default;
+
+  svg {
+    margin: 0 2px 2px 0;
+    fill: rgba(0, 0, 0, 0.8);
+  }
 }
 
 .user-story__wysiwyg {
@@ -74,6 +80,12 @@
   box-sizing: border-box;
   border-radius: 2px;
   text-indent: 5px;
+
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 }
 
 .user-story__placeholder {
@@ -85,9 +97,26 @@
 .user-story__editable {
   position: relative;
   width: 100%;
+
+  span[contenteditable] {
+    outline: none;
+  }
 }
 
-.user-story__editable, .user-story__input {
+.user-story__input-field {
+  position: relative;
+}
+
+.user-story__editable-input {
+  display: inline-block;
+  min-width: 60px;
+  padding: 10px 0;
+}
+
+.user-story__editable,
+.user-story__input,
+.user-story__input-field,
+.user-story__editable-input {
   caret-color: $light-blue;
 
   &:focus {
@@ -115,4 +144,84 @@
 
 .user-story__editable--field {
   @include set-bottom-border($light-red);
+}
+
+.dictionary {
+  font-size: 14px;
+  line-height: 17px;
+  color: $black;
+
+  &.user-story {
+    padding: 0;
+    margin: -5px -8px;
+
+    .layout {
+      padding: 5px 8px;
+    }
+  }
+
+  .user-story__editable {
+    font-size: 14px;
+    line-height: 17px;
+  }
+
+  .user-story__editable--after {
+    &:after {
+      content: ':';
+      margin: 5px;
+      font-weight: normal !important;
+    }
+  }
+}
+
+[draggable=true] {
+  .user-story {
+    margin: -4px -8px;
+    padding: 4px 8px;
+    border: 1px solid rgba(120, 57, 223, 0.4);
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
+  }
+}
+[draggable=false] {
+  .user-story {
+    border: none;
+    box-shadow: none;
+  }
+}
+
+.user-story__wysiwyg--disabled {
+  pointer-events: none;
+}
+
+.user-story__priority--short {
+  margin: -2px 0 0 -48px;
+  position: absolute;
+  background-color: red;
+  border-radius: 0 2px 2px 0;
+  color: rgba(0, 0, 0, 0.8);
+  font-weight: bold;
+  font-size: 12px;
+  line-height: 24px;
+  text-align: center;
+  width: 24px;
+  height: 24px;
+
+  &:hover {
+    filter: brightness(0.9);
+  }
+}
+
+.user-story__label--short {
+  display: inline-block;
+  margin-right: 8px;
+  border-radius: 10px;
+  min-width: 32px;
+  padding: 2px 10px;
+  font-size: 12px;
+  line-height: 14px;
+  min-height: 9px;
+}
+
+.user-story--without-padding {
+  padding: 5px 0;
 }

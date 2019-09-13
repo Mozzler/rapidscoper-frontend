@@ -7,5 +7,10 @@ export default {
   ],
   adjustConstructions: {},
   activeStoryOnTab: null,
-  activeEditorId: null
+  filterSidebar: true,
+  filters: {
+    labels: [],
+    priorities: [],
+    search: ''
+  }
 };
