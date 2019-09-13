@@ -44,7 +44,7 @@ export default {
 
       if (!tail.replace('&nbsp;', '') && text) {
         this.list[this.focused].tail = this.createSpan(this.next, `&nbsp;${text}`, true, false);
-        this.list[this.focused].placeholder = line + this.list[this.focused].tail;
+        this.list[this.focused].placeholder = line + `&nbsp;` + this.list[this.focused].tail;
       } else {
         this.resetPlaceholder();
       }
@@ -90,7 +90,7 @@ export default {
 
       if (this.next && this.next.includes('static-text')) {
         const [type, text] = this.getStaticTextByType();
-        this.list[this.focused].markup += this.createSpan(type, text, false);
+        this.list[this.focused].markup += this.createSpan(type, `&nbsp;${text}`, false);
       }
     },
     finishSentence ($event, character = '') {
