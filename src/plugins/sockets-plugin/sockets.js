@@ -84,10 +84,6 @@ class MongoSockets {
       switch (response.operationType) {
         case 'update':
         case 'insert':
-          if (this.streams[response.model] === response.streamId && response.model === 'story') {
-            return;
-          }
-
           const commit = this.getCommitType(response.model, response.operationType);
 
           store.commit(commit, {

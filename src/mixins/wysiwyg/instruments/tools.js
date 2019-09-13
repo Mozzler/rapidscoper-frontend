@@ -74,7 +74,8 @@ export default {
     },
     submitTool (propertyId) {
       const item = this.list.find(item => item.id === this.toolId);
-      if (item.priority === propertyId) {
+
+      if (item.priority === propertyId && this.tab === 'priority') {
         propertyId = -1;
       }
 
