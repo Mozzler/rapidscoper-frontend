@@ -35,7 +35,8 @@ module.exports = {
     plugins: [
       new HtmlPlugin({
         template: `${appPath}/assets/index.html`,
-        hash: true
+        hash: true,
+        favicon: `${appPath}/assets/logo.png`
       })
     ]
   }
