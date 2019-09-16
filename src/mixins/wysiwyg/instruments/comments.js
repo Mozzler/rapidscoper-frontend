@@ -8,8 +8,38 @@ export default {
   },
   methods: {
     ...mapMutations('system', [ 'setComment' ]),
-    getSpanClass (nodes, range) {
+    getSpanClass (nodes, range, container, offset, delimeter = '') {
+      // custom text
+      if (range[container].previousSibling === null) {
+        let text = range[container].parentNode.innerHTML.replace('&nbsp;', ' ');
+        let sliced = [text.slice(0, range[offset]), text.slice(range[offset])];
 
+        return {
+          className: range[container].parentNode.className,
+          updated: sliced.join(`[${delimeter}comment-id=21]`)
+        };
+      }
+
+      let editor = range[container].parentNode.className === 'user-story__editable';
+
+      // connector between two spans - &nbsp;
+      if (editor && !range[offset]) {
+        return {
+          previous: range[container].previousElementSibling.className,
+          className: null,
+          updated: `[${delimeter}comment-id=21]${range[container].textContent}`
+        };
+      }
+
+      // beginning of the element node
+      if (editor && range[offset]) {
+        let next = range[container].nextSibling;
+
+        return {
+          className: next.className,
+          updated: `[${delimeter}comment-id=21]${next.innerHTML}`
+        };
+      }
     },
     selectEvent ($event, id) {
       if (this.tab !== 'comments') {
@@ -23,7 +53,6 @@ export default {
         this.setCommentData(null, '', null, 0, 0);
         return;
       }
-      console.log(range);
 
       const start = range.startContainer;
       const end = range.endContainer;
@@ -31,7 +60,8 @@ export default {
       let nodes = document.getElementById(id).childNodes;
 
       let chain = [];
-      let markupStart = this.getSpanClass(nodes, range);
+      let markupStart = this.getSpanClass(nodes, range, 'startContainer', 'startOffset');
+      let markupEnd = this.getSpanClass(nodes, range, 'endContainer', 'endOffset', '/');
 
         /*_.find(this.list, story => story.id === id).markup
         .split(/<span|^&nbsp;$/)
