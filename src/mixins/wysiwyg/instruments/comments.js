@@ -63,6 +63,8 @@ export default {
       let markupStart = this.getSpanClass(nodes, range, 'startContainer', 'startOffset');
       let markupEnd = this.getSpanClass(nodes, range, 'endContainer', 'endOffset', '/');
 
+      let cls = markupStart.className;
+
         /*_.find(this.list, story => story.id === id).markup
         .split(/<span|^&nbsp;$/)
         .map(item => item.includes('</span>') ? `<span${item}` : item)*/
