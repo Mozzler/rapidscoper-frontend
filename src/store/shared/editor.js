@@ -108,6 +108,10 @@ function conformity (filters = {}, story) {
   return priority || labels;
 }
 
+function uncommented (str) {
+  return str.replace(/(\[\/?commentId=.*?\])/g, '');
+}
+
 function stories (storyOrder, stories, comments, dictionary = null, filters = null) {
   const sorted = sortStoriesByOrder(stories, storyOrder);
 
@@ -133,7 +137,8 @@ function stories (storyOrder, stories, comments, dictionary = null, filters = nu
         labels: basic.labels ? basic.labels : [],
         template: construction ? construction.structure : '',
         tail: item.tail ? item.tail : '',
-        markup: markup,
+        markup: uncommented(markup),
+        originalMarkup: markup,
         placeholder: item.placeholder ? item.placeholder : markup
       });
     }

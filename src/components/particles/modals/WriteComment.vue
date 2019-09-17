@@ -132,26 +132,10 @@ export default {
         data: payload
       });
 
-      let shards = comment.markup.split('<span')
-        .filter(item => item)
-        .map(item => item.includes('span>') ? `<span${item}` : item);
-
-      _.each(shards, (shard, index) => {
-        if (index === 0) {
-          shards[index] = shards[index].replace(/<span[^>]*>/, '');
-        }
-        if (index === shards.length - 1) {
-          shards[index] = shards[index].replace('<\/span>', '');
-        }
-      });
-
-      let text = `<i class="commented-text" data-comment-id="${response.item.id}">${comment.markup}</i>`;
-      let markup = comment.item.markup.replace(comment.markup, text);
-
       await this.update({
         entity: 'story',
         data: {
-          markup: markup
+          markup: comment.markup.replace(/~~~/g, response.item.id)
         },
         params: {
           id: comment.item.id

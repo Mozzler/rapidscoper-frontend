@@ -8,15 +8,16 @@ export default {
   },
   methods: {
     ...mapMutations('system', [ 'setComment' ]),
-    getSpanClass (nodes, range, container, offset, delimeter = '') {
+    getSpanClass (nodes, range, container = 'startContainer', offset = 'startOffset', delimeter = '') {
       // custom text
       if (range[container].previousSibling === null) {
         let text = range[container].parentNode.innerHTML.replace('&nbsp;', ' ');
         let sliced = [text.slice(0, range[offset]), text.slice(range[offset])];
 
         return {
+          increment: 0,
           className: range[container].parentNode.className,
-          updated: sliced.join(`[${delimeter}comment-id=21]`)
+          updated: sliced.join(`[${delimeter}commentId=~~~]`)
         };
       }
 
@@ -25,21 +26,71 @@ export default {
       // connector between two spans - &nbsp;
       if (editor && !range[offset]) {
         return {
-          previous: range[container].previousElementSibling.className,
-          className: null,
-          updated: `[${delimeter}comment-id=21]${range[container].textContent}`
+          increment: 1,
+          className: range[container].previousElementSibling.className,
+          updated: `[${delimeter}commentId=~~~]${range[container].textContent}`
         };
       }
 
       // beginning of the element node
       if (editor && range[offset]) {
         let next = range[container].nextSibling;
+        if (next) {
+          return {
+            increment: 0,
+            className: next.className,
+            updated: `[commentId=~~~]${next.innerHTML}`
+          };
+        }
 
-        return {
-          className: next.className,
-          updated: `[${delimeter}comment-id=21]${next.innerHTML}`
-        };
+        let previous = range[container].previousSibling;
+        if (previous) {
+          return {
+            increment: 1,
+            className: previous.className,
+            updated: `${range[container].textContent}[/commentId=~~~]`
+          };
+        }
       }
+    },
+    getCommentedMarkup (range, id) {
+      let nodes = document.getElementById(id).childNodes;
+      let shadowNodes = _.map(nodes, node => {
+        if (node.nodeType === 3) {
+          return {
+            content: node.textContent
+          };
+        }
+        if (node.nodeType === 1) {
+          return {
+            content: node.innerHTML,
+            outerHTML: node.outerHTML,
+            className: node.className
+          };
+        }
+      });
+
+      let markup = [
+        this.getSpanClass(nodes, range),
+        this.getSpanClass(nodes, range, 'endContainer', 'endOffset', '/')
+      ];
+
+      _.each(markup, item => {
+        let index = _.findIndex(shadowNodes, i => i.className === item.className);
+        shadowNodes[index + item.increment].content = item.updated;
+      });
+
+      return _.map(shadowNodes, item => {
+        if (item.outerHTML) {
+          let split = item.outerHTML.split(/(<span .*>)(.*)(<\/span>)/)
+            .filter(item => item);
+          split[1] = item.content;
+
+          return split.join('');
+        } else {
+          return item.content;
+        }
+      }).join('');
     },
     selectEvent ($event, id) {
       if (this.tab !== 'comments') {
@@ -50,57 +101,22 @@ export default {
       const content = range.cloneContents();
 
       if (!content.childNodes.length) {
-        this.setCommentData(null, '', null, 0, 0);
-        return;
+        return this.setCommentData();
       }
 
-      const start = range.startContainer;
-      const end = range.endContainer;
+      let markup = this.getCommentedMarkup(range, id);
+      let rect = range.getBoundingClientRect();
 
-      let nodes = document.getElementById(id).childNodes;
-
-      let chain = [];
-      let markupStart = this.getSpanClass(nodes, range, 'startContainer', 'startOffset');
-      let markupEnd = this.getSpanClass(nodes, range, 'endContainer', 'endOffset', '/');
-
-      let cls = markupStart.className;
-
-        /*_.find(this.list, story => story.id === id).markup
-        .split(/<span|^&nbsp;$/)
-        .map(item => item.includes('</span>') ? `<span${item}` : item)*/
-
-      /*
-      if (start && start.nodeType === 3 && start.parentNode) {
-        let startSpanIndex = _.findIndex(markup, item => item.includes(start.parentNode.className));
-
-        let matched = markup[startSpanIndex].match(/<span .*>(.*)<\/span>/)[1];
-        let replaced = matched.replace(`&nbsp;`, ' '); // correction of the index position
-
-        let unchanged = replaced.slice(0, range.startOffset);
-        let changed = replaced.slice(range.startOffset);
-
-        let regexp = new RegExp(/<(\/)?span/);
-        replaced = `${unchanged}[comment-id=67]${changed}`.replace(' ', '&nbsp;');
-
-        markup[startSpanIndex] = markup[startSpanIndex].split(/(<span .*>)(.*)(<\/span>.*)/)
-          .filter(item => item)
-          .map(item => !(regexp).test(item) ? replaced : item)
-          .join('');
-      }
-      if (end && end.nodeType === 3 && end.parentNode) {
-        if (end.parentNode.className === 'user-story__editable') {
-
-        }
-      }*/
+      this.setCommentData(id, markup, id, rect.left + 15, rect.top - 30)
     },
-    setCommentData (id, markup = '', state = null, x = 0, y = 0) {
+    setCommentData (id = null, markup = '', state = null, x = 0, y = 0) {
       const story = _.find(this.list, story => story.id === id);
       const data = {
         state: state,
         x: x,
         y: y,
         item: story,
-        markup: markup || story.markup
+        markup: id ? markup || story.markup : null
       };
 
       this.setComment(data);
