@@ -122,8 +122,8 @@
   &:focus {
     outline: none;
   }
-  &::selection {
-    background-color: $light-primary;
+  &::selection, ::selection {
+    background-color: $light-primary !important;
   }
 }
 

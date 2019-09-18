@@ -139,7 +139,7 @@ function stories (storyOrder, stories, comments, dictionary = null, filters = nu
         tail: item.tail ? item.tail : '',
         markup: uncommented(markup),
         originalMarkup: markup,
-        placeholder: item.placeholder ? item.placeholder : markup
+        placeholder: item.placeholder ? item.placeholder : uncommented(markup)
       });
     }
 

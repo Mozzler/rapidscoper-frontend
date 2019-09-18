@@ -99,10 +99,10 @@ export default {
 
       if (this.tab === 'comments' && document.getSelection().rangeCount) {
         // reset by 'write comment' modal
-        let range = document.getSelection().getRangeAt(0);
+        /*let range = document.getSelection().getRangeAt(0);
         let sel = document.getSelection();
         sel.removeAllRanges();
-        sel.addRange(range);
+        sel.addRange(range);*/
       } else if (this.tab === 'edit' && this.focused) {
         this.$nextTick(() => {
           const el = document.getElementById(this.toolId);

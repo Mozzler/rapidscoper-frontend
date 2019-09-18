@@ -4,6 +4,7 @@
                v-model="list"
                :clone="clone"
                @start="start"
+               @end="resetMovable"
                ghost-class="user-story__draggable"
                @change="change">
       <div v-for="(item, index) in list"
@@ -20,8 +21,8 @@
            :key="`tool-panel-${item.id}`"
            :ref="`tool-panel-${item.id}`"
            @click="() => selectTool(item.id)"
-           @mouseover="() => hovered = item.id"
-           @mouseleave="() => hovered = null"
+           @mouseleave="setHovered"
+           @mouseover="() => setHovered(item.id)"
            @keyup.enter.prevent.exact="() => setHandler('nextItem', item.id)"
            @keydown.tab.prevent.exact="() => setHandler('nextItem', item.id)"
            @keydown.down.prevent.exact="() => setHandler('nextItem', item.id)"
@@ -75,7 +76,7 @@
                         <comment-icon />
                       </div>
                       <div
-                        v-else-if="tab === 'edit'"
+                        v-else-if="tab === 'edit' && (hovered === item.id || movable === item.id)"
                         class="story-icon icon drag-icon"
                         @mousedown="() => startDragging(item.id)">
                         <drag-icon />
@@ -90,6 +91,7 @@
           <v-flex text-xs-left align-center row fill-height
             class="word-break-word">
             <div class="user-story__wysiwyg">
+              <div class="user-story__comments"></div>
               <div class="user-story__placeholder"
                    v-html="item.placeholder"
                    readonly></div>
@@ -177,10 +179,7 @@ export default {
       list: null,
       hintEditor: null,
       processing: false,
-      replacement: null,
-
-      hovered: null,
-      movable: null
+      replacement: null
     };
   },
   beforeMount () {
@@ -229,11 +228,17 @@ export default {
       }
 
       this.replacement = null;
-    },
-    startDragging (id) {
-      this.movable = id;
-      this.$store.commit('story/setActiveStoryOnTab', null);
     }
+  },
+  mounted () {
+    _.each(this.stories, item => {
+      let originalMarkup = item.originalMarkup.split('commentId=');
+      let commentIndex = item.originalMarkup.indexOf('[commentId=');
+      /*while (markup.includes('[commentId=')) {
+        let commentIndex = markup.indexOf('[commentId=');
+        console.log(commentIndex);
+      }*/
+    });
   },
   watch: {
     stories: {
@@ -243,9 +248,11 @@ export default {
           this.list = this.stories;
           resolve();
         }).then(() => {
-          if (!this.isEditable(this.event)) {
+          const selection = document.getSelection();
+
+          if (!this.isEditable(this.event) && selection.rangeCount) {
             document.execCommand('selectAll', false, null);
-            document.getSelection().collapseToEnd();
+            selection.collapseToEnd();
           }
         });
       }
