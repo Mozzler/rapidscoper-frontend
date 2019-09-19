@@ -72,6 +72,25 @@
   width: 100%;
 }
 
+.user-story__delete-icon {
+  font-size: 16px;
+  top: 2px;
+  left: -35px;
+  color: #ff5252 !important;
+  cursor: pointer;
+  position: absolute;
+
+  &:hover {
+    filter: brightness(0.5);
+  }
+}
+
+.user-story__action-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
 .user-story__input {
   width: 32px;
   height: 24px;

@@ -65,10 +65,14 @@
                 </v-flex>
                 <v-flex grow>
                   <v-layout row
-                            align-center
                             fill-height
                             class="user-story__prefix">
-                    <template>
+                    <div class="user-story__action-group">
+                      <v-icon
+                        v-if="tab === 'edit' && hovered === item.id"
+                        class="user-story__delete-icon">
+                        delete
+                      </v-icon>
                       <div
                         v-if="comment.state === item.id && tab === 'comments'"
                         @click="() => commentStory(item.id)"
@@ -81,7 +85,7 @@
                         @mousedown="() => startDragging(item.id)">
                         <drag-icon />
                       </div>
-                    </template>
+                    </div>
                     <div>#</div>
                   </v-layout>
                 </v-flex>
