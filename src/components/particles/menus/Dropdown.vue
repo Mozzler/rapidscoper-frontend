@@ -4,7 +4,7 @@
       <template>
         <div
           v-if="editable"
-          class="user-story__editable-input user-story__editable-header"
+          class="user-story__editable-input user-story__editable--bordered"
           :contenteditable="editable"
           :class="{
             'text-bold': bold,

@@ -10,19 +10,21 @@
 
     <div
       class="user-story__section-container"
-      @click="removeSection"
       @mouseover="() => hovered = model.id"
       @mouseleave="() => hovered = null">
       <v-icon
+        @click="removeSection"
         class="user-story__delete-section"
         v-if="hovered !== null">
         delete
       </v-icon>
       <h1>
-        <input v-model="name"
-               @click="click"
-               @input="updateSectionName"
-               @blur="() => updateStory('name')" />
+        <input
+          class="user-story__editable--bordered-1"
+          v-model="name"
+          @click="click"
+          @input="updateSectionName"
+          @blur="() => updateStory('name')" />
       </h1>
     </div>
     <div class="mt-3 user-story__wysiwyg">
