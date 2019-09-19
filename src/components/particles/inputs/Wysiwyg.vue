@@ -68,11 +68,13 @@
                             fill-height
                             class="user-story__prefix">
                     <div class="user-story__action-group">
-                      <v-icon
-                        v-if="tab === 'edit' && hovered === item.id"
-                        class="user-story__delete-icon">
-                        delete
-                      </v-icon>
+                      <div @click="() => removeStory(index)">
+                        <v-icon
+                          v-if="tab === 'edit' && hovered === item.id"
+                          class="user-story__delete-icon">
+                          delete
+                        </v-icon>
+                      </div>
                       <div
                         v-if="comment.state === item.id && tab === 'comments'"
                         @click="() => commentStory(item.id)"

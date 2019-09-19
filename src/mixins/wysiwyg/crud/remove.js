@@ -1,23 +1,28 @@
 export default {
   methods: {
-    async removeStory () {
-      this.processing = this.list[this.focused].id;
+    async removeStory (index = this.focused) {
+      this.processing = this.list[index].id;
 
-      if (this.list[this.focused].level === 0 && this.list.length === 1) {
+      if (this.list[index].level === 0 && this.list.length === 1) {
         return;
       }
 
       const removable = {
-        'ids': this.getSubstoryIds()
+        'ids': this.getSubstoryIds(index)
       };
-      const focusable = this.$refs[this.list[this.focused - 1].id];
+
+      const focusable = index ? this.$refs[this.list[index - 1].id] :
+        this.list.length > 1 ? this.$refs[this.list[index + 1].id] : null;
 
       await this.$store.dispatch('story/deleteMany', removable);
-
       this.processing = null;
 
       await this.$nextTick();
-      focusable[0].focus();
+
+      if (focusable !== null) {
+        focusable[0].focus();
+      }
+
       this.collapseToEnd();
     },
     async remove ($event) {

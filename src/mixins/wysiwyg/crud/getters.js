@@ -126,6 +126,18 @@ export default {
       return list
         .slice(startIndex, lastIndex + 1)
         .map(item => item.id);
+    },
+    focusNext (index) {
+      let next = null;
+
+      if (index - 1 > 0) {
+        next = index - 1;
+      }
+      if (this.list.length > 0) {
+        next = index + 1;
+      }
+
+      return next;
     }
   }
 };
