@@ -5,14 +5,26 @@
     <circular-loader
       cls="loader-shadow--without-padding"
       :size="50"
+      :visible="processing"
       :width="5" />
 
-    <h1>
-      <input v-model="name"
-             @click="click"
-             @input="updateSectionName"
-             @blur="() => updateStory('name')" />
-    </h1>
+    <div
+      class="user-story__section-container"
+      @click="removeSection"
+      @mouseover="() => hovered = model.id"
+      @mouseleave="() => hovered = null">
+      <v-icon
+        class="user-story__delete-section"
+        v-if="hovered !== null">
+        delete
+      </v-icon>
+      <h1>
+        <input v-model="name"
+               @click="click"
+               @input="updateSectionName"
+               @blur="() => updateStory('name')" />
+      </h1>
+    </div>
     <div class="mt-3 user-story__wysiwyg">
       <div class="user-story__placeholder text-greyed">
         {{ !description ? 'Describe this section' : '' }}
@@ -71,6 +83,7 @@ export default {
   },
   data () {
     return {
+      hovered: null,
       name: this.model.name,
       description: this.model.description,
       processing: null
@@ -124,6 +137,15 @@ export default {
           const msg = this.handleErrors(error, true);
           this.$emit('show-error', msg);
         });
+    },
+    removeSection () {
+      this.processing = this.model.id;
+      this.$store.dispatch('entity/delete', {
+        entity: 'section',
+        id: this.model.id
+      }).then(() => {
+        this.processing = null;
+      });
     }
   },
   watch: {

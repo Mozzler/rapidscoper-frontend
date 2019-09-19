@@ -46,12 +46,13 @@ export default {
     return {
       message: null,
       scrollActive: false,
-      scrollSelector: '.user-story__block',
+      scrollSelector: '.user-story__block'
     };
   },
   beforeMount () {
     this.$root.$on('create-new-section', this.createSection);
     this.$root.$on('show-error-message', this.setErrorMessage);
+    console.log();
   },
   beforeDestroy () {
     this.$root.$off('create-new-section');

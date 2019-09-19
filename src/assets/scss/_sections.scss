@@ -53,6 +53,41 @@
   }
 }
 
+.user-story__section-container {
+  margin: 0 -25px;
+
+  h1 {
+    padding: 0 25px;
+  }
+}
+
+.user-story__delete-icon,
+.user-story__delete-section {
+  cursor: pointer;
+  position: absolute;
+  color: $error !important;
+
+  &:hover {
+    filter: brightness(0.5);
+  }
+}
+
+.user-story__delete-icon {
+  font-size: 16px;
+  top: 2px;
+  left: -35px;
+  width: 30px;
+  height: 30px;
+}
+
+.user-story__delete-section {
+  width: 30px;
+  height: 30px;
+  left: -27px;
+  top: 7px;
+  font-size: 20px;
+}
+
 .user-story__tools {
   padding: 0 16px;
   margin-bottom: 2px;
@@ -70,19 +105,6 @@
 .user-story__wysiwyg {
   position: relative;
   width: 100%;
-}
-
-.user-story__delete-icon {
-  font-size: 16px;
-  top: 2px;
-  left: -35px;
-  color: #ff5252 !important;
-  cursor: pointer;
-  position: absolute;
-
-  &:hover {
-    filter: brightness(0.5);
-  }
 }
 
 .user-story__action-group {
@@ -122,6 +144,16 @@
   }
 }
 
+.user-story__editable-header {
+  padding: 4px 15px;
+  border-radius: 2px;
+
+  &:hover, &:focus {
+    padding: 4px 14px;
+    border: 1px solid $dark-grey;
+  }
+}
+
 .user-story__input-field {
   position: relative;
 }
@@ -129,7 +161,6 @@
 .user-story__editable-input {
   display: inline-block;
   min-width: 60px;
-  padding: 10px 0;
 }
 
 .user-story__editable,
