@@ -15,28 +15,23 @@
 import SidebarList from '../lists/SidebarList';
 import { mapGetters } from 'vuex';
 
+import ScrollGoToMixin from '@/mixins/scroll-go-to';
+
 export default {
   name: 'SidebarFullList',
   inject: ['entity'],
   components: {
     SidebarList
   },
+  mixins: [
+    ScrollGoToMixin
+  ],
   computed: {
     ...mapGetters({
       chapterGetter: 'projectVersion/chapters'
     }),
     chapters () {
       return this.chapterGetter(this.entity);
-    }
-  },
-  methods: {
-    goTo (id) {
-      this.$router.replace({
-        name: this.$route.name,
-        params: {
-          section: id
-        }
-      });
     }
   }
 };

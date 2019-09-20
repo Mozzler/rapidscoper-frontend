@@ -10,5 +10,8 @@ export default {
   },
   setComment (state, data) {
     _.assign(state.comment, data);
+  },
+  freeze (state, data) {
+    state.freeze = data;
   }
 };

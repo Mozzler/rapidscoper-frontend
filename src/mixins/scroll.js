@@ -14,6 +14,9 @@ export default {
   computed: {
     activeSectionId () {
       return this.$route.params.section;
+    },
+    freeze () {
+      return this.$store.state.system.freeze;
     }
   },
   methods: {
@@ -28,6 +31,10 @@ export default {
       }
     },
     handleScroll () {
+      if (this.freeze) {
+        return;
+      }
+
       const container = this.$refs['scrollable-layout'];
       const nodes = container.querySelectorAll(this.scrollSelector);
       const node = _.find(nodes, item => item.getBoundingClientRect().top > -1);
@@ -48,7 +55,9 @@ export default {
   },
   watch: {
     activeSectionId () {
-      this.scrollToActiveSection();
+      if (!this.freeze) {
+        this.scrollToActiveSection();
+      }
     }
   }
 };

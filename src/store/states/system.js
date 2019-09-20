@@ -29,5 +29,6 @@ export default {
   }, {
     name: 'Full access',
     type: 'full'
-  }]
+  }],
+  freeze: false
 };
