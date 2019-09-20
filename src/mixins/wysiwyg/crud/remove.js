@@ -24,7 +24,10 @@ export default {
     async remove ($event) {
       this.event = $event;
 
-      // allow to remove characters from editable div
+      if (document.getSelection().rangeCount) {
+        document.execCommand('delete');
+      }
+
       if (this.isEditable()) {
         return;
       }

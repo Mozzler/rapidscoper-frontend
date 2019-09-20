@@ -50,7 +50,7 @@ export default {
     },
     createSpan (type, text, greyed = false, editable = false, clickable = false) {
       const cls = `user-story__editable--${type}${greyed ? ' text-greyed' : ''}`;
-      const props = `readonly contenteditable="${editable}"`;
+      const props = `contenteditable="${editable}"`;
       const attr = this.getAttr(text);
       const withoutDots = this.$options.filters.withoutDots(text);
 
