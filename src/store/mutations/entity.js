@@ -57,8 +57,6 @@ export default {
       _.each(['technical', 'user'], order => {
         project.sectionOrder[order] = _.filter(project.sectionOrder[order], id => id !== payload.id);
       });
-
-      console.log(project.sectionOrder);
     }
 
     let normalized = toCamelCase(payload.entity);

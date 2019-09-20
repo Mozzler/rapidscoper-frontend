@@ -154,13 +154,33 @@ export default {
         });
     },
     async createFirstStory () {
-      let payload = this.getCreateRequestPayload();
-      await this.$store.dispatch('entity/create', payload);
+      const data = {
+        id: this.getObjectId(),
+        type: 'user',
+        storyIdentifier: this.identifier,
+        parentStoryId: null,
+        afterStoryId: 0,
+
+        estimate: 0,
+        priority: null,
+        labels: [],
+        level: 0,
+
+        markup: `<span class="user-story__editable--beginning">As a </span>&nbsp;`,
+
+        sectionId: this.model.id,
+        teamId: this.model.teamId,
+        projectId: this.model.projectId
+      };
+
+      await this.$store.dispatch('entity/create', {
+        entity: 'story',
+        data: data
+      });
+
       this.$socket.recreateWatchers('story', false);
     },
     async removeSection () {
-      this.processing = this.model.id;
-
       this.$store.commit('entity/delete', {
         entity: 'section',
         id: this.model.id
@@ -171,8 +191,6 @@ export default {
         id: this.model.id,
         cancelCommit: true
       });
-
-      this.processing = null;
     }
   },
   watch: {

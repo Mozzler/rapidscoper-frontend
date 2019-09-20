@@ -21,13 +21,6 @@ export default {
     }
   },
   methods: {
-    getObjectId () {
-      const timestamp = (new Date().getTime() / 1000 | 0).toString(16);
-
-      return timestamp + 'xxxxxxxxxxxxxxxx'.replace(/[x]/g, () => {
-        return (Math.random() * 16 | 0).toString(16);
-      }).toLowerCase();
-    },
     getPreviousAfterStoryId (index = this.focused) {
       return index === 0 ? 0 : this.list[index - 1].id;
     },

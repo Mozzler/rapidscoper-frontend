@@ -3,10 +3,6 @@ export default {
     async removeStory (index = this.focused) {
       this.processing = this.list[index].id;
 
-      if (this.list[index].level === 0 && this.list.length === 1) {
-        return;
-      }
-
       const removable = {
         'ids': this.getSubstoryIds(index)
       };
@@ -42,14 +38,9 @@ export default {
         this.removeStory();
       }
 
-      const spans = this.getSpanList(false).length === 1;
-      if (this.list[this.focused].level === 0 && this.focused === 0 && spans && !this.getTail()) {
-        $event.preventDefault();
-      } else {
-        if (this.list[this.focused].markup) {
-          this.list[this.focused].markup = $event.target.innerHTML;
-          this.$refs[this.list[this.focused].id][0].classList.remove('text-greyed');
-        }
+      if (this.list[this.focused].markup) {
+        this.list[this.focused].markup = $event.target.innerHTML;
+        this.$refs[this.list[this.focused].id][0].classList.remove('text-greyed');
       }
 
       this.collapseToEnd();
