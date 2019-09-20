@@ -23,7 +23,8 @@ export default {
     scrollToActiveSection () {
       const el = document.getElementById(this.activeSectionId);
       if (el) {
-        el.scrollIntoView('smooth');
+        const container = el.closest('.content-container');
+        container.scrollIntoView({ behavior: 'smooth' });
       }
     },
     handleScroll () {
@@ -35,22 +36,19 @@ export default {
         return;
       }
 
-      this.frozen = true;
-      this.$router.replace({
-        name: this.$route.name,
-        params: {
-          section: node.id
-        }
-      });
+      if (node.id !== this.$route.params.section) {
+        this.$router.replace({
+          name: this.$route.name,
+          params: {
+            section: node.id
+          }
+        });
+      }
     }
   },
   watch: {
     activeSectionId () {
-      if (!this.frozen) {
-        this.scrollToActiveSection();
-      } else {
-        this.frozen = false;
-      }
+      this.scrollToActiveSection();
     }
   }
 };

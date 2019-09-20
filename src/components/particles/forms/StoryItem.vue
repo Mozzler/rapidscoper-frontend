@@ -54,7 +54,10 @@
         <span v-if="filters.priorities.length || filters.labels.length">
           There are no stories for the selected filters
         </span>
-        <span v-else>There are no stories in the sections yet</span>
+        <div v-else>
+          <div>There are no stories in the sections yet</div>
+          <div class="text-reference" @click="createFirstStory">Create story</div>
+        </div>
       </div>
       <v-divider class="my-3" />
     </div>
@@ -67,6 +70,7 @@ import ErrorHandler from '@/mixins/error-handler';
 import CircularLoader from '../../particles/loaders/Circular';
 
 import { mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'StoryItem',
@@ -86,14 +90,23 @@ export default {
   data () {
     return {
       hovered: null,
-      name: this.model.name,
-      description: this.model.description,
+      name: null,
+      description: null,
       processing: null
     };
+  },
+  beforeMount () {
+    this.hovered = null;
+    this.name = this.model.name;
+    this.description = this.model.description;
+    this.processing = null;
   },
   computed: {
     ...mapState({
       filters: state => state.story.filters
+    }),
+    ...mapGetters({
+      items: 'entity/items'
     }),
     stories () {
       return this.$store.getters['story/content'](this.model.id);
@@ -140,14 +153,26 @@ export default {
           this.$emit('show-error', msg);
         });
     },
-    removeSection () {
+    async createFirstStory () {
+      let payload = this.getCreateRequestPayload();
+      await this.$store.dispatch('entity/create', payload);
+      this.$socket.recreateWatchers('story', false);
+    },
+    async removeSection () {
       this.processing = this.model.id;
-      this.$store.dispatch('entity/delete', {
+
+      this.$store.commit('entity/delete', {
         entity: 'section',
         id: this.model.id
-      }).then(() => {
-        this.processing = null;
       });
+
+      await this.$store.dispatch('entity/delete', {
+        entity: 'section',
+        id: this.model.id,
+        cancelCommit: true
+      });
+
+      this.processing = null;
     }
   },
   watch: {

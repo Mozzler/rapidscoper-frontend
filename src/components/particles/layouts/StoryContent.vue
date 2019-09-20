@@ -52,7 +52,6 @@ export default {
   beforeMount () {
     this.$root.$on('create-new-section', this.createSection);
     this.$root.$on('show-error-message', this.setErrorMessage);
-    console.log();
   },
   beforeDestroy () {
     this.$root.$off('create-new-section');
@@ -116,7 +115,8 @@ export default {
           { 'fullDocument._id': { '$in': [ orderList ] } }
         ]
       };
-      this.$socket.recreateWatchers('story', true, filter);
+
+      //this.$socket.recreateWatchers('story', true, filter);
     }
   }
 };
