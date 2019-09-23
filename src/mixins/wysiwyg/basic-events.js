@@ -59,7 +59,7 @@ export default {
       this.setSiblings();
 
       let printable = this.printable($event.which);
-      if (!printable) {
+      if (!printable && !this.isEditable()) {
         this.list[this.focused].markup = this.event.target.innerHTML;
         this.collapseToEnd();
       }
