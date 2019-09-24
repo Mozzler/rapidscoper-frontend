@@ -138,6 +138,7 @@
 .user-story__editable {
   position: relative;
   width: 100%;
+  color: $black;
 
   span[contenteditable] {
     outline: none;
@@ -291,4 +292,17 @@
 
 .user-story--without-padding {
   padding: 5px 0;
+}
+
+.user-story__comments {
+  z-index: -1;
+  visibility: hidden;
+  height: 0;
+}
+
+.user-story__comment-item {
+  background-color: rgba(250, 220, 162, 0.7);;
+  position: absolute;
+  height: 20px;
+  z-index: 0;
 }

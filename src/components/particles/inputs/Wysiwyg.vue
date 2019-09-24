@@ -97,7 +97,10 @@
           <v-flex text-xs-left align-center row fill-height
             class="word-break-word">
             <div class="user-story__wysiwyg">
-              <div class="user-story__comments"></div>
+              <div :id="`comment-container-${item.id}`"></div>
+              <div class="user-story__comments"
+                   v-html="item.originalMarkup"
+                   :id="`comment-${item.id}`"></div>
               <div class="user-story__placeholder"
                    v-html="item.placeholder"
                    readonly></div>
@@ -234,16 +237,71 @@ export default {
       }
 
       this.replacement = null;
+    },
+    findCommentNodes (nodes, i = 0) {
+      let ranges = [];
+
+      for (; i < nodes.length; i++) {
+        const beginning = nodes[i].textContent.match(/\[commentId=.*?\]/i);
+
+        if (beginning) {
+          const id = beginning[0].replace(/\[commentId=|\]/g, '');
+          const startIndex = nodes[i].textContent.search(`[commentId=${id}]`);
+          nodes[i].textContent = nodes[i].textContent.replace(`[commentId=${id}]`, '');
+
+          let endIndex = null;
+          let found = null;
+          let j = i;
+
+          for (; j < nodes.length; j++) {
+            found = nodes[j].textContent.indexOf(`[/commentId=${id}]`);
+            if (found !== -1) {
+              endIndex = found - 1;
+              nodes[j].textContent = nodes[j].textContent.replace(`[/commentId=${id}]`, '');
+              break;
+            }
+          }
+
+          const range = document.createRange();
+
+          const startNode = nodes[i].nodeType === 1 ?
+            _.first(nodes[i].childNodes) : nodes[i];
+          range.setStart(startNode, startIndex);
+
+          const endNode = nodes[j].nodeType === 1 ?
+            _.first(nodes[j].childNodes) : nodes[j];
+          range.setEnd(endNode, endIndex);
+
+          ranges.push(range);
+        }
+      }
+
+      return ranges;
+    },
+    createCommentNodes (id) {
+      const nodes = document.getElementById(id).childNodes;
+      const ranges = this.findCommentNodes(nodes);
+
+      _.each(ranges, range => {
+        const parent = document.getElementById(`comment-container-${id}`);
+        const parentRect = parent.getBoundingClientRect();
+        const rect = range.getBoundingClientRect();
+
+        let n = document.createElement('div');
+        n.className = 'user-story__comment-item';
+        _.assign(n.style, {
+          left: `${rect.left - parentRect.left}px`,
+          top: `${rect.top - parentRect.top - 2}px`,
+          width: `${rect.width}px`
+        });
+
+        parent.prepend(n);
+      });
     }
   },
   mounted () {
-    _.each(this.stories, item => {
-      let originalMarkup = item.originalMarkup.split('commentId=');
-      let commentIndex = item.originalMarkup.indexOf('[commentId=');
-      /*while (markup.includes('[commentId=')) {
-        let commentIndex = markup.indexOf('[commentId=');
-        console.log(commentIndex);
-      }*/
+    _.each(this.stories, story => {
+      this.createCommentNodes(story.id);
     });
   },
   watch: {

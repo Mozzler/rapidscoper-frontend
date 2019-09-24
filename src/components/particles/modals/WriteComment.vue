@@ -142,6 +142,8 @@ export default {
         }
       });
 
+      console.log(comment.markup);
+
       this.processing = false;
       this.closeModal();
     },

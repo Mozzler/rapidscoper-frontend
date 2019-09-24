@@ -46,7 +46,7 @@
     <div v-if="stories.length">
       <wysiwyg
         :sectionId="model.id"
-        :stories="stories"/>
+        :stories="stories" />
     </div>
     <div v-else>
       <v-divider class="my-3" />
