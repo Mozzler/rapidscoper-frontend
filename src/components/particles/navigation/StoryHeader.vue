@@ -2,17 +2,19 @@
   <div class="header">
     <v-layout align-center justify-space-between row fill-height>
       <v-flex>
-        <v-btn icon class="text-size--18"
-          @click="toDashboard">
-          <v-icon>arrow_back</v-icon>
-        </v-btn>
-        <span class="text-size--16">
-          <dropdown :list="projects"
-                    :editable="true"
-                    :submit="submit"
-                    :selected="currentProject"
-                    @update="item => goToProject(item.name, item.id)" />
-        </span>
+        <div class="white-space-nowrap">
+          <v-btn icon class="text-size--18"
+            @click="toDashboard">
+            <v-icon>arrow_back</v-icon>
+          </v-btn>
+          <span class="text-size--16">
+            <dropdown :list="projects"
+                      :editable="true"
+                      :submit="submit"
+                      :selected="currentProject"
+                      @update="item => goToProject(item.name, item.id)" />
+          </span>
+        </div>
       </v-flex>
       <v-flex>
         <template v-if="tabsPanel && !storyViewMode">
