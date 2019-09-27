@@ -1,5 +1,11 @@
 <template>
   <div class="comment">
+    <circular-loader
+      cls="loader-shadow--without-padding transparent"
+      :size="50"
+      :width="5"
+      :visible="processing"
+    />
     <div class="comment__actions">
       <v-layout row fill-height align-center justify-space-between>
         <div v-if="!comment.parentCommentId">
@@ -31,7 +37,7 @@
         </v-layout>
       </v-flex>
     </v-layout>
-    <v-layout align-start justify-center row fill-height mt-2>
+    <v-layout align-center justify-center row fill-height mt-2>
       <v-flex>
         <div class="comment__text" :contenteditable="editable"
           :class="{'comment__text--editable': editable}">
@@ -50,10 +56,12 @@
 
 <script>
 import CommentOptions from '../menus/CommentOptions';
+import CircularLoader from '../../particles/loaders/Circular';
 
 import {
   mapState,
-  mapMutations
+  mapMutations,
+  mapActions
 } from 'vuex';
 
 export default {
@@ -62,12 +70,14 @@ export default {
     'item'
   ],
   components: {
-    CommentOptions
+    CommentOptions,
+    CircularLoader
   },
   data () {
     return {
       editable: false,
-      comment: null
+      comment: null,
+      processing: false
     };
   },
   computed: {
@@ -79,18 +89,23 @@ export default {
     this.comment = this.item;
   },
   methods: {
-    ...mapMutations('entity', [
-      'update'
-    ]),
-    updateVisibility () {
-      this.update({
+    ...mapMutations('entity', [ 'update' ]),
+    ...mapActions('entity', [ 'updateAction' ]),
+    getPayload () {
+      return {
         entity: 'comment',
         data: {
-          id: this.comment.id,
-          visibleToClient: !this.comment.visibleToClient
+          id: this.comment.id
         },
-        params: this.comment.id
-      });
+        params: { id: this.comment.id }
+      };
+    },
+    updateVisibility () {
+      this.processing = true;
+      const payload = this.getPayload();
+      payload.data.visibleToClient = !this.comment.visibleToClient;
+      this.update(payload);
+      this.processing = false;
     },
     removeComment () {
       console.log('remove-comment');

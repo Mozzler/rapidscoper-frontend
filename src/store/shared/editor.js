@@ -181,6 +181,7 @@ function comments (commentList, userInfoList) {
       name: user ? user.name : null,
       text: comment.content,
       createdBy: comment.createdUserId,
+      visibleToClient: comment.visibleToClient,
       editor: false,
       time
     };
