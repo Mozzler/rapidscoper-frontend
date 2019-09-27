@@ -11,27 +11,28 @@
 
         <div class="comment__history">
           <div v-for="(item, index) in history" :key="index">
-            <v-layout row fill-height>
-              <v-flex shrink mr-2>
-                <img class="comment__img"
-                     :src="item.avatarUrl" />
-              </v-flex>
-              <v-flex grow>
-                <v-layout column fill-height>
-                  <div class="font-weight-bold"> {{ item.name }} </div>
-                  <div class="comment__subtitle"> {{ item.time }} </div>
-                </v-layout>
-              </v-flex>
-            </v-layout>
-            <v-layout fill-height row mt-2>
-              <v-flex>
-                <div class="comment__text"> {{ item.text }} </div>
-                <div class="comment__subtitle">1 reply</div>
-              </v-flex>
-            </v-layout>
+            <div>
+              <v-layout row fill-height>
+                <v-flex shrink mr-2>
+                  <img class="comment__img"
+                       :src="item.avatarUrl" />
+                </v-flex>
+                <v-flex grow>
+                  <v-layout column fill-height>
+                    <div> {{ item.name }} </div>
+                    <div class="comment__subtitle"> {{ item.time }} </div>
+                  </v-layout>
+                </v-flex>
+              </v-layout>
+              <v-layout fill-height row mt-2>
+                <v-flex>
+                  <div class="comment__text"> {{ item.text }} </div>
+                </v-flex>
+              </v-layout>
+            </div>
           </div>
         </div>
-
+        <v-divider class="my-3 comment__divider" />
         <v-card-text class="padding-0">
           <div class="mb-3">
             <v-layout row fill-height align-center>
@@ -113,15 +114,14 @@ export default {
     };
   },
   computed: {
-    ...mapState('auth', [
-      'user'
-    ]),
-    ...mapGetters('entity', [
-      'items'
-    ]),
-    ...mapState('system', [
-      'comment'
-    ]),
+    ...mapState({
+      user: state => state.auth.user,
+      comment: state => state.system.comment
+    }),
+    ...mapGetters({
+      items: 'entity/items',
+      commentList: 'entity/comments'
+    }),
     userInfo () {
       return this.items('userInfo');
     },
@@ -129,7 +129,10 @@ export default {
       return _.find(this.userInfo, info => info.userId === this.user.user_id);
     },
     history () {
-      return this.items('comment').find(comment => comment.id === this.comment.id);
+      let comments = this.commentList();
+      let parent = _.find(comments, c => c && c.id === this.comment.id);
+      let childs = _.filter(comments, c => c && c.parentCommentId === this.comment.id);
+      return !parent ? childs : [parent, ...childs];
     }
   },
   methods: {
@@ -148,7 +151,7 @@ export default {
         status: 'active',
         content: this.content,
         visibleToClient: this.visible,
-        parentCommentId: null,
+        parentCommentId: this.comment.id,
         storyId: comment.item.id,
         sectionId: comment.item.sectionId,
         teamId: comment.item.teamId,
@@ -175,13 +178,6 @@ export default {
     },
     setVisibility () {
       this.visible = !this.visible;
-    }
-  },
-  watch: {
-    dialog () {
-      if (this.dialog) {
-        console.log(this.items('comment'), this.comment);
-      }
     }
   }
 };

@@ -44,6 +44,11 @@ export default {
     comment: {
       deep: true,
       async handler () {
+        if (!this.comment.precomment) {
+          this.show = false;
+          return;
+        }
+
         this.show = this.comment.state;
 
         await this.$nextTick();

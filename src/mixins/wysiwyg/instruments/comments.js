@@ -118,7 +118,9 @@ export default {
         x: x,
         y: y,
         item: story,
-        markup: id ? markup || story.markup : null
+        markup: id ? markup || story.markup : null,
+        precomment: true,
+        id: null
       };
 
       this.setComment(data);

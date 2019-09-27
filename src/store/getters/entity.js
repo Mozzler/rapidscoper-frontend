@@ -100,7 +100,7 @@ export default {
     };
   },
   comments (state) {
-    return entity => {
+    return () => {
       let comment = state.comment;
       let userInfo = state.userInfo;
 

@@ -32,8 +32,8 @@
                 <div class="comment__subtitle">1 reply</div>
               </v-flex>
             </v-layout>
-            <v-divider horizontal></v-divider>
           </div>
+          <v-divider horizontal></v-divider>
       </div>
       </div>
     </template>
@@ -89,7 +89,8 @@ export default {
         x: 300,
         y: 300,
         markup: '',
-        item: _.find(this.stories, story => story.id === item.storyId)
+        item: _.find(this.stories, story => story.id === item.storyId),
+        precomment: false
       });
       this.$root.$emit('write-comment');
     }

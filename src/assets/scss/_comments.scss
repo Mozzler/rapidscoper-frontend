@@ -1,3 +1,14 @@
+.tool-section {
+  .comment {
+    margin: -16px -25px -12px;
+    padding: 16px 25px;
+
+    &:hover {
+      background-color: $light-grey;
+    }
+  }
+}
+
 .comment__img {
   width: 32px;
   height: 32px;
@@ -52,4 +63,9 @@
 
 .comment-dialog--invisible {
   display: none;
+}
+
+.comment__divider {
+  margin-left: -20px;
+  max-width: calc(100% + 36px)
 }

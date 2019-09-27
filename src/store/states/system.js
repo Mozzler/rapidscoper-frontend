@@ -8,7 +8,8 @@ export default {
     y: 0,
     markup: '',
     item: null,
-    id: null
+    id: null,
+    precomment: true
   },
   periods: ['Unexpired', '1 day', '2 days', '3 days', '7 days'],
   roles: [{
