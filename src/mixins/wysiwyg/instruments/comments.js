@@ -77,7 +77,9 @@ export default {
 
       _.each(markup, item => {
         let index = _.findIndex(shadowNodes, i => i.className === item.className);
-        shadowNodes[index + item.increment].content = item.updated;
+        if (shadowNodes[index + item.increment]) {
+          shadowNodes[index + item.increment].content = item.updated;
+        }
       });
 
       return _.map(shadowNodes, item => {

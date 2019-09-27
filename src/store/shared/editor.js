@@ -175,6 +175,8 @@ function comments (commentList, userInfoList) {
     }
 
     return {
+      id: comment.id,
+      storyId: comment.storyId,
       avatarUrl: user ? user.avatarUrl : null,
       name: user ? user.name : null,
       text: comment.content,

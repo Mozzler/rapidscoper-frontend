@@ -12,7 +12,8 @@
       </div>
       <div>
         <div v-for="(item, index) in list" :key="index">
-          <div class="comment">
+          <div class="comment cursor-pointer"
+               @[event]="() => showComment(item)">
             <v-layout row fill-height>
               <v-flex shrink mr-2>
                 <img class="comment__img"
@@ -47,13 +48,18 @@
 
 <script>
 import Dropdown from '../menus/Dropdown';
+import { mapMutations } from 'vuex';
 
 export default {
   name: 'Comments',
   inject: ['entity'],
-  props: [
-    'source'
-  ],
+  props: {
+    'source': {},
+    'clickable': {
+      default: false,
+      type: Boolean
+    }
+  },
   components: {
     Dropdown
   },
@@ -66,6 +72,26 @@ export default {
   computed: {
     list () {
       return this.source(this.entity);
+    },
+    stories () {
+      return this.$store.getters['entity/items']('story');
+    },
+    event () {
+      return this.clickable ? 'click' : null;
+    }
+  },
+  methods: {
+    ...mapMutations('system', [ 'setComment' ]),
+    showComment (item) {
+      this.setComment({
+        id: item.id,
+        state: item.storyId,
+        x: 300,
+        y: 300,
+        markup: '',
+        item: _.find(this.stories, story => story.id === item.storyId)
+      });
+      this.$root.$emit('write-comment');
     }
   }
 };

@@ -3,19 +3,44 @@
     <v-dialog v-model="dialog" max-width="416">
       <v-card class="modal-card modal-card--short">
         <div class="modal-header">
-          <v-layout row fill-height align-center>
-            <img
-              class="comment__img mr-2"
-              :src="info ? info.avatarUrl : null" />
-            <span>{{ info ? info.name : null }}</span>
-          </v-layout>
           <v-btn icon class="modal-close-btn" @click="setVisibility">
             <v-icon v-if="visible">visibility</v-icon>
             <v-icon class="primary-icon" v-else>visibility_off</v-icon>
           </v-btn>
         </div>
 
-        <v-card-text class="mt-3 padding-0">
+        <div class="comment__history">
+          <div v-for="(item, index) in history" :key="index">
+            <v-layout row fill-height>
+              <v-flex shrink mr-2>
+                <img class="comment__img"
+                     :src="item.avatarUrl" />
+              </v-flex>
+              <v-flex grow>
+                <v-layout column fill-height>
+                  <div class="font-weight-bold"> {{ item.name }} </div>
+                  <div class="comment__subtitle"> {{ item.time }} </div>
+                </v-layout>
+              </v-flex>
+            </v-layout>
+            <v-layout fill-height row mt-2>
+              <v-flex>
+                <div class="comment__text"> {{ item.text }} </div>
+                <div class="comment__subtitle">1 reply</div>
+              </v-flex>
+            </v-layout>
+          </div>
+        </div>
+
+        <v-card-text class="padding-0">
+          <div class="mb-3">
+            <v-layout row fill-height align-center>
+              <img
+                class="comment__img mr-2"
+                :src="info ? info.avatarUrl : null" />
+              <span>{{ info ? info.name : null }}</span>
+            </v-layout>
+          </div>
           <div>
             <circular-loader
               cls="loader-shadow--without-padding transparent"
@@ -102,6 +127,9 @@ export default {
     },
     info () {
       return _.find(this.userInfo, info => info.userId === this.user.user_id);
+    },
+    history () {
+      return this.items('comment').find(comment => comment.id === this.comment.id);
     }
   },
   methods: {
@@ -142,13 +170,18 @@ export default {
         }
       });
 
-      console.log(comment.markup);
-
       this.processing = false;
       this.closeModal();
     },
     setVisibility () {
       this.visible = !this.visible;
+    }
+  },
+  watch: {
+    dialog () {
+      if (this.dialog) {
+        console.log(this.items('comment'), this.comment);
+      }
     }
   }
 };

@@ -264,6 +264,10 @@ export default {
 
           const range = document.createRange();
 
+          if (!nodes[i] || !nodes[j]) {
+            return;
+          }
+
           const startNode = nodes[i].nodeType === 1 ?
             _.first(nodes[i].childNodes) : nodes[i];
           range.setStart(startNode, startIndex);
@@ -279,7 +283,7 @@ export default {
       return ranges;
     },
     createCommentNodes (id) {
-      const nodes = document.getElementById(id).childNodes;
+      const nodes = document.getElementById(`comment-${id}`).childNodes;
       const ranges = this.findCommentNodes(nodes);
 
       _.each(ranges, range => {
@@ -318,6 +322,10 @@ export default {
             document.execCommand('selectAll', false, null);
             selection.collapseToEnd();
           }
+
+          _.each(this.stories, story => {
+            this.createCommentNodes(story.id);
+          });
         });
       }
     }
