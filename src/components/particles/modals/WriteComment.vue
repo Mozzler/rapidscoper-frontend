@@ -2,36 +2,7 @@
   <v-layout row justify-center>
     <v-dialog v-model="dialog" max-width="416">
       <v-card class="modal-card modal-card--short">
-        <div class="modal-header">
-          <v-btn icon class="modal-close-btn" @click="setVisibility">
-            <v-icon v-if="visible">visibility</v-icon>
-            <v-icon class="primary-icon" v-else>visibility_off</v-icon>
-          </v-btn>
-        </div>
-
-        <div class="comment__history">
-          <div v-for="(item, index) in history" :key="index">
-            <div>
-              <v-layout row fill-height>
-                <v-flex shrink mr-2>
-                  <img class="comment__img"
-                       :src="item.avatarUrl" />
-                </v-flex>
-                <v-flex grow>
-                  <v-layout column fill-height>
-                    <div> {{ item.name }} </div>
-                    <div class="comment__subtitle"> {{ item.time }} </div>
-                  </v-layout>
-                </v-flex>
-              </v-layout>
-              <v-layout fill-height row mt-2>
-                <v-flex>
-                  <div class="comment__text"> {{ item.text }} </div>
-                </v-flex>
-              </v-layout>
-            </div>
-          </div>
-        </div>
+        <comment-history v-if="dialog"/>
         <v-divider class="my-3 comment__divider" />
         <v-card-text class="padding-0">
           <div class="mb-3">
@@ -91,17 +62,20 @@
 <script>
 import ModalMixin from '@/mixins/modal';
 import CircularLoader from '../../particles/loaders/Circular';
+import CommentHistory from '../../particles/lists/CommentHistory';
 
 import {
   mapState,
   mapGetters,
-  mapActions
+  mapActions,
+  mapMutations
 } from 'vuex';
 
 export default {
   name: 'write-comment',
   components: {
-    CircularLoader
+    CircularLoader,
+    CommentHistory
   },
   mixins: [
     ModalMixin
@@ -110,7 +84,8 @@ export default {
     return {
       content: '',
       visible: true,
-      processing: false
+      processing: false,
+      history: []
     };
   },
   computed: {
@@ -119,23 +94,19 @@ export default {
       comment: state => state.system.comment
     }),
     ...mapGetters({
-      items: 'entity/items',
-      commentList: 'entity/comments'
+      items: 'entity/items'
     }),
     userInfo () {
       return this.items('userInfo');
     },
     info () {
       return _.find(this.userInfo, info => info.userId === this.user.user_id);
-    },
-    history () {
-      let comments = this.commentList();
-      let parent = _.find(comments, c => c && c.id === this.comment.id);
-      let childs = _.filter(comments, c => c && c.parentCommentId === this.comment.id);
-      return !parent ? childs : [parent, ...childs];
     }
   },
   methods: {
+    ...mapMutations('system', [
+      'setComment'
+    ]),
     ...mapActions('entity', [
       'create',
       'update'
@@ -175,9 +146,6 @@ export default {
 
       this.processing = false;
       this.closeModal();
-    },
-    setVisibility () {
-      this.visible = !this.visible;
     }
   }
 };

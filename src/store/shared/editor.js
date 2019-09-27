@@ -180,6 +180,8 @@ function comments (commentList, userInfoList) {
       avatarUrl: user ? user.avatarUrl : null,
       name: user ? user.name : null,
       text: comment.content,
+      createdBy: comment.createdUserId,
+      editor: false,
       time
     };
   });

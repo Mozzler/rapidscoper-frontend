@@ -30,6 +30,15 @@
   margin-bottom: 4px;
 }
 
+.comment__text--editable {
+  line-height: 20px;
+  padding: 2px 12px;
+  border-radius: 4px;
+  margin-top: 10px;
+  border: 1px solid gray;
+  outline: none;
+}
+
 .comment-dialog {
   position: fixed;
   display: flex;
@@ -68,4 +77,23 @@
 .comment__divider {
   margin-left: -20px;
   max-width: calc(100% + 36px)
+}
+
+.comment {
+  .v-btn--icon {
+    margin: 0;
+    padding: 0;
+    width: 25px;
+    height: 25px;
+
+    i {
+      font-size: 18px;
+    }
+  }
+}
+
+.comment__actions {
+  position: absolute;
+  right: 10px;
+  top: 10px;
 }
