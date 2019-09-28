@@ -67,7 +67,7 @@ export default {
   },
   data () {
     return {
-      dropdown: ['Active', 'Archived'],
+      dropdown: ['Active', 'Resolved', 'Deleted'],
       commentStatus: 'Active'
     };
   },

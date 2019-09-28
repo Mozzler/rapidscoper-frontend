@@ -7,7 +7,7 @@
       :visible="processing"
     />
     <div class="comment__actions">
-      <v-layout row fill-height align-center justify-space-between>
+      <v-layout row fill-height align-center justify-space-between v-if="comment.status !== 'deleted'">
         <div v-if="!comment.parentCommentId">
           <v-btn icon v-if="!item.parentCommentId" @click="updateVisibility">
             <v-icon v-if="item.visibleToClient">visibility</v-icon>
@@ -37,7 +37,7 @@
       </v-flex>
     </v-layout>
     <v-layout align-start row fill-height>
-      <v-flex>
+      <v-flex v-if="comment.status !== 'deleted'">
         <v-textarea
           class="comment-textarea rapid-textarea"
           name="comment"
@@ -51,6 +51,9 @@
           rows="1"
           auto-grow
         ></v-textarea>
+      </v-flex>
+      <v-flex v-else class="text-greyed mt-2">
+        Delete the comment
       </v-flex>
       <v-flex shrink>
         <v-btn icon v-if="editable"
@@ -129,7 +132,7 @@ export default {
       });
     },
     resolveComment () {
-      this.comment.status = this.comment.status === 'active' ? 'archived' : 'active';
+      this.comment.status = this.comment.status === 'active' ? 'resolved' : 'active';
       this.initAction({
         status: this.comment.status
       });
@@ -141,7 +144,11 @@ export default {
       });
     },
     removeComment () {
-      this.initAction({}, 'remove', { id: this.comment.id });
+      //this.initAction({}, 'remove', { id: this.comment.id });
+      this.comment.status = 'deleted';
+      this.initAction({
+        status: this.comment.status
+      });
     }
   },
   watch: {
