@@ -4,6 +4,9 @@
     <div v-for="(comment, index) in chain" :key="index">
       <comment-item :item="comment"/>
     </div>
+    <v-divider
+      v-if="master"
+      class="my-3 comment__divider" />
   </div>
 </template>
 
