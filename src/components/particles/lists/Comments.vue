@@ -4,12 +4,12 @@
       comments
     </div>
 
+    <div class="mt-3">
+      <dropdown :list="dropdown" :selected="commentStatus"
+                @update="value => commentStatus = value"/>
+    </div>
     <template v-if="list.length">
-      <div class="mt-3">
-        <dropdown :list="dropdown" :selected="active"
-                  @update="value => active = value"/>
-        <v-divider horizontal></v-divider>
-      </div>
+      <v-divider horizontal></v-divider>
       <div>
         <div v-for="(item, index) in list" :key="index">
           <div class="comment cursor-pointer"
@@ -36,7 +36,7 @@
             </v-layout>
           </div>
           <v-divider horizontal></v-divider>
-      </div>
+        </div>
       </div>
     </template>
     <div
@@ -67,13 +67,17 @@ export default {
   },
   data () {
     return {
-      dropdown: ['Active'],
-      active: 'Active'
+      dropdown: ['Active', 'Archived'],
+      commentStatus: 'Active'
     };
   },
   computed: {
-    list () {
+    comments () {
       return this.source(this.entity);
+    },
+    list () {
+      const status = this.commentStatus.toLowerCase();
+      return _.filter(this.comments, comment => comment.status === status);
     },
     stories () {
       return this.$store.getters['entity/items']('story');
