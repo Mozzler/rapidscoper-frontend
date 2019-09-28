@@ -186,6 +186,7 @@ function commentBuilder (comment, user) {
     createdBy: comment.createdUserId,
     visibleToClient: comment.visibleToClient,
     parentCommentId: comment.parentCommentId,
+    status: comment.status,
     time: converter.unixToDateTimeStr(comment.createdAt),
     replies: []
   };

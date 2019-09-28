@@ -9,14 +9,13 @@
     <div class="comment__actions">
       <v-layout row fill-height align-center justify-space-between>
         <div v-if="!comment.parentCommentId">
-          <v-btn icon v-if="!item.parentCommentId"
-                 @click="updateVisibility">
+          <v-btn icon v-if="!item.parentCommentId" @click="updateVisibility">
             <v-icon v-if="item.visibleToClient">visibility</v-icon>
-            <v-icon class="primary-icon" v-else>visibility_off</v-icon>
+            <v-icon v-else class="primary-icon">visibility_off</v-icon>
           </v-btn>
-          <v-btn icon v-if="!comment.parentCommentId"
-                 @click="resolveComment">
-            <v-icon>check</v-icon>
+          <v-btn icon v-if="!comment.parentCommentId" @click="resolveComment">
+            <v-icon v-if="comment.status === 'active'">check_circle_outline</v-icon>
+            <v-icon v-else class="primary-icon">check_circle</v-icon>
           </v-btn>
         </div>
         <comment-options
@@ -116,31 +115,33 @@ export default {
         params: { id: this.comment.id }
       };
     },
-    initUpdate (data = {}) {
+    async initUpdate (data = {}) {
       this.processing = true;
       const payload = this.getPayload();
       _.assign(payload.data, data);
-      this.update(payload);
+      await this.update(payload);
       this.processing = false;
     },
     updateVisibility () {
-      const data = {
-        visibleToClient: !this.comment.visibleToClient
-      };
-      this.initUpdate(data);
+      this.comment.visibleToClient = !this.comment.visibleToClient;
+      this.initUpdate({
+        visibleToClient: this.comment.visibleToClient
+      });
     },
     removeComment () {
       console.log('remove-comment');
     },
     resolveComment () {
-      console.log('resolve-comment');
+      this.comment.status = this.comment.status === 'active' ? 'archived' : 'active';
+      this.initUpdate({
+        status: this.comment.status
+      });
     },
     finishEdit () {
       this.editable = false;
-      const data = {
+      this.initUpdate({
         content: this.comment.text
-      };
-      this.initUpdate(data);
+      });
     }
   },
   watch: {
