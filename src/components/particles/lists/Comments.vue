@@ -28,7 +28,8 @@
             </v-layout>
             <v-layout fill-height row mt-2>
               <v-flex>
-                <div class="comment__text"> {{ item.text }} </div>
+                <div class="comment__text" v-if="item.status !== 'deleted'"> {{ item.text }} </div>
+                <div class="comment__text text-greyed" v-else> Delete the comment </div>
                 <div class="comment__subtitle" v-if="item.replies.length">
                   {{ item.replies.length | s('reply', 'replies') }}
                 </div>
