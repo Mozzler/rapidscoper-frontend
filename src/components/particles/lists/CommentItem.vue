@@ -1,5 +1,5 @@
 <template>
-  <div class="comment">
+  <div class="comment" v-if="comment">
     <circular-loader
       cls="loader-shadow--without-padding transparent"
       :size="50"
@@ -66,9 +66,15 @@ import {
 
 export default {
   name: 'CommentItem',
-  props: [
-    'item'
-  ],
+  props: {
+    item: {
+      type: [Object, undefined]
+    },
+    readonly: {
+      type: Boolean,
+      default: false
+    }
+  },
   components: {
     CommentOptions,
     CircularLoader

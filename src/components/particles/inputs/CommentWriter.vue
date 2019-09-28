@@ -1,11 +1,18 @@
 <template>
   <v-card-text class="padding-0">
-    <div class="mb-3">
+    <div class="mb-3 comment position-relative">
       <v-layout row fill-height align-center>
         <img
           class="comment__img mr-2"
           :src="info ? info.avatarUrl : null" />
         <span>{{ info ? info.name : null }}</span>
+        <div class="comment__actions--writer" v-if="!comment.id">
+          <v-btn icon
+                 @click="visibleToClient = !visibleToClient">
+            <v-icon v-if="visibleToClient">visibility</v-icon>
+            <v-icon class="primary-icon" v-else>visibility_off</v-icon>
+          </v-btn>
+        </div>
       </v-layout>
     </div>
     <div>
@@ -69,6 +76,7 @@ export default {
   data () {
     return {
       content: '',
+      visibleToClient: true,
       processing: false
     };
   },
@@ -87,6 +95,9 @@ export default {
       return _.find(this.userInfo, info => info.userId === this.user.user_id);
     }
   },
+  beforeMount () {
+    this.initData();
+  },
   methods: {
     ...mapMutations('system', [
       'setComment'
@@ -97,20 +108,22 @@ export default {
     ]),
     initData () {
       this.content = '';
+      this.visible = true;
+      this.$validator.reset();
     },
     async send () {
-      let comment = { ...this.comment };
       this.processing = true;
+      const { item, markup, id } = this.comment;
 
       let payload = {
         status: 'active',
         content: this.content,
-        visibleToClient: this.visible,
-        parentCommentId: this.comment.id,
-        storyId: comment.item.id,
-        sectionId: comment.item.sectionId,
-        teamId: comment.item.teamId,
-        projectId: comment.item.projectId
+        visibleToClient: this.visibleToClient,
+        parentCommentId: id,
+        storyId: item.id,
+        sectionId: item.sectionId,
+        teamId: item.teamId,
+        projectId: item.projectId
       };
 
       const response = await this.create({
@@ -118,18 +131,21 @@ export default {
         data: payload
       });
 
-      await this.update({
-        entity: 'story',
-        data: {
-          markup: comment.markup.replace(/~~~/g, response.item.id)
-        },
-        params: {
-          id: comment.item.id
-        }
-      });
+      if (!id) { // if master comment - not comment within chain
+        await this.updateStoryMarkup(markup, response.item.id, item.id);
+      }
 
       this.processing = false;
-      this.closeModal();
+      this.$emit('close-modal');
+    },
+    updateStoryMarkup (markup, commentId, storyId) {
+      const data = {
+        entity: 'story',
+        data:   { markup: markup.replace(/~~~/g, commentId) },
+        params: { id: storyId }
+      };
+
+      return this.update(data);
     }
   }
 };

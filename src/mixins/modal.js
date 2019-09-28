@@ -59,7 +59,7 @@ export default {
   },
   watch: {
     dialog () {
-      if (this.dialog) {
+      if (this.dialog && typeof this.initData === 'function') {
         this.initData();
         this.$validator.reset();
       }
