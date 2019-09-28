@@ -70,7 +70,6 @@ import CircularLoader from '../../particles/loaders/Circular';
 
 import {
   mapState,
-  mapMutations,
   mapActions
 } from 'vuex';
 
@@ -105,43 +104,44 @@ export default {
     this.comment = this.item;
   },
   methods: {
-    ...mapActions('entity', [ 'update' ]),
-    getPayload () {
+    ...mapActions('entity', {
+      update: 'update',
+      remove: 'delete'
+    }),
+    getPayload (data = {}, additional = {}) {
       return {
         entity: 'comment',
-        data: {
-          id: this.comment.id
-        },
-        params: { id: this.comment.id }
+        params: { id: this.comment.id },
+        ...data,
+        ...additional
       };
     },
-    async initUpdate (data = {}) {
+    async initAction (data = {}, action = 'update', additional = {}) {
       this.processing = true;
-      const payload = this.getPayload();
-      _.assign(payload.data, data);
-      await this.update(payload);
+      const payload = this.getPayload({ data: data }, additional);
+      await this[action](payload);
       this.processing = false;
     },
     updateVisibility () {
       this.comment.visibleToClient = !this.comment.visibleToClient;
-      this.initUpdate({
+      this.initAction({
         visibleToClient: this.comment.visibleToClient
       });
     },
-    removeComment () {
-      console.log('remove-comment');
-    },
     resolveComment () {
       this.comment.status = this.comment.status === 'active' ? 'archived' : 'active';
-      this.initUpdate({
+      this.initAction({
         status: this.comment.status
       });
     },
     finishEdit () {
       this.editable = false;
-      this.initUpdate({
+      this.initAction({
         content: this.comment.text
       });
+    },
+    removeComment () {
+      this.initAction({}, 'remove', { id: this.comment.id });
     }
   },
   watch: {
