@@ -1,3 +1,7 @@
+.comment-modal {
+  @include rapid-scroll;
+}
+
 .tool-section {
   .comment {
     margin: -16px -25px -12px;
@@ -81,6 +85,8 @@
 }
 
 .comment {
+  position: relative;
+
   .v-btn--icon {
     margin: 0;
     padding: 0;
@@ -94,12 +100,6 @@
 }
 
 .comment__actions {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-}
-
-.comment__actions--writer {
   position: absolute;
   right: 0;
   top: 0;

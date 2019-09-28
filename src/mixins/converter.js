@@ -38,6 +38,12 @@ export default {
       }
 
       return s ? s.replace(/\.../g, '').trim() : s;
+    },
+    s (number, single, many) {
+      const unit = Number(number);
+      const measure = unit === 1 ? single : many;
+
+      return `${unit} ${measure}`;
     }
   },
   methods: {

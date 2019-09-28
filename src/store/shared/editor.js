@@ -155,25 +155,40 @@ function labels (dictionary) {
   return _.filter(dictionary, item => item.type === 'label');
 }
 
-function comments (commentList, userInfoList) {
+function comments (commentList, userInfoList, replies = true) {
   if (!commentList || !userInfoList) {
     return;
   }
 
-  return _.map(commentList, comment => {
-    let user = _.find(userInfoList, u => u.userId === comment.createdUserId);
-    return {
-      id: comment.id,
-      storyId: comment.storyId,
-      avatarUrl: user ? user.avatarUrl : null,
-      name: user ? user.name : null,
-      text: comment.content,
-      createdBy: comment.createdUserId,
-      visibleToClient: comment.visibleToClient,
-      editor: false,
-      time: converter.unixToDateTimeStr(comment.createdAt)
-    };
-  });
+  return _.chain(commentList)
+    .filter(comment => !comment.parentCommentId)
+    .map(comment => {
+      const user = _.find(userInfoList, u => u.userId === comment.createdUserId);
+      let master = commentBuilder(comment, user);
+
+      master.replies = _.chain(commentList)
+        .filter(reply => reply.parentCommentId === comment.id)
+        .map(reply => commentBuilder(reply, user))
+        .value();
+
+      return master;
+    })
+    .value();
+}
+
+function commentBuilder (comment, user) {
+  return {
+    id: comment.id,
+    storyId: comment.storyId,
+    avatarUrl: user ? user.avatarUrl : null,
+    name: user ? user.name : null,
+    text: comment.content,
+    createdBy: comment.createdUserId,
+    visibleToClient: comment.visibleToClient,
+    parentCommentId: comment.parentCommentId,
+    time: converter.unixToDateTimeStr(comment.createdAt),
+    replies: []
+  };
 }
 
 export default {

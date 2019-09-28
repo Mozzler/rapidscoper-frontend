@@ -1,12 +1,12 @@
 <template>
   <v-card-text class="padding-0">
-    <div class="mb-3 comment position-relative">
+    <div class="mb-3 comment">
       <v-layout row fill-height align-center>
         <img
           class="comment__img mr-2"
           :src="info ? info.avatarUrl : null" />
         <span>{{ info ? info.name : null }}</span>
-        <div class="comment__actions--writer" v-if="!comment.id">
+        <div class="comment__actions" v-if="!comment.id">
           <v-btn icon
                  @click="visibleToClient = !visibleToClient">
             <v-icon v-if="visibleToClient">visibility</v-icon>

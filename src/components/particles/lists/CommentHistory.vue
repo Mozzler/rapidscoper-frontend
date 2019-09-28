@@ -1,11 +1,10 @@
 <template>
-  <div class="comment__history">
-    <comment-item :item="master"/>
-    <div v-for="(comment, index) in chain" :key="index">
+  <div v-if="primary">
+    <comment-item :item="primary"/>
+    <div v-for="(comment, index) in primary.replies" :key="index">
       <comment-item :item="comment"/>
     </div>
     <v-divider
-      v-if="master"
       class="my-3 comment__divider" />
   </div>
 </template>
@@ -40,11 +39,8 @@ export default {
     comments () {
       return this.commentList();
     },
-    master () {
+    primary () {
       return _.find(this.comments, c => c && c.id === this.comment.id);
-    },
-    chain () {
-      return _.filter(this.comments, c => c && c.parentCommentId === this.comment.id);
     }
   }
 };

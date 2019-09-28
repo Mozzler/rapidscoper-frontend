@@ -29,7 +29,9 @@
             <v-layout fill-height row mt-2>
               <v-flex>
                 <div class="comment__text"> {{ item.text }} </div>
-                <div class="comment__subtitle">1 reply</div>
+                <div class="comment__subtitle" v-if="item.replies.length">
+                  {{ item.replies.length | s('reply', 'replies') }}
+                </div>
               </v-flex>
             </v-layout>
           </div>
