@@ -35,13 +35,26 @@
   margin-bottom: 4px;
 }
 
-.comment__text--editable {
-  line-height: 20px;
-  padding: 2px 12px;
-  border-radius: 4px;
-  margin-top: 10px;
-  border: 1px solid gray;
-  outline: none;
+.comment-textarea {
+  .v-input__slot {
+    border: none !important;
+    padding: 0 !important;
+
+    textarea {
+      color: $light-black;
+    }
+  }
+}
+
+.comment__textarea--editable {
+  .v-input__slot {
+    line-height: 20px;
+    border-radius: 4px;
+    margin-top: 10px;
+    border: 1px solid $primary !important;
+    padding: 0 10px !important;
+    outline: none;
+  }
 }
 
 .comment-dialog {

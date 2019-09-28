@@ -1,5 +1,5 @@
 <template>
-  <div class="comment mb-4">
+  <div class="comment mb-3">
     <circular-loader
       cls="loader-shadow--without-padding transparent"
       :size="50"
@@ -37,16 +37,27 @@
         </v-layout>
       </v-flex>
     </v-layout>
-    <v-layout align-center justify-center row fill-height mt-2>
+    <v-layout align-start row fill-height>
       <v-flex>
-        <div class="comment__text" :contenteditable="editable"
-          :class="{'comment__text--editable': editable}">
-          {{ comment.text }}
-        </div>
+        <v-textarea
+          class="comment-textarea rapid-textarea"
+          name="comment"
+          v-model="comment.text"
+          v-validate="'required|min:2|max:255'"
+          label="Write a comment ..."
+          :error-messages="errors.first('comment')"
+          :disabled="!editable"
+          :class="{'comment__textarea--editable': editable}"
+          solo
+          rows="1"
+          auto-grow
+        ></v-textarea>
       </v-flex>
       <v-flex shrink>
         <v-btn icon v-if="editable"
-               @click="editable = false">
+               class="ma-1"
+               :style="{ 'color': 'green' }"
+               @click="finishEdit">
           <v-icon>check</v-icon>
         </v-btn>
       </v-flex>
@@ -95,8 +106,7 @@ export default {
     this.comment = this.item;
   },
   methods: {
-    ...mapMutations('entity', [ 'update' ]),
-    ...mapActions('entity', [ 'updateAction' ]),
+    ...mapActions('entity', [ 'update' ]),
     getPayload () {
       return {
         entity: 'comment',
@@ -106,18 +116,31 @@ export default {
         params: { id: this.comment.id }
       };
     },
-    updateVisibility () {
+    initUpdate (data = {}) {
       this.processing = true;
       const payload = this.getPayload();
-      payload.data.visibleToClient = !this.comment.visibleToClient;
+      _.assign(payload.data, data);
       this.update(payload);
       this.processing = false;
+    },
+    updateVisibility () {
+      const data = {
+        visibleToClient: !this.comment.visibleToClient
+      };
+      this.initUpdate(data);
     },
     removeComment () {
       console.log('remove-comment');
     },
     resolveComment () {
       console.log('resolve-comment');
+    },
+    finishEdit () {
+      this.editable = false;
+      const data = {
+        content: this.comment.text
+      };
+      this.initUpdate(data);
     }
   },
   watch: {
