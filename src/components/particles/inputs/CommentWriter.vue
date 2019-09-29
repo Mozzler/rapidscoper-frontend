@@ -47,23 +47,16 @@
           </v-btn>
         </v-flex>
       </v-layout>
-      <v-layout pt-4 v-if="assigns.length > 1" justify-space-between row fill-height>
-        <v-flex>Assign a comment thread to:</v-flex>
-        <v-flex class="text-sm-right">
-          <assign-dropdown
-            :list="assigns"
-            :selected='assigned'
-            @update="assign" />
-        </v-flex>
-      </v-layout>
+      <assignment-menu
+        :content="content"
+        :reassign="!!comment.id" />
     </div>
   </v-card-text>
 </template>
 
 <script>
 import CircularLoader from '../loaders/Circular';
-import AssignDropdown from '../lists/AssignDropdown';
-import AssignmentMixin from '@/mixins/assignment';
+import AssignmentMenu from '../menus/AssignmentMenu';
 
 import {
   mapState,
@@ -75,12 +68,9 @@ import {
 export default {
   name: 'CommentWriter',
   components: {
-    AssignDropdown,
+    AssignmentMenu,
     CircularLoader
   },
-  mixins: [
-    AssignmentMixin
-  ],
   data () {
     return {
       content: '',

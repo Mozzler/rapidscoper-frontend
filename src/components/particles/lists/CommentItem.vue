@@ -49,7 +49,7 @@
         <v-textarea
           class="comment-textarea rapid-textarea"
           name="comment"
-          v-model="comment.text"
+          v-model="comment.content"
           v-validate="'required|min:2|max:255'"
           label="Write a comment ..."
           :error-messages="errors.first('comment')"
@@ -72,6 +72,10 @@
         </v-btn>
       </v-flex>
     </v-layout>
+    <assignment-menu
+      v-if="editable"
+      :content="comment.content"
+      :reassign="!!comment.parentCommentId"/>
   </div>
 </template>
 
@@ -79,6 +83,7 @@
 import CommentOptions from '../menus/CommentOptions';
 import CircularLoader from '../loaders/Circular';
 import CommentOptionButton from '../buttons/CommentOptionButton';
+import AssignmentMenu from '../menus/AssignmentMenu';
 
 import {
   mapState,
@@ -99,7 +104,8 @@ export default {
   components: {
     CommentOptions,
     CommentOptionButton,
-    CircularLoader
+    CircularLoader,
+    AssignmentMenu
   },
   data () {
     return {
@@ -150,7 +156,7 @@ export default {
     finishEdit () {
       this.editable = false;
       this.initAction({
-        content: this.comment.text
+        content: this.comment.content
       });
     },
     removeComment () {

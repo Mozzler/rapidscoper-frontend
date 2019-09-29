@@ -182,7 +182,7 @@ function commentBuilder (comment, user) {
     storyId: comment.storyId,
     avatarUrl: user ? user.avatarUrl : null,
     name: user ? user.name : null,
-    text: comment.content,
+    content: comment.content,
     createdBy: comment.createdUserId,
     visibleToClient: comment.visibleToClient,
     parentCommentId: comment.parentCommentId,
