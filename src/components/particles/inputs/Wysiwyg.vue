@@ -76,7 +76,7 @@
                         </v-icon>
                       </div>
                       <div
-                        v-if="comment.state === item.id && tab === 'comments'"
+                        v-if="hovered === item.id && tab === 'comments'"
                         @click="() => commentStory(item.id)"
                         class="story-icon icon">
                         <comment-icon />
