@@ -63,6 +63,7 @@
 <script>
 import CircularLoader from '../loaders/Circular';
 import AssignDropdown from '../lists/AssignDropdown';
+import AssignmentMixin from '@/mixins/assignment';
 
 import {
   mapState,
@@ -77,12 +78,14 @@ export default {
     AssignDropdown,
     CircularLoader
   },
+  mixins: [
+    AssignmentMixin
+  ],
   data () {
     return {
       content: '',
       visibleToClient: true,
-      processing: false,
-      assigned: ['Not assign']
+      processing: false
     };
   },
   computed: {
@@ -93,9 +96,6 @@ export default {
     ...mapGetters({
       items: 'entity/items'
     }),
-    assigns () {
-      return this.matchAssigns();
-    },
     userInfo () {
       return this.items('userInfo');
     },
@@ -159,33 +159,6 @@ export default {
       };
 
       return this.update(data);
-    },
-    matchAssigns () {
-      const matches = this.content.match(/@([a-z0-9]+)@(([a-z0-9-]+\.)*[a-z]{2,4})/gis);
-      let assigns = ['Not assign'];
-
-      if (matches) {
-        const un = _.uniq(matches);
-        assigns = [...assigns, ...un];
-      }
-
-      return assigns;
-    },
-    assign (value) {
-      switch (true) {
-        case value === 'Not assign':
-          this.assigned = ['Not assign'];
-          return;
-        case this.assigned.includes(value):
-          const index = this.assigned.indexOf(value);
-          this.assigned.splice(index, 1);
-          return;
-        default:
-          if (this.assigned.includes('Not assign')) {
-            this.assigned = [];
-          }
-          this.assigned.push(value);
-      }
     }
   }
 };
