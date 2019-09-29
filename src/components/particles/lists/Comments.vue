@@ -30,7 +30,7 @@
               <v-flex>
                 <div class="comment__text" v-if="item.status !== 'deleted'"> {{ item.text }} </div>
                 <div class="comment__text text-greyed" v-else> Delete the comment </div>
-                <div class="comment__subtitle" v-if="item.replies.length">
+                <div class="comment__subtitle" v-if="!item.parentCommentId">
                   {{ item.replies.length | s('reply', 'replies') }}
                 </div>
               </v-flex>

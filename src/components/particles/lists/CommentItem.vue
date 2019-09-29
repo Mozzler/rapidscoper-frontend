@@ -9,14 +9,22 @@
     <div class="comment__actions">
       <v-layout row fill-height align-center justify-space-between v-if="comment.status !== 'deleted'">
         <div v-if="!comment.parentCommentId">
-          <v-btn icon v-if="!item.parentCommentId" @click="updateVisibility">
-            <v-icon v-if="item.visibleToClient">visibility</v-icon>
-            <v-icon v-else class="primary-icon">visibility_off</v-icon>
-          </v-btn>
-          <v-btn icon v-if="!comment.parentCommentId" @click="resolveComment">
-            <v-icon v-if="comment.status === 'active'">check_circle_outline</v-icon>
-            <v-icon v-else class="primary-icon">check_circle</v-icon>
-          </v-btn>
+          <comment-option-button
+            :visible="!item.parentCommentId"
+            :click-handler="updateVisibility"
+            :icon-visible="item.visibleToClient"
+            :text="item.visibleToClient ? 'Hide from Client' : 'Show to Client'"
+            icon-if="visibility"
+            icon-else="visibility_off"
+          />
+          <comment-option-button
+            :visible="!item.parentCommentId"
+            :click-handler="resolveComment"
+            :icon-visible="comment.status === 'active'"
+            :text="comment.status === 'active' ? 'Resolve' : 'Unresolve'"
+            icon-if="check_circle_outline"
+            icon-else="check_circle"
+          />
         </div>
         <comment-options
           v-if="comment.id && item.createdBy === user.user_id"
@@ -69,7 +77,8 @@
 
 <script>
 import CommentOptions from '../menus/CommentOptions';
-import CircularLoader from '../../particles/loaders/Circular';
+import CircularLoader from '../loaders/Circular';
+import CommentOptionButton from '../buttons/CommentOptionButton';
 
 import {
   mapState,
@@ -89,6 +98,7 @@ export default {
   },
   components: {
     CommentOptions,
+    CommentOptionButton,
     CircularLoader
   },
   data () {
