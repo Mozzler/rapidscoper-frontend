@@ -119,6 +119,19 @@
 }
 
 .comment__tooltip {
+  span::before {
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    position: absolute;
+    border-left: 9px solid transparent;
+    border-bottom: 6px solid $light-black;
+    border-right: 9px solid transparent;
+    left: calc(50% - 10px);
+    top: -5px;
+  }
+
   background: $light-black;
   border-radius: 2px;
   font-family: 'Lato', sans-serif;
