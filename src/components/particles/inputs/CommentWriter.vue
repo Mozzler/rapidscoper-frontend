@@ -82,7 +82,8 @@ export default {
   computed: {
     ...mapState({
       user: state => state.auth.user,
-      comment: state => state.system.comment
+      comment: state => state.system.comment,
+      submitCommentSignal: state => state.system.submitCommentSignal
     }),
     ...mapGetters({
       items: 'entity/items'
@@ -99,7 +100,8 @@ export default {
   },
   methods: {
     ...mapMutations('system', [
-      'setComment'
+      'setComment',
+      'submitComment'
     ]),
     ...mapActions('entity', [
       'create',
@@ -121,6 +123,7 @@ export default {
     },
     async send () {
       this.processing = true;
+
       const validated = await this.$validator.validate();
       if (!validated) {
         this.processing = false;
@@ -161,6 +164,14 @@ export default {
 
       this.processing = false;
       this.$emit('close-modal');
+    }
+  },
+  watch: {
+    async submitCommentSignal () {
+      if (this.submitCommentSignal) {
+        await this.dispatch();
+        this.submitComment(false);
+      }
     }
   }
 };

@@ -48,7 +48,10 @@
 import Dropdown from '../menus/Dropdown';
 import ModalMixin from '@/mixins/modal';
 
-import { mapState } from 'vuex';
+import {
+  mapState,
+  mapMutations
+} from 'vuex';
 
 export default {
   name: 'invite-assigned-users',
@@ -69,6 +72,9 @@ export default {
     ])
   },
   methods: {
+    ...mapMutations('system', [
+      'submitComment'
+    ]),
     initData () {
       this.assigned = _.map(this.params, email => {
         return {
@@ -81,7 +87,7 @@ export default {
       return {
         entity: 'invite',
         data: {
-          entityId: this.$route.params.name,
+          entityId: this.$route.params.projectId,
           entityType: 'project',
           expiry: null,
           role: user.role.type,
@@ -108,15 +114,16 @@ export default {
         this.$root.$emit('show-error-message', msg.message);
       }
     },
-    async invite () {
+    invite () {
       this.processing = true;
 
-      _.each(this.assigned, item => {
-        this.submit(item);
+      _.each(this.assigned, async (item) => {
+        await this.submit(item);
       });
 
       this.processing = false;
-      this.$emit('write-comment-after-invite');
+      this.closeModal();
+      this.submitComment(true);
     }
   }
 };
