@@ -134,7 +134,7 @@
                    :id="item.id"
                    @keydown.prevent
                    @mouseup="$event => selectEvent($event, item.id)"
-                   v-html="item.markup">
+                   v-html="editable(item.markup)">
               </div>
               <circular-loader
                 cls="user-story__loader"

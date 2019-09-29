@@ -8,6 +8,9 @@ export default {
   },
   methods: {
     ...mapMutations('system', [ 'setComment' ]),
+    editable (str) {
+      return str.replace(/contenteditable="false"/g, '');
+    },
     getSpanClass (nodes, range, container = 'startContainer', offset = 'startOffset', delimeter = '') {
       // custom text
       if (range[container].previousSibling === null) {
@@ -95,7 +98,8 @@ export default {
       }).join('');
     },
     selectEvent ($event, id) {
-      if (this.tab !== 'comments') {
+      console.log($event);
+      /*if (this.tab !== 'comments') {
         return;
       }
 
@@ -109,7 +113,7 @@ export default {
       let markup = this.getCommentedMarkup(range, id);
       let rect = range.getBoundingClientRect();
 
-      this.setCommentData(id, markup, id, rect.left + 15, rect.top - 30)
+      this.setCommentData(id, markup, id, rect.left + 15, rect.top - 30)*/
     },
     setCommentData (id = null, markup = '', state = null, x = 0, y = 0) {
       const story = _.find(this.list, story => story.id === id);
