@@ -47,19 +47,22 @@
           </v-btn>
         </v-flex>
       </v-layout>
-      <v-flex shrink class="text-xs-right" v-if="isMobileDevice">
-        <v-btn class="btn-rapid primary" large
-               :disabled="processing"
-               @click="send">
-          Send
-        </v-btn>
-      </v-flex>
+      <v-layout pt-4 v-if="assigns.length > 1" justify-space-between row fill-height>
+        <v-flex>Assign a comment thread to:</v-flex>
+        <v-flex class="text-sm-right">
+          <assign-dropdown
+            :list="assigns"
+            :selected='assigned'
+            @update="assign" />
+        </v-flex>
+      </v-layout>
     </div>
   </v-card-text>
 </template>
 
 <script>
-import CircularLoader from '../../particles/loaders/Circular';
+import CircularLoader from '../loaders/Circular';
+import AssignDropdown from '../lists/AssignDropdown';
 
 import {
   mapState,
@@ -71,13 +74,15 @@ import {
 export default {
   name: 'CommentWriter',
   components: {
+    AssignDropdown,
     CircularLoader
   },
   data () {
     return {
       content: '',
       visibleToClient: true,
-      processing: false
+      processing: false,
+      assigned: ['Not assign']
     };
   },
   computed: {
@@ -88,6 +93,9 @@ export default {
     ...mapGetters({
       items: 'entity/items'
     }),
+    assigns () {
+      return this.matchAssigns();
+    },
     userInfo () {
       return this.items('userInfo');
     },
@@ -113,6 +121,11 @@ export default {
     },
     async send () {
       this.processing = true;
+      const validated = await this.$validator.validate();
+      if (!validated) {
+        this.processing = false;
+        return;
+      }
       const { item, markup, id } = this.comment;
 
       let payload = {
@@ -146,6 +159,33 @@ export default {
       };
 
       return this.update(data);
+    },
+    matchAssigns () {
+      const matches = this.content.match(/@([a-z0-9]+)@(([a-z0-9-]+\.)*[a-z]{2,4})/gis);
+      let assigns = ['Not assign'];
+
+      if (matches) {
+        const un = _.uniq(matches);
+        assigns = [...assigns, ...un];
+      }
+
+      return assigns;
+    },
+    assign (value) {
+      switch (true) {
+        case value === 'Not assign':
+          this.assigned = ['Not assign'];
+          return;
+        case this.assigned.includes(value):
+          const index = this.assigned.indexOf(value);
+          this.assigned.splice(index, 1);
+          return;
+        default:
+          if (this.assigned.includes('Not assign')) {
+            this.assigned = [];
+          }
+          this.assigned.push(value);
+      }
     }
   }
 };

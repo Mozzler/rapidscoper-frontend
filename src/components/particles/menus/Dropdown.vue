@@ -48,7 +48,7 @@ export default {
       required: true
     },
     selected: {
-      type: [String, Object],
+      type: [String, Object, Array],
       required: false
     },
     bold: {
