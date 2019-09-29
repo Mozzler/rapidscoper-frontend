@@ -78,7 +78,12 @@ export default {
     },
     list () {
       const status = this.commentStatus.toLowerCase();
-      return _.filter(this.comments, comment => comment.status === status);
+      return _.filter(this.comments, comment => {
+        const acceptable = comment.status === status;
+        const visible = this.clickable || comment.visibleToClient;
+
+        return visible && acceptable;
+      });
     },
     stories () {
       return this.$store.getters['entity/items']('story');
