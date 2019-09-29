@@ -1,15 +1,87 @@
 import { mapState, mapMutations } from 'vuex';
 
+const COMMENT_LEFT = '[commentId=~~~]';
+const COMMENT_RIGHT = '[/commentId=~~~]';
+
 export default {
   computed: {
     ...mapState('system', [
       'comment'
     ])
   },
+  mounted () {
+    _.each(this.stories, story => {
+      this.createCommentNodes(story.id);
+    });
+  },
   methods: {
     ...mapMutations('system', [ 'setComment' ]),
     editable (str) {
       return str.replace(/contenteditable="false"/g, '');
+    },
+    findCommentNodes (nodes, i = 0) {
+      let ranges = [];
+
+      for (; i < nodes.length; i++) {
+        const beginning = nodes[i].textContent.match(/\[commentId=.*?\]/i);
+
+        if (beginning) {
+          const id = beginning[0].replace(/\[commentId=|\]/g, '');
+          const startIndex = nodes[i].textContent.search(`[commentId=${id}]`);
+          nodes[i].textContent = nodes[i].textContent.replace(`[commentId=${id}]`, '');
+
+          let endIndex = null;
+          let found = null;
+          let j = i;
+
+          for (; j < nodes.length; j++) {
+            found = nodes[j].textContent.indexOf(`[/commentId=${id}]`);
+            if (found !== -1) {
+              endIndex = found - 1;
+              nodes[j].textContent = nodes[j].textContent.replace(`[/commentId=${id}]`, '');
+              break;
+            }
+          }
+
+          const range = document.createRange();
+
+          if (!nodes[i] || !nodes[j]) {
+            return;
+          }
+
+          const startNode = nodes[i].nodeType === 1 ?
+            _.first(nodes[i].childNodes) : nodes[i];
+          range.setStart(startNode, startNode.length ? startIndex : 0);
+
+          const endNode = nodes[j].nodeType === 1 ?
+            _.first(nodes[j].childNodes) : nodes[j];
+          range.setEnd(endNode, endNode.length ? endIndex + 1 : 0);
+
+          ranges.push(range);
+        }
+      }
+
+      return ranges;
+    },
+    createCommentNodes (id) {
+      const nodes = document.getElementById(`comment-${id}`).childNodes;
+      const ranges = this.findCommentNodes(nodes);
+
+      _.each(ranges, range => {
+        const parent = document.getElementById(`comment-container-${id}`);
+        const parentRect = parent.getBoundingClientRect();
+        const rect = range.getBoundingClientRect();
+
+        let n = document.createElement('div');
+        n.className = 'user-story__comment-item';
+        _.assign(n.style, {
+          left: `${rect.left - parentRect.left}px`,
+          top: `${rect.top - parentRect.top - 2}px`,
+          width: `${rect.width}px`
+        });
+
+        parent.prepend(n);
+      });
     },
     getSpanClass (nodes, range, container = 'startContainer', offset = 'startOffset', delimeter = '') {
       // custom text
@@ -115,7 +187,7 @@ export default {
 
       this.setCommentData(id, markup, id, rect.left + 15, rect.top - 30)*/
     },
-    setCommentData (id = null, markup = '', state = null, x = 0, y = 0) {
+    setCommentData (id = null, markup = '', state = null, x = 0, y = 0, parentCommentId = null) {
       const story = _.find(this.list, story => story.id === id);
       const data = {
         state: state,
@@ -124,13 +196,22 @@ export default {
         item: story,
         markup: id ? markup || story.markup : null,
         precomment: true,
-        id: null
+        id: parentCommentId
       };
 
       this.setComment(data);
     },
-    commentStory (id) {
-      this.setCommentData(id);
+    commentStory (id, markup) {
+      const storyRegex = /^\[commentId=.*\].*\[\/commentId=.*\]$/gi;
+
+      if (markup.match(storyRegex)) {
+        let commentId = markup.match(/\[commentId=(.*?)\]/i);
+        this.setCommentData(id, markup, null, 0, 0, commentId[1]);
+      } else {
+        let commentedMarkup = `${COMMENT_LEFT}${markup}${COMMENT_RIGHT}`;
+        this.setCommentData(id, commentedMarkup);
+      }
+
       this.$root.$emit('write-comment');
     }
   }

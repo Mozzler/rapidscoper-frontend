@@ -77,7 +77,7 @@
                       </div>
                       <div
                         v-if="hovered === item.id && tab === 'comments'"
-                        @click="() => commentStory(item.id)"
+                        @click="() => commentStory(item.id, item.originalMarkup)"
                         class="story-icon icon">
                         <comment-icon />
                       </div>
@@ -237,76 +237,7 @@ export default {
       }
 
       this.replacement = null;
-    },
-    findCommentNodes (nodes, i = 0) {
-      let ranges = [];
-
-      for (; i < nodes.length; i++) {
-        const beginning = nodes[i].textContent.match(/\[commentId=.*?\]/i);
-
-        if (beginning) {
-          const id = beginning[0].replace(/\[commentId=|\]/g, '');
-          const startIndex = nodes[i].textContent.search(`[commentId=${id}]`);
-          nodes[i].textContent = nodes[i].textContent.replace(`[commentId=${id}]`, '');
-
-          let endIndex = null;
-          let found = null;
-          let j = i;
-
-          for (; j < nodes.length; j++) {
-            found = nodes[j].textContent.indexOf(`[/commentId=${id}]`);
-            if (found !== -1) {
-              endIndex = found - 1;
-              nodes[j].textContent = nodes[j].textContent.replace(`[/commentId=${id}]`, '');
-              break;
-            }
-          }
-
-          const range = document.createRange();
-
-          if (!nodes[i] || !nodes[j]) {
-            return;
-          }
-
-          const startNode = nodes[i].nodeType === 1 ?
-            _.first(nodes[i].childNodes) : nodes[i];
-          range.setStart(startNode, startIndex);
-
-          const endNode = nodes[j].nodeType === 1 ?
-            _.first(nodes[j].childNodes) : nodes[j];
-          range.setEnd(endNode, endIndex);
-
-          ranges.push(range);
-        }
-      }
-
-      return ranges;
-    },
-    createCommentNodes (id) {
-      const nodes = document.getElementById(`comment-${id}`).childNodes;
-      const ranges = this.findCommentNodes(nodes);
-
-      _.each(ranges, range => {
-        const parent = document.getElementById(`comment-container-${id}`);
-        const parentRect = parent.getBoundingClientRect();
-        const rect = range.getBoundingClientRect();
-
-        let n = document.createElement('div');
-        n.className = 'user-story__comment-item';
-        _.assign(n.style, {
-          left: `${rect.left - parentRect.left}px`,
-          top: `${rect.top - parentRect.top - 2}px`,
-          width: `${rect.width}px`
-        });
-
-        parent.prepend(n);
-      });
     }
-  },
-  mounted () {
-    _.each(this.stories, story => {
-      this.createCommentNodes(story.id);
-    });
   },
   watch: {
     stories: {
