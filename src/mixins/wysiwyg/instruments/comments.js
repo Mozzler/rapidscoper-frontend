@@ -86,7 +86,7 @@ export default {
     getSpanClass (nodes, range, container = 'startContainer', offset = 'startOffset', delimeter = '') {
       // custom text
       if (range[container].previousSibling === null) {
-        let text = range[container].parentNode.innerHTML.replace('&nbsp;', ' ');
+        let text = range[container].parentNode.innerHTML.replace(/&nbsp;|\u00a0/g, ' ');
         let sliced = [text.slice(0, range[offset]), text.slice(range[offset])];
 
         return {
@@ -145,17 +145,25 @@ export default {
         }
       });
 
-      let markup = [
+      const markup = [
         this.getSpanClass(nodes, range),
         this.getSpanClass(nodes, range, 'endContainer', 'endOffset', '/')
       ];
 
-      _.each(markup, item => {
-        let index = _.findIndex(shadowNodes, i => i.className === item.className);
-        if (shadowNodes[index + item.increment]) {
-          shadowNodes[index + item.increment].content = item.updated;
-        }
-      });
+      if (markup[0].className !== markup[1].className) {
+        _.each(markup, item => {
+          let index = _.findIndex(shadowNodes, i => i.className === item.className);
+          if (shadowNodes[index + item.increment]) {
+            shadowNodes[index + item.increment].content = item.updated;
+          }
+        });
+      } else {
+        const beginning = markup[0].updated.split('[commentId=~~~]');
+        const ending = markup[1].updated.split(beginning[0]);
+
+        let index = _.findIndex(shadowNodes, i => i.className === markup[0].className);
+        shadowNodes[index].content = `${beginning[0]}[commentId=~~~]${ending[1]}`;
+      }
 
       return _.map(shadowNodes, item => {
         if (item.outerHTML) {
@@ -170,8 +178,7 @@ export default {
       }).join('');
     },
     selectEvent ($event, id) {
-      console.log($event);
-      /*if (this.tab !== 'comments') {
+      if (this.tab !== 'comments') {
         return;
       }
 
@@ -184,8 +191,7 @@ export default {
 
       let markup = this.getCommentedMarkup(range, id);
       let rect = range.getBoundingClientRect();
-
-      this.setCommentData(id, markup, id, rect.left + 15, rect.top - 30)*/
+      this.setCommentData(id, markup, id, rect.left + 15, rect.top - 30);
     },
     setCommentData (id = null, markup = '', state = null, x = 0, y = 0, parentCommentId = null) {
       const story = _.find(this.list, story => story.id === id);
