@@ -107,7 +107,7 @@
               <div v-if="tab === 'edit'"
                    class="user-story__editable"
                    tabindex="0"
-                   :contenteditable="processing !== item.id && tab === 'edit'"
+                   :contenteditable="processing !== item.id"
                    :disabled="processing === item.id"
                    :class="{
                     'text-dark-grey': !item.type && beginning(item.markup)

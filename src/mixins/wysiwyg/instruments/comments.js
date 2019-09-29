@@ -10,14 +10,17 @@ export default {
     ])
   },
   mounted () {
-    _.each(this.stories, story => {
-      this.createCommentNodes(story.id);
-    });
+    this.highlightComments();
   },
   methods: {
     ...mapMutations('system', [ 'setComment' ]),
     editable (str) {
       return str.replace(/contenteditable="false"/g, '');
+    },
+    highlightComments () {
+      _.each(this.stories, story => {
+        this.createCommentNodes(story.id);
+      });
     },
     findCommentNodes (nodes, i = 0) {
       let ranges = [];
@@ -27,7 +30,7 @@ export default {
 
         if (beginning) {
           const id = beginning[0].replace(/\[commentId=|\]/g, '');
-          const startIndex = nodes[i].textContent.search(`[commentId=${id}]`);
+          const startIndex = nodes[i].textContent.indexOf(`[commentId=${id}]`);
           nodes[i].textContent = nodes[i].textContent.replace(`[commentId=${id}]`, '');
 
           let endIndex = null;
@@ -191,6 +194,7 @@ export default {
 
       let markup = this.getCommentedMarkup(range, id);
       let rect = range.getBoundingClientRect();
+
       this.setCommentData(id, markup, id, rect.left + 15, rect.top - 30);
     },
     setCommentData (id = null, markup = '', state = null, x = 0, y = 0, parentCommentId = null) {
@@ -220,5 +224,8 @@ export default {
 
       this.$root.$emit('write-comment');
     }
+  },
+  updated () {
+    this.highlightComments();
   }
 };
