@@ -2,6 +2,13 @@
   <v-layout row justify-center>
     <v-dialog v-model="dialog" max-width="416" persistent>
       <v-card class="modal-card">
+        <circular-loader
+          cls="loader-shadow--without-padding transparent"
+          :size="50"
+          :width="5"
+          :visible="processing"
+        />
+
         <div class="modal-header">
           <h1> Invite user </h1>
           <v-btn icon class="modal-close-btn" @click="closeModal">
@@ -34,7 +41,7 @@
             </v-btn>
             <v-btn class="btn-rapid primary" large
                    :disabled="processing"
-                   @click="invite">
+                   @click="submit">
               Invite
             </v-btn>
           </v-flex>
@@ -47,6 +54,7 @@
 <script>
 import Dropdown from '../menus/Dropdown';
 import ModalMixin from '@/mixins/modal';
+import CircularLoader from '../loaders/Circular';
 
 import {
   mapState,
@@ -59,7 +67,8 @@ export default {
     ModalMixin
   ],
   components: {
-    Dropdown
+    Dropdown,
+    CircularLoader
   },
   data () {
     return {
@@ -96,34 +105,39 @@ export default {
         cancelCommit: true
       };
     },
-    async submit (user) {
-      try {
-        const data = this.getRequestData(user);
-        const response = await this.$store.dispatch('entity/create', data);
-
-        this.$store.commit('entity/create', {
-          entity: 'invite',
-          data: response.item
-        });
-        this.$store.commit('entity/create', {
-          entity: 'userInfo',
-          data: response.userInfo
-        });
-      } catch (error) {
-        let msg = _.first(error.response.data);
-        this.$root.$emit('show-error-message', msg.message);
-      }
-    },
-    invite () {
+    submit () {
       this.processing = true;
+      const requests = [];
 
-      _.each(this.assigned, async (item) => {
-        await this.submit(item);
+      _.each(this.assigned, user => {
+        const data = this.getRequestData(user);
+        requests.push(this.$store.dispatch('entity/create', data));
       });
 
-      this.processing = false;
-      this.closeModal();
-      this.submitComment(true);
+      Promise.all(requests).then((responses) => {
+        _.each(responses, response => {
+          this.commitChanges(response.item, response.userInfo);
+        });
+        this.submitComment(true);
+        this.processing = false;
+        this.closeModal();
+      }).catch(errors => {
+        _.each(errors, error => {
+          let msg = _.first(error.response.data);
+          this.$root.$emit('show-error-message', msg.message);
+        });
+        this.processing = false;
+      });
+    },
+    commitChanges (item, userInfo) {
+      this.$store.commit('entity/create', {
+        entity: 'invite',
+        data: item
+      });
+      this.$store.commit('entity/create', {
+        entity: 'userInfo',
+        data: userInfo
+      });
     }
   }
 };

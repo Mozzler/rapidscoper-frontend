@@ -1,7 +1,6 @@
 <template>
   <v-layout row justify-center>
-    <v-dialog v-model="dialog" content-class="comment-modal"
-              max-width="416">
+    <v-dialog v-model="dialog" content-class="comment-modal" max-width="416" persistent>
       <v-card v-if="dialog" class="modal-card modal-card--short">
         <comment-history />
         <comment-writer @close-modal="closeModal"/>
