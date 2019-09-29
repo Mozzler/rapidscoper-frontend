@@ -58,6 +58,7 @@
 <script>
 import CircularLoader from '../loaders/Circular';
 import AssignmentMenu from '../menus/AssignmentMenu';
+import AssignmentMixin from '@/mixins/assignment';
 
 import {
   mapState,
@@ -68,6 +69,9 @@ import {
 
 export default {
   name: 'CommentWriter',
+  mixins: [
+    AssignmentMixin
+  ],
   components: {
     AssignmentMenu,
     CircularLoader
@@ -76,14 +80,14 @@ export default {
     return {
       content: '',
       visibleToClient: true,
-      processing: false
+      processing: false,
+      continue: 'dispatch'
     };
   },
   computed: {
     ...mapState({
       user: state => state.auth.user,
-      comment: state => state.system.comment,
-      submitCommentSignal: state => state.system.submitCommentSignal
+      comment: state => state.system.comment
     }),
     ...mapGetters({
       items: 'entity/items'
@@ -100,8 +104,7 @@ export default {
   },
   methods: {
     ...mapMutations('system', [
-      'setComment',
-      'submitComment'
+      'setComment'
     ]),
     ...mapActions('entity', [
       'create',
@@ -120,24 +123,6 @@ export default {
       };
 
       return this.update(data);
-    },
-    async send () {
-      this.processing = true;
-
-      const validated = await this.$validator.validate();
-      if (!validated) {
-        this.processing = false;
-        return;
-      }
-
-      const invitations = this.$refs.assignment.getInvitations();
-      if (invitations.length) {
-        this.$root.$emit('invite-assigned-users', invitations);
-        this.processing = false;
-        return;
-      }
-
-      await this.dispatch();
     },
     async dispatch () {
       const { item, markup, id } = this.comment;
@@ -164,14 +149,6 @@ export default {
 
       this.processing = false;
       this.$emit('close-modal');
-    }
-  },
-  watch: {
-    async submitCommentSignal () {
-      if (this.submitCommentSignal) {
-        await this.dispatch();
-        this.submitComment(false);
-      }
     }
   }
 };

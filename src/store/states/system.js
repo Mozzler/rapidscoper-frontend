@@ -33,6 +33,5 @@ export default {
     name: 'Full access',
     type: 'full'
   }],
-  freeze: false,
-  submitCommentFlag: false
+  freeze: false
 };

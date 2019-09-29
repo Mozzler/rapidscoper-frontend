@@ -67,13 +67,14 @@
         <v-btn icon v-if="editable"
                class="ma-1"
                :style="{ 'color': 'green' }"
-               @click="finishEdit">
+               @click="send">
           <v-icon>check</v-icon>
         </v-btn>
       </v-flex>
     </v-layout>
     <assignment-menu
       v-if="editable"
+      ref="assignment"
       :content="comment.content"
       :reassign="!!comment.parentCommentId"/>
   </div>
@@ -85,6 +86,8 @@ import CircularLoader from '../loaders/Circular';
 import CommentOptionButton from '../buttons/CommentOptionButton';
 import AssignmentMenu from '../menus/AssignmentMenu';
 
+import AssignmentMixin from '@/mixins/assignment';
+
 import {
   mapState,
   mapActions
@@ -92,6 +95,9 @@ import {
 
 export default {
   name: 'CommentItem',
+  mixins: [
+    AssignmentMixin
+  ],
   props: {
     item: {
       type: Object
@@ -111,7 +117,8 @@ export default {
     return {
       editable: false,
       comment: null,
-      processing: false
+      processing: false,
+      continue: 'finishEdit'
     };
   },
   computed: {
@@ -160,6 +167,7 @@ export default {
       });
     },
     removeComment () {
+      this.editable = false;
       //this.initAction({}, 'remove', { id: this.comment.id });
       this.comment.status = 'deleted';
       this.initAction({

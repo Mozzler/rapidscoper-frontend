@@ -13,8 +13,5 @@ export default {
   },
   freeze (state, data) {
     state.freeze = data;
-  },
-  submitComment (state, data) {
-    state.submitCommentFlag = data;
   }
 };

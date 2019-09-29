@@ -57,8 +57,7 @@ import ModalMixin from '@/mixins/modal';
 import CircularLoader from '../loaders/Circular';
 
 import {
-  mapState,
-  mapMutations
+  mapState
 } from 'vuex';
 
 export default {
@@ -81,9 +80,6 @@ export default {
     ])
   },
   methods: {
-    ...mapMutations('system', [
-      'submitComment'
-    ]),
     initData () {
       this.assigned = _.map(this.params, email => {
         return {
@@ -118,7 +114,6 @@ export default {
         _.each(responses, response => {
           this.commitChanges(response.item, response.userInfo);
         });
-        this.submitComment(true);
         this.processing = false;
         this.closeModal();
       }).catch(errors => {
