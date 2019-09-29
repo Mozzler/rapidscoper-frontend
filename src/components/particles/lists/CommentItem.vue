@@ -7,7 +7,7 @@
       :visible="processing"
     />
     <div class="comment__actions">
-      <v-layout row fill-height align-center justify-space-between v-if="comment.status !== 'deleted'">
+      <v-layout row fill-height align-center justify-space-between>
         <div v-if="!comment.parentCommentId">
           <comment-option-button
             :visible="!item.parentCommentId"
@@ -27,7 +27,7 @@
           />
         </div>
         <comment-options
-          v-if="comment.id && item.createdBy === user.user_id"
+          v-if="comment.id && item.createdBy === user.user_id && comment.status !== 'deleted'"
           @edit-mode="editable = true"
           @delete-mode="removeComment" />
       </v-layout>
