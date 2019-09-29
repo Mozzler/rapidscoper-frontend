@@ -48,6 +48,7 @@
         </v-flex>
       </v-layout>
       <assignment-menu
+        ref="assignment"
         :content="content"
         :reassign="!!comment.id" />
     </div>
@@ -109,6 +110,15 @@ export default {
       this.visible = true;
       this.$validator.reset();
     },
+    updateStoryMarkup (markup, commentId, storyId) {
+      const data = {
+        entity: 'story',
+        data:   { markup: markup.replace(/~~~/g, commentId) },
+        params: { id: storyId }
+      };
+
+      return this.update(data);
+    },
     async send () {
       this.processing = true;
       const validated = await this.$validator.validate();
@@ -116,6 +126,17 @@ export default {
         this.processing = false;
         return;
       }
+
+      const invitations = this.$refs.assignment.getInvitations();
+      if (invitations.length) {
+        this.$root.$emit('invite-assigned-users', invitations);
+        this.processing = false;
+        return;
+      }
+
+      await this.dispatch();
+    },
+    async dispatch () {
       const { item, markup, id } = this.comment;
 
       let payload = {
@@ -140,15 +161,6 @@ export default {
 
       this.processing = false;
       this.$emit('close-modal');
-    },
-    updateStoryMarkup (markup, commentId, storyId) {
-      const data = {
-        entity: 'story',
-        data:   { markup: markup.replace(/~~~/g, commentId) },
-        params: { id: storyId }
-      };
-
-      return this.update(data);
     }
   }
 };

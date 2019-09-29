@@ -17,7 +17,7 @@ export default {
     name: 'Manager',
     type: 'manager'
   }, {
-    name: 'Member',
+    name: 'Full Member',
     type: 'member'
   }, {
     name: 'Client',

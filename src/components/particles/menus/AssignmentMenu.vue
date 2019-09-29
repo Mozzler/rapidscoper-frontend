@@ -12,6 +12,7 @@
 
 <script>
 import AssignDropdown from '../lists/AssignDropdown';
+import { mapGetters } from 'vuex';
 
 const NOT_ASSIGN = 'Not assign';
 const EMAIL = /@([a-z0-9]+)@(([a-z0-9-]+\.)*[a-z]{2,4})/gis;
@@ -36,6 +37,9 @@ export default {
     };
   },
   computed: {
+    ...mapGetters('entity', [
+      'items'
+    ]),
     assigns () {
       return this.matchAssigns();
     }
@@ -62,14 +66,38 @@ export default {
     },
     matchAssigns () {
       const matches = this.content.match(EMAIL);
-      let assigns = ['Not assign'];
+      let assigns = [NOT_ASSIGN];
 
       if (matches) {
-        const un = _.uniq(matches);
-        assigns = [...assigns, ...un];
+        const emails = _.map(matches, email => email.replace(/@/, ''));
+        assigns = [...[NOT_ASSIGN], ..._.uniq(emails)];
       }
 
       return assigns;
+    },
+    getInvitations () {
+      const userInfo = this.items('userInfo');
+
+      return _.filter(this.assigned, email => {
+        const notAssign = email === NOT_ASSIGN;
+        const known = _.find(userInfo, item => item.email === email);
+
+        return !notAssign && !known;
+      });
+    },
+    normalizeAssigned () {
+      this.assigned = _.filter(this.assigned, email => this.assigns.includes(email));
+      if (this.assigned.length === 0) {
+        this.assigned = [NOT_ASSIGN];
+      }
+    }
+  },
+  watch: {
+    assigns: {
+      deep: true,
+      handler () {
+        this.normalizeAssigned();
+      }
     }
   }
 };

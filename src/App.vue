@@ -17,6 +17,7 @@
       <share-project-modal />
       <settings-modal />
       <write-comment />
+      <invite-assigned-users />
     </template>
   </v-app>
 </template>
@@ -36,6 +37,7 @@ import IncorrectDataModal from '@/components/particles/modals/IncorrectData';
 import ShareProjectModal from '@/components/particles/modals/ShareProject';
 import SettingsModal from '@/components/particles/modals/Settings';
 import WriteComment from '@/components/particles/modals/WriteComment';
+import InviteAssignedUsers from '@/components/particles/modals/InviteAssignedUsers';
 
 export default {
   name: 'app',
@@ -51,7 +53,8 @@ export default {
     PaymentSuccessfullyModal,
     IncorrectDataModal,
     ShareProjectModal,
-    SettingsModal
+    SettingsModal,
+    InviteAssignedUsers
   },
   mixins: [
     ResizeMixin
