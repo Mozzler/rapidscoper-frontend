@@ -131,6 +131,16 @@ export default {
         }
       }
     },
+    stick (originalMarkup, updatedMarkup) {
+      const regex = /(\[\/?commentId=.*?])/g;
+
+      const m1 = originalMarkup.split(regex);
+      const m2 = updatedMarkup.split(regex);
+
+      console.log(m1, m2);
+
+      return updatedMarkup;
+    },
     getCommentedMarkup (range, id) {
       let nodes = document.getElementById(id).childNodes;
       let shadowNodes = _.map(nodes, node => {
@@ -168,7 +178,8 @@ export default {
         shadowNodes[index].content = `${beginning[0]}[commentId=~~~]${ending[1]}`;
       }
 
-      return _.map(shadowNodes, item => {
+      const originalMarkup = _.find(this.stories, story => story.id === id).originalMarkup;
+      const updatedMarkup = _.map(shadowNodes, item => {
         if (item.outerHTML) {
           let split = item.outerHTML.split(/(<span .*>)(.*)(<\/span>)/)
             .filter(item => item);
@@ -179,6 +190,8 @@ export default {
           return item.content;
         }
       }).join('');
+
+      return this.stick(originalMarkup, updatedMarkup);
     },
     selectEvent ($event, id) {
       if (this.tab !== 'comments') {
