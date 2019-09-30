@@ -131,13 +131,56 @@ export default {
         }
       }
     },
+    findShard (m1, m2, resulted) {
+      if (m2[0].includes(m1[0])) {
+        resulted += m1[0];
+        m2[0] = m2[0].slice(m1[0].length);
+        m1.shift();
+
+        if (!m2[0].length) {
+          m2.shift();
+        }
+        return resulted;
+      }
+
+      if (m1[0].includes('commentId')) {
+        resulted += m1[0];
+        m1.shift();
+        return resulted;
+      }
+
+      if (m2[0].includes('commentId')) {
+        resulted += m2[0];
+        m2.shift();
+        return resulted;
+      }
+
+      if (m1[0].includes(m2[0])) {
+        resulted += m2[0];
+        m1[0] = m1[0].slice(m2[0].length);
+        m2.shift();
+
+        if (!m1[0].length) {
+          m1.shift();
+        }
+        return resulted;
+      }
+    },
     stick (originalMarkup, updatedMarkup) {
       const regex = /(\[\/?commentId=.*?])/g;
 
-      const m1 = originalMarkup.split(regex);
-      const m2 = updatedMarkup.split(regex);
+      const m1 = originalMarkup.replace(/&nbsp;|\u00a0/g, ' ').split(regex);
+      const m2 = updatedMarkup.replace(/&nbsp;|\u00a0/g, ' ').split(regex);
+      let resulted = '';
+      let i = 0;
+      while (m1.length && m2.length) {
+        if (i > 20) {
+          break;
+        } i++;
+        resulted = this.findShard(m1, m2, resulted);
+      }
 
-      console.log(m1, m2);
+      console.log(resulted);
 
       return updatedMarkup;
     },
