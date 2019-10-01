@@ -181,16 +181,7 @@ export default {
       this.$socket.recreateWatchers('story', false);
     },
     async removeSection () {
-      this.$store.commit('entity/delete', {
-        entity: 'section',
-        id: this.model.id
-      });
-
-      await this.$store.dispatch('entity/delete', {
-        entity: 'section',
-        id: this.model.id,
-        cancelCommit: true
-      });
+      this.$root.$emit('delete-section', this.model.id);
     }
   },
   watch: {
