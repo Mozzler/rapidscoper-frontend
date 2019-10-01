@@ -161,6 +161,12 @@ export default {
     projects () {
       return this.items('project');
     },
+    userProjects () {
+      return this.items('userProject');
+    },
+    authorizedUserProject () {
+      return _.find(this.userProjects, item => item.id );
+    },
     project () {
       return _.find(this.projects, item => item.id === this.params);
     },
