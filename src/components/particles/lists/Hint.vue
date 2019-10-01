@@ -82,13 +82,13 @@ export default {
     items () {
       const keyword = this.filter ? this.filter.toLowerCase() : '';
 
-      return this. list ? this.list.filter(item => {
+      return this.list ? _.filter(this.list, item => {
         const data = this.getStrFromObj(item);
         return data.toLowerCase().includes(keyword, 0);
       }) : [];
     },
     inList () {
-      const filter = this.list.filter(item => {
+      const filter = _.filter(this.list, item => {
         return this.getStrFromObj(item) === this.filter.trim();
       });
       return Boolean(filter.length);
