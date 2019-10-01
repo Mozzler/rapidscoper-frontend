@@ -104,8 +104,8 @@ export default {
   data () {
     return {
       colors: [
-        '#FE9BA5', '#D7AC8D', '#FADCA2', '#9BE1CA',
-        '#9FCEF8', '#C4ABED', '#FAAAD5', '#E5E5E5'
+        '#9BE1CA', '#9FCEF8', '#C4ABED', '#FAAAD5',
+        '#E5E5E5', '#FE9BA5', '#D7AC8D', '#FADCA2'
       ],
       list: [],
       focused: null,
