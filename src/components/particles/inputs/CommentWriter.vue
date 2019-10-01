@@ -1,5 +1,6 @@
 <template>
-  <v-card-text class="padding-0">
+  <v-card-text class="padding-0"
+               @keyup.enter.ctrl.exact="send">
     <div class="mb-3 comment">
       <v-layout row fill-height align-center>
         <img
@@ -32,6 +33,7 @@
               v-validate="'required|min:2|max:255'"
               label="Write a comment ..."
               :error-messages="errors.first('comment')"
+              :disabled="processing"
               solo
               rows="1"
               auto-grow
