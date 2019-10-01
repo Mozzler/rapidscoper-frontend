@@ -78,7 +78,7 @@
 
 <script>
 export default {
-  name: "DictionaryLayout",
+  name: 'DictionaryLayout',
   data () {
     return {
       processing: false,

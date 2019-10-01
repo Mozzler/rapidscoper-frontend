@@ -24,8 +24,9 @@ export default {
     async remove ($event) {
       this.event = $event;
 
-      if (document.getSelection().rangeCount) {
+      if (document.getSelection().toString()) {
         document.execCommand('delete');
+        return;
       }
 
       if (this.isEditable()) {

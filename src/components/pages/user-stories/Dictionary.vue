@@ -24,7 +24,7 @@ import CircularLoader from "../../particles/loaders/Circular";
 import LayoutMixin from "@/mixins/layout";
 
 export default {
-  name: "Dictionary",
+  name: 'Dictionary',
   components: {
     StoryHeader,
     StorySidebar,
