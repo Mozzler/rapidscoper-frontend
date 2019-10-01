@@ -108,15 +108,16 @@ export default {
     };
   },
   allowedRoles (state, getters, rootState) {
-    return (projectId, collectionType) => {
-      collectionType = `${collectionType.charAt(0).toUpperCase()}${collectionType.slice(1)}`;
-
-      const collection = rootState.entity[`user${collectionType}`].items;
+    return (projectId) => {
+      const collection = rootState.entity.userProject.items;
       const user = rootState.auth.user;
       const roles = rootState.system.roles;
 
-      const authorizedUser = _.find(collection, { userId: user.user_id });
-      const acceptableIndex = _.findIndex(roles, { type: authorizedUser.role });
+      const authorizedUser = _.find(collection, item => {
+        return (item.userId === user.user_id && projectId === item.projectId);
+      });
+
+      let acceptableIndex = authorizedUser ? _.findIndex(roles, { type: authorizedUser.role }) : -1;
 
       return _.filter(roles, (role, index) => index >= acceptableIndex);
     };

@@ -78,7 +78,7 @@ export default {
       allowedRoles: 'entity/allowedRoles'
     }),
     roles () {
-      return this.allowedRoles(this.entityId, this.entityType);
+      return this.allowedRoles(this.entityId);
     }
   },
   methods: {

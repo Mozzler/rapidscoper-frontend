@@ -181,9 +181,6 @@ export default {
     }
   },
   methods: {
-    initData () {
-
-    },
     removeInvite (id) {
       const data = {
         entity: 'invite',
