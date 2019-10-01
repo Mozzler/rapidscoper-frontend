@@ -83,7 +83,7 @@ export default {
   ],
   props: {
     model: {
-      type: Object,
+      type: [Object, undefined],
       required: true
     }
   },

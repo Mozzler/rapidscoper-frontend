@@ -88,9 +88,12 @@ function replaceMarkup (markup, dictionary) {
 }
 
 function sections (project, sections, type) {
-  return _.map(project.sectionOrder[type], sectionId => {
-    return _.find(sections, section => section.id === sectionId);
-  });
+  return _.chain(project.sectionOrder[type])
+    .map(sectionId => {
+      return _.find(sections, section => section.id === sectionId);
+    })
+    .filter(section => section)
+    .value();
 }
 
 function conformity (filters = {}, story) {
