@@ -186,7 +186,7 @@ export default {
       const index = _.findIndex(spans, item => item.includes(`user-story__editable--${chapter}`));
       spans[index] = node.outerHTML;
 
-      this.list[focused].markup = spans.join('&nbsp;');
+      this.list[focused].markup = spans.join('&nbsp;') + '&nbsp;';
       this.processing = false;
 
       this.$store.commit('entity/update', {
