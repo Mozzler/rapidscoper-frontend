@@ -43,9 +43,9 @@ export default [
     }
   },
   {
-    path: '/accept-invite',
+    path: '/accept-invite/:inviteId',
     name: 'accept-invite',
-    component: AuthFlow,
+    component: AuthFlow
   },
   {
     path: '/create-team',
@@ -54,5 +54,5 @@ export default [
     meta: {
       guest: true
     }
-  },
+  }
 ];

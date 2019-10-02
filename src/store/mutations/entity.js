@@ -19,6 +19,9 @@ function toCamelCase (str) {
 }
 
 export default {
+  setItem (state, payload) {
+    //state[payload.entity].items.push(payload.data);
+  },
   setList (state, payload) {
     payload.data.items = normalizeId(payload.data.items);
     state[payload.entity] = payload.data;
