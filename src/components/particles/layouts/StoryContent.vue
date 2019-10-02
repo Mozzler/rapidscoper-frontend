@@ -26,7 +26,7 @@
 <script>
 import StoryItem from '../../particles/forms/StoryItem';
 import Hint from '../lists/Hint';
-import Comment from '../menus/Comment';
+import Comment from '../hint/Comment';
 import SidebarFilters from '../../particles/inputs/SidebarFilters';
 
 import ScrollMixin from '@/mixins/scroll';

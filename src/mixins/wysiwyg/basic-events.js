@@ -4,10 +4,43 @@ export default {
       focused: null,
       editor: null,
       etalon: null,
-      blocked: false
+      blocked: false,
+      description: {
+        text: '',
+        id: null
+      }
     };
   },
   methods: {
+    hoverEvent ($event, id) {
+      const target = $event.target;
+      if (target.dataset.id) {
+        const dictionary = _.find(this.rawSections, item => item.id === target.dataset.id);
+        if (dictionary && dictionary.description) {
+          const hint = document.getElementById(`description-container-${id}`);
+          const rect = target
+            .getBoundingClientRect();
+          const wysiwyg = document.getElementById(`wysiwyg-${id}`)
+            .getBoundingClientRect();
+
+          this.description = {
+            id: id,
+            text: dictionary.description
+          };
+
+          _.assign(hint.style, {
+            left: `${rect.left - wysiwyg.left}px`,
+            top: `${rect.top - wysiwyg.top}px`
+          });
+        }
+      }
+    },
+    leaveEvent () {
+      this.description = {
+        text: '',
+        id: null
+      };
+    },
     focusEvent (item, index) {
       this.focused = index;
       this.etalon = { ...item };

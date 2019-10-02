@@ -96,7 +96,7 @@
           </v-flex>
           <v-flex text-xs-left align-center row fill-height
             class="word-break-word">
-            <div class="user-story__wysiwyg">
+            <div class="user-story__wysiwyg" :id="`wysiwyg-${item.id}`">
               <div :id="`comment-container-${item.id}`"></div>
               <div class="user-story__comments"
                    v-html="item.originalMarkup"
@@ -127,6 +127,8 @@
                    @keydown.186.shift.exact="createSubstory"
                    @keydown.tab.shift.exact="decreaseStoryLevel"
                    @blur="() => updateStory(index)"
+                   @mouseover="$event => hoverEvent($event, item.id)"
+                   @mouseleave="leaveEvent"
                    v-html="item.markup"></div>
               <div v-else
                    class="user-story__editable"
@@ -141,6 +143,12 @@
                 :size="10"
                 :width="7"
                 :visible="processing === item.id" />
+              <div
+                class="comment-dialog"
+                :id="`description-container-${ item.id }`"
+                :class="{'comment-dialog--invisible': description.id !== item.id && !description.text }">
+                <span>{{ description.text }}</span>
+              </div>
             </div>
           </v-flex>
         </v-layout>
