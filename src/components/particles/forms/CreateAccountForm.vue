@@ -44,7 +44,7 @@
             :disabled="processing"/>
           <error-message :msg="errors.first('phone')" />
         </v-flex>
-        <v-flex xs12 class="signup-input">
+        <v-flex xs12 class="signup-input" v-if="teammate">
           <v-text-field
             key="team name"
             name="Team name"
@@ -73,6 +73,8 @@
 import ErrorMessage from '../../particles/alerts/error-message';
 import ImageLoader from '../../particles/inputs/ImageLoader';
 
+import { mapGetters } from 'vuex';
+
 export default {
   name: 'CreateAccountForm',
   components: {
@@ -92,27 +94,38 @@ export default {
     processing: false
   }),
   computed: {
+    ...mapGetters('entity', [
+      'items'
+    ]),
     authorized () {
       return this.$store.state.auth.user;
+    },
+    teammate () {
+      const userTeam = this.items('userTeam');
+      return _.find(userTeam, item => item.userId === this.authorized.user_id);
     }
   },
   beforeMount () {
-    this.connect('user', 'auth/update', null, false);
+    this.connect('user', 'auth/update');
+    this.connect('userTeam', 'entity/setList');
   },
   methods: {
     handleImage ($event) {
       console.log($event);
     },
     send () {
-      const payload = {
-        data: this.team,
-        entity: 'team'
-      };
+      let requests = [
+        this.$store.dispatch('auth/update', this.user)
+      ];
 
-      return Promise.all([
-        this.$store.dispatch('auth/update', this.user),
-        this.$store.dispatch('entity/create', payload)
-      ]);
+      if (!this.teammate) {
+        requests.push(this.$store.dispatch('entity/create', {
+          data: this.team,
+          entity: 'team'
+        }));
+      }
+
+      return Promise.all(requests);
     },
     formatPhone (data) {
       let formatted = data.replace(/ |[^0-9]/g, '');
@@ -120,7 +133,7 @@ export default {
         this.user.phone = formatted.replace(/(.{4})/g, '$1 ');
 
         if (data.length < this.user.phone.length) {
-          this.user.phone =  this.user.phone.slice(0, -1);
+          this.user.phone = this.user.phone.slice(0, -1);
         }
       });
     },
