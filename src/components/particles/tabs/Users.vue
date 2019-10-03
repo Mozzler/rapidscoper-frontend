@@ -22,13 +22,18 @@
         <td>{{ props.item.userData.email }}</td>
         <td>
           <v-flex>
-            <dropdown :list="roles"
-                      :selected="props.item.role"
-                      @update="value => updateRole(value, props.item.id)" />
+            <div class="position-relative white-space-nowrap">
+              <dropdown
+                :list="roles"
+                :selected="props.item.role"
+                @update="value => updateRole(value, props.item.id)" />
+            </div>
           </v-flex>
         </td>
         <td class="text-xs-left">
-          <v-icon>delete</v-icon>
+          <v-btn icon :disabled="props.item.role !== 'manager'">
+            <v-icon>delete</v-icon>
+          </v-btn>
         </td>
       </tr>
       <span class="tr-border" />
@@ -37,8 +42,10 @@
 </template>
 
 <script>
-import AbsoluteMenu from "../menus/AbsoluteMenu";
-import Dropdown from "../menus/Dropdown";
+import AbsoluteMenu from '../menus/AbsoluteMenu';
+import Dropdown from '../menus/Dropdown';
+import { mapState, mapGetters } from 'vuex';
+
 export default {
   name: 'Users',
   components: {
@@ -47,6 +54,7 @@ export default {
   },
   data () {
     return {
+      processing: true,
       headers: [
         {
           text: 'user',
@@ -94,15 +102,19 @@ export default {
       this.connect('userTeam', 'entity/setList', filter);
     },
     updateRole (role, id) {
-      this.$store.dispatch('entity/update', {
+      const data = {
         entity: 'user-team',
+        cancelCommit: true,
         params: {
           id: id
         },
         data: {
+          id: id,
           role: role.type
         }
-      });
+      };
+      this.$store.commit('entity/update', data);
+      this.$store.dispatch('entity/update', data);
     }
   },
   beforeMount () {
@@ -112,11 +124,22 @@ export default {
     this.$store.commit('entity/resetList', 'userTeam');
   },
   computed: {
-    userTeam () {
-      return this.$store.getters['entity/items']('userTeam');
+    ...mapState('system', [
+      'roles'
+    ]),
+    ...mapGetters({
+      items: 'entity/items'
+    }),
+    teamId () {
+      return this.$route.params.name;
     },
-    roles () {
-      return this.$store.state.system.roles;
+    userTeam () {
+      return this.items('userTeam');
+    }
+  },
+  watch: {
+    teamId () {
+      this.fetchData();
     }
   }
 };

@@ -15,7 +15,9 @@
           v-html="project"></div>
         <span class="cursor-default" v-else> {{ project }} </span>
       </template>
-      <v-btn icon v-on="on" class="dropdown-action">
+      <v-btn icon v-on="on"
+         class="dropdown-action"
+        :disabled="processing">
         <v-icon>arrow_drop_down</v-icon>
       </v-btn>
     </template>
@@ -66,6 +68,10 @@ export default {
     field: {
       type: String,
       default: 'name'
+    },
+    processing: {
+      type: Boolean,
+      default: false
     }
   },
   data () {

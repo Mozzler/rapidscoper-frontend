@@ -34,7 +34,7 @@ export default {
     }
   },
   update (state, payload) {
-    const entity = payload.actual ? payload.actual : payload.entity;
+    const entity = payload.actual ? payload.actual : toCamelCase(payload.entity);
     payload.data = normalizeId(payload.data);
 
     _.each(state[entity].items, (item, index) => {

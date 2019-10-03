@@ -23,6 +23,8 @@ export default {
     return response.data;
   },
   async update (store, payload) {
+    delete payload.data.id;
+
     const params = payload.params;
     const response = await this._vm.$axios.put(`${payload.entity}/update`, payload.data, { params });
     const data = {

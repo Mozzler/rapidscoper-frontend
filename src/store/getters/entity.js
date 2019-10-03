@@ -5,22 +5,23 @@ function uppercased (str) {
 }
 
 export default {
-  items (state) {
+  items (state, getters, rootState, rootGetters) {
     return entity => {
-      let items = state[entity].items;
+      const items = state[entity].items;
+      const roles = rootState.system.roles;
       let data = [];
 
       if (entity === 'userTeam') {
         _.each(items, item => {
           const value = { ...item };
-          value.role = uppercased(item.role);
+          value.role = _.find(roles, item => item.type === value.role);
           data.push(value);
         });
       } else {
         data = state[entity].items;
       }
 
-      return data;
+      return state[entity].items;
     };
   },
   total (state) {
