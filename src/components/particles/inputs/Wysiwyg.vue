@@ -97,6 +97,11 @@
           <v-flex text-xs-left align-center row fill-height
             class="word-break-word">
             <div class="user-story__wysiwyg" :id="`wysiwyg-${item.id}`">
+              <div class="comment-dialog"
+                :class="{'comment-dialog--invisible': description.id !== item.id}"
+                :id="`description-container-${ item.id }`">
+                <span>{{ description.text }}</span>
+              </div>
               <div :id="`comment-container-${item.id}`"></div>
               <div class="user-story__comments"
                    v-html="item.originalMarkup"
@@ -143,13 +148,6 @@
                 :size="10"
                 :width="7"
                 :visible="processing === item.id" />
-              <div
-                v-show="description.id === item.id && !description.text"
-                class="comment-dialog"
-                :class="{'comment-dialog--invisible': description.id !== item.id && !description.text }"
-                :id="`description-container-${ item.id }`">
-                <span>{{ description.text }}</span>
-              </div>
             </div>
           </v-flex>
         </v-layout>

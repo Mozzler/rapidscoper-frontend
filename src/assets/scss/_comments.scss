@@ -60,13 +60,15 @@
 .comment-dialog {
   position: absolute;
   display: flex;
+  top: 20px;
+  left: 20px;
   align-items: center;
   background-color: $light-black;
   color: $white;
   font-size: 12px;
   line-height: 14px;
   padding: 5px;
-  z-index: 6;
+  z-index: 20;
   border-radius: 2px;
   cursor: pointer;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
