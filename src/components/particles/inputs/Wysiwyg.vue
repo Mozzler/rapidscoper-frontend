@@ -144,9 +144,10 @@
                 :width="7"
                 :visible="processing === item.id" />
               <div
+                v-show="description.id === item.id && !description.text"
                 class="comment-dialog"
-                :id="`description-container-${ item.id }`"
-                :class="{'comment-dialog--invisible': description.id !== item.id && !description.text }">
+                :class="{'comment-dialog--invisible': description.id !== item.id && !description.text }"
+                :id="`description-container-${ item.id }`">
                 <span>{{ description.text }}</span>
               </div>
             </div>

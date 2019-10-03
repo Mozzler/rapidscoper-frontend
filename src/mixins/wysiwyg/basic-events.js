@@ -16,12 +16,15 @@ export default {
       const target = $event.target;
       if (target.dataset.id) {
         const dictionary = _.find(this.rawSections, item => item.id === target.dataset.id);
+
         if (dictionary && dictionary.description) {
           const hint = document.getElementById(`description-container-${id}`);
           const rect = target
             .getBoundingClientRect();
           const wysiwyg = document.getElementById(`wysiwyg-${id}`)
             .getBoundingClientRect();
+
+          console.log(hint, rect, wysiwyg);
 
           this.description = {
             id: id,
