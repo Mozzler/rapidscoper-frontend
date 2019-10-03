@@ -28,7 +28,7 @@
         <td>
           <v-layout align-center justify-space-between row fill-height>
             <v-icon @click="() => share(props.item.id)">share</v-icon>
-            <template>
+            <template v-if="props.item.role === 'manager'">
               <v-icon @click="() => setStatus(props.item.id, 'archived')"
                       v-if="props.item.status !== 'archived'">
                 archive

@@ -34,12 +34,13 @@ export default {
       return list.length.toString();
     };
   },
-  projectsWithMembers (state) {
+  projectsWithMembers (state, getters, rootState) {
     return teamId => {
 
       let projects = [...state.project.items];
       let userProject = [...state.userProject.items];
       let userInfo = [...state.userInfo.items];
+      let user = rootState.auth.user;
 
       if (teamId) {
         projects = _.filter(projects, item => item.teamId === teamId);
@@ -58,6 +59,13 @@ export default {
           let found = _.find(userInfo, info => info.userId === id);
           return found ? found.avatarUrl : null;
         });
+
+        const up = _.find(userProject, u =>
+          u.userId === user.user_id && u.projectId === item.id);
+
+        if (up) {
+          obj.role = up.role;
+        }
 
         return obj;
       });
