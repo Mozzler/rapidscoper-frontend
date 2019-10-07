@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 
 export default {
   name: 'ForgotPasswordForm',
@@ -43,7 +44,13 @@ export default {
     },
     processing: false
   }),
+  beforeMount () {
+    this.fetchData();
+  },
   methods: {
+    ...mapActions('entity', [
+      'view'
+    ]),
     async reset () {
       this.processing = true;
 
@@ -57,6 +64,16 @@ export default {
       } else {
         this.processing = false;
       }
+    },
+    async fetchData () {
+      this.processing = true;
+      await this.view({
+        entity: 'invite',
+        data: {
+          id: '5d53874a3393df07be05cdac',//this.$route.params.inviteId
+        }
+      });
+      this.processing = false;
     }
   }
 };

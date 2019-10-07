@@ -4,10 +4,49 @@ export default {
       focused: null,
       editor: null,
       etalon: null,
-      blocked: false
+      blocked: false,
+      description: {
+        text: '',
+        id: null
+      }
     };
   },
   methods: {
+    hoverEvent ($event, id) {
+      const target = $event.target;
+      this.description.id = null;
+      if (target.dataset.id) {
+        const dictionary = _.find(this.rawSections, item => item.id === target.dataset.id);
+
+        if (dictionary && dictionary.description) {
+          const hint = document.getElementById(`description-container-${id}`);
+          const phraseRect = target.getBoundingClientRect();
+          const wysiwygRect = document.getElementById(`wysiwyg-${id}`)
+            .getBoundingClientRect();
+
+          this.description = {
+            id: id,
+            text: dictionary.description
+          };
+
+          this.$nextTick();
+
+          const level = _.find(this.list, item => item.id === id).level;
+
+          _.assign(hint.style, {
+            position: 'absolute',
+            top: `${phraseRect.top - wysiwygRect.top - 30}px`,
+            left: `${phraseRect.left - wysiwygRect.left + level * 4}px`
+          });
+        }
+      }
+    },
+    leaveEvent () {
+      this.description = {
+        text: '',
+        id: null
+      };
+    },
     focusEvent (item, index) {
       this.focused = index;
       this.etalon = { ...item };
@@ -59,7 +98,7 @@ export default {
       this.setSiblings();
 
       let printable = this.printable($event.which);
-      if (!printable) {
+      if (!printable && !this.isEditable()) {
         this.list[this.focused].markup = this.event.target.innerHTML;
         this.collapseToEnd();
       }

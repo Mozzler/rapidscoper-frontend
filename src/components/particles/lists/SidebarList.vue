@@ -45,7 +45,7 @@
 import Navigation from '@/mixins/navigation';
 
 export default {
-  name: "SidebarList",
+  name: 'SidebarList',
   mixins: [
     Navigation
   ],

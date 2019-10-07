@@ -5,14 +5,28 @@
     <circular-loader
       cls="loader-shadow--without-padding"
       :size="50"
+      :visible="processing"
       :width="5" />
 
-    <h1>
-      <input v-model="name"
-             @click="click"
-             @input="updateSectionName"
-             @blur="() => updateStory('name')" />
-    </h1>
+    <div
+      class="user-story__section-container"
+      @mouseover="() => hovered = model.id"
+      @mouseleave="() => hovered = null">
+      <v-icon
+        @click="removeSection"
+        class="user-story__delete-section"
+        v-if="hovered !== null">
+        delete
+      </v-icon>
+      <h1>
+        <input
+          class="user-story__editable--bordered-1"
+          v-model="name"
+          @click="click"
+          @input="updateSectionName"
+          @blur="() => updateStory('name')" />
+      </h1>
+    </div>
     <div class="mt-3 user-story__wysiwyg">
       <div class="user-story__placeholder text-greyed">
         {{ !description ? 'Describe this section' : '' }}
@@ -32,7 +46,7 @@
     <div v-if="stories.length">
       <wysiwyg
         :sectionId="model.id"
-        :stories="stories"/>
+        :stories="stories" />
     </div>
     <div v-else>
       <v-divider class="my-3" />
@@ -40,7 +54,10 @@
         <span v-if="filters.priorities.length || filters.labels.length">
           There are no stories for the selected filters
         </span>
-        <span v-else>There are no stories in the sections yet</span>
+        <div v-else>
+          <div>There are no stories in the sections yet</div>
+          <div class="text-reference" @click="createFirstStory">Create story</div>
+        </div>
       </div>
       <v-divider class="my-3" />
     </div>
@@ -53,6 +70,7 @@ import ErrorHandler from '@/mixins/error-handler';
 import CircularLoader from '../../particles/loaders/Circular';
 
 import { mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'StoryItem',
@@ -65,20 +83,30 @@ export default {
   ],
   props: {
     model: {
-      type: Object,
+      type: [Object, undefined],
       required: true
     }
   },
   data () {
     return {
-      name: this.model.name,
-      description: this.model.description,
+      hovered: null,
+      name: null,
+      description: null,
       processing: null
     };
+  },
+  beforeMount () {
+    this.hovered = null;
+    this.name = this.model.name;
+    this.description = this.model.description;
+    this.processing = null;
   },
   computed: {
     ...mapState({
       filters: state => state.story.filters
+    }),
+    ...mapGetters({
+      items: 'entity/items'
     }),
     stories () {
       return this.$store.getters['story/content'](this.model.id);
@@ -124,6 +152,36 @@ export default {
           const msg = this.handleErrors(error, true);
           this.$emit('show-error', msg);
         });
+    },
+    async createFirstStory () {
+      const data = {
+        id: this.getObjectId(),
+        type: 'user',
+        storyIdentifier: this.identifier,
+        parentStoryId: null,
+        afterStoryId: 0,
+
+        estimate: 0,
+        priority: null,
+        labels: [],
+        level: 0,
+
+        markup: `<span class="user-story__editable--beginning">As a </span>&nbsp;`,
+
+        sectionId: this.model.id,
+        teamId: this.model.teamId,
+        projectId: this.model.projectId
+      };
+
+      await this.$store.dispatch('entity/create', {
+        entity: 'story',
+        data: data
+      });
+
+      this.$socket.recreateWatchers('story', false);
+    },
+    async removeSection () {
+      this.$root.$emit('delete-section', this.model.id);
     }
   },
   watch: {

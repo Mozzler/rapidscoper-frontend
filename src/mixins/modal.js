@@ -13,6 +13,7 @@ export default {
   },
   beforeMount () {
     this.$root.$on(this.$options.name, this.showModal);
+    this.$validator.reset();
     if (typeof this.initData === 'function') {
       this.initData();
     }
@@ -59,9 +60,9 @@ export default {
   },
   watch: {
     dialog () {
-      if (this.dialog) {
+      this.$validator.reset();
+      if (this.dialog && typeof this.initData === 'function') {
         this.initData();
-        this.$validator.reset();
       }
     }
   }

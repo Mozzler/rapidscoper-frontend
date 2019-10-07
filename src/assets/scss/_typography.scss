@@ -1,5 +1,5 @@
-.theme--rapid {
-  font-family: 'Lato', sans-serif;
+*:not(.v-icon) {
+  font-family: 'Lato', sans-serif !important;
 }
 
 h1 {
@@ -46,6 +46,10 @@ a {
 
 .mt-40 {
   margin-top: 40px;
+}
+
+.text-size--16-normal {
+  font-size: 16px;
 }
 
 .text-size--16 {

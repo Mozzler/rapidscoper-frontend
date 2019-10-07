@@ -8,6 +8,7 @@
     <tool-section
       v-if="!isCommentTab" />
     <comments
+      :clickable="true"
       :source="commentGetter"
       v-else />
   </div>

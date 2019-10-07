@@ -1,11 +1,23 @@
-.comment {
+.comment-modal {
+  @include rapid-scroll;
+}
 
+.tool-section {
+  .comment {
+    margin: -16px -25px -12px;
+    padding: 16px 25px;
+
+    &:hover {
+      background-color: $light-grey;
+    }
+  }
 }
 
 .comment__img {
   width: 32px;
   height: 32px;
   margin: 0;
+  display: inline-block;
 }
 
 .comment__subtitle {
@@ -23,16 +35,40 @@
   margin-bottom: 4px;
 }
 
+.comment-textarea {
+  .v-input__slot {
+    border: none !important;
+    padding: 0 !important;
+
+    textarea {
+      color: $light-black;
+    }
+  }
+}
+
+.comment__textarea--editable {
+  .v-input__slot {
+    line-height: 20px;
+    border-radius: 4px;
+    margin-top: 10px;
+    border: 1px solid $primary !important;
+    padding: 0 10px !important;
+    outline: none;
+  }
+}
+
 .comment-dialog {
-  position: fixed;
+  position: absolute;
   display: flex;
+  top: 20px;
+  left: 20px;
   align-items: center;
   background-color: $light-black;
   color: $white;
   font-size: 12px;
   line-height: 14px;
   padding: 5px;
-  z-index: 6;
+  z-index: 20;
   border-radius: 2px;
   cursor: pointer;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
@@ -56,4 +92,51 @@
 
 .comment-dialog--invisible {
   display: none;
+}
+
+.comment__divider {
+  margin-left: -20px;
+  max-width: calc(100% + 36px)
+}
+
+.comment {
+  position: relative;
+
+  .v-btn--icon {
+    margin: 3px;
+    padding: 3px;
+    width: 28px;
+    height: 28px;
+
+    i {
+      font-size: 22px;
+    }
+  }
+}
+
+.comment__actions {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.comment__tooltip {
+  span::before {
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    position: absolute;
+    border-left: 9px solid transparent;
+    border-bottom: 6px solid $light-black;
+    border-right: 9px solid transparent;
+    left: calc(50% - 10px);
+    top: -5px;
+  }
+
+  background: $light-black;
+  border-radius: 2px;
+  font-family: 'Lato', sans-serif;
+  font-size: 12px;
+  line-height: 14px;
 }

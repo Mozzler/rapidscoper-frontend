@@ -17,6 +17,13 @@
         </div>
 
         <v-card-text class="mt-4 padding-0">
+          <circular-loader
+            cls="loader-shadow--without-padding transparent"
+            :size="50"
+            :width="5"
+            :visible="processing"
+          />
+
           <v-layout row wrap fill-height>
             <v-flex>
               <v-layout row justify-space-between align-center
@@ -71,16 +78,6 @@
               </v-layout>
             </v-flex>
           </v-layout>
-          <!---<v-layout row mt-4 justify-end>
-            <v-btn class="btn-rapid mr-3" large outline
-                   @click="closeModal">
-              Cancel
-            </v-btn>
-            <v-btn class="btn-rapid primary" large
-                   @click="save">
-              Save
-            </v-btn>
-          </v-layout>-->
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -91,14 +88,14 @@
 import { mapGetters } from 'vuex';
 
 import ModalMixin from '@/mixins/modal';
-import Dropdown from '../menus/Dropdown';
+import CircularLoader from '../loaders/Circular';
 
 import Tools from '@/mixins/story';
 
 export default {
   name: 'settings',
   components: {
-    Dropdown
+    CircularLoader
   },
   mixins: [
     ModalMixin,
@@ -107,11 +104,12 @@ export default {
   data () {
     return {
       colors: [
-        '#FE9BA5', '#D7AC8D', '#FADCA2', '#9BE1CA',
-        '#9FCEF8', '#C4ABED', '#FAAAD5', '#E5E5E5'
+        '#9BE1CA', '#9FCEF8', '#C4ABED', '#FAAAD5',
+        '#E5E5E5', '#FE9BA5', '#D7AC8D', '#FADCA2'
       ],
       list: [],
-      focused: null
+      focused: null,
+      processing: false
     };
   },
   beforeMount () {
@@ -172,6 +170,7 @@ export default {
       this.submit({ id: id }, 'delete');
     },
     async createLabel () {
+      this.processing = true;
       const color = this.colors[this.labels.length].replace('#', '');
       const response = await this.submit({
         data: {
@@ -184,6 +183,7 @@ export default {
       }, 'create');
 
       this.focused = response.item.id;
+      this.processing = false;
     },
     submit (payload = {}, action, params = {}) {
       let data = {

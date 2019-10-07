@@ -19,6 +19,9 @@ function toCamelCase (str) {
 }
 
 export default {
+  setItem (state, payload) {
+    //state[payload.entity].items.push(payload.data);
+  },
   setList (state, payload) {
     payload.data.items = normalizeId(payload.data.items);
     state[payload.entity] = payload.data;
@@ -31,7 +34,7 @@ export default {
     }
   },
   update (state, payload) {
-    const entity = payload.actual ? payload.actual : payload.entity;
+    const entity = payload.actual ? payload.actual : toCamelCase(payload.entity);
     payload.data = normalizeId(payload.data);
 
     _.each(state[entity].items, (item, index) => {
@@ -50,10 +53,17 @@ export default {
       deletable = payload.ids;
     }
 
-    let normalized = toCamelCase(payload.entity);
+    if (payload.entity === 'section') {
+      const section = _.find(state.section.items, section => section.id === payload.id);
+      const project = _.find(state.project.items, item => item.id === section.projectId);
 
-    state[normalized].items = _.filter(state[normalized].items,
-        item => !deletable.includes(item.id));
+      _.each(['technical', 'user'], order => {
+        project.sectionOrder[order] = _.filter(project.sectionOrder[order], id => id !== payload.id);
+      });
+    }
+
+    let normalized = toCamelCase(payload.entity);
+    state[normalized].items = _.filter(state[normalized].items, item => !deletable.includes(item.id));
   },
   resetList (state, entity) {
     if (_.isString(entity)) {

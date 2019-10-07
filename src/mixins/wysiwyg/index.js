@@ -1,13 +1,13 @@
-import Instruments from "./instruments";
-import Crud from "./crud";
-import Converters from "./converters";
-import Getters from "./getters";
-import StaticText from "./static-text";
-import AutoCompleting from "./auto-completing";
-import BasicEvents from "./basic-events";
-import Filters from "./filters";
-import Hint from "./hint";
-import ActionHelper from "./action-helper";
+import Instruments from './instruments';
+import Crud from './crud';
+import Converters from './converters';
+import Getters from './getters';
+import StaticText from './static-text';
+import AutoCompleting from './auto-completing';
+import BasicEvents from './basic-events';
+import Filters from './filters';
+import Hint from './hint';
+import ActionHelper from './action-helper';
 
 export default {
   mixins: [

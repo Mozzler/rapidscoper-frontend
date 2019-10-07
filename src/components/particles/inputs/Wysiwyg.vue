@@ -4,6 +4,7 @@
                v-model="list"
                :clone="clone"
                @start="start"
+               @end="resetMovable"
                ghost-class="user-story__draggable"
                @change="change">
       <div v-for="(item, index) in list"
@@ -20,8 +21,8 @@
            :key="`tool-panel-${item.id}`"
            :ref="`tool-panel-${item.id}`"
            @click="() => selectTool(item.id)"
-           @mouseover="() => hovered = item.id"
-           @mouseleave="() => hovered = null"
+           @mouseleave="setHovered"
+           @mouseover="() => setHovered(item.id)"
            @keyup.enter.prevent.exact="() => setHandler('nextItem', item.id)"
            @keydown.tab.prevent.exact="() => setHandler('nextItem', item.id)"
            @keydown.down.prevent.exact="() => setHandler('nextItem', item.id)"
@@ -64,23 +65,29 @@
                 </v-flex>
                 <v-flex grow>
                   <v-layout row
-                            align-center
                             fill-height
                             class="user-story__prefix">
-                    <template>
+                    <div class="user-story__action-group">
+                      <div @click="() => removeStory(index)">
+                        <v-icon
+                          v-if="tab === 'edit' && hovered === item.id"
+                          class="user-story__delete-icon">
+                          delete
+                        </v-icon>
+                      </div>
                       <div
-                        v-if="comment.state === item.id && tab === 'comments'"
-                        @click="() => commentStory(item.id)"
+                        v-if="hovered === item.id && tab === 'comments'"
+                        @click="() => commentStory(item.id, item.originalMarkup)"
                         class="story-icon icon">
                         <comment-icon />
                       </div>
                       <div
-                        v-else-if="tab === 'edit'"
+                        v-else-if="tab === 'edit' && (hovered === item.id || movable === item.id)"
                         class="story-icon icon drag-icon"
                         @mousedown="() => startDragging(item.id)">
                         <drag-icon />
                       </div>
-                    </template>
+                    </div>
                     <div>#</div>
                   </v-layout>
                 </v-flex>
@@ -89,14 +96,23 @@
           </v-flex>
           <v-flex text-xs-left align-center row fill-height
             class="word-break-word">
-            <div class="user-story__wysiwyg">
+            <div class="user-story__wysiwyg" :id="`wysiwyg-${item.id}`">
+              <div class="comment-dialog"
+                :class="{'comment-dialog--invisible': description.id !== item.id}"
+                :id="`description-container-${ item.id }`">
+                <span>{{ description.text }}</span>
+              </div>
+              <div :id="`comment-container-${item.id}`"></div>
+              <div class="user-story__comments"
+                   v-html="item.originalMarkup"
+                   :id="`comment-${item.id}`"></div>
               <div class="user-story__placeholder"
                    v-html="item.placeholder"
                    readonly></div>
               <div v-if="tab === 'edit'"
                    class="user-story__editable"
                    tabindex="0"
-                   :contenteditable="processing !== item.id && tab === 'edit'"
+                   :contenteditable="processing !== item.id"
                    :disabled="processing === item.id"
                    :class="{
                     'text-dark-grey': !item.type && beginning(item.markup)
@@ -116,6 +132,8 @@
                    @keydown.186.shift.exact="createSubstory"
                    @keydown.tab.shift.exact="decreaseStoryLevel"
                    @blur="() => updateStory(index)"
+                   @mouseover="$event => hoverEvent($event, item.id)"
+                   @mouseleave="leaveEvent"
                    v-html="item.markup"></div>
               <div v-else
                    class="user-story__editable"
@@ -123,7 +141,7 @@
                    :id="item.id"
                    @keydown.prevent
                    @mouseup="$event => selectEvent($event, item.id)"
-                   v-html="item.markup">
+                   v-html="editable(item.markup)">
               </div>
               <circular-loader
                 cls="user-story__loader"
@@ -177,10 +195,7 @@ export default {
       list: null,
       hintEditor: null,
       processing: false,
-      replacement: null,
-
-      hovered: null,
-      movable: null
+      replacement: null
     };
   },
   beforeMount () {
@@ -229,10 +244,6 @@ export default {
       }
 
       this.replacement = null;
-    },
-    startDragging (id) {
-      this.movable = id;
-      this.$store.commit('story/setActiveStoryOnTab', null);
     }
   },
   watch: {
@@ -243,10 +254,16 @@ export default {
           this.list = this.stories;
           resolve();
         }).then(() => {
-          if (!this.isEditable(this.event)) {
+          const selection = document.getSelection();
+
+          if (!this.isEditable(this.event) && selection.rangeCount) {
             document.execCommand('selectAll', false, null);
-            document.getSelection().collapseToEnd();
+            selection.collapseToEnd();
           }
+
+          _.each(this.stories, story => {
+            this.createCommentNodes(story.id);
+          });
         });
       }
     }

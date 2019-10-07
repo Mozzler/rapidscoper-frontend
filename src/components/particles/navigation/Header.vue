@@ -7,10 +7,10 @@
       <v-flex xs6>
         <template v-if="!isAuthenticated">
           <p class="text-xs-right" v-if="isSignup">Already have an account?
-            <router-link :to="'login'">Log In</router-link>
+            <router-link :to="'/login'">Log In</router-link>
           </p>
           <p class="text-xs-right" v-else>Don't have an account?
-            <router-link :to="'signup'">Sign Up</router-link>
+            <router-link :to="'/signup'">Sign Up</router-link>
           </p>
         </template>
         <template v-else>

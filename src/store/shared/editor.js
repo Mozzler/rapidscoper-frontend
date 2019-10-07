@@ -1,3 +1,5 @@
+import converter from './converter';
+
 function constructions () {
   return {
     'As a ...': {
@@ -86,9 +88,12 @@ function replaceMarkup (markup, dictionary) {
 }
 
 function sections (project, sections, type) {
-  return _.map(project.sectionOrder[type], sectionId => {
-    return _.find(sections, section => section.id === sectionId);
-  });
+  return _.chain(project.sectionOrder[type])
+    .map(sectionId => {
+      return _.find(sections, section => section.id === sectionId);
+    })
+    .filter(section => section)
+    .value();
 }
 
 function conformity (filters = {}, story) {
@@ -106,6 +111,10 @@ function conformity (filters = {}, story) {
 
   // doesn't match the label or priority filters
   return priority || labels;
+}
+
+function uncommented (str) {
+  return str.replace(/(\[\/?commentId=.*?\])/g, '');
 }
 
 function stories (storyOrder, stories, comments, dictionary = null, filters = null) {
@@ -133,8 +142,9 @@ function stories (storyOrder, stories, comments, dictionary = null, filters = nu
         labels: basic.labels ? basic.labels : [],
         template: construction ? construction.structure : '',
         tail: item.tail ? item.tail : '',
-        markup: markup,
-        placeholder: item.placeholder ? item.placeholder : markup
+        markup: uncommented(markup),
+        originalMarkup: markup,
+        placeholder: item.placeholder ? item.placeholder : uncommented(markup)
       });
     }
 
@@ -148,34 +158,41 @@ function labels (dictionary) {
   return _.filter(dictionary, item => item.type === 'label');
 }
 
-function comments (commentList, userInfoList) {
+function comments (commentList, userInfoList, replies = true) {
   if (!commentList || !userInfoList) {
     return;
   }
 
-  return _.map(commentList, comment => {
-    let user = _.find(userInfoList, u => u.userId === comment.createdUserId);
-    let time = moment.unix(comment.createdAt);
-    const diff = time.diff(moment(), 'days');
-    switch (diff) {
-      case 0:
-        time = time.format("[Today at] h:mm a");
-        break;
-      case -1:
-        time = time.format("[Yesterday at] h:mm a");
-        break;
-      default:
-        time = time.format("D MMM YYYY [at] h:mm a");
-        break;
-    }
+  return _.chain(commentList)
+    .filter(comment => !comment.parentCommentId)
+    .map(comment => {
+      const user = _.find(userInfoList, u => u.userId === comment.createdUserId);
+      let master = commentBuilder(comment, user);
 
-    return {
-      avatarUrl: user ? user.avatarUrl : null,
-      name: user ? user.name : null,
-      text: comment.content,
-      time
-    };
-  });
+      master.replies = _.chain(commentList)
+        .filter(reply => reply.parentCommentId === comment.id)
+        .map(reply => commentBuilder(reply, user))
+        .value();
+
+      return master;
+    })
+    .value();
+}
+
+function commentBuilder (comment, user) {
+  return {
+    id: comment.id,
+    storyId: comment.storyId,
+    avatarUrl: user ? user.avatarUrl : null,
+    name: user ? user.name : null,
+    content: comment.content,
+    createdBy: comment.createdUserId,
+    visibleToClient: comment.visibleToClient,
+    parentCommentId: comment.parentCommentId,
+    status: comment.status,
+    time: converter.unixToDateTimeStr(comment.createdAt),
+    replies: []
+  };
 }
 
 export default {

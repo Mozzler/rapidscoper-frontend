@@ -7,14 +7,17 @@ export default {
     x: 0,
     y: 0,
     markup: '',
-    item: null
+    item: null,
+    id: null,
+    precomment: true,
+    optionDropdown: false
   },
   periods: ['Unexpired', '1 day', '2 days', '3 days', '7 days'],
   roles: [{
     name: 'Manager',
     type: 'manager'
   }, {
-    name: 'Member',
+    name: 'Full Member',
     type: 'member'
   }, {
     name: 'Client',
@@ -29,5 +32,6 @@ export default {
   }, {
     name: 'Full access',
     type: 'full'
-  }]
+  }],
+  freeze: false
 };

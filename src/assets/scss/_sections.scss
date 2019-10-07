@@ -45,12 +45,46 @@
 }
 .user-story--active {
   background-color: $light-grey-1;
-  margin: -4px -8px;
-  padding: 4px 8px;
+
 
   &:focus {
     outline: none;
   }
+}
+
+.user-story__section-container {
+  margin: 0 -25px;
+
+  h1 {
+    padding: 0 15px;
+  }
+}
+
+.user-story__delete-icon,
+.user-story__delete-section {
+  cursor: pointer;
+  position: absolute;
+  color: $dark-grey !important;
+
+  &:hover {
+    color: $error !important;
+  }
+}
+
+.user-story__delete-icon {
+  font-size: 16px;
+  top: 2px;
+  left: -35px;
+  width: 30px;
+  height: 30px;
+}
+
+.user-story__delete-section {
+  width: 30px;
+  height: 30px;
+  left: -32px;
+  top: 7px;
+  font-size: 20px;
 }
 
 .user-story__tools {
@@ -68,8 +102,12 @@
 }
 
 .user-story__wysiwyg {
-  position: relative;
   width: 100%;
+}
+
+.user-story__action-group {
+  display: flex;
+  align-items: center;
 }
 
 .user-story__input {
@@ -97,9 +135,37 @@
 .user-story__editable {
   position: relative;
   width: 100%;
+  color: $black;
 
   span[contenteditable] {
     outline: none;
+  }
+}
+
+.user-story__editable--bordered,
+.user-story__editable--bordered-1 {
+  border-radius: 2px;
+  outline: none;
+
+  &:hover, &:focus {
+    border: 1px solid $dark-grey;
+  }
+}
+
+.user-story__editable--bordered-1 {
+  margin: -2px;
+  padding: 0 10px;
+
+  &:hover, &:focus {
+    padding: 0 9px;
+  }
+}
+
+.user-story__editable--bordered {
+  padding: 4px 15px;
+
+  &:hover, &:focus {
+    padding: 4px 14px;
   }
 }
 
@@ -110,7 +176,6 @@
 .user-story__editable-input {
   display: inline-block;
   min-width: 60px;
-  padding: 10px 0;
 }
 
 .user-story__editable,
@@ -122,8 +187,8 @@
   &:focus {
     outline: none;
   }
-  &::selection {
-    background-color: $light-primary;
+  &::selection, ::selection {
+    background-color: $light-primary !important;
   }
 }
 
@@ -224,4 +289,17 @@
 
 .user-story--without-padding {
   padding: 5px 0;
+}
+
+.user-story__comments {
+  z-index: -1;
+  visibility: hidden;
+  height: 0;
+}
+
+.user-story__comment-item {
+  background-color: rgba(250, 220, 162, 0.7);;
+  position: absolute;
+  height: 20px;
+  z-index: 0;
 }

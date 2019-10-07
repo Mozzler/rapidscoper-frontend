@@ -45,6 +45,7 @@
 <script>
 import Dropdown from '../menus/Dropdown';
 import CircularLoader from '../../particles/loaders/Circular';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'InviteGroup',
@@ -73,8 +74,11 @@ export default {
     this.initData();
   },
   computed: {
+    ...mapGetters({
+      allowedRoles: 'entity/allowedRoles'
+    }),
     roles () {
-      return this.$store.state.system.roles;
+      return this.allowedRoles(this.entityId);
     }
   },
   methods: {

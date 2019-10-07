@@ -1,22 +1,106 @@
+import ShardMixin from './shards';
+
 import { mapState, mapMutations } from 'vuex';
 
+const COMMENT_LEFT = '[commentId=~~~]';
+const COMMENT_RIGHT = '[/commentId=~~~]';
+
 export default {
+  mixins: [
+    ShardMixin
+  ],
   computed: {
     ...mapState('system', [
       'comment'
     ])
   },
+  mounted () {
+    this.highlightComments();
+  },
   methods: {
     ...mapMutations('system', [ 'setComment' ]),
-    getSpanClass (nodes, range, container, offset, delimeter = '') {
+    editable (str) {
+      return str.replace(/contenteditable="false"/g, '');
+    },
+    highlightComments () {
+      _.each(this.stories, story => {
+        this.createCommentNodes(story.id);
+      });
+    },
+    findCommentNodes (nodes, i = 0) {
+      let ranges = [];
+
+      for (; i < nodes.length; i++) {
+        const beginning = nodes[i].textContent.match(/\[commentId=.*?\]/i);
+
+        if (beginning) {
+          const id = beginning[0].replace(/\[commentId=|\]/g, '');
+          const startIndex = nodes[i].textContent.indexOf(`[commentId=${id}]`);
+          nodes[i].textContent = nodes[i].textContent.replace(`[commentId=${id}]`, '');
+
+          let endIndex = null;
+          let found = null;
+          let j = i;
+
+          for (; j < nodes.length; j++) {
+            found = nodes[j].textContent.indexOf(`[/commentId=${id}]`);
+            if (found !== -1) {
+              endIndex = found - 1;
+              nodes[j].textContent = nodes[j].textContent.replace(`[/commentId=${id}]`, '');
+              break;
+            }
+          }
+
+          const range = document.createRange();
+
+          if (!nodes[i] || !nodes[j]) {
+            return;
+          }
+
+          const startNode = nodes[i].nodeType === 1 ?
+            _.first(nodes[i].childNodes) : nodes[i];
+          range.setStart(startNode, startNode.length ? startIndex : 0);
+
+          const endNode = nodes[j].nodeType === 1 ?
+            _.first(nodes[j].childNodes) : nodes[j];
+          range.setEnd(endNode, endNode.length ? endIndex + 1 : 0);
+
+          ranges.push(range);
+        }
+      }
+
+      return ranges;
+    },
+    createCommentNodes (id) {
+      const nodes = document.getElementById(`comment-${id}`).childNodes;
+      const ranges = this.findCommentNodes(nodes);
+
+      _.each(ranges, range => {
+        const parent = document.getElementById(`comment-container-${id}`);
+        const parentRect = parent.getBoundingClientRect();
+        const rect = range.getBoundingClientRect();
+
+        let n = document.createElement('div');
+        n.className = 'user-story__comment-item';
+        _.assign(n.style, {
+          left: `${rect.left - parentRect.left}px`,
+          top: `${rect.top - parentRect.top - 2}px`,
+          width: `${rect.width}px`
+        });
+
+        parent.prepend(n);
+      });
+    },
+    getSpanClass (nodes, range, container = 'startContainer', offset = 'startOffset', delimeter = '') {
       // custom text
       if (range[container].previousSibling === null) {
-        let text = range[container].parentNode.innerHTML.replace('&nbsp;', ' ');
+        let text = range[container].parentNode.innerHTML.replace(/&nbsp;|\u00a0/g, ' ');
         let sliced = [text.slice(0, range[offset]), text.slice(range[offset])];
 
         return {
+          increment: 0,
           className: range[container].parentNode.className,
-          updated: sliced.join(`[${delimeter}comment-id=21]`)
+          updated: sliced.join(`[${delimeter}commentId=~~~]`)
         };
       }
 
@@ -25,21 +109,84 @@ export default {
       // connector between two spans - &nbsp;
       if (editor && !range[offset]) {
         return {
-          previous: range[container].previousElementSibling.className,
-          className: null,
-          updated: `[${delimeter}comment-id=21]${range[container].textContent}`
+          increment: 1,
+          className: range[container].previousElementSibling.className,
+          updated: `[${delimeter}commentId=~~~]${range[container].textContent}`
         };
       }
 
       // beginning of the element node
       if (editor && range[offset]) {
         let next = range[container].nextSibling;
+        if (next) {
+          return {
+            increment: 0,
+            className: next.className,
+            updated: `[commentId=~~~]${next.innerHTML}`
+          };
+        }
 
-        return {
-          className: next.className,
-          updated: `[${delimeter}comment-id=21]${next.innerHTML}`
-        };
+        let previous = range[container].previousSibling;
+        if (previous) {
+          return {
+            increment: 1,
+            className: previous.className,
+            updated: `${range[container].textContent}[/commentId=~~~]`
+          };
+        }
       }
+    },
+    getCommentedMarkup (range, id) {
+      let nodes = document.getElementById(id).childNodes;
+      let shadowNodes = _.map(nodes, node => {
+        if (node.nodeType === 3) {
+          return {
+            content: node.textContent
+          };
+        }
+        if (node.nodeType === 1) {
+          return {
+            content: node.innerHTML,
+            outerHTML: node.outerHTML,
+            className: node.className
+          };
+        }
+      });
+
+      const markup = [
+        this.getSpanClass(nodes, range),
+        this.getSpanClass(nodes, range, 'endContainer', 'endOffset', '/')
+      ];
+
+      if (markup[0].className !== markup[1].className) {
+        _.each(markup, item => {
+          let index = _.findIndex(shadowNodes, i => i.className === item.className);
+          if (shadowNodes[index + item.increment]) {
+            shadowNodes[index + item.increment].content = item.updated;
+          }
+        });
+      } else {
+        const beginning = markup[0].updated.split('[commentId=~~~]');
+        const ending = markup[1].updated.split(beginning[0]);
+
+        let index = _.findIndex(shadowNodes, i => i.className === markup[0].className);
+        shadowNodes[index].content = `${beginning[0]}[commentId=~~~]${ending[1]}`;
+      }
+
+      const originalMarkup = _.find(this.stories, story => story.id === id).originalMarkup;
+      const updatedMarkup = _.map(shadowNodes, item => {
+        if (item.outerHTML) {
+          let split = item.outerHTML.split(/(<span .*>)(.*)(<\/span>)/)
+            .filter(item => item);
+          split[1] = item.content;
+
+          return split.join('');
+        } else {
+          return item.content;
+        }
+      }).join('');
+
+      return this.stick(originalMarkup, updatedMarkup);
     },
     selectEvent ($event, id) {
       if (this.tab !== 'comments') {
@@ -50,64 +197,43 @@ export default {
       const content = range.cloneContents();
 
       if (!content.childNodes.length) {
-        this.setCommentData(null, '', null, 0, 0);
-        return;
+        return this.setCommentData();
       }
 
-      const start = range.startContainer;
-      const end = range.endContainer;
+      let markup = this.getCommentedMarkup(range, id);
+      let rect = range.getBoundingClientRect();
 
-      let nodes = document.getElementById(id).childNodes;
-
-      let chain = [];
-      let markupStart = this.getSpanClass(nodes, range, 'startContainer', 'startOffset');
-      let markupEnd = this.getSpanClass(nodes, range, 'endContainer', 'endOffset', '/');
-
-      let cls = markupStart.className;
-
-        /*_.find(this.list, story => story.id === id).markup
-        .split(/<span|^&nbsp;$/)
-        .map(item => item.includes('</span>') ? `<span${item}` : item)*/
-
-      /*
-      if (start && start.nodeType === 3 && start.parentNode) {
-        let startSpanIndex = _.findIndex(markup, item => item.includes(start.parentNode.className));
-
-        let matched = markup[startSpanIndex].match(/<span .*>(.*)<\/span>/)[1];
-        let replaced = matched.replace(`&nbsp;`, ' '); // correction of the index position
-
-        let unchanged = replaced.slice(0, range.startOffset);
-        let changed = replaced.slice(range.startOffset);
-
-        let regexp = new RegExp(/<(\/)?span/);
-        replaced = `${unchanged}[comment-id=67]${changed}`.replace(' ', '&nbsp;');
-
-        markup[startSpanIndex] = markup[startSpanIndex].split(/(<span .*>)(.*)(<\/span>.*)/)
-          .filter(item => item)
-          .map(item => !(regexp).test(item) ? replaced : item)
-          .join('');
-      }
-      if (end && end.nodeType === 3 && end.parentNode) {
-        if (end.parentNode.className === 'user-story__editable') {
-
-        }
-      }*/
+      this.setCommentData(id, markup, id, rect.left + 15, rect.top - 30);
     },
-    setCommentData (id, markup = '', state = null, x = 0, y = 0) {
+    setCommentData (id = null, markup = '', state = null, x = 0, y = 0, parentCommentId = null) {
       const story = _.find(this.list, story => story.id === id);
       const data = {
         state: state,
         x: x,
         y: y,
         item: story,
-        markup: markup || story.markup
+        markup: id ? markup || story.markup : null,
+        precomment: true,
+        id: parentCommentId
       };
 
       this.setComment(data);
     },
-    commentStory (id) {
-      this.setCommentData(id);
+    commentStory (id, markup) {
+      const storyRegex = /^\[commentId=.*\].*\[\/commentId=.*\]$/gi;
+
+      if (markup.match(storyRegex)) {
+        let commentId = markup.match(/\[commentId=(.*?)\]/i);
+        this.setCommentData(id, markup, null, 0, 0, commentId[1]);
+      } else {
+        let commentedMarkup = `${COMMENT_LEFT}${markup}${COMMENT_RIGHT}`;
+        this.setCommentData(id, commentedMarkup);
+      }
+
       this.$root.$emit('write-comment');
     }
+  },
+  updated () {
+    this.highlightComments();
   }
 };

@@ -23,6 +23,8 @@ export default {
     return response.data;
   },
   async update (store, payload) {
+    delete payload.data.id;
+
     const params = payload.params;
     const response = await this._vm.$axios.put(`${payload.entity}/update`, payload.data, { params });
     const data = {
@@ -45,7 +47,10 @@ export default {
 
     const response = await this._vm.$axios.delete(`${payload.entity}/delete`, params);
     payload.entity = actualEntity(payload.entity);
-    store.commit('delete', payload);
+
+    if (!payload.cancelCommit) {
+      store.commit('delete', payload);
+    }
 
     return response.data;
   },
@@ -53,6 +58,17 @@ export default {
     const response = await this._vm.$axios.get(`${payload.entity}`, payload);
     store.commit('setList', {
       data: response.data,
+      entity: actualEntity(payload.entity)
+    });
+    return response.data;
+  },
+  async view (store, payload) {
+    const params = {
+      params: payload.data
+    };
+    const response = await this._vm.$axios.get(`${payload.entity}/view`, params);
+    store.commit('setItem', {
+      data: response.data.item,
       entity: actualEntity(payload.entity)
     });
     return response.data;

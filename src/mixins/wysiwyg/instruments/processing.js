@@ -52,7 +52,7 @@ export default {
           item[property].filter(i => i !== propertyId) :
           [...item[property], ...[propertyId]];
       } else {
-        query = propertyId;
+        query = item[property] === propertyId ? null : propertyId;
       }
 
       this.$store.commit('entity/update', {

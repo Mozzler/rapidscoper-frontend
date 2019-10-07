@@ -17,6 +17,8 @@
       <share-project-modal />
       <settings-modal />
       <write-comment />
+      <invite-assigned-users />
+      <delete-section-modal />
     </template>
   </v-app>
 </template>
@@ -36,6 +38,8 @@ import IncorrectDataModal from '@/components/particles/modals/IncorrectData';
 import ShareProjectModal from '@/components/particles/modals/ShareProject';
 import SettingsModal from '@/components/particles/modals/Settings';
 import WriteComment from '@/components/particles/modals/WriteComment';
+import InviteAssignedUsers from '@/components/particles/modals/InviteAssignedUsers';
+import DeleteSectionModal from '@/components/particles/modals/DeleteSection';
 
 export default {
   name: 'app',
@@ -51,7 +55,9 @@ export default {
     PaymentSuccessfullyModal,
     IncorrectDataModal,
     ShareProjectModal,
-    SettingsModal
+    SettingsModal,
+    InviteAssignedUsers,
+    DeleteSectionModal
   },
   mixins: [
     ResizeMixin

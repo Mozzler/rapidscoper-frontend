@@ -21,13 +21,6 @@ export default {
     }
   },
   methods: {
-    getObjectId () {
-      const timestamp = (new Date().getTime() / 1000 | 0).toString(16);
-
-      return timestamp + 'xxxxxxxxxxxxxxxx'.replace(/[x]/g, () => {
-        return (Math.random() * 16 | 0).toString(16);
-      }).toLowerCase();
-    },
     getPreviousAfterStoryId (index = this.focused) {
       return index === 0 ? 0 : this.list[index - 1].id;
     },
@@ -126,6 +119,18 @@ export default {
       return list
         .slice(startIndex, lastIndex + 1)
         .map(item => item.id);
+    },
+    focusNext (index) {
+      let next = null;
+
+      if (index - 1 > 0) {
+        next = index - 1;
+      }
+      if (this.list.length > 0) {
+        next = index + 1;
+      }
+
+      return next;
     }
   }
 };

@@ -5,22 +5,23 @@ function uppercased (str) {
 }
 
 export default {
-  items (state) {
+  items (state, getters, rootState, rootGetters) {
     return entity => {
-      let items = state[entity].items;
+      const items = state[entity].items;
+      const roles = rootState.system.roles;
       let data = [];
 
       if (entity === 'userTeam') {
         _.each(items, item => {
           const value = { ...item };
-          value.role = uppercased(item.role);
+          value.role = _.find(roles, item => item.type === value.role);
           data.push(value);
         });
       } else {
         data = state[entity].items;
       }
 
-      return data;
+      return state[entity].items;
     };
   },
   total (state) {
@@ -34,12 +35,13 @@ export default {
       return list.length.toString();
     };
   },
-  projectsWithMembers (state) {
+  projectsWithMembers (state, getters, rootState) {
     return teamId => {
 
       let projects = [...state.project.items];
       let userProject = [...state.userProject.items];
       let userInfo = [...state.userInfo.items];
+      let user = rootState.auth.user;
 
       if (teamId) {
         projects = _.filter(projects, item => item.teamId === teamId);
@@ -58,6 +60,13 @@ export default {
           let found = _.find(userInfo, info => info.userId === id);
           return found ? found.avatarUrl : null;
         });
+
+        const up = _.find(userProject, u =>
+          u.userId === user.user_id && u.projectId === item.id);
+
+        if (up) {
+          obj.role = up.role;
+        }
 
         return obj;
       });
@@ -100,11 +109,26 @@ export default {
     };
   },
   comments (state) {
-    return entity => {
+    return () => {
       let comment = state.comment;
       let userInfo = state.userInfo;
 
       return editor.comments(comment.items, userInfo.items);
+    };
+  },
+  allowedRoles (state, getters, rootState) {
+    return (projectId) => {
+      const collection = rootState.entity.userProject.items;
+      const user = rootState.auth.user;
+      const roles = rootState.system.roles;
+
+      const authorizedUser = _.find(collection, item => {
+        return (item.userId === user.user_id && projectId === item.projectId);
+      });
+
+      let acceptableIndex = authorizedUser ? _.findIndex(roles, { type: authorizedUser.role }) : -1;
+
+      return _.filter(roles, (role, index) => index >= acceptableIndex);
     };
   }
 };

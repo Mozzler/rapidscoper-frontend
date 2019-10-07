@@ -1,29 +1,34 @@
 export default {
   methods: {
-    async removeStory () {
-      this.processing = this.list[this.focused].id;
-
-      if (this.list[this.focused].level === 0 && this.list.length === 1) {
-        return;
-      }
+    async removeStory (index = this.focused) {
+      this.processing = this.list[index].id;
 
       const removable = {
-        'ids': this.getSubstoryIds()
+        'ids': this.getSubstoryIds(index)
       };
-      const focusable = this.$refs[this.list[this.focused - 1].id];
+
+      const focusable = index ? this.$refs[this.list[index - 1].id] :
+        this.list.length > 1 ? this.$refs[this.list[index + 1].id] : null;
 
       await this.$store.dispatch('story/deleteMany', removable);
-
       this.processing = null;
 
       await this.$nextTick();
-      focusable[0].focus();
+
+      if (focusable !== null) {
+        focusable[0].focus();
+      }
+
       this.collapseToEnd();
     },
     async remove ($event) {
       this.event = $event;
 
-      // allow to remove characters from editable div
+      if (document.getSelection().toString()) {
+        document.execCommand('delete');
+        return;
+      }
+
       if (this.isEditable()) {
         return;
       }
@@ -37,14 +42,9 @@ export default {
         this.removeStory();
       }
 
-      const spans = this.getSpanList(false).length === 1;
-      if (this.list[this.focused].level === 0 && this.focused === 0 && spans && !this.getTail()) {
-        $event.preventDefault();
-      } else {
-        if (this.list[this.focused].markup) {
-          this.list[this.focused].markup = $event.target.innerHTML;
-          this.$refs[this.list[this.focused].id][0].classList.remove('text-greyed');
-        }
+      if (this.list[this.focused].markup) {
+        this.list[this.focused].markup = $event.target.innerHTML;
+        this.$refs[this.list[this.focused].id][0].classList.remove('text-greyed');
       }
 
       this.collapseToEnd();

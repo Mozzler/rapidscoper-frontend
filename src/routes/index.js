@@ -15,8 +15,8 @@ const router = new Router({
       path: '/',
       redirect: '/dashboard/all-projects'
     },
-    ...DashboardRoutes,
     ...SignupRoutes,
+    ...DashboardRoutes
   ]
 });
 

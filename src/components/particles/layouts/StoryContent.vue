@@ -26,7 +26,7 @@
 <script>
 import StoryItem from '../../particles/forms/StoryItem';
 import Hint from '../lists/Hint';
-import Comment from '../menus/Comment';
+import Comment from '../hint/Comment';
 import SidebarFilters from '../../particles/inputs/SidebarFilters';
 
 import ScrollMixin from '@/mixins/scroll';
@@ -46,7 +46,7 @@ export default {
     return {
       message: null,
       scrollActive: false,
-      scrollSelector: '.user-story__block',
+      scrollSelector: '.user-story__block'
     };
   },
   beforeMount () {
@@ -86,13 +86,26 @@ export default {
       this.message = error;
     },
     getSectionData () {
-      const untitled = this.sections.filter(item => item.name.includes('Untitled'));
-      const number = untitled.length;
+      let n = null;
+
+      if (this.sections.length === 0) {
+        n = '';
+      } else {
+        const max = _.chain(this.sections)
+          .filter(section => section.name.includes('Untitled'))
+          .map(section => section.name.replace(/\D/g, ''))
+          .filter(num => !!num)
+          .map(num => Number(num))
+          .max()
+          .value();
+
+        n = (max === -Infinity) ? 1 : max + 1;
+      }
 
       return {
         entity: 'section',
         data: {
-          name: `Untitled${number ? ' ' + number : ''}`,
+          name: `Untitled ${n}`,
           description: '',
           projectId: this.activeProject.id,
           teamId: this.activeProject.teamId,
@@ -102,20 +115,8 @@ export default {
     },
     async createSection () {
       const section = this.getSectionData();
-
       await this.$store.dispatch('entity/create', section);
-
-      let orderList = _.chain(this.sections)
-        .map(item => item.storyOrder)
-        .flatten()
-        .value();
-
-      let filter = {
-        $or: [
-          { 'fullDocument._id': { '$in': [ orderList ] } }
-        ]
-      };
-      this.$socket.recreateWatchers('story', true, filter);
+      this.$socket.recreateWatchers('story', true);
     }
   }
 };

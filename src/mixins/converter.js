@@ -38,6 +38,12 @@ export default {
       }
 
       return s ? s.replace(/\.../g, '').trim() : s;
+    },
+    s (number, single, many) {
+      const unit = Number(number);
+      const measure = unit === 1 ? single : many;
+
+      return `${unit} ${measure}`;
     }
   },
   methods: {
@@ -50,7 +56,7 @@ export default {
     },
     createSpan (type, text, greyed = false, editable = false, clickable = false) {
       const cls = `user-story__editable--${type}${greyed ? ' text-greyed' : ''}`;
-      const props = `readonly contenteditable="${editable}"`;
+      const props = `contenteditable="${editable}"`;
       const attr = this.getAttr(text);
       const withoutDots = this.$options.filters.withoutDots(text);
 
@@ -67,6 +73,13 @@ export default {
         document.execCommand('selectAll', false, null);
         document.getSelection().collapseToEnd();
       });
+    },
+    getObjectId () {
+      const timestamp = (new Date().getTime() / 1000 | 0).toString(16);
+
+      return timestamp + 'xxxxxxxxxxxxxxxx'.replace(/[x]/g, () => {
+        return (Math.random() * 16 | 0).toString(16);
+      }).toLowerCase();
     }
   },
   computed: {

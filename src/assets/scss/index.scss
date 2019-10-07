@@ -24,7 +24,7 @@
 @import 'typography';
 
 .remove-icon {
-  color: $error !important;
+  color: $dark-grey !important;
   position: absolute;
   top: 4px !important;
   left: -15px !important;
@@ -35,7 +35,7 @@
   }
 
   &:hover {
-    filter: brightness(0.9);
+    color: $error !important;
   }
 }
 

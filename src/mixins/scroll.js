@@ -14,6 +14,9 @@ export default {
   computed: {
     activeSectionId () {
       return this.$route.params.section;
+    },
+    freeze () {
+      return this.$store.state.system.freeze;
     }
   },
   methods: {
@@ -23,10 +26,15 @@ export default {
     scrollToActiveSection () {
       const el = document.getElementById(this.activeSectionId);
       if (el) {
-        el.scrollIntoView('smooth');
+        const container = el.closest('.content-container');
+        container.scrollIntoView({ behavior: 'smooth' });
       }
     },
     handleScroll () {
+      if (this.freeze) {
+        return;
+      }
+
       const container = this.$refs['scrollable-layout'];
       const nodes = container.querySelectorAll(this.scrollSelector);
       const node = _.find(nodes, item => item.getBoundingClientRect().top > -1);
@@ -35,21 +43,20 @@ export default {
         return;
       }
 
-      this.frozen = true;
-      this.$router.replace({
-        name: this.$route.name,
-        params: {
-          section: node.id
-        }
-      });
+      if (node.id !== this.$route.params.section) {
+        this.$router.replace({
+          name: this.$route.name,
+          params: {
+            section: node.id
+          }
+        });
+      }
     }
   },
   watch: {
     activeSectionId () {
-      if (!this.frozen) {
+      if (!this.freeze) {
         this.scrollToActiveSection();
-      } else {
-        this.frozen = false;
       }
     }
   }

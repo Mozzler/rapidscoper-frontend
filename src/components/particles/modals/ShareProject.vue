@@ -1,6 +1,7 @@
 <template>
   <v-layout row justify-center>
-    <v-dialog v-model="dialog" max-width="608" persistent>
+    <v-dialog v-model="dialog" max-width="608" persistent
+              @keydown.enter.prevent.exact="$refs['invite-group'].invite">
       <v-card class="modal-card">
 
         <circular-loader
@@ -105,6 +106,7 @@
           <v-flex grow mt-5>
             <invite-group
               v-if="dialog"
+              :ref="`invite-group`"
               :entityId="params"
               :entityType="`project`" />
           </v-flex>
@@ -151,11 +153,15 @@ export default {
     ...mapGetters('entity', [
       'items',
       'invited',
-      'link'
+      'link',
+      'allowedRoles'
     ]),
     ...mapGetters('system', [
       'periods'
     ]),
+    roles () {
+      return this.allowedRoles(this.params, 'project');
+    },
     projects () {
       return this.items('project');
     },
@@ -175,9 +181,6 @@ export default {
     }
   },
   methods: {
-    initData () {
-
-    },
     removeInvite (id) {
       const data = {
         entity: 'invite',

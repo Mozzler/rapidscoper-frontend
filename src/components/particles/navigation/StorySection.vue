@@ -16,13 +16,16 @@
 import SidebarList from "../lists/SidebarList";
 import Navigation from '@/mixins/navigation';
 
+import ScrollGoToMixin from '@/mixins/scroll-go-to';
+
 export default {
-  name: "StorySection",
+  name: 'StorySection',
   components: {
-    SidebarList,
+    SidebarList
   },
   mixins: [
-    Navigation
+    Navigation,
+    ScrollGoToMixin
   ],
   data () {
     return {
@@ -138,12 +141,6 @@ export default {
             section: id
           };
       }
-    },
-    goTo (id) {
-      this.$router.replace({
-        name: this.$route.name,
-        params: this.getParams(id)
-      });
     }
   }
 };

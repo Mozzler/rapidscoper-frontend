@@ -49,7 +49,8 @@ export default {
         section: false,
         story: false,
         projectShare: false,
-        comment: false
+        comment: false,
+        userProject: false
       }
     };
   },
@@ -83,6 +84,9 @@ export default {
       });
       this.connect('projectShare', 'entity/setList', this.filter, true, () => {
         this.loaded['projectShare'] = true;
+      });
+      this.connect('userProject', 'entity/setList', this.filter, true, () => {
+        this.loaded['userProject'] = true;
       });
 
       let filter = JSON.parse(JSON.stringify(this.filter));
