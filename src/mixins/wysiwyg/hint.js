@@ -132,7 +132,7 @@ export default {
         data: this.list[this.focused]
       });
     },
-    async submitField (chapter, text, focused = this.focused) {
+    async submitField (chapter, text, focused = this.focused, id = this.getObjectId()) {
       if (typeof text !== 'string') {
         return;
       }
@@ -155,7 +155,7 @@ export default {
       }
 
       const data = {
-        id: this.getObjectId(),
+        id: id,
         projectId: this.list[focused].projectId,
         teamId: this.list[focused].teamId,
         name: text,

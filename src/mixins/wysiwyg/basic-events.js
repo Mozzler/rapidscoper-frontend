@@ -70,10 +70,12 @@ export default {
       }
 
       if (this.otherBuffer) {
-        const custom = this.createSpan('other', corrected, false, false, true);
+        const id = this.getObjectId();
+        const custom = this.createSpan('other', { name: corrected, id: id }, false, false, true, id);
+
         this.list[this.focused].markup = this.list[this.focused].markup.replace(this.otherBuffer, custom);
 
-        await this.submitField('custom', corrected, this.focused);
+        await this.submitField('custom', corrected, this.focused, id);
         this.otherBuffer = '';
       }
     },

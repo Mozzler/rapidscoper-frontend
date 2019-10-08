@@ -1,11 +1,11 @@
 export default {
   methods: {
     getStaticText (increments = 1) {
-      const nodes = this.$refs[this.list[this.focused].id][0].childNodes;
+      const nodes = this.$refs[this.list[this.focused].id][0].children;
       nodes.filter = [].filter;
 
       const classes = nodes
-        .filter(item => item.nodeName !== '#text')
+        .filter(item => !item.className.includes('user-story__editable--other'))
         .map(item => {
           let value = item.className.replace(/user-story__editable--| text-greyed/gi, '');
 
@@ -29,20 +29,16 @@ export default {
       const id = this.list[this.focused].id;
       const children = document.getElementById(id).children;
       const spans = _.chain(children)
+        .filter(child => !child.className.includes('user-story__editable--other'))
         .map(child => child.outerHTML)
         .value();
-
-      console.log(spans);
-        /*.split('</span>&nbsp;')
-        .filter(item => item.includes('<span'))
-        .map(item => `${item}</span>`);*/
 
       return !joined ? spans : spans.join('&nbsp;');
     },
     getTail () {
       return this.list[this.focused].markup
         .split('</span>')
-        .filter(item => !item.includes('<span'))
+        .filter(item => !item.includes('<span') && !item.includes('') && !item.includes('user-story__editable--other'))
         .join('');
     },
     getStaticTextByType (str = this.next) {
@@ -58,17 +54,29 @@ export default {
         return null;
       }
 
+      let el = null;
       let current = node.parentNode.className.replace(' text-greyed', '');
 
       if (current === 'user-story__editable') {
-        current = node.previousSibling.className;
+        el = node.previousSibling;
+        current = el.className;
+
+        if (current.includes('user-story__editable--other')) {
+          el = el.previousElementSibling;
+          current = el.className;
+        }
 
         if (current.includes('beginning')) {
           this.list[this.focused].markup = this.list[this.focused].markup.replace(/ text-greyed/, '');
         }
       }
 
-      return this.classToType(current);
+      let cls = this.classToType(current);
+      if (cls === 'static-text') {
+        cls += `="${el.innerHTML}"`;
+      }
+
+      return cls;
     },
     getNextSpan () {
       const parts = this.list[this.focused].template
@@ -77,11 +85,6 @@ export default {
 
       if (!this.list[this.focused].markup || !this.list[this.focused].template) {
         return 'beginning';
-      }
-
-      if (this.previous === 'static-text') {
-        const html = document.getSelection().focusNode.previousSibling.innerHTML.trim();
-        this.previous += `="${html}"`;
       }
 
       const next = parts.indexOf(this.previous) + 1;
