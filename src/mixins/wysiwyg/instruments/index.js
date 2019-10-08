@@ -3,6 +3,7 @@ import Tools from './tools';
 import Comments from './comments';
 import Special from './special';
 import Hovering from './hovering';
+import CustomPhrases from './custom-phrases';
 
 export default {
   mixins: [
@@ -10,6 +11,7 @@ export default {
     Tools,
     Special,
     Comments,
-    Hovering
+    Hovering,
+    CustomPhrases
   ]
 };

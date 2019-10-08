@@ -12,7 +12,7 @@ export default {
 
       return (spans === 1 || spans === 0) && !tail && parentExists;
     },
-    fixStaticText ($event) {
+    async fixStaticText ($event) {
       $event.preventDefault();
       this.event = $event;
       this.setSiblings();
@@ -29,6 +29,7 @@ export default {
         return;
       }
 
+      console.log(this.next, this.next.includes('custom'), 'next-custom');
       if (this.next && this.next.includes('custom')) {
         this.setCustomText(true);
 

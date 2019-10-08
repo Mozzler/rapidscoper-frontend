@@ -1,3 +1,5 @@
+const OTHER_SPAN = 'user-story__editable--other';
+
 export default {
   methods: {
     getStaticText (increments = 1) {
@@ -5,7 +7,7 @@ export default {
       nodes.filter = [].filter;
 
       const classes = nodes
-        .filter(item => !item.className.includes('user-story__editable--other'))
+        .filter(item => !item.className.includes(OTHER_SPAN))
         .map(item => {
           let value = item.className.replace(/user-story__editable--| text-greyed/gi, '');
 
@@ -29,7 +31,7 @@ export default {
       const id = this.list[this.focused].id;
       const children = document.getElementById(id).children;
       const spans = _.chain(children)
-        .filter(child => !child.className.includes('user-story__editable--other'))
+        .filter(child => !child.className.includes(OTHER_SPAN))
         .map(child => child.outerHTML)
         .value();
 
@@ -38,7 +40,7 @@ export default {
     getTail () {
       return this.list[this.focused].markup
         .split('</span>')
-        .filter(item => !item.includes('<span') && !item.includes('') && !item.includes('user-story__editable--other'))
+        .filter(item => !item.includes('<span') && !item.includes('') && !item.includes(OTHER_SPAN))
         .join('');
     },
     getStaticTextByType (str = this.next) {
@@ -61,7 +63,7 @@ export default {
         el = node.previousSibling;
         current = el.className;
 
-        if (current.includes('user-story__editable--other')) {
+        if (current.includes(OTHER_SPAN)) {
           el = el.previousElementSibling;
           current = el.className;
         }
