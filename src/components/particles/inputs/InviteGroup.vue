@@ -78,7 +78,7 @@ export default {
       allowedRoles: 'entity/allowedRoles'
     }),
     roles () {
-      return this.allowedRoles(this.entityId);
+      return this.allowedRoles(this.entityId, this.entityType);
     }
   },
   methods: {
@@ -109,14 +109,17 @@ export default {
         const response = await this.$store.dispatch('entity/create', data);
 
         this.$store.commit('entity/create', {
-          entity: 'invite',
-          data: response.item
-        });
-        this.$store.commit('entity/create', {
           entity: 'userInfo',
           data: response.userInfo
         });
 
+        this.$store.commit('entity/create', {
+          entity: 'invite',
+          data: response.item
+        });
+
+        this.$socket.recreateWatchers('userInfo', false);
+        this.$socket.recreateWatchers('invite', false);
       } catch (error) {
         let msg = _.first(error.response.data);
         this.$root.$emit('show-error-message', msg.message);
@@ -127,7 +130,7 @@ export default {
       this.initData();
     },
     initData () {
-      this.role = _.find(this.roles, (item, index) => index === 1);
+      this.role = _.first(this.roles);
       this.email = null;
     }
   }
