@@ -31,7 +31,7 @@ export default {
       return value === 'less than minute ago' ? value : `${beginning}${Math.trunc(value)} ${ending} ago`;
     },
     withoutDots (str) {
-      let s = str ? (typeof str === 'string' ? str : str.name) : str;
+      let s = _.isObject(str) ? str.name : str;
 
       if (s.indexOf('&nbsp;') === 0) {
         s = s.slice(6);
@@ -54,14 +54,13 @@ export default {
     getAttr (field) {
       return _.isObject(field) ? `data-id="${field.id}"` : '';
     },
-    createSpan (type, text, greyed = false, editable = false, clickable = false, identifier = null) {
-      const id = identifier ? ` data-id="${identifier}"` : '';
+    createSpan (type, text, greyed = false, editable = false, clickable = false) {
       const attr = text ? ` ${this.getAttr(text)}` : '';
       const props = `contenteditable="${editable}"`;
       const cls = `user-story__editable--${type}${greyed ? ' text-greyed' : ''}`;
 
       const withoutDots = this.$options.filters.withoutDots(text);
-      return `<span class="${cls}" ${props}${attr}${id}>${withoutDots}</span>&nbsp;`;
+      return `<span class="${cls}" ${props}${attr}>${withoutDots}</span>&nbsp;`;
     },
     shortcut (item) {
       const exp = new RegExp(this.filter, 'i');
