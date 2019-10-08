@@ -32,7 +32,7 @@
           </v-flex>
         </td>
         <td class="text-xs-left">
-          <v-btn icon :disabled="props.item.role.type !== 'manager'">
+          <v-btn icon :disabled="role.type !== 'manager'">
             <v-icon>delete</v-icon>
           </v-btn>
         </td>
@@ -76,7 +76,7 @@ export default {
           text: 'actions',
           sortable: false,
           value: 'actions'
-        },
+        }
       ]
     };
   },
