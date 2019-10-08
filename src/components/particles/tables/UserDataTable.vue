@@ -47,13 +47,8 @@
 </template>
 
 <script>
-import CircularLoader from '../../particles/loaders/Circular';
-
 export default {
   name: 'UserDataTable',
-  components: {
-    CircularLoader
-  },
   props: {
     loading: {
       default: false

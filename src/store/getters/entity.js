@@ -21,7 +21,7 @@ export default {
         data = state[entity].items;
       }
 
-      return state[entity].items;
+      return data;
     };
   },
   total (state) {
@@ -85,8 +85,11 @@ export default {
       };
 
       let user = _.find(info, inf => inf.email === item.email);
-      data.avatarUrl = user && user.avatarUrl ? user.avatarUrl :
-        require('@/assets/img/default-user.png');
+
+      if (user) {
+        data.avatarUrl = user && user.avatarUrl ? user.avatarUrl :
+          require('@/assets/img/default-user.png');
+      }
 
       return data;
     });
@@ -117,17 +120,17 @@ export default {
     };
   },
   allowedRoles (state, getters, rootState) {
-    return (projectId) => {
-      const collection = rootState.entity.userProject.items;
+    return (entityId, entityType = 'project') => {
+      const entity = `user${entityType.charAt(0).toUpperCase()}${entityType.slice(1)}`;
+      const collection = rootState.entity[entity].items;
       const user = rootState.auth.user;
       const roles = rootState.system.roles;
 
       const authorizedUser = _.find(collection, item => {
-        return (item.userId === user.user_id && projectId === item.projectId);
+        return (item.userId === user.user_id && entityId === item[`${entityType}Id`]);
       });
 
       let acceptableIndex = authorizedUser ? _.findIndex(roles, { type: authorizedUser.role }) : -1;
-
       return _.filter(roles, (role, index) => index >= acceptableIndex);
     };
   }

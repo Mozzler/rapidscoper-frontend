@@ -25,13 +25,14 @@
             <div class="position-relative white-space-nowrap">
               <dropdown
                 :list="roles"
+                :selectBtn="hasPermission(props.item.role)"
                 :selected="props.item.role"
                 @update="value => updateRole(value, props.item.id)" />
             </div>
           </v-flex>
         </td>
         <td class="text-xs-left">
-          <v-btn icon :disabled="props.item.role !== 'manager'">
+          <v-btn icon :disabled="props.item.role.type !== 'manager'">
             <v-icon>delete</v-icon>
           </v-btn>
         </td>
@@ -75,11 +76,14 @@ export default {
           text: 'actions',
           sortable: false,
           value: 'actions'
-        }
+        },
       ]
     };
   },
   methods: {
+    hasPermission (role) {
+      return !!_.find(this.roles, item => item.type === role.type);
+    },
     fetchData () {
       const filter = {
         $or: [
@@ -124,14 +128,27 @@ export default {
     this.$store.commit('entity/resetList', 'userTeam');
   },
   computed: {
-    ...mapState('system', [
-      'roles'
+    ...mapState('auth', [
+      'user'
     ]),
     ...mapGetters({
+      allowedRoles: 'entity/allowedRoles',
       items: 'entity/items'
     }),
+    roles () {
+      return this.allowedRoles(this.teamId, 'team');
+    },
+    role () {
+      return _.find(this.userTeam, item => item.userId === this.user.user_id &&
+        item.teamId === this.teamId).role;
+    },
     teamId () {
       return this.$route.params.name;
+    },
+    permission () {
+      const role = _.find(this.userTeam, item => item.userId === this.user.user_id &&
+        item.teamId === this.teamId).role;
+      return !!_.find(this.roles, item => item.type === role.type);
     },
     userTeam () {
       return this.items('userTeam');
