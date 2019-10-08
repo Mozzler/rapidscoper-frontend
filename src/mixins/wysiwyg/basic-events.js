@@ -5,6 +5,7 @@ export default {
       editor: null,
       etalon: null,
       blocked: false,
+      otherBuffer: '',
       description: {
         text: '',
         id: null
@@ -31,12 +32,10 @@ export default {
 
           this.$nextTick();
 
-          const level = _.find(this.list, item => item.id === id).level;
-
           _.assign(hint.style, {
             position: 'absolute',
             top: `${phraseRect.top - wysiwygRect.top - 30}px`,
-            left: `${phraseRect.left - wysiwygRect.left + level * 4}px`
+            left: `${phraseRect.left - wysiwygRect.left + this.description.text.length * 1.3}px`
           });
         }
       }
@@ -47,7 +46,39 @@ export default {
         id: null
       };
     },
+    withoutSpace () {
+      const index = this.otherBuffer.lastIndexOf('&nbsp;');
+      let result = this.otherBuffer;
+
+      if (index === this.otherBuffer.length - 6) {
+        result = this.otherBuffer.slice(0, index);
+      }
+
+      return result;
+    },
+    async checkOtherDictionary (key, space = false) {
+      const corrected = this.withoutSpace(this.otherBuffer);
+      const accepted = {
+        space: this.otherBuffer && space,
+        capitalized: key.match(/[A-Z]/),
+        letter: this.otherBuffer && key.match(/[a-z]/) && corrected === this.otherBuffer
+      };
+
+      if (_.some(accepted)) {
+        this.otherBuffer += key;
+        return;
+      }
+
+      if (this.otherBuffer) {
+        const custom = this.createSpan('other', corrected, false, false, true);
+        this.list[this.focused].markup = this.list[this.focused].markup.replace(this.otherBuffer, custom);
+
+        await this.submitField('custom', corrected, this.focused);
+        this.otherBuffer = '';
+      }
+    },
     focusEvent (item, index) {
+      this.otherBuffer = '';
       this.focused = index;
       this.etalon = { ...item };
       this.$store.commit('story/setActiveStoryOnTab', this.etalon.id);
@@ -85,8 +116,10 @@ export default {
 
         if (key === ' ') {
           story.markup += '&nbsp;';
+          this.checkOtherDictionary('&nbsp;', true);
         } else {
           story.markup += key;
+          this.checkOtherDictionary(key);
         }
 
         story.placeholder = story.markup + story.tail;

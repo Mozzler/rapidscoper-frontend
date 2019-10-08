@@ -207,6 +207,10 @@
   @include set-bottom-border($light-blue);
 }
 
+.user-story__editable--other {
+  @include set-bottom-border($light-primary);
+}
+
 .user-story__editable--field {
   @include set-bottom-border($light-red);
 }

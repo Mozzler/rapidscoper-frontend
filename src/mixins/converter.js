@@ -54,13 +54,14 @@ export default {
     getAttr (field) {
       return _.isObject(field) ? `data-id="${field.id}"` : '';
     },
-    createSpan (type, text, greyed = false, editable = false, clickable = false) {
-      const cls = `user-story__editable--${type}${greyed ? ' text-greyed' : ''}`;
+    createSpan (type, text, greyed = false, editable = false, clickable = false, identifier = null) {
+      const id = identifier ? ` data-id="${identifier}"` : '';
+      const attr = text ? ` ${this.getAttr(text)}` : '';
       const props = `contenteditable="${editable}"`;
-      const attr = this.getAttr(text);
-      const withoutDots = this.$options.filters.withoutDots(text);
+      const cls = `user-story__editable--${type}${greyed ? ' text-greyed' : ''}`;
 
-      return `<span class="${cls}" ${props} ${attr}>${ withoutDots }</span>&nbsp;`;
+      const withoutDots = this.$options.filters.withoutDots(text);
+      return `<span class="${cls}" ${props}${attr}${id}>${withoutDots}</span>&nbsp;`;
     },
     shortcut (item) {
       const exp = new RegExp(this.filter, 'i');

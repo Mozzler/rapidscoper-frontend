@@ -132,10 +132,12 @@ export default {
         data: this.list[this.focused]
       });
     },
-    async submitField (chapter, text, focused) {
+    async submitField (chapter, text, focused = this.focused) {
       if (typeof text !== 'string') {
         return;
       }
+
+      this.processing = true;
 
       let replacement = {
         type: chapter,
@@ -153,6 +155,7 @@ export default {
       }
 
       const data = {
+        id: this.getObjectId(),
         projectId: this.list[focused].projectId,
         teamId: this.list[focused].teamId,
         name: text,
@@ -170,32 +173,12 @@ export default {
         return;
       }
 
-      const response = await this.$store.dispatch('entity/create', {
+      await this.$store.dispatch('entity/create', {
         entity: 'dictionary',
         data: data
       });
 
-      await this.$nextTick();
-
-      const el = document.getElementById(this.list[focused].id);
-      const children = el.children;
-      const node = _.find(children, item => item.className.includes(`user-story__editable--${chapter}`));
-      node.setAttribute('data-id', response.item.id);
-
-      const spans = this.getSpanList(false);
-      const index = _.findIndex(spans, item => item.includes(`user-story__editable--${chapter}`));
-      spans[index] = node.outerHTML;
-
-      this.list[focused].markup = spans.join('&nbsp;') + '&nbsp;';
       this.processing = false;
-
-      this.$store.commit('entity/update', {
-        entity: 'story',
-        data: this.list[focused]
-      });
-
-      await this.$nextTick();
-      document.getElementById(this.list[this.focused].id).focus();
     }
   }
 };

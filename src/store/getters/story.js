@@ -25,7 +25,8 @@ export default {
       'requirement',
       'priority',
       'label',
-      'model'
+      'model',
+      'custom'
     ];
 
     const dictionary = {

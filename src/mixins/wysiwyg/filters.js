@@ -10,7 +10,7 @@ export default {
       return this.$store.state.story.adjustConstructions;
     },
     shortcutList () {
-      return this.adjustedConstruction.map(item => item.shortcut);
+      return _.map(this.adjustedConstruction, item => item.shortcut);
     },
     storyType () {
       return this.$route.params.storyType;

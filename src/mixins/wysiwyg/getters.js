@@ -26,10 +26,16 @@ export default {
       return index + increments < templates.length ? templates[index + increments] : null;
     },
     getSpanList (joined = true) {
-      const spans = this.list[this.focused].markup
-        .split('</span>&nbsp;')
+      const id = this.list[this.focused].id;
+      const children = document.getElementById(id).children;
+      const spans = _.chain(children)
+        .map(child => child.outerHTML)
+        .value();
+
+      console.log(spans);
+        /*.split('</span>&nbsp;')
         .filter(item => item.includes('<span'))
-        .map(item => `${item}</span>`);
+        .map(item => `${item}</span>`);*/
 
       return !joined ? spans : spans.join('&nbsp;');
     },
