@@ -1,3 +1,5 @@
+const CUSTOM_PHRASE = 'user-story__editable--other';
+
 export default {
   methods: {
     getFocusedEl () {
@@ -9,7 +11,7 @@ export default {
       nodes.filter = [].filter;
 
       const classes = nodes
-        .filter(item => !item.className.includes('user-story__editable--other'))
+        .filter(item => !item.className.includes(CUSTOM_PHRASE))
         .map(item => {
           let value = item.className.replace(/user-story__editable--| text-greyed/gi, '');
 
@@ -32,7 +34,7 @@ export default {
     getSpanList (joined = true) {
       const children = this.getFocusedEl().children;
       const spans = _.chain(children)
-        .filter(child => !child.className.includes('user-story__editable--other'))
+        .filter(child => !child.className.includes(CUSTOM_PHRASE))
         .map(child => child.outerHTML)
         .value();
 
@@ -40,14 +42,22 @@ export default {
     },
     getTail (cleared = false) {
       const nodes = this.getFocusedEl().childNodes;
-      const last = _.last(nodes);
+      const index = _.findLastIndex(nodes, node => {
+        return node.nodeType === 1 && !node.className.includes(CUSTOM_PHRASE);
+      });
 
-      let tail = '';
-      if (last && last.nodeType === 3) {
-        tail = last.textContent;
-      }
+      let tail = _.chain(nodes)
+        .filter((node, i) => i > index)
+        .map(node => node.outerHTML || node.textContent)
+        .value()
+        .join('');
+
       if (cleared) {
-        tail = tail.replace(/&nbsp;|\u00a0/g, '');
+        let splitted = tail.split(/&nbsp;|\u00a0/);
+        if (!_.last(splitted)) {
+          splitted.splice(-1, 1);
+        }
+        tail = splitted.join('&nbsp;');
       }
 
       return tail;
@@ -72,12 +82,12 @@ export default {
         el = node.previousSibling;
         current = el.className;
 
-        if (current.includes('user-story__editable--other')) {
+        if (current && current.includes(CUSTOM_PHRASE)) {
           el = el.previousElementSibling;
           current = el.className;
         }
 
-        if (current.includes('beginning')) {
+        if (current && current.includes('beginning')) {
           this.list[this.focused].markup = this.list[this.focused].markup.replace(/ text-greyed/, '');
         }
       }

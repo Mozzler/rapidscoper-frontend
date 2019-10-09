@@ -140,6 +140,10 @@
   span[contenteditable] {
     outline: none;
   }
+
+  i {
+    font-style: normal;
+  }
 }
 
 .user-story__editable--bordered,

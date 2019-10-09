@@ -67,7 +67,7 @@ export default {
       if (completion !== null) {
         const [text, type] = this.getStaticTextByType(completion);
 
-        const tail = this.getTail(true)
+        const tail = this.getTail(true);
         this.list[this.focused].tail = `${tail.length ? '&nbsp;' : ''}` + this.createSpan(text, type, true);
         this.list[this.focused].placeholder = this.list[this.focused].markup + this.list[this.focused].tail;
       }

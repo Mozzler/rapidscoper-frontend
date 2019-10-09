@@ -71,7 +71,7 @@ export default {
 
       if (this.otherBuffer) {
         const id = this.getObjectId();
-        const custom = this.createSpan('other', { name: corrected, id: id }, false, false, true, id);
+        const custom = this.createSpan('other', { name: corrected, id: id }, false, false, true, 'i');
 
         this.list[this.focused].markup = this.list[this.focused].markup.replace(this.otherBuffer, custom);
 
