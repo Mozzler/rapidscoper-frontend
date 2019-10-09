@@ -5,7 +5,7 @@ export default {
       this.list[this.focused].placeholder = this.list[this.focused].markup;
     },
     increasable () {
-      const tail = this.getTail().replace(/&nbsp;/gi, '');
+      const tail = this.getTail(true);
       const spans = this.getSpanList(false).length;
       const parentExists = this.focused !== 0 &&
         this.list[this.focused - 1].level === this.list[this.focused].level;

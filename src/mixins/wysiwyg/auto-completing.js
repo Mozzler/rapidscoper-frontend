@@ -39,10 +39,10 @@ export default {
       }
     },
     initPlaceholder () {
-      const [line, tail] = this.getLineParticles();
+      const [line, tail] = this.getLineParticles(true);
       const text = this.dictionary.placeholders[this.next];
 
-      if (!tail.replace('&nbsp;', '') && text) {
+      if (!tail && text) {
         this.list[this.focused].tail = this.createSpan(this.next, `&nbsp;${text}`, true, false);
         this.list[this.focused].placeholder = line + `&nbsp;` + this.list[this.focused].tail;
       } else {
@@ -67,7 +67,7 @@ export default {
       if (completion !== null) {
         const [text, type] = this.getStaticTextByType(completion);
 
-        const tail = this.getTail().replace(/&nbsp;/gi, '');
+        const tail = this.getTail(true)
         this.list[this.focused].tail = `${tail.length ? '&nbsp;' : ''}` + this.createSpan(text, type, true);
         this.list[this.focused].placeholder = this.list[this.focused].markup + this.list[this.focused].tail;
       }

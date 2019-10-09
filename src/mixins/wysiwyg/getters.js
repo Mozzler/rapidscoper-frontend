@@ -1,7 +1,11 @@
 export default {
   methods: {
+    getFocusedEl () {
+      const id = this.list[this.focused].id;
+      return document.getElementById(id);
+    },
     getStaticText (increments = 1) {
-      const nodes = this.$refs[this.list[this.focused].id][0].children;
+      const nodes = this.getFocusedEl().children;
       nodes.filter = [].filter;
 
       const classes = nodes
@@ -26,8 +30,7 @@ export default {
       return index + increments < templates.length ? templates[index + increments] : null;
     },
     getSpanList (joined = true) {
-      const id = this.list[this.focused].id;
-      const children = document.getElementById(id).children;
+      const children = this.getFocusedEl().children;
       const spans = _.chain(children)
         .filter(child => !child.className.includes('user-story__editable--other'))
         .map(child => child.outerHTML)
@@ -35,11 +38,19 @@ export default {
 
       return !joined ? spans : spans.join('&nbsp;');
     },
-    getTail () {
-      return this.list[this.focused].markup
-        .split('</span>')
-        .filter(item => !item.includes('<span') && !item.includes('') && !item.includes('user-story__editable--other'))
-        .join('');
+    getTail (cleared = false) {
+      const nodes = this.getFocusedEl().childNodes;
+      const last = _.last(nodes);
+
+      let tail = '';
+      if (last && last.nodeType === 3) {
+        tail = last.textContent;
+      }
+      if (cleared) {
+        tail = tail.replace(/&nbsp;|\u00a0/g, '');
+      }
+
+      return tail;
     },
     getStaticTextByType (str = this.next) {
       return str
@@ -90,8 +101,8 @@ export default {
       const next = parts.indexOf(this.previous) + 1;
       return parts[next];
     },
-    getLineParticles () {
-      return [this.getSpanList(), this.getTail()];
+    getLineParticles (clearedTail = false) {
+      return [this.getSpanList(), this.getTail(clearedTail)];
     },
     getElementToFocus (item, level, index, path = 'this') {
       const length = item.list.length;
