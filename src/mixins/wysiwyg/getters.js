@@ -86,7 +86,6 @@ export default {
           el = el.previousElementSibling;
           current = el.className;
         }
-
         if (current && current.includes('beginning')) {
           this.list[this.focused].markup = this.list[this.focused].markup.replace(/ text-greyed/, '');
         }
