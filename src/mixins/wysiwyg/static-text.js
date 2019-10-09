@@ -12,7 +12,7 @@ export default {
 
       return (spans === 1 || spans === 0) && !tail && parentExists;
     },
-    fixStaticText ($event) {
+    async fixStaticText ($event) {
       $event.preventDefault();
       this.event = $event;
       this.setSiblings();
@@ -32,7 +32,7 @@ export default {
       if (this.next && this.next.includes('custom')) {
         this.setCustomText(true);
 
-        let completion = this.getStaticText(1);
+        let completion = this.getStaticText(1);  // placeholder text
         if (completion && completion.includes('static-text')) {
           const [type, text] = this.getStaticTextByType(completion);
           this.list[this.focused].markup += this.createSpan(type, text);
@@ -43,6 +43,11 @@ export default {
         const [type, text] = this.getStaticTextByType();
         this.list[this.focused].markup += this.createSpan(type, text, false);
       }
+
+      this.$store.commit('entity/update', {
+        entity: 'story',
+        data: this.list[this.focused]
+      });
 
       this.resetPlaceholder();
       this.collapseToEnd();

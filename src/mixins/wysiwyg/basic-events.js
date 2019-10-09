@@ -35,7 +35,7 @@ export default {
           _.assign(hint.style, {
             position: 'absolute',
             top: `${phraseRect.top - wysiwygRect.top - 30}px`,
-            left: `${phraseRect.left - wysiwygRect.left + this.description.text.length * 1.3}px`
+            left: `${phraseRect.left - wysiwygRect.left}px`
           });
         }
       }
@@ -56,6 +56,19 @@ export default {
 
       return result;
     },
+    async printField (corrected = this.withoutSpace()) {
+      if (!this.otherBuffer) {
+        return;
+      }
+
+      const id = this.getObjectId();
+      const custom = this.createSpan('other', { name: corrected, id: id }, false, false, true, 'i');
+
+      this.list[this.focused].markup = this.list[this.focused].markup.replace(this.otherBuffer, custom);
+
+      await this.submitField('custom', corrected, this.focused, id);
+      this.otherBuffer = '';
+    },
     async checkOtherDictionary (key, space = false) {
       const corrected = this.withoutSpace(this.otherBuffer);
       const accepted = {
@@ -69,15 +82,7 @@ export default {
         return;
       }
 
-      if (this.otherBuffer) {
-        const id = this.getObjectId();
-        const custom = this.createSpan('other', { name: corrected, id: id }, false, false, true, 'i');
-
-        this.list[this.focused].markup = this.list[this.focused].markup.replace(this.otherBuffer, custom);
-
-        await this.submitField('custom', corrected, this.focused, id);
-        this.otherBuffer = '';
-      }
+      await this.printField();
     },
     focusEvent (item, index) {
       this.otherBuffer = '';

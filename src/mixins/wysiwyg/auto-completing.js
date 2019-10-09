@@ -116,8 +116,11 @@ export default {
       const [list, tail] = this.getLineParticles();
 
       if (tail) {
-        const text = this.createSpan(this.next, tail, false, editable);
-        this.list[this.focused].markup = list + `&nbsp;` + (this.next ? text : ':');
+        this.printField()
+          .then(() => {
+            const text = this.createSpan(this.next, tail, false, editable);
+            this.list[this.focused].markup = list + `&nbsp;` + (this.next ? text : ':');
+          });
       }
     }
   }

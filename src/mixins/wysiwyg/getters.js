@@ -82,6 +82,10 @@ export default {
         el = node.previousSibling;
         current = el.className;
 
+        if (!current) {
+          el = node;
+          current = node.className;
+        }
         if (current && current.includes(CUSTOM_PHRASE)) {
           el = el.previousElementSibling;
           current = el.className;
