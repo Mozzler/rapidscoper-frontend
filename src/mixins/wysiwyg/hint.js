@@ -155,6 +155,7 @@ export default {
       }
 
       const data = {
+        _id: id,
         id: id,
         projectId: this.list[focused].projectId,
         teamId: this.list[focused].teamId,
