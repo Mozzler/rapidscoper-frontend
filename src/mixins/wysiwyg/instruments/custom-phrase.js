@@ -40,7 +40,7 @@ export default {
       const index = this.otherBuffer.lastIndexOf('&nbsp;');
       let result = this.otherBuffer;
 
-      if (index === this.otherBuffer.length - 6) {
+      if (index !== -1 && index === this.otherBuffer.length - 6) {
         result = this.otherBuffer.slice(0, index);
       }
 
