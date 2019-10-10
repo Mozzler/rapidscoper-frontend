@@ -14,7 +14,7 @@ export default {
       }
 
       const text = this.submitField('custom', corrected, this.focused);
-      const custom = this.createSpan('other', text, false, true, true, 'i');
+      const custom = this.createSpan('other', text, false, false, true, 'i');
 
       this.list[this.focused].markup = this.list[this.focused].markup.replace(this.otherBuffer, custom);
       this.otherBuffer = '';

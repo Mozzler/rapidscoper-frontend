@@ -26,6 +26,8 @@ export default {
 
       if (document.getSelection().toString()) {
         document.execCommand('delete');
+        this.list[this.focused].markup = $event.target.innerHTML;
+        this.list[this.focused].placeholder = this.list[this.focused].markup;
         return;
       }
 
