@@ -119,7 +119,6 @@ export default {
         this.printCustomPhrase()
           .then(() => {
             tail = this.getTail();
-            console.log(tail, 'markup-1');
             const text = this.createSpan(this.next, tail, false, editable);
             this.list[this.focused].markup = list + `&nbsp;` + (this.next ? text : ':');
           });

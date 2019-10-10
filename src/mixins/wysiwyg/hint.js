@@ -82,7 +82,6 @@ export default {
       document.getElementById(addresserId).focus();
       await this.$nextTick();
       this.hintEditor = null;
-      let id = null;
 
       if (chapter === 'beginning') {
         this.list[this.focused].template = text.value;
@@ -96,7 +95,9 @@ export default {
 
         text = text.key;
       } else {
-        id = this.submitField(chapter, text, this.focused);
+        text = _.isObject(text) ?
+          this.submitField(chapter, text.name, this.focused, text.id) :
+          this.submitField(chapter, text, this.focused);
       }
 
       let spans = this.getSpanList(false);
@@ -109,7 +110,7 @@ export default {
       });
 
       if (index !== null) {
-        spans[index] = this.createSpan(chapter, { name: text, id: id }, false, false);
+        spans[index] = this.createSpan(chapter, text, false, false);
 
         if (chapter === 'requirement') {
           spans = spans.filter((item, i) => i <= index);
@@ -118,7 +119,7 @@ export default {
         this.list[this.focused].markup = spans.join('&nbsp;');
       } else {
         let t = spans.join('&nbsp;');
-        let span = this.createSpan(chapter, { name: text, id: id }, false, false);
+        let span = this.createSpan(chapter, text, false, false);
         this.list[this.focused].markup = `${t}${!t ? '' : '&nbsp;'}${span}`;
 
         this.setCompletion();
@@ -171,17 +172,18 @@ export default {
         item.relatedDictionaryId === data.relatedDictionaryId &&
         item.type === data.type);
 
-      if (existed) {
-        return existed.id;
+      if (!existed) {
+        this.$store.dispatch('entity/create', {
+          entity: 'dictionary',
+          data: data
+        });
       }
 
-      this.$store.dispatch('entity/create', {
-        entity: 'dictionary',
-        data: data
-      });
-
       this.processing = false;
-      return data.id;
+      return {
+        id: data.id,
+        name: data.name
+      };
     }
   }
 };
