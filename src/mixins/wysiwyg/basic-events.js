@@ -32,11 +32,12 @@ export default {
           this.$nextTick();
           hint.innerHTML = this.description.text;
 
-          const correction = (phraseRect.width - hint.clientWidth) / 2;
+          const x = (phraseRect.width - hint.clientWidth) / 2;
+          const y = hint.clientHeight;
           _.assign(hint.style, {
             position: 'absolute',
-            top: `${phraseRect.top - wysiwygRect.top - 30}px`,
-            left: `${phraseRect.left - wysiwygRect.left + correction}px`
+            top: `${phraseRect.top - wysiwygRect.top - 5 - y}px`,
+            left: `${phraseRect.left - wysiwygRect.left + x}px`
           });
         }
       }
