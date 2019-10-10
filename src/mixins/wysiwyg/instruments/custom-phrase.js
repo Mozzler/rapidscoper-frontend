@@ -8,16 +8,18 @@ export default {
     declineCustomPhrase () {
       return !this.next || !this.next.includes('custom-') || !this.otherBuffer;
     },
-    async printCustomPhrase (corrected = this.withoutSpace()) {
+    printCustomPhrase (corrected = this.withoutSpace()) {
       if (this.declineCustomPhrase()) {
         return;
       }
 
       const text = this.submitField('custom', corrected, this.focused);
-      const custom = this.createSpan('other', text, false, false, true, 'i');
+      const custom = this.createSpan('other', text, false, true, true, 'i');
 
       this.list[this.focused].markup = this.list[this.focused].markup.replace(this.otherBuffer, custom);
       this.otherBuffer = '';
+
+      return this.list[this.focused].markup;
     },
     async checkOtherDictionary (key, space = false) {
       const corrected = this.withoutSpace(this.otherBuffer);
@@ -32,7 +34,7 @@ export default {
         return;
       }
 
-      await this.printCustomPhrase();
+      this.printCustomPhrase();
     },
     withoutSpace () {
       const index = this.otherBuffer.lastIndexOf('&nbsp;');

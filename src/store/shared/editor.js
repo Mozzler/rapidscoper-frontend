@@ -66,25 +66,22 @@ function getStoryLevel (id, stories) {
 }
 
 function replaceMarkup (markup, dictionary) {
-  let spans = markup.split('</span>');
-
-  spans = _.map(spans, span => {
-    return span.includes('<span') ? `${span}</span>` : span;
-  });
+  let spans = markup.split('&nbsp;');
 
   _.each(spans, (item, index) => {
     const matched = item.match(/data-id="(.*?)"/);
     if (matched) {
       const dictionaryItem = _.find(dictionary, i => i.id === matched[1]);
-      const replaceable = item.match(/>(.*?)(?=<\/)/)[1];
+      const matchedItem = item.match(/>(.*?)(?=<\/)/);
 
-      if (dictionaryItem) {
+      if (matchedItem && dictionaryItem) {
+        const replaceable = item.match(/>(.*?)(?=<\/)/)[1];
         spans[index] = item.replace(replaceable, dictionaryItem.name);
       }
     }
   });
 
-  return spans.join('');
+  return spans.join('&nbsp;');
 }
 
 function sections (project, sections, type) {

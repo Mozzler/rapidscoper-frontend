@@ -41,16 +41,14 @@ export default {
       return !joined ? spans : spans.join('&nbsp;');
     },
     getTail (cleared = false) {
-      const nodes = this.getFocusedEl().childNodes;
+      /*const nodes = this.getFocusedEl().childNodes;
       const index = _.findLastIndex(nodes, node => {
         return node.nodeType === 1 && !node.className.includes(CUSTOM_PHRASE);
-      });
+      });*/
+      const nodes = this.list[this.focused].markup.split('</span>');
+      const index = _.findLastIndex(nodes, node => node.includes('<span'));
 
-      let tail = _.chain(nodes)
-        .filter((node, i) => i > index)
-        .map(node => node.outerHTML || node.textContent)
-        .value()
-        .join('');
+      let tail = _.filter(nodes, (node, i) => i > index).join('');
 
       if (cleared) {
         let splitted = tail.split(/&nbsp;|\u00a0/);

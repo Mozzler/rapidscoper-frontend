@@ -177,6 +177,8 @@ export default {
           entity: 'dictionary',
           data: data
         });
+      } else {
+        data.id = existed.id;
       }
 
       this.processing = false;
