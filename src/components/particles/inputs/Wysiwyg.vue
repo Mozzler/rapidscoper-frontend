@@ -100,7 +100,6 @@
               <div class="comment-dialog"
                 :class="{'comment-dialog--invisible': description.id !== item.id}"
                 :id="`description-container-${ item.id }`">
-                <span>{{ description.text }}</span>
               </div>
               <div :id="`comment-container-${item.id}`"></div>
               <div class="user-story__comments"

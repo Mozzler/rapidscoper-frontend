@@ -5,7 +5,6 @@ export default {
       editor: null,
       etalon: null,
       blocked: false,
-      otherBuffer: '',
       description: {
         text: '',
         id: null
@@ -31,11 +30,13 @@ export default {
           };
 
           this.$nextTick();
+          hint.innerHTML = this.description.text;
 
+          const correction = (phraseRect.width - hint.clientWidth) / 2;
           _.assign(hint.style, {
             position: 'absolute',
             top: `${phraseRect.top - wysiwygRect.top - 30}px`,
-            left: `${phraseRect.left - wysiwygRect.left}px`
+            left: `${phraseRect.left - wysiwygRect.left + correction}px`
           });
         }
       }
@@ -46,44 +47,6 @@ export default {
         id: null
       };
     },
-    withoutSpace () {
-      const index = this.otherBuffer.lastIndexOf('&nbsp;');
-      let result = this.otherBuffer;
-
-      if (index === this.otherBuffer.length - 6) {
-        result = this.otherBuffer.slice(0, index);
-      }
-
-      return result;
-    },
-    async printField (corrected = this.withoutSpace()) {
-      if (!this.otherBuffer) {
-        return;
-      }
-
-      const id = this.getObjectId();
-      const custom = this.createSpan('other', { name: corrected, id: id }, false, false, true, 'i');
-
-      this.list[this.focused].markup = this.list[this.focused].markup.replace(this.otherBuffer, custom);
-
-      await this.submitField('custom', corrected, this.focused, id);
-      this.otherBuffer = '';
-    },
-    async checkOtherDictionary (key, space = false) {
-      const corrected = this.withoutSpace(this.otherBuffer);
-      const accepted = {
-        space: this.otherBuffer && space,
-        capitalized: key.match(/[A-Z]/),
-        letter: this.otherBuffer && key.match(/[a-z]/) && corrected === this.otherBuffer
-      };
-
-      if (_.some(accepted)) {
-        this.otherBuffer += key;
-        return;
-      }
-
-      await this.printField();
-    },
     focusEvent (item, index) {
       this.otherBuffer = '';
       this.focused = index;
@@ -93,14 +56,6 @@ export default {
       if (this.etalon.id !== this.hintEditor) {
         this.hintEditor = null;
       }
-    },
-    printable (keycode) {
-      return (keycode > 47 && keycode < 58) || // number keys
-      (keycode === 32 || keycode === 13) || // spacebar & return key(s)
-      (keycode > 64 && keycode < 91) || // letter keys
-      (keycode > 95 && keycode < 112) || // numpad keys
-      (keycode > 185 && keycode < 193) || // ;=,-./` (in order)
-      (keycode > 218 && keycode < 223);
     },
     keydownEvent ($event) {
       this.event = $event;
@@ -153,26 +108,6 @@ export default {
         entity: 'story',
         data: this.list[this.focused]
       });
-    },
-    isEditable () {
-      if (!this.event) {
-        return false;
-      }
-
-      const focused = this.event.view.getSelection().focusNode;
-      const node = focused ? this.event.view.getSelection().focusNode.parentElement : null;
-      const other = this.list[this.focused] && this.list[this.focused].type === 'other';
-
-      if (other) {
-        this.list[this.focused].placeholder = this.event.target.innerHTML;
-      }
-
-      return (node && node.className.includes('custom')) || other;
-    },
-    completeBeginning (shortcut) {
-      const item = _.find(this.adjustedConstruction, item => item.shortcut === shortcut);
-      this.hintEditor = this.list[this.focused].id;
-      this.hintComplete('beginning', item, this.list[this.focused].id);
     }
   }
 };

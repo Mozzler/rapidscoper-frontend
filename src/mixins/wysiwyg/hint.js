@@ -82,6 +82,7 @@ export default {
       document.getElementById(addresserId).focus();
       await this.$nextTick();
       this.hintEditor = null;
+      let id = null;
 
       if (chapter === 'beginning') {
         this.list[this.focused].template = text.value;
@@ -95,7 +96,7 @@ export default {
 
         text = text.key;
       } else {
-        this.submitField(chapter, text, this.focused);
+        id = this.submitField(chapter, text, this.focused);
       }
 
       let spans = this.getSpanList(false);
@@ -108,7 +109,7 @@ export default {
       });
 
       if (index !== null) {
-        spans[index] = this.createSpan(chapter, text, false, false);
+        spans[index] = this.createSpan(chapter, { name: text, id: id }, false, false);
 
         if (chapter === 'requirement') {
           spans = spans.filter((item, i) => i <= index);
@@ -117,7 +118,7 @@ export default {
         this.list[this.focused].markup = spans.join('&nbsp;');
       } else {
         let t = spans.join('&nbsp;');
-        let span = this.createSpan(chapter, text, false, false);
+        let span = this.createSpan(chapter, { name: text, id: id }, false, false);
         this.list[this.focused].markup = `${t}${!t ? '' : '&nbsp;'}${span}`;
 
         this.setCompletion();
@@ -132,7 +133,7 @@ export default {
         data: this.list[this.focused]
       });
     },
-    async submitField (chapter, text, focused = this.focused, id = this.getObjectId()) {
+    submitField (chapter, text, focused = this.focused, id = this.getObjectId()) {
       if (typeof text !== 'string') {
         return;
       }
@@ -171,15 +172,16 @@ export default {
         item.type === data.type);
 
       if (existed) {
-        return;
+        return existed.id;
       }
 
-      await this.$store.dispatch('entity/create', {
+      this.$store.dispatch('entity/create', {
         entity: 'dictionary',
         data: data
       });
 
       this.processing = false;
+      return data.id;
     }
   }
 };

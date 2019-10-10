@@ -1,32 +1,32 @@
 export default {
   methods: {
-    getDeletableSet () {
-      const deletable = [
-        this.list[this.focused].id
-      ];
+    isEditable () {
+      if (!this.event) {
+        return false;
+      }
 
-      _.each(this.list[this.focused].list, item => {
-        deletable.push(item.id);
+      const focused = this.event.view.getSelection().focusNode;
+      const node = focused ? this.event.view.getSelection().focusNode.parentElement : null;
+      const other = this.list[this.focused] && this.list[this.focused].type === 'other';
 
-        if (item.list.length) {
-          const subIds = item.list.map(item => item.id);
-          deletable.push(...subIds);
-        }
-      });
+      if (other) {
+        this.list[this.focused].placeholder = this.event.target.innerHTML;
+      }
 
-      return deletable.reverse();
+      return (node && node.className.includes('custom')) || other;
     },
-
-    getNextStoryUpdate () {
-      return this.focused + 1 < this.list.length ? {
-        entity: 'story',
-        params: {
-          id: this.list[this.focused + 1].id
-        },
-        data: {
-          afterStoryId: this.focused === 0 ? this.list[this.focused].parentStoryId : this.list[this.focused - 1].id
-        }
-      } : null;
-    }
+    completeBeginning (shortcut) {
+      const item = _.find(this.adjustedConstruction, item => item.shortcut === shortcut);
+      this.hintEditor = this.list[this.focused].id;
+      this.hintComplete('beginning', item, this.list[this.focused].id);
+    },
+    printable (keycode) {
+      return (keycode > 47 && keycode < 58) || // number keys
+        (keycode === 32 || keycode === 13) || // spacebar & return key(s)
+        (keycode > 64 && keycode < 91) || // letter keys
+        (keycode > 95 && keycode < 112) || // numpad keys
+        (keycode > 185 && keycode < 193) || // ;=,-./` (in order)
+        (keycode > 218 && keycode < 223);
+    },
   }
 };

@@ -113,11 +113,13 @@ export default {
       this.updateStory();
     },
     setCustomText (editable = false) {
-      const [list, tail] = this.getLineParticles();
+      let [list, tail] = this.getLineParticles();
 
       if (tail) {
-        this.printField()
+        this.printCustomPhrase()
           .then(() => {
+            tail = this.getTail();
+            console.log(tail, 'markup-1');
             const text = this.createSpan(this.next, tail, false, editable);
             this.list[this.focused].markup = list + `&nbsp;` + (this.next ? text : ':');
           });
