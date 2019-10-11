@@ -68,6 +68,7 @@ export default {
         case 'email':
           return 'email';
         case 'password':
+        case 'confirmation':
           return 'password';
         default:
           return 'text';
@@ -81,7 +82,9 @@ export default {
         case 'email':
           return 'required|email|min:6|max:255';
         case 'password':
-          return 'required|min:6|max:255';
+          return { required: !!this.items.confirmation, min: 6, max: 255 };
+        case 'confirmation':
+          return { required: !!this.items.password, min: 6, max: 255, confirmed: 'password' };
         default:
           return '';
       }

@@ -96,7 +96,7 @@ export default {
       const validated = _.every(result, item => item === true);
 
       if (validated) {
-        //await this.updateUser(this.data);
+        await this.updateUser(this.data);
       }
 
       this.processing = false;

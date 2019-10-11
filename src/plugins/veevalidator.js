@@ -4,6 +4,7 @@ import VeeValidate from 'vee-validate';
 const dictionary = {
   en: {
     attributes: {
+      'confirmation': 'password',
       'password_confirmation': 'password',
       'phone': 'Phone number'
     }

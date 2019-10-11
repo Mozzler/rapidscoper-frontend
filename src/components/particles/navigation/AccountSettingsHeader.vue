@@ -1,5 +1,5 @@
 <template>
-  <div class="account-settings__header">
+  <div class="account-settings__header bottom-border">
     <v-layout align-center justify-space-between row fill-height>
       <h1>Account Settings</h1>
       <v-flex shrink>
