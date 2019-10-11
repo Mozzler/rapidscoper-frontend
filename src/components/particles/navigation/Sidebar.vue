@@ -143,8 +143,10 @@ export default {
     },
     handleDropdown (value) {
       switch (value) {
+        case 'Account Settings':
+          return this.$router.push('/account-settings');
         case 'Log out':
-          this.$store.dispatch('auth/logout')
+          return this.$store.dispatch('auth/logout')
             .then(() => {
               this.$router.push('/login');
             });
