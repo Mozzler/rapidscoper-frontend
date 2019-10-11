@@ -315,5 +315,14 @@
 .account-settings__section {
   position: relative;
   max-width: 368px;
-  margin: 32px auto;
+  margin: 0 auto;
+}
+
+.account-settings__section-form {
+  padding: 27px 0 16px;
+}
+
+.bottom-border {
+  border-bottom: 1px solid $light-grey;
+  border-radius: 4px;
 }

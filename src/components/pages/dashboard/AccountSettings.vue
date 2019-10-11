@@ -13,12 +13,17 @@
         :visible="processing"
       />
 
-      <account-settings-form ref="password"
+      <text-field ref="user"
         :processing="processing"
-        :data="data"
-        @update="update"/>
+        :model="data"
+        @update="update" />
 
-      <v-layout column>
+      <text-field ref="password"
+        :processing="processing"
+        :model="password"
+        @update="update" />
+
+      <v-layout column class="account-settings__section-form">
         <v-flex class="text-reference"
           @click="deleteAccount">Delete account</v-flex>
         <v-flex class="mt-2">This account will no longer be available and all data in the account will be permanently deleted.</v-flex>
@@ -29,16 +34,16 @@
 
 <script>
 import AccountSettingsHeader from '../../particles/navigation/AccountSettingsHeader';
-import AccountSettingsForm from '../../particles/forms/AccountSettingsForm';
 import CircularLoader from '../../particles/loaders/Circular';
+import TextField from '../../particles/inputs/TextField';
 
 import { mapState, mapActions } from 'vuex';
 
 export default {
   name: 'AccountSettings',
   components: {
+    TextField,
     AccountSettingsHeader,
-    AccountSettingsForm,
     CircularLoader
   },
   data () {
@@ -86,8 +91,21 @@ export default {
     },
     async save () {
       this.processing = true;
-      await this.updateUser(this.data);
+
+      const result = await Promise.all(this.validate());
+      const validated = _.every(result, item => item === true);
+
+      if (validated) {
+        //await this.updateUser(this.data);
+      }
+
       this.processing = false;
+    },
+    validate () {
+      const sections = ['user', 'password'];
+      return _.map(sections, (section) => {
+        return this.$refs[section].$validator.validate();
+      });
     },
     cancel () {
       this.$router.push('/dashboard/all-projects');
