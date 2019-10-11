@@ -3,9 +3,16 @@
     <v-flex xs12 class="signup-input"
             v-for="field in list"
             :key="field.name">
-      <div class="text-field__label" v-if="field.name">
-        {{ field.name }}
-      </div>
+      <v-layout align-center justify-space-between row fill-height
+        class="text-size--12">
+        <div class="text-field__label" v-if="field.name">
+          {{ field.name }}
+        </div>
+        <div class="text-reference" v-if="extra && extra[field.prop]"
+          @click="() => $emit('secondary-click', field.prop)">
+          {{ extra[field.prop] }}
+        </div>
+      </v-layout>
       <v-text-field
         v-validate="field.rules"
         v-model="items[field.prop]"
@@ -32,6 +39,10 @@ export default {
     processing: {
       type: Boolean,
       default: false
+    },
+    extra: {
+      type: Object,
+      default: null
     }
   },
   data () {

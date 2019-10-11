@@ -16,6 +16,8 @@
       <text-field ref="user"
         :processing="processing"
         :model="data"
+        :extra="{email: 'Verify Email'}"
+        @secondary-click="verifyEmail"
         @update="update" />
 
       <text-field ref="password"
@@ -83,8 +85,7 @@ export default {
       console.log('delete account');
     },
     verifyEmail () {
-      console.log('verify email');
-      //this.$root.$emit('verify-email', _.pick(this.data, 'email'));
+      this.$root.$emit('verify-email', _.pick(this.data, 'email'));
     },
     update (data) {
       _.assign(this.data, data);
