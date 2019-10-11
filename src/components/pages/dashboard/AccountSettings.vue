@@ -81,8 +81,11 @@ export default {
         confirmation: null
       };
     },
-    deleteAccount () {
-      console.log('delete account');
+    async deleteAccount () {
+      this.processing = true;
+      await this.updateUser({ status: 'archived' });
+      this.logout();
+      this.processing = false;
     },
     verifyEmail () {
       this.$root.$emit('verify-email', _.pick(this.data, 'email'));
