@@ -1,7 +1,7 @@
 <template>
   <v-layout column class="account-settings__section-form bottom-border">
     <v-flex xs12 class="signup-input"
-            v-for="field in fields"
+            v-for="field in list"
             :key="field.name">
       <div class="text-field__label" v-if="field.name">
         {{ field.name }}
@@ -37,7 +37,7 @@ export default {
   data () {
     return {
       items: this.model,
-      fields: null
+      list: null
     };
   },
   beforeMount () {
@@ -45,7 +45,7 @@ export default {
   },
   methods: {
     generateFields () {
-      this.fields = _.map(this.model, (item, key) => {
+      this.list = _.map(this.model, (item, key) => {
         return {
           prop: key,
           name: this.getNameByKey(key),
