@@ -238,3 +238,9 @@ input:-webkit-autofill:active  {
     min-height: max-content !important;
   }
 }
+
+.text-field__label {
+  font-size: 12px;
+  font-weight: 600;
+  color: $dark-grey;
+}

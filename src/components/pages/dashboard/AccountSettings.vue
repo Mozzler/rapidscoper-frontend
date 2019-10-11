@@ -13,11 +13,6 @@
         :visible="processing"
       />
 
-      <account-settings-form ref="user"
-        :processing="processing"
-        :data="data"
-        @update="update"/>
-
       <account-settings-form ref="password"
         :processing="processing"
         :data="data"

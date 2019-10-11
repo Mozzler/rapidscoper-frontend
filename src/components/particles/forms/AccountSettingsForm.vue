@@ -1,6 +1,7 @@
 <template>
   <v-layout column>
     <v-flex xs12 class="signup-input">
+      <div class="text-field__label">First name</div>
       <v-text-field
         key="first name"
         name="First name"
@@ -13,6 +14,7 @@
       ></v-text-field>
     </v-flex>
     <v-flex xs12 class="signup-input">
+      <div class="text-field__label">Last name</div>
       <v-text-field
         key="last name"
         name="Last name"
@@ -25,6 +27,7 @@
       ></v-text-field>
     </v-flex>
     <v-flex xs12 class="signup-input">
+      <div class="text-field__label">Email</div>
       <v-text-field
         key="email"
         name="Email"
