@@ -45,7 +45,7 @@
 <script>
 import AbsoluteMenu from '../menus/AbsoluteMenu';
 import Dropdown from '../menus/Dropdown';
-import { mapState, mapGetters } from 'vuex';
+import { mapState, mapGetters, mapMutations } from 'vuex';
 
 export default {
   name: 'Users',
@@ -81,6 +81,11 @@ export default {
     };
   },
   methods: {
+    ...mapMutations('entity', [
+      'resetList',
+      'setList',
+      'update'
+    ]),
     hasPermission (role) {
       return !!_.find(this.roles, item => item.type === role.type);
     },
@@ -102,8 +107,9 @@ export default {
         ]
       };
 
-      this.$store.commit('entity/resetList', 'userTeam');
+      this.resetList('userTeam');
       this.connect('userTeam', 'entity/setList', filter);
+      this.connect('invite', 'entity/setList');
     },
     updateRole (role, id) {
       const data = {
@@ -117,7 +123,7 @@ export default {
           role: role.type
         }
       };
-      this.$store.commit('entity/update', data);
+      this.update(data);
       this.$store.dispatch('entity/update', data);
     }
   },
@@ -125,7 +131,7 @@ export default {
     this.fetchData();
   },
   beforeDestroy () {
-    this.$store.commit('entity/resetList', 'userTeam');
+    this.resetList('userTeam');
   },
   computed: {
     ...mapState('auth', [
