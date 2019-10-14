@@ -99,7 +99,7 @@ export default {
         case 'email':
           return 'required|email|min:6|max:255';
         case 'password':
-          return { required: !!this.items['password_confirmation'], min: 6, max: 255 };
+          return { required: !!this.items.password_confirmation, min: 6, max: 255 };
         case 'password_confirmation':
           return { required: !!this.items.password, min: 6, max: 255, confirmed: 'password' };
         default:

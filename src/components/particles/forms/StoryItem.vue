@@ -66,7 +66,6 @@
 
 <script>
 import Wysiwyg from '../inputs/Wysiwyg';
-import ErrorHandler from '@/mixins/error-handler';
 import CircularLoader from '../../particles/loaders/Circular';
 
 import { mapState } from 'vuex';
@@ -78,9 +77,6 @@ export default {
     Wysiwyg,
     CircularLoader
   },
-  mixins: [
-    ErrorHandler
-  ],
   props: {
     model: {
       type: [Object, undefined],

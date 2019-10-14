@@ -30,6 +30,10 @@
           @click="deleteAccount">Delete account</v-flex>
         <v-flex class="mt-2">This account will no longer be available and all data in the account will be permanently deleted.</v-flex>
       </v-layout>
+
+      <alert
+        :message="response.msg"
+        :cls="response.cls" />
     </div>
   </div>
 </template>
@@ -59,6 +63,10 @@ export default {
       password: {
         password: null,
         password_confirmation: null
+      },
+      response: {
+        msg: null,
+        cls: ''
       }
     };
   },
@@ -100,18 +108,22 @@ export default {
       _.assign(this.data, data);
     },
     async save () {
-      /*this.processing = true;
+      this.processing = true;
 
       const result = await Promise.all(this.validate());
       const validated = _.every(result, item => item === true);
 
       if (validated) {
-        await this.updateUser(this.data);
+        try {
+          await this.updateUser(this.data);
+          this.initAlert();
+        } catch (error) {
+          const msg = this.handleErrors(error, true);
+          this.initAlert(msg, 'rapid-alert--warning');
+        }
       }
 
-      this.processing = false;*/
-      await this.$refs.password.$validator.validate();
-      console.log(this.errors);
+      this.processing = false;
     },
     validate () {
       const sections = ['user', 'password'];
@@ -121,6 +133,10 @@ export default {
     },
     cancel () {
       this.$router.push('/dashboard/all-projects');
+    },
+    initAlert (msg = 'Settings updated successfully!', cls = 'rapid-alert--success') {
+      this.response = { msg, cls };
+      console.log(this.response);
     }
   },
   beforeDestroy () {

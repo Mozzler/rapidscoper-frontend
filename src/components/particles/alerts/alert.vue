@@ -1,6 +1,6 @@
 <template>
   <div v-if="visible"
-       class="rapid-alert"
+       :class="`rapid-alert ${cls}`"
        @click="hide">
     {{ message }}
   </div>
@@ -8,16 +8,20 @@
 
 <script>
 export default {
-  name: "alert",
+  name: 'alert',
   props: {
     message: {
       type: String,
       default: null
+    },
+    cls: {
+      type: String,
+      default: 'rapid-alert--warning'
     }
   },
   data () {
     return {
-      visible: false
+      visible: !!this.message
     };
   },
   methods: {
@@ -27,7 +31,7 @@ export default {
   },
   watch: {
     message () {
-      this.visible = true;
+      this.visible = !!this.message;
     }
   }
 };
