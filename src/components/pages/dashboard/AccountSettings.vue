@@ -58,7 +58,7 @@ export default {
       },
       password: {
         password: null,
-        confirmation: null
+        password_confirmation: null
       }
     };
   },
@@ -84,7 +84,7 @@ export default {
       this.data = _.pick(this.user, 'firstName', 'lastName', 'email');
       this.password = {
         password: null,
-        confirmation: null
+        password_confirmation: null
       };
     },
     async deleteAccount () {
@@ -100,7 +100,7 @@ export default {
       _.assign(this.data, data);
     },
     async save () {
-      this.processing = true;
+      /*this.processing = true;
 
       const result = await Promise.all(this.validate());
       const validated = _.every(result, item => item === true);
@@ -109,7 +109,9 @@ export default {
         await this.updateUser(this.data);
       }
 
-      this.processing = false;
+      this.processing = false;*/
+      await this.$refs.password.$validator.validate();
+      console.log(this.errors);
     },
     validate () {
       const sections = ['user', 'password'];

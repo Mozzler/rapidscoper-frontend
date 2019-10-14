@@ -17,10 +17,11 @@
         v-validate="field.rules"
         v-model="items[field.prop]"
         :key="field.name"
-        :name="field.name"
-        :placeholder="field.name"
+        :name="field.prop"
+        :placeholder="field.placeholder"
         :type="field.type"
-        :error-messages="errors.first(field.name)"
+        :ref="field.prop"
+        :error-messages="errors.first(field.prop)"
         :disabled="processing"
         solo
       ></v-text-field>
@@ -61,13 +62,18 @@ export default {
           prop: key,
           name: this.getNameByKey(key),
           type: this.getTypeByKey(key),
-          rules: this.getRulesByKey(key)
+          rules: this.getRulesByKey(key),
+          placeholder: this.getNameByKey(key, true)
         };
       });
     },
-    getNameByKey (key) {
+    getNameByKey (key, placeholder) {
+      if (placeholder && key === 'password') {
+        return 'New password';
+      }
+
       return key
-        .split(/(?=[A-Z])/)
+        .split(/(?=[A-Z])|_/)
         .map((item, index) => this.capitalized(item, index === 0))
         .join(' ');
     },
@@ -79,7 +85,7 @@ export default {
         case 'email':
           return 'email';
         case 'password':
-        case 'confirmation':
+        case 'password_confirmation':
           return 'password';
         default:
           return 'text';
@@ -93,8 +99,8 @@ export default {
         case 'email':
           return 'required|email|min:6|max:255';
         case 'password':
-          return { required: !!this.items.confirmation, min: 6, max: 255 };
-        case 'confirmation':
+          return { required: !!this.items['password_confirmation'], min: 6, max: 255 };
+        case 'password_confirmation':
           return { required: !!this.items.password, min: 6, max: 255, confirmed: 'password' };
         default:
           return '';
