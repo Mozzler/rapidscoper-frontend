@@ -9,12 +9,14 @@ export default {
     return entity => {
       const items = state[entity].items;
       const roles = rootState.system.roles;
+      const invites = rootState.system.invites;
       let data = [];
 
       if (entity === 'userTeam') {
         _.each(items, item => {
           const value = { ...item };
           value.role = _.find(roles, item => item.type === value.role);
+          console.log(invites);
           data.push(value);
         });
       } else {
