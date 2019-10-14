@@ -11,7 +11,7 @@
         <v-btn class="btn-rapid" large outline
                :disabled="processing"
                @click="() => $emit('cancel')">
-          Cancel
+          Close
         </v-btn>
       </v-flex>
     </v-layout>

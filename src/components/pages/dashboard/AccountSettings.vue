@@ -64,6 +64,7 @@ export default {
   },
   beforeMount () {
     this.init();
+    window.addEventListener('keydown', this.submit);
   },
   computed: {
     ...mapState('auth', [
@@ -74,6 +75,11 @@ export default {
     ...mapActions({
       updateUser: 'auth/update'
     }),
+    submit ($event) {
+      if ($event.code === 'Enter') {
+        this.save();
+      }
+    },
     init () {
       this.data = _.pick(this.user, 'firstName', 'lastName', 'email');
       this.password = {
@@ -114,6 +120,9 @@ export default {
     cancel () {
       this.$router.push('/dashboard/all-projects');
     }
+  },
+  beforeDestroy () {
+    window.removeEventListener('keydown', this.submit);
   }
 };
 </script>
