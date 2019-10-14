@@ -63,15 +63,21 @@ export default {
           name: this.getNameByKey(key),
           type: this.getTypeByKey(key),
           rules: this.getRulesByKey(key),
-          placeholder: this.getNameByKey(key, true)
+          placeholder: this.getPlaceholderByKey(key)
         };
       });
     },
-    getNameByKey (key, placeholder) {
-      if (placeholder && key === 'password') {
-        return 'New password';
+    getPlaceholderByKey (key) {
+      switch (key) {
+        case 'password':
+          return 'New password';
+        case 'password_confirmation':
+          return 'Re-enter password';
+        default:
+          return this.getNameByKey(key);
       }
-
+    },
+    getNameByKey (key) {
       return key
         .split(/(?=[A-Z])|_/)
         .map((item, index) => this.capitalized(item, index === 0))
