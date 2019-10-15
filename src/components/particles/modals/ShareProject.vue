@@ -8,7 +8,7 @@
           cls="loader-shadow--without-padding transparent"
           :size="50"
           :width="5"
-          :visible="processing || updating"
+          :visible="processing || updating || !loaded"
         />
 
         <div class="modal-header">
@@ -72,7 +72,9 @@
                     <img
                       class="invited__img"
                       :src="user.avatarUrl" />
-                    <div>{{ user.email }}</div>
+                    <div :class="{ 'text-primary': user.teammate }">
+                      {{ user.email }}
+                    </div>
                   </v-flex>
                   <v-flex shrink class="invited__flex">
                     <dropdown
@@ -142,7 +144,12 @@ export default {
     return {
       permission: null,
       processing: false,
-      updating: false
+      updating: false,
+      loading: {
+        userTeam: true,
+        invite: true
+      },
+      loaded: false
     };
   },
   computed: {
@@ -197,15 +204,18 @@ export default {
       };
     },
     async fetchData () {
-      this.processing = true;
+      const filter = {
+        $or: [
+          { 'fullDocument.teamId': { $in: [this.project.teamId] } }
+        ]
+      };
 
-      const invited = this.getParams('invite', {
-        entityType: 'project',
-        entityId: this.params
+      this.connect('userTeam', 'entity/setList', filter, true, () => {
+        this.loading.userTeam = false;
       });
-
-      await this.$store.dispatch('entity/read', invited);
-      this.processing = false;
+      this.connect('invite', 'entity/setList', null, true, () => {
+        this.loading.invite = false;
+      });
     },
     copy () {
       this.$refs.link.value = `${document.location.origin}/project/${this.shared.id}/${this.shared.token}`;
@@ -293,6 +303,12 @@ export default {
     dialog () {
       if (this.dialog) {
         this.fetchData();
+      }
+    },
+    loading: {
+      deep: true,
+      handler () {
+        this.loaded = _.every(this.loading, item => !item);
       }
     }
   }

@@ -19,6 +19,7 @@
 import Dropdown from '../menus/Dropdown';
 import Navigation from '@/mixins/navigation';
 import UserDataTable from '../tables/UserDataTable';
+import ConnectIndicatorMixin from '@/mixins/connect-indicator';
 
 export default {
   name: 'Projects',
@@ -27,13 +28,16 @@ export default {
     Dropdown
   },
   mixins: [
-    Navigation
+    Navigation,
+    ConnectIndicatorMixin
   ],
   data () {
     return {
       option: 'Active',
       dropdown: ['Active', 'Archived'],
-      loading: true
+      collections: [
+        'userInfo', 'userProject', 'project'
+      ]
     };
   },
   computed: {

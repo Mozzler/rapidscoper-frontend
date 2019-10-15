@@ -43,16 +43,19 @@
 </template>
 
 <script>
-import AbsoluteMenu from '../menus/AbsoluteMenu';
 import Dropdown from '../menus/Dropdown';
+import ConnectIndicatorMixin from '@/mixins/connect-indicator';
+
 import { mapState, mapGetters, mapMutations } from 'vuex';
 
 export default {
   name: 'Users',
   components: {
-    Dropdown,
-    AbsoluteMenu
+    Dropdown
   },
+  mixins: [
+    ConnectIndicatorMixin
+  ],
   data () {
     return {
       processing: true,
@@ -77,6 +80,9 @@ export default {
           sortable: false,
           value: 'actions'
         }
+      ],
+      collections: [
+        'userInfo', 'userProject', 'project'
       ]
     };
   },
@@ -88,28 +94,6 @@ export default {
     ]),
     hasPermission (role) {
       return !!_.find(this.roles, item => item.type === role.type);
-    },
-    fetchData () {
-      const filter = {
-        $or: [
-          { 'fullDocument.teamId': {$in: [this.$route.params.name] } }
-        ],
-        params: [
-          {
-            $lookup: {
-              from: 'userInfo',
-              localField: 'userId',
-              foreignField: 'userId',
-              as: 'userData'
-            }
-          },
-          { $unwind: '$userData' }
-        ]
-      };
-
-      this.resetList('userTeam');
-      this.connect('userTeam', 'entity/setList', filter);
-      this.connect('invite', 'entity/setList');
     },
     updateRole (role, id) {
       const data = {
@@ -158,11 +142,6 @@ export default {
     },
     userTeam () {
       return this.items('userTeam');
-    }
-  },
-  watch: {
-    teamId () {
-      this.fetchData();
     }
   }
 };

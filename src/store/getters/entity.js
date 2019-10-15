@@ -4,8 +4,28 @@ function uppercased (str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
+function detectRelatedUsers (info, roles) {
+  return (collection, team = false) => _.map(collection, item => {
+    let data = {
+      id: item.id,
+      role: _.find(roles, role => item.role === role.type),
+      email: item.email,
+      teammate: team
+    };
+
+    let user = _.find(info, inf => inf.userId === item.userId);
+    if (user) {
+      data.email = user.email;
+      data.avatarUrl = user.avatarUrl ? user.avatarUrl :
+        require('@/assets/img/default-user.png');
+    }
+
+    return data;
+  });
+}
+
 export default {
-  items (state, getters, rootState, rootGetters) {
+  items (state, getters, rootState) {
     return entity => {
       const items = state[entity].items;
       const roles = rootState.system.roles;
@@ -75,31 +95,19 @@ export default {
     };
   },
   invited (state, getters, rootState) {
-    const invite = rootState.entity.invite.items;
-    const info = rootState.entity.userInfo.items;
-    const roles = rootState.system.roles;
+    const detect = detectRelatedUsers(state.userInfo.items, rootState.system.roles);
 
-    return _.map(invite, item => {
-      let data = {
-        id: item.id,
-        role: _.find(roles, role => item.role === role.type),
-        email: item.email
-      };
-
-      let user = _.find(info, inf => inf.email === item.email);
-
-      if (user) {
-        data.avatarUrl = user && user.avatarUrl ? user.avatarUrl :
-          require('@/assets/img/default-user.png');
-      }
-
-      return data;
-    });
+    return [
+      ...detect(state.invite.items),
+      ...detect(state.userTeam.items, true)
+    ];
   },
   link (state, getters, rootState, rootGetters) {
     return projectId => {
       let items = rootState.entity.projectShare.items;
-      let shared = _.find(items, item => item.projectId === projectId);
+      let shared = _.find(items, item =>
+        item.projectId === projectId &&
+        item.status === 'active');
 
       let roles = rootState.system.roles;
       let periods = rootGetters['system/periods'];

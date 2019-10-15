@@ -92,7 +92,6 @@ export default {
   beforeMount () {
     this.connect('projectShare', 'entity/setList');
     this.$root.$on('dataset-updated', this.datasetUpdated);
-    this.fetchData();
   },
   beforeDestroy () {
     this.$root.$off('dataset-updated', this.datasetUpdated);
@@ -126,31 +125,6 @@ export default {
     datasetUpdated (data) {
       this.updating = data.state;
     },
-    fetchData () {
-      this.processing = true;
-
-      let payload = {
-        params: {}
-      };
-
-      if (this.teamId) {
-        payload.params = {
-          teamId: this.teamId
-        };
-      }
-
-      Promise.all([
-        this.$store.dispatch('entity/read', {
-          entity: 'user-project',
-          params: payload
-        }),
-        this.$store.dispatch('entity/read', {
-          entity: 'user-info'
-        })
-      ]).then(() => {
-        this.processing = false;
-      });
-    },
     goTo (item, id) {
       const url = `/projects/${id}/user-story/section/edit`;
       this.$router.push(url);
@@ -172,11 +146,6 @@ export default {
     },
     share (id) {
       this.$root.$emit('share-project', id);
-    }
-  },
-  watch: {
-    '$route.params.name' () {
-      this.fetchData();
     }
   }
 };
