@@ -12,14 +12,14 @@
         <td>
           <v-layout align-center justify-start row fill-height>
             <v-flex shrink mr-3>
-              <img :src="props.item.userData.avatarUrl" />
+              <img :src="props.item.avatarUrl" />
             </v-flex>
-            <v-flex grow>
-              {{ props.item.userData.firstName }} {{ props.item.userData.lastName }}
+            <v-flex grow :class="{ 'text-primary': user.entity === 'user-team' }">
+              {{ props.item.name }}
             </v-flex>
           </v-layout>
         </td>
-        <td>{{ props.item.userData.email }}</td>
+        <td>{{ props.item.email }}</td>
         <td>
           <v-flex>
             <div class="position-relative white-space-nowrap">
@@ -32,7 +32,8 @@
           </v-flex>
         </td>
         <td class="text-xs-left">
-          <v-btn icon :disabled="role.type !== 'manager'">
+          <v-btn icon :disabled="role.type !== 'manager'"
+                 @click="() => deleteMember(props.item.id, props.item.entity)">
             <v-icon>delete</v-icon>
           </v-btn>
         </td>
@@ -46,7 +47,7 @@
 import Dropdown from '../menus/Dropdown';
 import ConnectIndicatorMixin from '@/mixins/connect-indicator';
 
-import { mapState, mapGetters, mapMutations } from 'vuex';
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 
 export default {
   name: 'Users',
@@ -82,16 +83,19 @@ export default {
         }
       ],
       collections: [
-        'userInfo', 'userProject', 'project'
+        'userInfo', 'userTeam', 'invite'
       ]
     };
   },
   methods: {
-    ...mapMutations('entity', [
-      'resetList',
-      'setList',
-      'update'
-    ]),
+    ...mapMutations('entity', {
+      'updateM': 'update',
+      'deleteM': 'delete'
+    }),
+    ...mapActions('entity', {
+      'updateA': 'update',
+      'deleteA': 'delete'
+    }),
     hasPermission (role) {
       return !!_.find(this.roles, item => item.type === role.type);
     },
@@ -107,15 +111,14 @@ export default {
           role: role.type
         }
       };
-      this.update(data);
-      this.$store.dispatch('entity/update', data);
+
+      this.updateM(data);
+      this.updateA(data);
+    },
+    deleteMember (id, entity) {
+      this.deleteA({ id, entity });
+      this.deleteM({ id, entity });
     }
-  },
-  beforeMount () {
-    this.fetchData();
-  },
-  beforeDestroy () {
-    this.resetList('userTeam');
   },
   computed: {
     ...mapState('auth', [
@@ -123,25 +126,23 @@ export default {
     ]),
     ...mapGetters({
       allowedRoles: 'entity/allowedRoles',
-      items: 'entity/items'
+      invited: 'entity/invited'
     }),
+    teamId () {
+      return this.$route.params.name;
+    },
+    userTeam () {
+      return this.invited(this.teamId);
+    },
     roles () {
       return this.allowedRoles(this.teamId, 'team');
     },
     role () {
-      return _.find(this.userTeam, item => item.userId === this.user.user_id &&
-        item.teamId === this.teamId).role;
-    },
-    teamId () {
-      return this.$route.params.name;
+      return _.find(this.userTeam, item => item.userId === this.user.user_id).role;
     },
     permission () {
-      const role = _.find(this.userTeam, item => item.userId === this.user.user_id &&
-        item.teamId === this.teamId).role;
+      const role = _.find(this.userTeam, item => item.userId === this.user.user_id).role;
       return !!_.find(this.roles, item => item.type === role.type);
-    },
-    userTeam () {
-      return this.items('userTeam');
     }
   }
 };

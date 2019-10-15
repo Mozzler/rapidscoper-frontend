@@ -72,7 +72,7 @@
                     <img
                       class="invited__img"
                       :src="user.avatarUrl" />
-                    <div :class="{ 'text-primary': user.teammate }">
+                    <div :class="{ 'text-primary': user.entity === 'user-team' }">
                       {{ user.email }}
                     </div>
                   </v-flex>
@@ -166,6 +166,9 @@ export default {
     ...mapGetters('system', [
       'periods'
     ]),
+    members () {
+      return this.invited(this.params);
+    },
     roles () {
       return this.allowedRoles(this.params, 'project');
     },

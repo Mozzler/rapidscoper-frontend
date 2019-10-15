@@ -5,19 +5,23 @@ function uppercased (str) {
 }
 
 function detectRelatedUsers (info, roles) {
-  return (collection, team = false) => _.map(collection, item => {
+  return (collection, entity) => _.map(collection, item => {
     let data = {
       id: item.id,
       role: _.find(roles, role => item.role === role.type),
       email: item.email,
-      teammate: team
+      name: '',
+      userId: item.userId,
+      entity: entity,
+      avatarUrl: require('@/assets/img/default-user.png')
     };
 
     let user = _.find(info, inf => inf.userId === item.userId);
+
     if (user) {
+      data.name = item.name;
       data.email = user.email;
-      data.avatarUrl = user.avatarUrl ? user.avatarUrl :
-        require('@/assets/img/default-user.png');
+      data.avatarUrl = user.avatarUrl;
     }
 
     return data;
@@ -25,25 +29,9 @@ function detectRelatedUsers (info, roles) {
 }
 
 export default {
-  items (state, getters, rootState) {
+  items (state) {
     return entity => {
-      const items = state[entity].items;
-      const roles = rootState.system.roles;
-      const invites = rootState.system.invites;
-      let data = [];
-
-      if (entity === 'userTeam') {
-        _.each(items, item => {
-          const value = { ...item };
-          value.role = _.find(roles, item => item.type === value.role);
-          console.log(invites);
-          data.push(value);
-        });
-      } else {
-        data = state[entity].items;
-      }
-
-      return data;
+      return state[entity].items;
     };
   },
   total (state) {
@@ -95,12 +83,18 @@ export default {
     };
   },
   invited (state, getters, rootState) {
-    const detect = detectRelatedUsers(state.userInfo.items, rootState.system.roles);
+    return teamId => {
+      const detect = detectRelatedUsers(state.userInfo.items, rootState.system.roles);
+      const filtered = {
+        invite: _.filter(state.invite.items, item => item.entityId === teamId && item.status === 'active'),
+        entity: _.filter(state.userTeam.items, item => item.teamId === teamId)
+      };
 
-    return [
-      ...detect(state.invite.items),
-      ...detect(state.userTeam.items, true)
-    ];
+      return [
+        ...detect(filtered.invite, 'invite'),
+        ...detect(filtered.entity, 'user-team')
+      ];
+    };
   },
   link (state, getters, rootState, rootGetters) {
     return projectId => {

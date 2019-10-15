@@ -51,7 +51,7 @@ export default {
   },
   data () {
     return {
-      tabs: ['Projects', 'Users', /*'Billing', 'Advanced'*/],
+      tabs: ['Projects', 'Users' /*'Billing', 'Advanced'*/],
       activeTab: 'Projects',
 
       modals: {
