@@ -90,16 +90,14 @@ export default {
       const detect = detectRelatedUsers(state.userInfo.items, rootState.system.roles);
 
       const filtered = {
-        invites: _.filter(state.invite.items, item => item.entityId === id),
+        invites: _.filter(state.invite.items, item => item.entityId === id && item.status === 'active'),
         userTeam: _.filter(state.userTeam.items, item => item.teamId === id)
       };
 
-      const list = _.uniq([
+      return _.sortBy([
         ...detect(filtered.invites, 'invite'),
         ...detect(filtered.userTeam, 'user-team')
-      ], item => item.email);
-
-      return _.sortBy(list, 'email');
+      ], 'email');
     };
   },
   link (state, getters, rootState, rootGetters) {
