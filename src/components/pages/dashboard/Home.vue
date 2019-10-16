@@ -35,6 +35,17 @@ export default {
   },
   beforeMount () {
     this.connectCollections();
+    /*console.log('loading');
+    this.collections.forEach(async (item) => {
+      const entity = item
+        .split(/(?=[A-Z])/)
+        .map(word => word.toLowerCase())
+        .join('-');
+
+
+      await this.$store.dispatch('entity/read', { entity });
+    });
+    console.log('loading finished');*/
   },
   methods: {
     ...mapMutations('system', [

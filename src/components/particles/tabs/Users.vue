@@ -116,8 +116,8 @@ export default {
       this.updateA(data);
     },
     deleteMember (id, entity) {
-      this.deleteA({ id, entity });
       this.deleteM({ id, entity });
+      this.deleteA({ id, entity });
     }
   },
   computed: {

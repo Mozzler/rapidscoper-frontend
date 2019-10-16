@@ -1,5 +1,7 @@
 import editor from '../shared/editor';
 
+const NULL_STUB = '--- // ---';
+
 function uppercased (str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
@@ -10,16 +12,17 @@ function detectRelatedUsers (info, roles) {
       id: item.id,
       role: _.find(roles, role => item.role === role.type),
       email: item.email,
-      name: '',
+      name: NULL_STUB,
       userId: item.userId,
       entity: entity,
       avatarUrl: require('@/assets/img/default-user.png')
     };
 
-    let user = _.find(info, inf => inf.userId === item.userId);
+    let user = _.find(info, inf =>
+      inf.userId === item.userId || inf.email === item.email);
 
     if (user) {
-      data.name = item.name;
+      data.name = user.name || NULL_STUB;
       data.email = user.email;
       data.avatarUrl = user.avatarUrl;
     }
@@ -85,14 +88,19 @@ export default {
   invited (state, getters, rootState) {
     return teamId => {
       const detect = detectRelatedUsers(state.userInfo.items, rootState.system.roles);
+
       const filtered = {
         invite: _.filter(state.invite.items, item => item.entityId === teamId && item.status === 'active'),
-        entity: _.filter(state.userTeam.items, item => item.teamId === teamId)
+        team: _.filter(state.userTeam.items, item => item.teamId === teamId),
+        project: _.filter(state.userProject.items, item => item.teamId === teamId)
       };
+
+      console.log(_.find(state.invite.items, item => item.email === 'orion---0000@gmail.com'));
 
       return [
         ...detect(filtered.invite, 'invite'),
-        ...detect(filtered.entity, 'user-team')
+        ...detect(filtered.team, 'user-team'),
+        ...detect(filtered.project, 'user-project')
       ];
     };
   },

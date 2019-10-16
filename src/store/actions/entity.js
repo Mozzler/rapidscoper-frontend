@@ -55,6 +55,7 @@ export default {
     return response.data;
   },
   async read (store, payload) {
+    payload.params = { 'per-page': 500 };
     const response = await this._vm.$axios.get(`${payload.entity}`, payload);
     store.commit('setList', {
       data: response.data,
