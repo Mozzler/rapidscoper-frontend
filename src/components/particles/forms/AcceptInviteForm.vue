@@ -63,10 +63,10 @@ export default {
 
       if (result) {
         this.processing = true;
-
-      } else {
-        this.processing = false;
+        return;
       }
+
+      this.processing = false;
     },
     async fetchData () {
       this.processing = true;

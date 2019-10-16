@@ -10,21 +10,21 @@ function detectRelatedUsers (info, roles) {
   return (collection, entity) => _.map(collection, item => {
     let data = {
       id: item.id,
-      role: _.find(roles, role => item.role === role.type),
+      status: item.status,
       email: item.email,
-      name: NULL_STUB,
+      entityType: item.entityType,
       userId: item.userId,
-      entity: entity,
+      name: NULL_STUB,
+      role: _.find(roles, role => item && item.role === role.type),
       avatarUrl: require('@/assets/img/default-user.png')
     };
 
-    let user = _.find(info, inf =>
-      inf.userId === item.userId || inf.email === item.email);
-
+    const user = _.find(info, inf => inf.email === item.email || inf.userId === item.userId);
     if (user) {
-      data.name = user.name || NULL_STUB;
+      data.userId = user.userId;
       data.email = user.email;
       data.avatarUrl = user.avatarUrl;
+      data.name = (user.userId && user.name) || data.name;
     }
 
     return data;
@@ -86,22 +86,20 @@ export default {
     };
   },
   invited (state, getters, rootState) {
-    return teamId => {
+    return id => {
       const detect = detectRelatedUsers(state.userInfo.items, rootState.system.roles);
 
       const filtered = {
-        invite: _.filter(state.invite.items, item => item.entityId === teamId && item.status === 'active'),
-        team: _.filter(state.userTeam.items, item => item.teamId === teamId),
-        project: _.filter(state.userProject.items, item => item.teamId === teamId)
+        invites: _.filter(state.invite.items, item => item.entityId === id),
+        userTeam: _.filter(state.userTeam.items, item => item.teamId === id)
       };
 
-      console.log(_.find(state.invite.items, item => item.email === 'orion---0000@gmail.com'));
+      const list = _.uniq([
+        ...detect(filtered.invites),
+        ...detect(filtered.userTeam)
+      ], item => item.email);
 
-      return [
-        ...detect(filtered.invite, 'invite'),
-        ...detect(filtered.team, 'user-team'),
-        ...detect(filtered.project, 'user-project')
-      ];
+      return _.sortBy(list, 'email');
     };
   },
   link (state, getters, rootState, rootGetters) {

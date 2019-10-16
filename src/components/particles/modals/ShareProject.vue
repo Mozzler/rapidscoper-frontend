@@ -8,7 +8,7 @@
           cls="loader-shadow--without-padding transparent"
           :size="50"
           :width="5"
-          :visible="processing || updating || !loaded"
+          :visible="processing || updating || initialization"
         />
 
         <div class="modal-header">
@@ -125,6 +125,7 @@ import InviteGroup from '@/components/particles/inputs/InviteGroup';
 import LinkDisabledIcon from '../icons/LinkDisabled';
 import LinkIcon from '../icons/Link';
 import CircularLoader from '../../particles/loaders/Circular';
+import ConnectIndicatorMixin from '@/mixins/connect-indicator';
 
 import { mapState, mapGetters } from 'vuex';
 
@@ -138,18 +139,17 @@ export default {
     LinkIcon
   },
   mixins: [
-    ModalMixin
+    ModalMixin,
+    ConnectIndicatorMixin
   ],
   data () {
     return {
       permission: null,
       processing: false,
       updating: false,
-      loading: {
-        userTeam: true,
-        invite: true
-      },
-      loaded: false
+      collections: [
+        'userInfo', 'invite'
+      ]
     };
   },
   computed: {
@@ -205,20 +205,6 @@ export default {
         entity: entity,
         params: params
       };
-    },
-    async fetchData () {
-      const filter = {
-        $or: [
-          { 'fullDocument.teamId': { $in: [this.project.teamId] } }
-        ]
-      };
-
-      this.connect('userTeam', 'entity/setList', filter, true, () => {
-        this.loading.userTeam = false;
-      });
-      this.connect('invite', 'entity/setList', null, true, () => {
-        this.loading.invite = false;
-      });
     },
     copy () {
       this.$refs.link.value = `${document.location.origin}/project/${this.shared.id}/${this.shared.token}`;
@@ -300,19 +286,6 @@ export default {
       });
 
       this.updating = false;
-    }
-  },
-  watch: {
-    dialog () {
-      if (this.dialog) {
-        this.fetchData();
-      }
-    },
-    loading: {
-      deep: true,
-      handler () {
-        this.loaded = _.every(this.loading, item => !item);
-      }
     }
   }
 };

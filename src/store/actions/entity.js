@@ -3,9 +3,10 @@ function uppercased (str) {
 }
 
 function actualEntity (str) {
-  return str.split('-')
-            .map((s, index) => index === 0 ? s : uppercased(s))
-            .join('');
+  return str
+    .split('-')
+    .map((s, index) => index === 0 ? s : uppercased(s))
+    .join('');
 }
 
 export default {
