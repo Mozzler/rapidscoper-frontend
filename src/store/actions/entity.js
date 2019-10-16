@@ -73,5 +73,9 @@ export default {
       entity: actualEntity(payload.entity)
     });
     return response.data;
+  },
+  async details (store, payload) {
+    const response = await this._vm.$axios.get('invite/detail', { params: payload });
+    return response.data;
   }
 };

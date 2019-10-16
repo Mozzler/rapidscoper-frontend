@@ -47,9 +47,14 @@ export default {
   beforeMount () {
     this.fetchData();
   },
+  computed: {
+    params () {
+      return this.$route.params;
+    }
+  },
   methods: {
     ...mapActions('entity', [
-      'view'
+      'details'
     ]),
     async reset () {
       this.processing = true;
@@ -58,20 +63,16 @@ export default {
 
       if (result) {
         this.processing = true;
-        /* this.$store.dispatch(this.action, this.user)
-            .then(() => {
-            }); */
+
       } else {
         this.processing = false;
       }
     },
     async fetchData () {
       this.processing = true;
-      await this.view({
-        entity: 'invite',
-        data: {
-          id: '5d53874a3393df07be05cdac',//this.$route.params.inviteId
-        }
+      await this.details({
+        id: this.params.inviteId,
+        code: this.params.inviteCode
       });
       this.processing = false;
     }
