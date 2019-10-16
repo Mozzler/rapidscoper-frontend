@@ -27,7 +27,7 @@
                 :list="roles"
                 :selectBtn="hasPermission(props.item.role)"
                 :selected="props.item.role"
-                @update="value => updateRole(value, props.item.id)" />
+                @update="value => updateRole(value, props.item.id, props.item.entity)" />
             </div>
           </v-flex>
         </td>
@@ -99,9 +99,9 @@ export default {
     hasPermission (role) {
       return !!_.find(this.roles, item => item.type === role.type);
     },
-    updateRole (role, id) {
+    updateRole (role, id, entity) {
       const data = {
-        entity: 'user-team',
+        entity: entity,
         cancelCommit: true,
         params: {
           id: id

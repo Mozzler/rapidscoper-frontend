@@ -12,7 +12,7 @@ function detectRelatedUsers (info, roles) {
       id: item.id,
       status: item.status,
       email: item.email,
-      entityType: item.entityType,
+      entity: entity,
       userId: item.userId,
       name: NULL_STUB,
       role: _.find(roles, role => item && item.role === role.type),
@@ -95,8 +95,8 @@ export default {
       };
 
       const list = _.uniq([
-        ...detect(filtered.invites),
-        ...detect(filtered.userTeam)
+        ...detect(filtered.invites, 'invite'),
+        ...detect(filtered.userTeam, 'user-team')
       ], item => item.email);
 
       return _.sortBy(list, 'email');
