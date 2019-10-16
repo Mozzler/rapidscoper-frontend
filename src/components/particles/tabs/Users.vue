@@ -33,7 +33,7 @@
           </v-flex>
         </td>
         <td class="text-xs-left">
-          <v-btn icon :disabled="role.type !== 'manager'"
+          <v-btn icon :disabled="userRoleType !== 'manager'"
                  @click="() => deleteMember(props.item.id, props.item.entity)">
             <v-icon>delete</v-icon>
           </v-btn>
@@ -138,12 +138,12 @@ export default {
     roles () {
       return this.allowedRoles(this.teamId, 'team');
     },
-    role () {
-      return _.find(this.userTeam, item => item.userId === this.user.user_id).role;
+    userRoleType () {
+      const found = _.find(this.userTeam, item => item.userId === this.user.user_id);
+      return found && found.role ? found.role.type : null;
     },
     permission () {
-      const role = _.find(this.userTeam, item => item.userId === this.user.user_id).role;
-      return !!_.find(this.roles, item => item.type === role.type);
+      return !!_.find(this.roles, item => item.type === this.userRoleType);
     }
   }
 };

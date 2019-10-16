@@ -19,7 +19,8 @@ function detectRelatedUsers (info, roles) {
       avatarUrl: require('@/assets/img/default-user.png')
     };
 
-    const user = _.find(info, inf => inf.email === item.email || inf.userId === item.userId);
+    const user = _.find(info, inf => inf.email === item.email ||
+      (item.userId && inf.userId === item.userId));
     if (user) {
       data.userId = user.userId;
       data.email = user.email;
