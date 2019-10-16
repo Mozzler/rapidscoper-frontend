@@ -8,13 +8,14 @@
     class="dashboard-table">
 
     <template v-slot:items="props">
-      <tr @click="props.expanded = !props.expanded">
+      <tr @click="props.expanded = !props.expanded"
+        :class="{'bg--light-primary': props.item.entity === 'invite'}">
         <td>
           <v-layout align-center justify-start row fill-height>
             <v-flex shrink mr-3>
               <img :src="props.item.avatarUrl" />
             </v-flex>
-            <v-flex grow :class="{ 'text-primary': user.entity === 'user-team' }">
+            <v-flex grow>
               {{ props.item.name }}
             </v-flex>
           </v-layout>
