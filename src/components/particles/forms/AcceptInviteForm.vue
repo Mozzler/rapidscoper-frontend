@@ -27,12 +27,16 @@
         </v-flex>
         <v-flex xs12 v-if="!accepted">
           <v-btn class="btn-rapid invitation__btn primary submit-btn mt-5px" large
-            @click="accept">
+            @click="accept"
+            :disabled="processing">
             Accept
           </v-btn>
         </v-flex>
         <v-flex xs12 v-if="!accepted">
-          <router-link :to="'/'" class="invitation__decline">Decline</router-link>
+          <router-link to="/" class="invitation__decline"
+                       @click.native.prevent="decline">
+            Decline
+          </router-link>
         </v-flex>
         <auth-form v-else type="Sign Up" :email="user.invite.email" />
       </v-layout>
@@ -54,7 +58,8 @@ export default {
   },
   data: () => ({
     user: null,
-    accepted: false
+    accepted: false,
+    processing: false
   }),
   filters: {
     toStrDate (str) {
@@ -74,7 +79,8 @@ export default {
   },
   methods: {
     ...mapActions('entity', [
-      'details'
+      'details',
+      'update'
     ]),
     roleByType (type) {
       const role = _.find(this.roles, role => role.type === type);
@@ -82,6 +88,17 @@ export default {
     },
     accept () {
       this.accepted = true;
+    },
+    decline () {
+      this.update({
+        entity: 'invite',
+        params: {
+          id: this.user.invite.id
+        },
+        data: {
+          status: 'deleted'
+        }
+      });
     },
     async reset () {
       this.processing = true;
