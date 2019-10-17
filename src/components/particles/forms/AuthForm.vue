@@ -1,5 +1,11 @@
 <template>
-  <v-form class="signup-with-email" @keyup.native.enter="submit">
+  <v-form class="signup-with-email position-relative" @keyup.native.enter="submit">
+    <circular-loader
+      cls="loader-shadow--without-padding transparent"
+      :size="50"
+      :width="5"
+      :visible="processing"
+    />
     <v-layout row wrap>
       <v-flex xs12 class="signup-input">
         <div class="text-field__label">
@@ -51,8 +57,13 @@
 </template>
 
 <script>
+import CircularLoader from '../loaders/Circular';
+
 export default {
   name: 'SignupForm',
+  components: {
+    CircularLoader
+  },
   props: {
     type: {
       type: String,
