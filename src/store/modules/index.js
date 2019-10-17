@@ -4,7 +4,7 @@ import story from './story';
 import entity from './entity';
 import dictionary from './dictionary';
 import projectVersion from './projectVersion';
-import introdution from './introdution';
+import introduction from './introduction';
 
 export default {
   system,
@@ -13,5 +13,5 @@ export default {
   auth,
   dictionary,
   projectVersion,
-  introdution
+  introduction
 };

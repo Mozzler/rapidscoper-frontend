@@ -1,12 +1,19 @@
 <template>
   <div v-if="visible"
        :class="`rapid-alert ${cls}`"
-       @click="hide">
+       @click="clickable ? hide : null">
     {{ message }}
+    <v-layout align-end justify-end row fill-height
+              v-if="btnShow">
+      <div class="text-reference"> Skip </div>
+      <div class="text-reference ml-3" @click="nextIntroChapter"> Next </div>
+    </v-layout>
   </div>
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
+
 export default {
   name: 'alert',
   props: {
@@ -17,6 +24,14 @@ export default {
     cls: {
       type: String,
       default: 'rapid-alert--warning'
+    },
+    clickable: {
+      type: Boolean,
+      default: true
+    },
+    btnShow: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -25,6 +40,9 @@ export default {
     };
   },
   methods: {
+    ...mapMutations('introduction', [
+      'nextIntroChapter'
+    ]),
     hide () {
       this.visible = false;
     }

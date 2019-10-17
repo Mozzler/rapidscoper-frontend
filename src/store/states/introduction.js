@@ -32,5 +32,6 @@ export default {
     [C.INTRO_STORY_WITHOUT]: 'To create user story without user type field, simply press “Backspace” and start writting what you need.',
     [C.INTRO_FINISH]: 'These are all the basic things you need to know to get started in Rapid Scoper. Enjoy it!'
   },
-  activeStepIndex: C.INTRO_WELCOME
+  activeChapter: C.INTRO_WELCOME,
+  show: true
 };

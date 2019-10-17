@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import SidebarList from "../lists/SidebarList";
+import SidebarList from '../lists/SidebarList';
 import Navigation from '@/mixins/navigation';
 
 import ScrollGoToMixin from '@/mixins/scroll-go-to';

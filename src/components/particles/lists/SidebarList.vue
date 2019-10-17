@@ -1,6 +1,7 @@
 <template>
   <div>
     <div v-if="title" class="sidebar__title"
+         :class="{'sidebar__title--onboarding': checkActiveChapter(C.INTRO_TEXT)}"
          @click="() => $emit('menu')">
       {{ title }}
     </div>
@@ -41,13 +42,14 @@
 </template>
 
 <script>
-
-import Navigation from '@/mixins/navigation';
+import NavigationMixin from '@/mixins/navigation';
+import IntroductionMixin from '@/mixins/introduction';
 
 export default {
   name: 'SidebarList',
   mixins: [
-    Navigation
+    NavigationMixin,
+    IntroductionMixin
   ],
   props: {
     title: {
