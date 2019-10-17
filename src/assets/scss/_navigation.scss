@@ -87,13 +87,21 @@
   box-shadow: 1px 0 0 rgba(0, 0, 0, 0.1);
 }
 
-.onboarding {
+.onboarding-basic {
   background: #FFFFFF;
   border: 1px solid #76B5FF;
   box-sizing: border-box;
   box-shadow: 0 0 5px #76B5FF;
   border-radius: 2px;
+}
+
+.onboarding {
   margin: -6px -8px;
   padding: 6px 8px;
+  @extend .onboarding-basic;
+}
+
+.onboarding--without-pm {
+  @extend .onboarding-basic;
 }
 

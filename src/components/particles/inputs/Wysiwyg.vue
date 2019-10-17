@@ -35,6 +35,7 @@
             :active="item[tab]"
             :list="toolDictionary"
             :minified="true"
+            :margin="true"
             :label-cls="'tool-block__label--minified'"
             @update="id => submitTool(id)"/>
         </div>
@@ -51,6 +52,7 @@
                   <input
                     :tabindex="0"
                     class="user-story__input"
+                    :class="{'onboarding--without-pm': checkActiveChapter(C.INTRO_ACTIVE)}"
                     v-model="item.estimate"
                     @focus="() => selectTool(item.id)"
                     @keydown.up.exact.prevent="$event => blur($event, 'previousItem')"
@@ -163,6 +165,8 @@ import CircularLoader from '../../particles/loaders/Circular';
 import PriorityIndicator from '../../particles/indicators/Priority';
 
 import WysiwygMixin from '@/mixins/wysiwyg';
+import IntroductionMixin from '@/mixins/introduction';
+
 import DragIcon from '../icons/Drag';
 import CommentIcon from '../icons/Comment';
 
@@ -177,7 +181,8 @@ export default {
     DragIcon
   },
   mixins: [
-    WysiwygMixin
+    WysiwygMixin,
+    IntroductionMixin
   ],
   props: {
     sectionId: {

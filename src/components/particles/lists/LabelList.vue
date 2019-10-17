@@ -1,31 +1,30 @@
 <template>
   <div class="tool-block__text"
        :class="{'tool-block__text--minified': minified}">
-    <div v-for="(item, index) in list"
-         :key="index"
-         :class="labelCls"
-         :style="`${getStyle(index, item.colour)}`"
-         @click="() => $emit('update', index)"
-         class="mr-3">
-      <template>
-        <span>{{ index + 1 }}.&nbsp;</span>
-        <span>{{ item.name }}</span>
-      </template>
+    <div :class="{'onboarding': checkActiveChapter(C.INTRO_LABELS_DESCRIPTION)}">
+      <div v-for="(item, index) in list"
+           :key="index"
+           :class="`${labelCls} ${(index !== list.length - 1 && margin) ? 'mr-3' : ''}`"
+           :style="`${getStyle(index, item.colour)}`"
+           @click="() => $emit('update', index)">
+        <template>
+          <span>{{ index + 1 }}.&nbsp;</span>
+          <span>{{ item.name }}</span>
+        </template>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import CircularLoader from "../../particles/loaders/Circular";
 import Tools from '@/mixins/story';
+import IntroductionMixin from '@/mixins/introduction';
 
 export default {
   name: 'LabelList',
-  components: {
-    CircularLoader
-  },
   mixins: [
-    Tools
+    Tools,
+    IntroductionMixin
   ],
   props: {
     list: {
@@ -44,6 +43,9 @@ export default {
       default: false
     },
     minified: {
+      default: false
+    },
+    margin: {
       default: false
     }
   }
