@@ -23,7 +23,7 @@
                   hide-slider
                   v-model="activeTab">
             <v-tab v-for="tab in tabs" :key="tab" @click="setTab(tab)">
-              {{ tab }}
+              <div :class="{'onboarding': checkOnBoardFlag(tab)}">{{ tab }}</div>
             </v-tab>
           </v-tabs>
         </template>
@@ -62,9 +62,9 @@
 import SortIcon from '../icons/Filter';
 import Dropdown from '../menus/Dropdown';
 import Navigation from '@/mixins/navigation';
+import IntroductionMixin from '@/mixins/introduction';
 
-import { mapMutations } from 'vuex';
-import { mapState } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 
 export default {
   name: 'StoryHeader',
@@ -73,7 +73,8 @@ export default {
     Dropdown
   },
   mixins: [
-    Navigation
+    Navigation,
+    IntroductionMixin
   ],
   props: {
     tabsPanel: {
@@ -165,6 +166,24 @@ export default {
         }
         return 'error';
       }
+    },
+    checkOnBoardFlag (key) {
+      const flag = (() => {
+        switch (key) {
+          case 'Edit':
+            return this.C.INTRO_COMMENT_FIND;
+          case 'Estimates':
+            return this.C.INTRO_EDITING;
+          case 'Priorities':
+            return this.C.INTRO_METADATA;
+          case 'Labels':
+            return this.C.INTRO_LABELS;
+          case 'Comments':
+            return this.C.INTRO_COMMENTS;
+        }
+      })();
+
+      return this.checkActiveChapter(flag);
     }
   },
   beforeMount () {

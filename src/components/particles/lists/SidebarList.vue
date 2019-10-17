@@ -1,9 +1,11 @@
 <template>
   <div>
-    <div v-if="title" class="sidebar__title"
-         :class="{'sidebar__title--onboarding': checkActiveChapter(C.INTRO_TEXT)}"
+    <div v-if="title"
+         class="sidebar__title"
          @click="() => $emit('menu')">
-      {{ title }}
+      <span :class="{'onboarding': checkActiveChapter(C.INTRO_TEXT)}">
+        {{ title }}
+      </span>
     </div>
     <v-list v-if="items.length" class="sidebar__list">
       <component :is="reorder ? 'draggable' : 'div'"

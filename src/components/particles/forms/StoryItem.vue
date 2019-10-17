@@ -19,31 +19,36 @@
         delete
       </v-icon>
       <h1>
-        <input
-          class="user-story__editable--bordered-1"
-          v-model="name"
-          @click="click"
-          @input="updateSectionName"
-          @blur="() => updateStory('name')" />
+        <span :class="{'onboarding': checkActiveChapter(C.INTRO_SECTION_TITLE)}">
+          <input
+            class="user-story__editable--bordered-1"
+            v-model="name"
+            @click="click"
+            @input="updateSectionName"
+            @blur="() => updateStory('name')" />
+        </span>
       </h1>
     </div>
     <div class="mt-3 user-story__wysiwyg">
-      <div class="user-story__placeholder text-greyed">
-        {{ !description ? 'Describe this section' : '' }}
-      </div>
-      <div contenteditable
-           class="user-story__editable"
-           v-html="description"
-           @click="click"
-           @input="event => updateSection('description', event)"
-           @blur="() => updateStory('description')">
+      <div :class="{'onboarding': checkActiveChapter(C.INTRO_DESCRIPTION)}">
+        <div class="user-story__placeholder text-greyed">
+          {{ !description ? 'Describe this section' : '' }}
+        </div>
+        <div contenteditable
+             class="user-story__editable"
+             v-html="description"
+             @click="click"
+             @input="event => updateSection('description', event)"
+             @blur="() => updateStory('description')">
+        </div>
       </div>
     </div>
     <div class="sidebar__title mt-4 mb-3 padding-0">
       user stories
     </div>
 
-    <div v-if="stories.length">
+    <div v-if="stories.length"
+         :class="{'onboarding': checkActiveChapter(C.INTRO_USER_STORY)}">
       <wysiwyg
         :sectionId="model.id"
         :stories="stories" />
@@ -67,9 +72,9 @@
 <script>
 import Wysiwyg from '../inputs/Wysiwyg';
 import CircularLoader from '../../particles/loaders/Circular';
+import IntroductionMixin from '@/mixins/introduction';
 
-import { mapState } from 'vuex';
-import { mapGetters } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 
 export default {
   name: 'StoryItem',
@@ -77,6 +82,9 @@ export default {
     Wysiwyg,
     CircularLoader
   },
+  mixins: [
+    IntroductionMixin
+  ],
   props: {
     model: {
       type: [Object, undefined],
