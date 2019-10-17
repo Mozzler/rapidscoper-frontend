@@ -2,6 +2,9 @@
   <v-form class="signup-with-email" @keyup.native.enter="submit">
     <v-layout row wrap>
       <v-flex xs12 class="signup-input">
+        <div class="text-field__label">
+          Email
+        </div>
         <v-text-field
           :key="`${action}-email`"
           name="email"
@@ -14,6 +17,9 @@
         ></v-text-field>
       </v-flex>
       <v-flex xs12 class="signup-input">
+        <div class="text-field__label">
+          Password
+        </div>
         <v-text-field
           :key="`${action}-password`"
           name="password"
@@ -26,7 +32,7 @@
           solo
         ></v-text-field>
       </v-flex>
-      <v-flex xs12>
+      <v-flex xs12 class="mt-4">
         <v-btn class="btn-rapid primary submit-btn mt-5px"
                block large
                @click="submit"
@@ -52,15 +58,21 @@ export default {
       type: String,
       default: 'Sign Up',
       required: true
+    },
+    email: {
+      type: String,
+      default: null
     }
   },
-  data: () => ({
-    user: {
-      email: null,
-      password: null
-    },
-    processing: false
-  }),
+  data () {
+    return {
+      user: {
+        email: this.email,
+        password: null
+      },
+      processing: false
+    };
+  },
   computed: {
     action () {
       return this.type === 'Sign Up' ? 'signup' : 'login';
