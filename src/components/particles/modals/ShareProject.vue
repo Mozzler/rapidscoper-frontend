@@ -58,14 +58,14 @@
             </div>
             <template v-else>
               <div
-                v-if="!invited.length"
+                v-if="!members.length"
                 class="text-sm-center text-greyed">
                 There are no invited users yet
               </div>
               <div v-else>
                 <v-layout
                   class="mb-3"
-                  v-for="user in invited"
+                  v-for="user in members"
                   :key="user.id"
                   row fill-height align-center justify-space-between>
                   <v-flex shrink class="invited__flex">
@@ -80,10 +80,10 @@
                     <dropdown
                       :list="roles"
                       :selected="user.role"
-                      @update="value => updateRole(value, user.id)" />
+                      @update="value => updateRole(value, user.id, user.entity)" />
                     <v-icon
                       class="ml-3"
-                      @click="() => removeInvite(user.id)"
+                      @click="() => removeInvite(user.id, user.entity)"
                     >delete</v-icon>
                   </v-flex>
                 </v-layout>
@@ -148,7 +148,7 @@ export default {
       processing: false,
       updating: false,
       collections: [
-        'userInfo', 'invite'
+        'userInfo', 'invite', 'userProject'
       ]
     };
   },
@@ -167,7 +167,7 @@ export default {
       'periods'
     ]),
     members () {
-      return this.invited(this.params);
+      return this.invited(this.params, 'project');
     },
     roles () {
       return this.allowedRoles(this.params, 'project');
@@ -191,9 +191,9 @@ export default {
     }
   },
   methods: {
-    removeInvite (id) {
+    removeInvite (id, entity) {
       const data = {
-        entity: 'invite',
+        entity: entity,
         id: id
       };
 
@@ -254,11 +254,11 @@ export default {
       await this.$store.dispatch('projectVersion/update', payload);
       this.updating = false;
     },
-    async updateRole (role, id) {
+    async updateRole (role, id, entity) {
       this.updating = true;
 
       this.$store.commit('entity/update', {
-        entity: 'invite',
+        entity: entity,
         data: {
           id: id,
           role: role.type
@@ -266,7 +266,7 @@ export default {
       });
 
       await this.$store.dispatch('entity/update', {
-        entity: 'invite',
+        entity: entity,
         data: {
           role: role.type
         },

@@ -133,7 +133,7 @@ export default {
       return this.$route.params.name;
     },
     userTeam () {
-      return this.invited(this.teamId);
+      return this.invited(this.teamId, 'team');
     },
     roles () {
       return this.allowedRoles(this.teamId, 'team');

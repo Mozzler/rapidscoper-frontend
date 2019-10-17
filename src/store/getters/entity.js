@@ -87,17 +87,18 @@ export default {
     };
   },
   invited (state, getters, rootState) {
-    return id => {
+    return (id, entityType) => {
+      const entity = uppercased(entityType);
       const detect = detectRelatedUsers(state.userInfo.items, rootState.system.roles);
 
       const filtered = {
         invites: _.filter(state.invite.items, item => item.entityId === id && item.status === 'active'),
-        userTeam: _.filter(state.userTeam.items, item => item.teamId === id)
+        [`user${entity}`]: _.filter(state[`user${entity}`].items, item => item[`${entityType}Id`] === id)
       };
 
       return _.sortBy([
         ...detect(filtered.invites, 'invite'),
-        ...detect(filtered.userTeam, 'user-team')
+        ...detect(filtered[`user${entity}`], `user-${entityType}`)
       ], 'email');
     };
   },
