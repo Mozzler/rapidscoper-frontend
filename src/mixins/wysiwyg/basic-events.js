@@ -20,10 +20,6 @@ export default {
 
         if (dictionary && dictionary.description) {
           const hint = document.getElementById(`description-container-${id}`);
-          const phraseRect = target.getBoundingClientRect();
-          const wysiwygRect = document.getElementById(`wysiwyg-${id}`)
-            .getBoundingClientRect();
-
           this.description = {
             id: id,
             text: dictionary.description
@@ -32,13 +28,7 @@ export default {
           this.$nextTick();
           hint.innerHTML = this.description.text;
 
-          const x = (phraseRect.width - hint.clientWidth) / 2;
-          const y = hint.clientHeight;
-          _.assign(hint.style, {
-            position: 'absolute',
-            top: `${phraseRect.top - wysiwygRect.top - 5 - y}px`,
-            left: `${phraseRect.left - wysiwygRect.left + x}px`
-          });
+          this.calculateXY(hint, target, id);
         }
       }
     },
