@@ -257,6 +257,9 @@ export default {
     }
   },
   watch: {
+    tab () {
+      this.hintEditor = null;
+    },
     stories: {
       deep: true,
       handler () {

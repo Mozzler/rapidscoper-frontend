@@ -61,7 +61,7 @@ export default {
     keydownEvent ($event) {
       this.event = $event;
 
-      if (this.isEditable()) {
+      if (this.isEditable() || $event.key === 'Escape') {
         return;
       }
 
@@ -86,10 +86,13 @@ export default {
         }
 
         story.placeholder = story.markup + story.tail;
-        c
       }
     },
     async keyupEvent ($event) {
+      if ($event.key === 'Escape') {
+        return;
+      }
+
       this.event = $event;
       this.setSiblings();
 
