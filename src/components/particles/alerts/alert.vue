@@ -6,7 +6,7 @@
     <v-layout align-end justify-end row fill-height
               class="mt-3"
               v-if="btnShow">
-      <div class="text-reference"> Skip </div>
+      <div class="text-reference" @click="hide"> Skip </div>
       <div class="text-reference ml-3" @click="nextIntroChapter"> Next </div>
     </v-layout>
   </div>
