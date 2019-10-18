@@ -214,7 +214,7 @@ export default {
         return this.setCommentData();
       }
 
-      const hint = document.getElementById(`comment-${id}`);
+      const hint = document.getElementById(`comment-hint-${id}`);
       const markup = this.getCommentedMarkup(range, id);
 
       this.calculateXY(hint, range, id);

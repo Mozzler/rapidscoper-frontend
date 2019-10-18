@@ -104,7 +104,7 @@
             class="word-break-word">
             <div class="user-story__wysiwyg" :id="`wysiwyg-${item.id}`">
               <comment
-                :id="`comment-${ item.id }`"
+                :id="`comment-hint-${ item.id }`"
                 :visible="comment.state === item.id" />
               <div class="comment-dialog"
                 :class="{'comment-dialog--invisible': description.id !== item.id}"

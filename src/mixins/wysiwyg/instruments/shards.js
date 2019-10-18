@@ -36,7 +36,7 @@ export default {
         .split(/(\[\/?commentId=.*?])/g);
     },
     stick (originalMarkup, updatedMarkup) {
-      const m1 = this.simplify(originalMarkup);
+      const m1 = this.simplify(originalMarkup.replace(/ contenteditable="false"/g, ''));
       const m2 = this.simplify(updatedMarkup);
 
       let resulted = '';
@@ -44,11 +44,14 @@ export default {
       while (m1.length && m2.length) {
         if (i > 20) {
           break;
-        } i++;
+        }
         resulted = this.findShard(m1, m2, resulted);
+        i++;
       }
 
-      return resulted;
+      //console.log(resulted, "\n\n", updatedMarkup);
+
+      return updatedMarkup;
     }
   }
 };
