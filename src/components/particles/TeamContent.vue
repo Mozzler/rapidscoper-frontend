@@ -29,14 +29,13 @@
 </template>
 
 <script>
-import Navigation from '@/mixins/navigation';
-
 import TabProjects from '@/components/particles/tabs/Projects';
 import TabUsers from '@/components/particles/tabs/Users';
 import TabBilling from '@/components/particles/tabs/Billing';
 import TabAdvanced from '@/components/particles/tabs/Advanced';
-
 import DashboardActionBtn from './buttons/DashboardActionButton';
+
+import Navigation from '@/mixins/navigation';
 
 export default {
   name: 'TeamContent',
@@ -52,7 +51,7 @@ export default {
   },
   data () {
     return {
-      tabs: ['Projects', 'Users', /*'Billing', 'Advanced'*/],
+      tabs: ['Projects', 'Users' /*'Billing', 'Advanced'*/],
       activeTab: 'Projects',
 
       modals: {

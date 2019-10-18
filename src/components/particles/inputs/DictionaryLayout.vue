@@ -30,7 +30,7 @@
                         v-for="word in section.list"
                         :key="word.id"
                         :class="{
-                          'user-story--active m-0': focused === word.id
+                          'user-story--active': focused === word.id
                         }">
                 <v-flex shrink v-if="!word.storyCount">
                   <div @click="() => remove(word.id)">
@@ -42,7 +42,6 @@
                        v-html="word.name"
                        :contenteditable="true"
                        :ref="`name-${word.id}`"
-                       @input="$event => input($event, word.id, 'name')"
                        @focus="() => focus(word.id, 'name')"
                        @keydown.enter.exact.prevent="() => update(word.id, 'name', true)"
                        @blur="() => update(word.id, 'name')"
@@ -56,7 +55,6 @@
                        v-html="word.description"
                        :contenteditable="true"
                        :ref="`description-${word.id}`"
-                       @input="$event => input($event, word.id, 'description')"
                        @focus="() => focus(word.id, 'description')"
                        @keydown.enter.exact.prevent="() => update(word.id, 'description', true)"
                        @blur="() => update(word.id, 'description')"
@@ -120,17 +118,6 @@ export default {
           basic = ['Actor', 'Others'].includes(section.name);
 
       return (!section.list.length || !used) && !basic;
-    },
-    input ($event, id, property) {
-      this.$store.commit('entity/update', {
-        entity: 'dictionary',
-        data: {
-          id: id,
-          [property]: $event.target.innerText
-        }
-      });
-
-      this.collapseToEnd();
     },
     updateSectionName (id, $event) {
       this.$store.commit('dictionary/update', {

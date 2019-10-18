@@ -1,9 +1,18 @@
 import Home from '@/components/pages/dashboard/Home';
 import UserStories from '@/components/pages/user-stories/UserStories';
 import Dictionary from '@/components/pages/user-stories/Dictionary';
+import AccountSettings from '@/components/pages/dashboard/AccountSettings';
 import SharedProject from '@/components/pages/dashboard/SharedProject';
 
 export default [
+  {
+    path: '/account-settings',
+    name: 'account-settings',
+    component: AccountSettings,
+    meta: {
+      requiresAuth: true
+    }
+  },
   {
     path: '/projects/:projectId/:storyType/:section/:tab',
     name: 'stories',

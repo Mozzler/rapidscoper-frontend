@@ -5,27 +5,27 @@
 
         <div class="modal-header">
           <h1>
-            Incorrect data
+            Verify Email
           </h1>
-            <v-btn icon class="modal-close-btn" @click="closeModal">
-              <v-icon>close</v-icon>
-            </v-btn>
+          <v-btn icon class="modal-close-btn" @click="closeModal">
+            <v-icon>close</v-icon>
+          </v-btn>
         </div>
 
         <v-card-text class="mt-4 padding-0">
           <v-layout row wrap>
             <v-flex xs12>
-              There is no card with the specified data.
+              To verify your email we will send you a verification email.
             </v-flex>
           </v-layout>
           <v-flex shrink mt-4 :class="{
             'text-xs-right': !isMobileDevice,
             'text-xs-center': isMobileDevice }">
             <v-btn class="btn-rapid mr-3" large outline @click="closeModal">
-              Cancel
+              Close
             </v-btn>
             <v-btn class="btn-rapid primary" large @click="closeModal">
-              Try again
+              Send Email
             </v-btn>
           </v-flex>
         </v-card-text>
@@ -39,7 +39,7 @@ import Navigation from '@/mixins/navigation';
 import ModalMixin from '@/mixins/modal';
 
 export default {
-  name: 'incorrect-data',
+  name: 'verify-email',
   mixins: [
     Navigation,
     ModalMixin

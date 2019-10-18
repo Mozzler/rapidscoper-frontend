@@ -1,11 +1,17 @@
+const CUSTOM_PHRASE = 'user-story__editable--other';
+
 export default {
   methods: {
+    getFocusedEl () {
+      const id = this.list[this.focused].id;
+      return document.getElementById(id);
+    },
     getStaticText (increments = 1) {
-      const nodes = this.$refs[this.list[this.focused].id][0].childNodes;
+      const nodes = this.getFocusedEl().children;
       nodes.filter = [].filter;
 
       const classes = nodes
-        .filter(item => item.nodeName !== '#text')
+        .filter(item => !item.className.includes(CUSTOM_PHRASE))
         .map(item => {
           let value = item.className.replace(/user-story__editable--| text-greyed/gi, '');
 
@@ -26,18 +32,33 @@ export default {
       return index + increments < templates.length ? templates[index + increments] : null;
     },
     getSpanList (joined = true) {
-      const spans = this.list[this.focused].markup
-        .split('</span>&nbsp;')
-        .filter(item => item.includes('<span'))
-        .map(item => `${item}</span>`);
+      const children = this.getFocusedEl().children;
+      const spans = _.chain(children)
+        .filter(child => !child.className.includes(CUSTOM_PHRASE))
+        .map(child => child.outerHTML)
+        .value();
 
       return !joined ? spans : spans.join('&nbsp;');
     },
-    getTail () {
-      return this.list[this.focused].markup
-        .split('</span>')
-        .filter(item => !item.includes('<span'))
-        .join('');
+    getTail (cleared = false) {
+      /*const nodes = this.getFocusedEl().childNodes;
+      const index = _.findLastIndex(nodes, node => {
+        return node.nodeType === 1 && !node.className.includes(CUSTOM_PHRASE);
+      });*/
+      const nodes = this.list[this.focused].markup.split('</span>');
+      const index = _.findLastIndex(nodes, node => node.includes('<span'));
+
+      let tail = _.filter(nodes, (node, i) => i > index).join('');
+
+      if (cleared) {
+        let splitted = tail.split(/&nbsp;|\u00a0/);
+        if (!_.last(splitted)) {
+          splitted.splice(-1, 1);
+        }
+        tail = splitted.join('&nbsp;');
+      }
+
+      return tail;
     },
     getStaticTextByType (str = this.next) {
       return str
@@ -52,17 +73,32 @@ export default {
         return null;
       }
 
+      let el = null;
       let current = node.parentNode.className.replace(' text-greyed', '');
 
       if (current === 'user-story__editable') {
-        current = node.previousSibling.className;
+        el = node.previousSibling;
+        current = el.className;
 
-        if (current.includes('beginning')) {
+        if (!current) {
+          el = node;
+          current = node.className;
+        }
+        if (current && current.includes(CUSTOM_PHRASE)) {
+          el = el.previousElementSibling;
+          current = el.className;
+        }
+        if (current && current.includes('beginning')) {
           this.list[this.focused].markup = this.list[this.focused].markup.replace(/ text-greyed/, '');
         }
       }
 
-      return this.classToType(current);
+      let cls = this.classToType(current);
+      if (cls === 'static-text') {
+        cls += `="${el.innerHTML}"`;
+      }
+
+      return cls;
     },
     getNextSpan () {
       const parts = this.list[this.focused].template
@@ -73,16 +109,11 @@ export default {
         return 'beginning';
       }
 
-      if (this.previous === 'static-text') {
-        const html = document.getSelection().focusNode.previousSibling.innerHTML.trim();
-        this.previous += `="${html}"`;
-      }
-
       const next = parts.indexOf(this.previous) + 1;
       return parts[next];
     },
-    getLineParticles () {
-      return [this.getSpanList(), this.getTail()];
+    getLineParticles (clearedTail = false) {
+      return [this.getSpanList(), this.getTail(clearedTail)];
     },
     getElementToFocus (item, level, index, path = 'this') {
       const length = item.list.length;

@@ -33,5 +33,12 @@ export default {
     name: 'Full access',
     type: 'full'
   }],
-  freeze: false
+  freeze: false,
+  loaded: {
+    project: false,
+    userTeam: false,
+    userProject: false,
+    userInfo: false,
+    invite: false
+  }
 };

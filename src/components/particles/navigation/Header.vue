@@ -2,7 +2,9 @@
   <v-container class="header-container">
     <v-layout row wrap align-center>
       <v-flex xs6>
+        <router-link to="/">
           <logo-rapid-scope class="app-logo"/>
+        </router-link>
       </v-flex>
       <v-flex xs6>
         <template v-if="!isAuthenticated">
@@ -25,7 +27,7 @@
 
 <script>
 import LogoRapidScope from '../icons/LogoRapidScope';
-import { mapState } from "vuex";
+import { mapState } from 'vuex';
 
 export default {
   name: 'AppHeader',

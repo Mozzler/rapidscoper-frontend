@@ -43,7 +43,7 @@ export default [
     }
   },
   {
-    path: '/accept-invite/:inviteId',
+    path: '/accept-invite/:inviteId/:inviteCode',
     name: 'accept-invite',
     component: AuthFlow
   },

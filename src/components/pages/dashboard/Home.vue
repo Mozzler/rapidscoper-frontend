@@ -13,6 +13,8 @@ import Sidebar from '../../particles/navigation/Sidebar';
 import DashboardContent from '../../particles/DashboardContent';
 import TeamContent from '../../particles/TeamContent';
 
+import { mapMutations } from 'vuex';
+
 export default {
   name: 'Home',
   components: {
@@ -20,8 +22,35 @@ export default {
     TeamContent,
     Sidebar
   },
+  data () {
+    return {
+      collections: [
+        'project',
+        'userTeam',
+        'userProject',
+        'userInfo',
+        'invite'
+      ]
+    };
+  },
   beforeMount () {
-    this.connect('project', 'entity/setList');
+    this.connectCollections();
+  },
+  methods: {
+    ...mapMutations('system', [
+      'setLoadedState'
+    ]),
+    handleLoaded (key) {
+      this.setLoadedState({ key, value: true });
+    },
+    connectCollections () {
+      _.each(this.collections, key => {
+        this.setLoadedState({ key, value: false });
+      });
+      _.each(this.collections, key => {
+        this.connect(key, 'entity/setList', null, true, () => this.handleLoaded(key));
+      });
+    }
   },
   computed: {
     route () {

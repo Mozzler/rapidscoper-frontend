@@ -1,26 +1,40 @@
 import editor from '../shared/editor';
 
+const NULL_STUB = '--- // ---';
+
 function uppercased (str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
+function detectRelatedUsers (info, roles) {
+  return (collection, entity) => _.map(collection, item => {
+    let data = {
+      id: item.id,
+      status: item.status,
+      email: item.email,
+      entity: entity,
+      userId: item.userId,
+      name: NULL_STUB,
+      role: _.find(roles, role => item && item.role === role.type),
+      avatarUrl: require('@/assets/img/default-user.png')
+    };
+
+    const user = _.find(info, inf => inf.email === item.email ||
+      (item.userId && inf.userId === item.userId));
+    if (user) {
+      data.userId = user.userId;
+      data.email = user.email;
+      data.avatarUrl = user.avatarUrl;
+      data.name = (user.userId && user.name) || data.name;
+    }
+
+    return data;
+  });
+}
+
 export default {
-  items (state, getters, rootState, rootGetters) {
+  items (state) {
     return entity => {
-      const items = state[entity].items;
-      const roles = rootState.system.roles;
-      let data = [];
-
-      if (entity === 'userTeam') {
-        _.each(items, item => {
-          const value = { ...item };
-          value.role = _.find(roles, item => item.type === value.role);
-          data.push(value);
-        });
-      } else {
-        data = state[entity].items;
-      }
-
       return state[entity].items;
     };
   },
@@ -73,28 +87,27 @@ export default {
     };
   },
   invited (state, getters, rootState) {
-    const invite = rootState.entity.invite.items;
-    const info = rootState.entity.userInfo.items;
-    const roles = rootState.system.roles;
+    return (id, entityType) => {
+      const entity = uppercased(entityType);
+      const detect = detectRelatedUsers(state.userInfo.items, rootState.system.roles);
 
-    return _.map(invite, item => {
-      let data = {
-        id: item.id,
-        role: _.find(roles, role => item.role === role.type),
-        email: item.email
+      const filtered = {
+        invites: _.filter(state.invite.items, item => item.entityId === id && item.status === 'active'),
+        [`user${entity}`]: _.filter(state[`user${entity}`].items, item => item[`${entityType}Id`] === id)
       };
 
-      let user = _.find(info, inf => inf.email === item.email);
-      data.avatarUrl = user && user.avatarUrl ? user.avatarUrl :
-        require('@/assets/img/default-user.png');
-
-      return data;
-    });
+      return _.sortBy([
+        ...detect(filtered.invites, 'invite'),
+        ...detect(filtered[`user${entity}`], `user-${entityType}`)
+      ], 'email');
+    };
   },
   link (state, getters, rootState, rootGetters) {
     return projectId => {
       let items = rootState.entity.projectShare.items;
-      let shared = _.find(items, item => item.projectId === projectId);
+      let shared = _.find(items, item =>
+        item.projectId === projectId &&
+        item.status === 'active');
 
       let roles = rootState.system.roles;
       let periods = rootGetters['system/periods'];
@@ -117,17 +130,17 @@ export default {
     };
   },
   allowedRoles (state, getters, rootState) {
-    return (projectId) => {
-      const collection = rootState.entity.userProject.items;
+    return (entityId, entityType = 'project') => {
+      const entity = `user${entityType.charAt(0).toUpperCase()}${entityType.slice(1)}`;
+      const collection = rootState.entity[entity].items;
       const user = rootState.auth.user;
       const roles = rootState.system.roles;
 
       const authorizedUser = _.find(collection, item => {
-        return (item.userId === user.user_id && projectId === item.projectId);
+        return (item.userId === user.user_id && entityId === item[`${entityType}Id`]);
       });
 
       let acceptableIndex = authorizedUser ? _.findIndex(roles, { type: authorizedUser.role }) : -1;
-
       return _.filter(roles, (role, index) => index >= acceptableIndex);
     };
   }

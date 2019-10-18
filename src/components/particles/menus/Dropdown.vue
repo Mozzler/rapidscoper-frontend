@@ -17,6 +17,7 @@
       </template>
       <v-btn icon v-on="on"
          class="dropdown-action"
+         v-if="selectBtn"
         :disabled="processing">
         <v-icon>arrow_drop_down</v-icon>
       </v-btn>
@@ -72,6 +73,10 @@ export default {
     processing: {
       type: Boolean,
       default: false
+    },
+    selectBtn: {
+      type: Boolean,
+      default: true
     }
   },
   data () {

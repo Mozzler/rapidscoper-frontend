@@ -3,9 +3,10 @@ function uppercased (str) {
 }
 
 function actualEntity (str) {
-  return str.split('-')
-            .map((s, index) => index === 0 ? s : uppercased(s))
-            .join('');
+  return str
+    .split('-')
+    .map((s, index) => index === 0 ? s : uppercased(s))
+    .join('');
 }
 
 export default {
@@ -55,6 +56,7 @@ export default {
     return response.data;
   },
   async read (store, payload) {
+    payload.params = { 'per-page': 500 };
     const response = await this._vm.$axios.get(`${payload.entity}`, payload);
     store.commit('setList', {
       data: response.data,
@@ -71,6 +73,10 @@ export default {
       data: response.data.item,
       entity: actualEntity(payload.entity)
     });
+    return response.data;
+  },
+  async details (store, payload) {
+    const response = await this._vm.$axios.get('invite/detail', { params: payload });
     return response.data;
   }
 };

@@ -1,4 +1,4 @@
-import ErrorHandlerMixin from "@/mixins/error-handler";
+import ErrorHandlerMixin from '@/mixins/error-handler';
 
 export default {
   mixins: [

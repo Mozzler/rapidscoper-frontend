@@ -22,6 +22,7 @@
             :click-handler="resolveComment"
             :icon-visible="comment.status === 'active'"
             :text="comment.status === 'active' ? 'Resolve' : 'Unresolve'"
+            :onboarding="true"
             icon-if="check_circle_outline"
             icon-else="check_circle"
           />

@@ -30,13 +30,14 @@ export default {
           };
 
           this.$nextTick();
+          hint.innerHTML = this.description.text;
 
-          const level = _.find(this.list, item => item.id === id).level;
-
+          const x = (phraseRect.width - hint.clientWidth) / 2;
+          const y = hint.clientHeight;
           _.assign(hint.style, {
             position: 'absolute',
-            top: `${phraseRect.top - wysiwygRect.top - 30}px`,
-            left: `${phraseRect.left - wysiwygRect.left + level * 4}px`
+            top: `${phraseRect.top - wysiwygRect.top - 5 - y}px`,
+            left: `${phraseRect.left - wysiwygRect.left + x}px`
           });
         }
       }
@@ -48,6 +49,7 @@ export default {
       };
     },
     focusEvent (item, index) {
+      this.otherBuffer = '';
       this.focused = index;
       this.etalon = { ...item };
       this.$store.commit('story/setActiveStoryOnTab', this.etalon.id);
@@ -55,14 +57,6 @@ export default {
       if (this.etalon.id !== this.hintEditor) {
         this.hintEditor = null;
       }
-    },
-    printable (keycode) {
-      return (keycode > 47 && keycode < 58) || // number keys
-      (keycode === 32 || keycode === 13) || // spacebar & return key(s)
-      (keycode > 64 && keycode < 91) || // letter keys
-      (keycode > 95 && keycode < 112) || // numpad keys
-      (keycode > 185 && keycode < 193) || // ;=,-./` (in order)
-      (keycode > 218 && keycode < 223);
     },
     keydownEvent ($event) {
       this.event = $event;
@@ -85,8 +79,10 @@ export default {
 
         if (key === ' ') {
           story.markup += '&nbsp;';
+          this.checkOtherDictionary('&nbsp;', true);
         } else {
           story.markup += key;
+          this.checkOtherDictionary(key);
         }
 
         story.placeholder = story.markup + story.tail;
@@ -113,26 +109,6 @@ export default {
         entity: 'story',
         data: this.list[this.focused]
       });
-    },
-    isEditable () {
-      if (!this.event) {
-        return false;
-      }
-
-      const focused = this.event.view.getSelection().focusNode;
-      const node = focused ? this.event.view.getSelection().focusNode.parentElement : null;
-      const other = this.list[this.focused] && this.list[this.focused].type === 'other';
-
-      if (other) {
-        this.list[this.focused].placeholder = this.event.target.innerHTML;
-      }
-
-      return (node && node.className.includes('custom')) || other;
-    },
-    completeBeginning (shortcut) {
-      const item = _.find(this.adjustedConstruction, item => item.shortcut === shortcut);
-      this.hintEditor = this.list[this.focused].id;
-      this.hintComplete('beginning', item, this.list[this.focused].id);
     }
   }
 };

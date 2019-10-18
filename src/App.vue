@@ -19,6 +19,7 @@
       <write-comment />
       <invite-assigned-users />
       <delete-section-modal />
+      <verify-email-modal />
     </template>
   </v-app>
 </template>
@@ -40,6 +41,7 @@ import SettingsModal from '@/components/particles/modals/Settings';
 import WriteComment from '@/components/particles/modals/WriteComment';
 import InviteAssignedUsers from '@/components/particles/modals/InviteAssignedUsers';
 import DeleteSectionModal from '@/components/particles/modals/DeleteSection';
+import VerifyEmailModal from '@/components/particles/modals/VerifyEmail';
 
 export default {
   name: 'app',
@@ -57,7 +59,8 @@ export default {
     ShareProjectModal,
     SettingsModal,
     InviteAssignedUsers,
-    DeleteSectionModal
+    DeleteSectionModal,
+    VerifyEmailModal
   },
   mixins: [
     ResizeMixin
@@ -83,7 +86,6 @@ export default {
     initConnect () {
       if (this.authenticated && this.user.access_token) {
         this.connect('user', 'auth/update');
-        this.connect('userInfo', 'entity/setList');
         this.connect('team', 'entity/setList');
       }
     }

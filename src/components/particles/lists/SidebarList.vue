@@ -1,8 +1,11 @@
 <template>
   <div>
-    <div v-if="title" class="sidebar__title"
+    <div v-if="title"
+         class="sidebar__title"
          @click="() => $emit('menu')">
-      {{ title }}
+      <span :class="{'onboarding': checkActiveChapter(C.INTRO_TEXT)}">
+        {{ title }}
+      </span>
     </div>
     <v-list v-if="items.length" class="sidebar__list">
       <component :is="reorder ? 'draggable' : 'div'"
@@ -41,13 +44,14 @@
 </template>
 
 <script>
-
-import Navigation from '@/mixins/navigation';
+import NavigationMixin from '@/mixins/navigation';
+import IntroductionMixin from '@/mixins/introduction';
 
 export default {
   name: 'SidebarList',
   mixins: [
-    Navigation
+    NavigationMixin,
+    IntroductionMixin
   ],
   props: {
     title: {

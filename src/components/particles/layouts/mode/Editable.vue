@@ -11,6 +11,11 @@
       :clickable="true"
       :source="commentGetter"
       v-else />
+    <alert
+      :message="introductionMessage"
+      :btn-show="true"
+      :clickable="false"
+      cls="rapid-alert--info"/>
   </div>
 </template>
 
@@ -25,6 +30,7 @@ import { mapGetters } from 'vuex';
 
 export default {
   name: 'Editable',
+
   provide: {
     'entity': 'entity'
   },
@@ -42,7 +48,8 @@ export default {
   },
   computed: {
     ...mapGetters({
-      commentGetter: 'entity/comments'
+      commentGetter: 'entity/comments',
+      introductionMessage: 'introduction/introductionMessage'
     }),
     isCommentTab () {
       return this.$route.params.tab === 'comments';

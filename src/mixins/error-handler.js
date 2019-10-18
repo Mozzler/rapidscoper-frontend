@@ -4,6 +4,9 @@ export default {
       translator: {
         'uniqueNameTeamAndVersion': ['Team Title', 'Project Name'],
         'uniqueUrlStub': 'Team name'
+      },
+      errorVocabulary: {
+        'uniqueUsername': 'Email is already in use.'
       }
     };
   },
@@ -14,7 +17,7 @@ export default {
         const error = response.data[0];
 
         if (msgOnly) {
-          return error.message;
+          return this.errorVocabulary[error.field] || error.message;
         }
 
         const field = this.translate(error.field);

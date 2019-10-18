@@ -72,6 +72,8 @@
   border-radius: 2px;
   cursor: pointer;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  max-width: 200px;
+  max-height: 200px;
 
   svg {
     fill: $white;
@@ -91,7 +93,7 @@
 }
 
 .comment-dialog--invisible {
-  display: none;
+  z-index: -1;
 }
 
 .comment__divider {

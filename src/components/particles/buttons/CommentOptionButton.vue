@@ -1,5 +1,6 @@
 <template>
-  <v-btn icon v-if="visible" @click="clickHandler">
+  <v-btn icon v-if="visible" @click="clickHandler"
+         :class="{'onboarding--without-pm': onboarding && checkActiveChapter(C.INTRO_COMMENT_ACTIONS)}">
     <v-tooltip bottom content-class="comment__tooltip">
       <template v-slot:activator="{ on }">
         <div v-on="on">
@@ -13,8 +14,13 @@
 </template>
 
 <script>
+import IntroductionMixin from '@/mixins/introduction';
+
 export default {
   name: 'CommentOptionButton',
+  mixins: [
+    IntroductionMixin
+  ],
   props: {
     visible: {
       type: Boolean,
@@ -36,6 +42,10 @@ export default {
     },
     text: {
       type: String
+    },
+    onboarding: {
+      type: Boolean,
+      default: false
     }
   }
 };

@@ -8,30 +8,33 @@
     class="dashboard-table">
 
     <template v-slot:items="props">
-      <tr @click="props.expanded = !props.expanded">
+      <tr @click="props.expanded = !props.expanded"
+        :class="{'bg--light-primary': props.item.entity === 'invite'}">
         <td>
           <v-layout align-center justify-start row fill-height>
             <v-flex shrink mr-3>
-              <img :src="props.item.userData.avatarUrl" />
+              <img :src="props.item.avatarUrl" />
             </v-flex>
             <v-flex grow>
-              {{ props.item.userData.firstName }} {{ props.item.userData.lastName }}
+              {{ props.item.name }}
             </v-flex>
           </v-layout>
         </td>
-        <td>{{ props.item.userData.email }}</td>
+        <td>{{ props.item.email }}</td>
         <td>
           <v-flex>
             <div class="position-relative white-space-nowrap">
               <dropdown
                 :list="roles"
+                :selectBtn="hasPermission(props.item.role)"
                 :selected="props.item.role"
-                @update="value => updateRole(value, props.item.id)" />
+                @update="value => updateRole(value, props.item.id, props.item.entity)" />
             </div>
           </v-flex>
         </td>
         <td class="text-xs-left">
-          <v-btn icon :disabled="props.item.role !== 'manager'">
+          <v-btn icon :disabled="userRoleType !== 'manager'"
+                 @click="() => deleteMember(props.item.id, props.item.entity)">
             <v-icon>delete</v-icon>
           </v-btn>
         </td>
@@ -42,16 +45,19 @@
 </template>
 
 <script>
-import AbsoluteMenu from '../menus/AbsoluteMenu';
 import Dropdown from '../menus/Dropdown';
-import { mapState, mapGetters } from 'vuex';
+import ConnectIndicatorMixin from '@/mixins/connect-indicator';
+
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex';
 
 export default {
   name: 'Users',
   components: {
-    Dropdown,
-    AbsoluteMenu
+    Dropdown
   },
+  mixins: [
+    ConnectIndicatorMixin
+  ],
   data () {
     return {
       processing: true,
@@ -76,34 +82,27 @@ export default {
           sortable: false,
           value: 'actions'
         }
+      ],
+      collections: [
+        'userInfo', 'userTeam', 'invite'
       ]
     };
   },
   methods: {
-    fetchData () {
-      const filter = {
-        $or: [
-          { 'fullDocument.teamId': {$in: [this.$route.params.name] } }
-        ],
-        params: [
-          {
-            $lookup: {
-              from: 'userInfo',
-              localField: 'userId',
-              foreignField: 'userId',
-              as: 'userData'
-            }
-          },
-          { $unwind: '$userData' }
-        ]
-      };
-
-      this.$store.commit('entity/resetList', 'userTeam');
-      this.connect('userTeam', 'entity/setList', filter);
+    ...mapMutations('entity', {
+      'updateM': 'update',
+      'deleteM': 'delete'
+    }),
+    ...mapActions('entity', {
+      'updateA': 'update',
+      'deleteA': 'delete'
+    }),
+    hasPermission (role) {
+      return !!_.find(this.roles, item => item.type === role.type);
     },
-    updateRole (role, id) {
+    updateRole (role, id, entity) {
       const data = {
-        entity: 'user-team',
+        entity: entity,
         cancelCommit: true,
         params: {
           id: id
@@ -113,33 +112,38 @@ export default {
           role: role.type
         }
       };
-      this.$store.commit('entity/update', data);
-      this.$store.dispatch('entity/update', data);
+
+      this.updateM(data);
+      this.updateA(data);
+    },
+    deleteMember (id, entity) {
+      this.deleteM({ id, entity });
+      this.deleteA({ id, entity });
     }
   },
-  beforeMount () {
-    this.fetchData();
-  },
-  beforeDestroy () {
-    this.$store.commit('entity/resetList', 'userTeam');
-  },
   computed: {
-    ...mapState('system', [
-      'roles'
+    ...mapState('auth', [
+      'user'
     ]),
     ...mapGetters({
-      items: 'entity/items'
+      allowedRoles: 'entity/allowedRoles',
+      invited: 'entity/invited'
     }),
     teamId () {
       return this.$route.params.name;
     },
     userTeam () {
-      return this.items('userTeam');
-    }
-  },
-  watch: {
-    teamId () {
-      this.fetchData();
+      return this.invited(this.teamId, 'team');
+    },
+    roles () {
+      return this.allowedRoles(this.teamId, 'team');
+    },
+    userRoleType () {
+      const found = _.find(this.userTeam, item => item.userId === this.user.user_id);
+      return found && found.role ? found.role.type : null;
+    },
+    permission () {
+      return !!_.find(this.roles, item => item.type === this.userRoleType);
     }
   }
 };

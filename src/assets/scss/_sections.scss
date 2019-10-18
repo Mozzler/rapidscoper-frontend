@@ -46,7 +46,6 @@
 .user-story--active {
   background-color: $light-grey-1;
 
-
   &:focus {
     outline: none;
   }
@@ -103,6 +102,7 @@
 
 .user-story__wysiwyg {
   width: 100%;
+  position: relative;
 }
 
 .user-story__action-group {
@@ -139,6 +139,10 @@
 
   span[contenteditable] {
     outline: none;
+  }
+
+  i {
+    font-style: normal;
   }
 }
 
@@ -205,6 +209,10 @@
 
 .user-story__editable--requirement {
   @include set-bottom-border($light-blue);
+}
+
+.user-story__editable--other {
+  @include set-bottom-border($light-primary);
 }
 
 .user-story__editable--field {
@@ -302,4 +310,19 @@
   position: absolute;
   height: 20px;
   z-index: 0;
+}
+
+.account-settings__section {
+  position: relative;
+  max-width: 368px;
+  margin: 0 auto;
+}
+
+.account-settings__section-form {
+  padding: 27px 0 16px;
+}
+
+.bottom-border {
+  border-bottom: 1px solid $light-grey !important;
+  border-radius: 4px;
 }

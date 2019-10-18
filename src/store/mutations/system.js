@@ -13,5 +13,8 @@ export default {
   },
   freeze (state, data) {
     state.freeze = data;
+  },
+  setLoadedState (state, data) {
+    state.loaded[data.key] = data.value;
   }
 };

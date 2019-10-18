@@ -48,6 +48,10 @@ a {
   margin-top: 40px;
 }
 
+.text-size--12 {
+  font-size: 12px;
+}
+
 .text-size--16-normal {
   font-size: 16px;
 }
@@ -119,4 +123,8 @@ a {
 .commented-text {
   background-color: $light-yellow;
   color: $black;
+}
+
+.bg--light-primary {
+  background-color: $light-primary;
 }

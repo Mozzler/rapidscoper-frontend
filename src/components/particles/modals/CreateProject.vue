@@ -29,6 +29,18 @@
         </div>
 
         <v-card-text class="mt-3 padding-0">
+          <v-layout row wrap v-if="this.route.section !== 'team'">
+            <v-flex xs6>
+              <div>Team</div>
+            </v-flex>
+            <v-flex xs6 text-xs-right>
+              <dropdown :list="teams"
+                        :selected="data.team"
+                        :disabled="processing"
+                        @update="value => data.team = value" />
+            </v-flex>
+          </v-layout>
+
           <v-flex shrink class="mt-40" :class="{
             'text-xs-right': !isMobileDevice,
             'text-xs-center': isMobileDevice }">
@@ -75,15 +87,17 @@ export default {
   computed: {
     teams () {
       return this.$store.getters['entity/items']('team');
+    },
+    route () {
+      return this.$route.params;
     }
   },
   methods: {
     initData () {
-      const params = this.$route.params;
       let team = _.first(this.teams);
 
-      if (params.section === 'team') {
-        team = _.find(this.teams, item => item.id === params.name);
+      if (this.route.section === 'team') {
+        team = _.find(this.teams, item => item.id === this.route.name);
       }
 
       this.data = {

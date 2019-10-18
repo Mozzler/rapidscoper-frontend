@@ -8,7 +8,7 @@
           cls="loader-shadow--without-padding transparent"
           :size="50"
           :width="5"
-          :visible="processing || updating"
+          :visible="processing || updating || initialization"
         />
 
         <div class="modal-header">
@@ -58,30 +58,32 @@
             </div>
             <template v-else>
               <div
-                v-if="!invited.length"
+                v-if="!members.length"
                 class="text-sm-center text-greyed">
                 There are no invited users yet
               </div>
               <div v-else>
                 <v-layout
                   class="mb-3"
-                  v-for="user in invited"
+                  v-for="user in members"
                   :key="user.id"
                   row fill-height align-center justify-space-between>
                   <v-flex shrink class="invited__flex">
                     <img
                       class="invited__img"
                       :src="user.avatarUrl" />
-                    <div>{{ user.email }}</div>
+                    <div :class="{ 'text-primary': user.entity === 'user-team' }">
+                      {{ user.email }}
+                    </div>
                   </v-flex>
                   <v-flex shrink class="invited__flex">
                     <dropdown
                       :list="roles"
                       :selected="user.role"
-                      @update="value => updateRole(value, user.id)" />
+                      @update="value => updateRole(value, user.id, user.entity)" />
                     <v-icon
                       class="ml-3"
-                      @click="() => removeInvite(user.id)"
+                      @click="() => removeInvite(user.id, user.entity)"
                     >delete</v-icon>
                   </v-flex>
                 </v-layout>
@@ -123,6 +125,7 @@ import InviteGroup from '@/components/particles/inputs/InviteGroup';
 import LinkDisabledIcon from '../icons/LinkDisabled';
 import LinkIcon from '../icons/Link';
 import CircularLoader from '../../particles/loaders/Circular';
+import ConnectIndicatorMixin from '@/mixins/connect-indicator';
 
 import { mapState, mapGetters } from 'vuex';
 
@@ -136,13 +139,17 @@ export default {
     LinkIcon
   },
   mixins: [
-    ModalMixin
+    ModalMixin,
+    ConnectIndicatorMixin
   ],
   data () {
     return {
       permission: null,
       processing: false,
-      updating: false
+      updating: false,
+      collections: [
+        'userInfo', 'invite', 'userProject'
+      ]
     };
   },
   computed: {
@@ -159,6 +166,9 @@ export default {
     ...mapGetters('system', [
       'periods'
     ]),
+    members () {
+      return this.invited(this.params, 'project');
+    },
     roles () {
       return this.allowedRoles(this.params, 'project');
     },
@@ -181,9 +191,9 @@ export default {
     }
   },
   methods: {
-    removeInvite (id) {
+    removeInvite (id, entity) {
       const data = {
-        entity: 'invite',
+        entity: entity,
         id: id
       };
 
@@ -195,17 +205,6 @@ export default {
         entity: entity,
         params: params
       };
-    },
-    async fetchData () {
-      this.processing = true;
-
-      const invited = this.getParams('invite', {
-        entityType: 'project',
-        entityId: this.params
-      });
-
-      await this.$store.dispatch('entity/read', invited);
-      this.processing = false;
     },
     copy () {
       this.$refs.link.value = `${document.location.origin}/project/${this.shared.id}/${this.shared.token}`;
@@ -255,11 +254,11 @@ export default {
       await this.$store.dispatch('projectVersion/update', payload);
       this.updating = false;
     },
-    async updateRole (role, id) {
+    async updateRole (role, id, entity) {
       this.updating = true;
 
       this.$store.commit('entity/update', {
-        entity: 'invite',
+        entity: entity,
         data: {
           id: id,
           role: role.type
@@ -267,7 +266,7 @@ export default {
       });
 
       await this.$store.dispatch('entity/update', {
-        entity: 'invite',
+        entity: entity,
         data: {
           role: role.type
         },
@@ -287,13 +286,6 @@ export default {
       });
 
       this.updating = false;
-    }
-  },
-  watch: {
-    dialog () {
-      if (this.dialog) {
-        this.fetchData();
-      }
     }
   }
 };

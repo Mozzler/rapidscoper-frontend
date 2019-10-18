@@ -6,3 +6,11 @@
   margin: 21px 0 28px 0;
   line-height: 17px;
 }
+
+.account-settings {
+  padding: 48px 156px;
+
+  @media (max-width: 767px) {
+    padding: 25px 10px 8px
+  }
+}

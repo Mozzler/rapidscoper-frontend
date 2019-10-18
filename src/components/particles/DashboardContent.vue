@@ -21,6 +21,7 @@
 <script>
 import DashboardActionBtn from '@/components/particles/buttons/DashboardActionButton';
 import UserDataTable from '@/components/particles/tables/UserDataTable';
+import ConnectIndicatorMixin from '@/mixins/connect-indicator';
 
 export default {
   name: 'DashboardContent',
@@ -28,9 +29,15 @@ export default {
     DashboardActionBtn,
     UserDataTable
   },
+  mixins: [
+    ConnectIndicatorMixin
+  ],
   data () {
     return {
-      showCreateProjectModal: false
+      showCreateProjectModal: false,
+      collections: [
+        'userInfo', 'userProject', 'project'
+      ]
     };
   },
   methods: {

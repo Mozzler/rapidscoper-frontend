@@ -44,7 +44,7 @@
             :disabled="processing"/>
           <error-message :msg="errors.first('phone')" />
         </v-flex>
-        <v-flex xs12 class="signup-input" v-if="teammate">
+        <v-flex xs12 class="signup-input" v-if="!teammate">
           <v-text-field
             key="team name"
             name="Team name"
@@ -91,23 +91,25 @@ export default {
     team: {
       name: null
     },
+    teammate: null,
     processing: false
   }),
   computed: {
     ...mapGetters('entity', [
       'items'
     ]),
+    userTeam () {
+      return this.items('userTeam');
+    },
     authorized () {
       return this.$store.state.auth.user;
-    },
-    teammate () {
-      const userTeam = this.items('userTeam');
-      return _.find(userTeam, item => item.userId === this.authorized.user_id);
     }
   },
   beforeMount () {
     this.connect('user', 'auth/update');
-    this.connect('userTeam', 'entity/setList');
+    this.connect('userTeam', 'entity/setList', null, true, () => {
+      this.teammate = _.find(this.userTeam, item => item.userId === this.authorized.user_id);
+    });
   },
   methods: {
     handleImage ($event) {

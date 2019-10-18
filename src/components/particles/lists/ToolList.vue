@@ -1,24 +1,26 @@
 <template>
   <div class="tool-block__text"
     :class="{'tool-block__text--minified': minified}">
-    <div v-for="(item, index) in list"
-         :class="`${labelCls} label--${type(item)} ${outline(index)}`"
-         :key="index"
-         @click="() => $emit('update', index)"
-         class="mr-3">
-      <template v-if="shortcutted">
-        <span class="text-underlined">{{ item.charAt(0) }}</span>
-        <span>{{ item.slice(1) }}</span>
-      </template>
-      <template v-else>
-        <span>{{ item }}</span>
-      </template>
-    </div>
+    <div :class="{'onboarding': checkActiveChapter(C.INTRO_PRIORITY)}">
+      <div v-for="(item, index) in list"
+           :class="`${labelCls} label--${type(item)} ${outline(index)} ${(index !== list.length - 1 && margin) ? 'mr-3' : ''}`"
+           :key="index"
+           @click="() => $emit('update', index)">
+        <template v-if="shortcutted">
+          <span class="text-underlined">{{ item.charAt(0) }}</span>
+          <span>{{ item.slice(1) }}</span>
+        </template>
+        <template v-else>
+          <span>{{ item }}</span>
+        </template>
+      </div>
+  </div>
   </div>
 </template>
 
 <script>
-import Tools from '@/mixins/story';
+import ToolsMixin from '@/mixins/story';
+import IntroductionMixin from '@/mixins/introduction';
 
 export default {
   name: 'ToolList',
@@ -38,10 +40,16 @@ export default {
     shortcutted: {
       default: true
     },
-    minified: false
+    minified: {
+      default: false
+    },
+    margin: {
+      default: false
+    }
   },
   mixins: [
-    Tools
+    ToolsMixin,
+    IntroductionMixin
   ]
 };
 </script>

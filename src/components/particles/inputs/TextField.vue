@@ -1,0 +1,130 @@
+<template>
+  <v-layout column class="account-settings__section-form bottom-border">
+    <v-flex xs12 class="signup-input"
+            v-for="field in list"
+            :key="field.name">
+      <v-layout align-center justify-space-between row fill-height
+        class="text-size--12">
+        <div class="text-field__label" v-if="field.name">
+          {{ field.name }}
+        </div>
+        <div class="text-reference" v-if="extra && extra[field.prop]"
+          @click="() => $emit('secondary-click', field.prop)">
+          {{ extra[field.prop] }}
+        </div>
+      </v-layout>
+      <v-text-field
+        v-validate="field.rules"
+        v-model="items[field.prop]"
+        :key="field.name"
+        :name="field.prop"
+        :placeholder="field.placeholder"
+        :type="field.type"
+        :ref="field.prop"
+        :error-messages="errors.first(field.prop)"
+        :disabled="processing"
+        solo
+      ></v-text-field>
+    </v-flex>
+  </v-layout>
+</template>
+
+<script>
+export default {
+  name: 'TextField',
+  props: {
+    model: {
+      type: Object,
+      default: null
+    },
+    processing: {
+      type: Boolean,
+      default: false
+    },
+    extra: {
+      type: Object,
+      default: null
+    }
+  },
+  data () {
+    return {
+      items: this.model,
+      list: null
+    };
+  },
+  beforeMount () {
+    this.generateFields();
+  },
+  methods: {
+    generateFields () {
+      this.list = _.map(this.model, (item, key) => {
+        return {
+          prop: key,
+          name: this.getNameByKey(key),
+          type: this.getTypeByKey(key),
+          rules: this.getRulesByKey(key),
+          placeholder: this.getPlaceholderByKey(key)
+        };
+      });
+    },
+    getPlaceholderByKey (key) {
+      switch (key) {
+        case 'password':
+          return 'New password';
+        case 'password_confirmation':
+          return 'Re-enter password';
+        default:
+          return this.getNameByKey(key);
+      }
+    },
+    getNameByKey (key) {
+      return key
+        .split(/(?=[A-Z])|_/)
+        .map((item, index) => this.capitalized(item, index === 0))
+        .join(' ');
+    },
+    getTypeByKey (key) {
+      switch (key) {
+        case 'firstName':
+        case 'lastName':
+          return 'text';
+        case 'email':
+          return 'email';
+        case 'password':
+        case 'password_confirmation':
+          return 'password';
+        default:
+          return 'text';
+      }
+    },
+    getRulesByKey (key) {
+      switch (key) {
+        case 'firstName':
+        case 'lastName':
+          return 'required|min:2|max:100';
+        case 'email':
+          return 'required|email|min:6|max:255';
+        case 'password':
+          return { required: !!this.items.password_confirmation, min: 6, max: 255 };
+        case 'password_confirmation':
+          return { required: !!this.items.password, min: 6, max: 255, confirmed: 'password' };
+        default:
+          return '';
+      }
+    },
+    capitalized (str, flag = false) {
+      return flag ?
+        str.charAt(0).toUpperCase() + str.slice(1) :
+        str.toLowerCase();
+    }
+  },
+  watch: {
+    items: {
+      deep: true,
+      handler () {
+        this.$emit('update', this.items);
+      }
+    }
+  }
+};
+</script>
