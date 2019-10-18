@@ -49,8 +49,8 @@
           </div>
           <v-btn class="btn-rapid primary ml-2"
                  large
-                 :disabled="disabled"
-                 @click="showModal">
+                 :disabled="initialization"
+                 @click="share">
             Share
           </v-btn>
         </v-layout>
@@ -85,16 +85,12 @@ export default {
     heading: {
       default: '',
       required: false
-    },
-    disabled: {
-      default: false,
-      type: Boolean
     }
   },
   data () {
     return {
       collections: [
-        'userInfo', 'invite', 'project'
+        'userInfo', 'invite', 'project', 'userProject'
       ],
       tabs: [
         'Edit', 'Estimates', 'Priorities', 'Labels', 'Comments'
@@ -150,8 +146,11 @@ export default {
     toDashboard () {
       this.$router.push('/');
     },
-    showModal () {
-      this.$emit('share-project');
+    share () {
+      this.$store.commit('story/setActiveStoryOnTab', null);
+      this.$nextTick(() => {
+        this.$root.$emit('share-project', this.currentProjectId);
+      });
     },
     async submit (value, id) {
       if (value === this.currentProject.name) {

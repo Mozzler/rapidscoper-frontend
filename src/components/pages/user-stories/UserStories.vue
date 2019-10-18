@@ -10,8 +10,7 @@
 
     <story-header
       :class="{'noprint': storyViewMode}"
-      :disabled="processing"
-      @share-project="share"/>
+      :disabled="processing" />
 
     <editable-mode-layout
       v-if="!storyViewMode"
@@ -48,15 +47,14 @@ export default {
     return {
       processing: true,
       collections: [
-        'userInfo', 'invite', 'project'
+        'userInfo', 'invite', 'project', 'userProject'
       ],
       loaded: {
         dictionary: false,
         section: false,
         story: false,
         projectShare: false,
-        comment: false,
-        userProject: false
+        comment: false
       }
     };
   },
@@ -78,17 +76,11 @@ export default {
     ...mapMutations('system', [
       'setLoadedState'
     ]),
-    share () {
-      this.$store.commit('story/setActiveStoryOnTab', null);
-      this.$nextTick(() => {
-        this.$root.$emit('share-project', this.$route.params.projectId);
-      });
-    },
     fetchData () {
       this.processing = true;
       this.resetData();
 
-      _.each(['userProject', 'comment', 'dictionary', 'projectShare'], key => {
+      _.each(['comment', 'dictionary', 'projectShare'], key => {
         this.connect(key, 'entity/setList', this.filter, true, () => {
           this.loaded[key] = true;
           this.setLoadedState({ key, value: true });
