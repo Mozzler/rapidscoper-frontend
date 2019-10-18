@@ -16,6 +16,9 @@
              'cursor-pointer': (tab !== 'edit' && tab !== 'estimate'),
              'cursor-default': tab === 'estimate',
              'user-story--draggable': replacement === item.id,
+             'onboarding': (index === 0 &&
+                (checkActiveChapter(C.INTRO_YOUR_FIRST_USER_STORY) ||
+                 checkActiveChapter(C.INTRO_COMPLETE_STORY_CREATION)))
            }"
            :tabindex="0"
            :key="`tool-panel-${item.id}`"
@@ -36,6 +39,7 @@
             :list="toolDictionary"
             :minified="true"
             :margin="true"
+            :activator="checkActiveChapter(C.INTRO_PRIORITY) || checkActiveChapter(C.INTRO_LABELS_DESCRIPTION)"
             :label-cls="'tool-block__label--minified'"
             @update="id => submitTool(id)"/>
         </div>
@@ -115,9 +119,7 @@
                    tabindex="0"
                    :contenteditable="processing !== item.id"
                    :disabled="processing === item.id"
-                   :class="{
-                    'text-dark-grey': !item.type && beginning(item.markup)
-                   }"
+                   :class="{'text-dark-grey': !item.type && beginning(item.markup)}"
                    :ref="item.id"
                    :id="item.id"
                    @paste="ctrlV"

@@ -21,6 +21,7 @@ export default {
     [C.INTRO_COMPLETE_STORY_CREATION]: 'To complete the user story creation and go to create the next press “Enter”. To attach story details, click “Ctrl+Enter”. Complete the history and attach details.',
     [C.INTRO_DETAILS]: 'The details may be different: substory, requirement or acceptance criteria. Create a requirement.',
     [C.INTRO_REQUIREMENT_TYPE]: 'Now choose a requirement type.',
+    [C.INTRO_YOUR_FIRST_USER_STORY]: 'Let’s create your first user story. It\'s incredibly easy in a Rapid Scoper. Just put your cursor in a new line.',
     [C.INTRO_SELECTED_TYPE_NAME]: 'Specify a name for the selected type.',
     [C.INTRO_MANAGE_METADATA]: 'Perfect! You can manage the user story metadata with the keyboard. Press “#” on your keyboard.',
     [C.INTRO_METADATA_HEADING]: 'As you can see, the headings in the metadata box have changed, now the first letter is underlined. These are tips for shortcuts. Try pressing "P" to change the priority.',
@@ -32,6 +33,6 @@ export default {
     [C.INTRO_STORY_WITHOUT]: 'To create user story without user type field, simply press “Backspace” and start writting what you need.',
     [C.INTRO_FINISH]: 'These are all the basic things you need to know to get started in Rapid Scoper. Enjoy it!'
   },
-  activeChapter: C.INTRO_WELCOME,
+  activeChapter: C.INTRO_PRIORITY_LETTERS,
   show: true
 };

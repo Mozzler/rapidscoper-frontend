@@ -1,7 +1,7 @@
 <template>
   <div class="tool-block__text"
     :class="{'tool-block__text--minified': minified}">
-    <div :class="{'onboarding': checkActiveChapter(C.INTRO_PRIORITY)}">
+    <div :class="{'onboarding': activator}">
       <div v-for="(item, index) in list"
            :class="`${labelCls} label--${type(item)} ${outline(index)} ${(index !== list.length - 1 && margin) ? 'mr-3' : ''}`"
            :key="index"
@@ -44,6 +44,10 @@ export default {
       default: false
     },
     margin: {
+      default: false
+    },
+    activator: {
+      type: Boolean,
       default: false
     }
   },

@@ -7,7 +7,12 @@
        @keydown.up.exact="$event => navigate($event, -1)"
        @keydown.down.exact="$event => navigate($event, 1)"
        @keydown.delete.exact="del"
-       class="hint">
+       class="hint"
+       :class="{'onboarding--without-pm':
+          (checkActiveChapter(C.INTRO_TYPE_OF_USER) && chapter === 'actor') ||
+          (checkActiveChapter(C.INTRO_DETAILS) && chapter === 'beginning') ||
+          (checkActiveChapter(C.INTRO_REQUIREMENT_TYPE) && chapter === 'requirement') ||
+          (checkActiveChapter(C.INTRO_SELECTED_TYPE_NAME) && chapter === 'field')}">
     <div class="hint__item"
          v-for="(item, index) in items"
          :key="index"
@@ -27,8 +32,13 @@
 </template>
 
 <script>
+import IntroductionMixin from '@/mixins/introduction';
+
 export default {
   name: 'Hint',
+  mixins: [
+    IntroductionMixin
+  ],
   data () {
     return {
       visible: false,

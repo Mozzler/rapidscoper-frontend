@@ -26,12 +26,15 @@
 
     <div class="tool-block">
       <div class="section__title">
-        Priority
+        <span :class="{'onboarding': checkActiveChapter(C.INTRO_METADATA_HEADING)}">
+          Priority
+        </span>
       </div>
       <tool-list
         :active="story.priority"
         :list="priorities"
         :shortcutted="false"
+        :activator="checkActiveChapter(C.INTRO_PRIORITY_LETTERS)"
         @update="id => updateToolId(id, story, 'priority')" />
     </div>
 
@@ -74,6 +77,7 @@ import LabelList from '../lists/LabelList';
 
 import ProcessingMixin from '@/mixins/wysiwyg/instruments/processing';
 import EstimateMixin from '@/mixins/wysiwyg/instruments/estimate';
+import IntroductionMixin from '@/mixins/introduction';
 
 import { mapGetters } from 'vuex';
 
@@ -81,7 +85,8 @@ export default {
   name: 'ToolSection',
   mixins: [
     ProcessingMixin,
-    EstimateMixin
+    EstimateMixin,
+    IntroductionMixin
   ],
   components: {
     ToolList,
