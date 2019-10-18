@@ -144,7 +144,13 @@ export default {
       });
     },
     toDashboard () {
-      this.$router.push('/');
+      this.$router.push({
+        name: 'dashboard',
+        params: {
+          section: 'team',
+          name: this.currentProject.teamId
+        }
+      });
     },
     share () {
       this.$store.commit('story/setActiveStoryOnTab', null);

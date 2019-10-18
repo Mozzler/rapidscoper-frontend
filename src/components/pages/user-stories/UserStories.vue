@@ -65,7 +65,6 @@ export default {
     ...mapState({
       storyViewMode: state => state.system.storyViewMode
     }),
-    ...mapState('system', [ 'comment' ]),
     ...mapGetters('entity', [
       'items'
     ]),
@@ -81,12 +80,11 @@ export default {
       'setLoadedState',
       'setComment'
     ]),
-    documentClick () {
-      this.$nextTick(() => {
-        if (!document.getSelection().toString().length) {
-          this.setComment({ state: null });
-        }
-      });
+    async documentClick () {
+      await this.$nextTick();
+      if (!document.getSelection().toString().length) {
+        this.setComment({ state: null });
+      }
     },
     fetchData () {
       this.processing = true;
