@@ -49,6 +49,7 @@
           </div>
           <v-btn class="btn-rapid primary ml-2"
                  large
+                 :disabled="disabled"
                  @click="showModal">
             Share
           </v-btn>
@@ -84,10 +85,17 @@ export default {
     heading: {
       default: '',
       required: false
+    },
+    disabled: {
+      default: false,
+      type: Boolean
     }
   },
   data () {
     return {
+      collections: [
+        'userInfo', 'invite', 'project'
+      ],
       tabs: [
         'Edit', 'Estimates', 'Priorities', 'Labels', 'Comments'
       ],
@@ -116,10 +124,11 @@ export default {
     }
   },
   methods: {
-    ...mapMutations({
-      setSidebarFilter: 'system/setSidebarFilter',
-      setStoryViewMode: 'system/setStoryViewMode'
-    }),
+    ...mapMutations('system', [
+      'setSidebarFilter',
+      'setStoryViewMode',
+      'setLoadedState'
+    ]),
     setTab (item) {
       let params = this.$route.params;
       params.tab = item.toLowerCase();
@@ -187,7 +196,9 @@ export default {
     }
   },
   beforeMount () {
-    this.connect('project', 'entity/setList', false);
+    _.each(this.collections, key => {
+      this.connect(key, 'entity/setList', null, true, () => this.setLoadedState({ key, value: true }));
+    });
   },
   watch: {
     tab () {

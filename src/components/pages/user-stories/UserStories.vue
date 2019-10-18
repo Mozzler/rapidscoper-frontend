@@ -10,6 +10,7 @@
 
     <story-header
       :class="{'noprint': storyViewMode}"
+      :disabled="processing"
       @share-project="share"/>
 
     <editable-mode-layout
@@ -26,9 +27,10 @@ import StoryHeader from '../../particles/navigation/StoryHeader';
 import EditableModeLayout from '../../particles/layouts/mode/Editable';
 import ReadableModeLayout from '../../particles/layouts/mode/Readable';
 import CircularLoader from '../../particles/loaders/Circular';
+import IntroductionMixin from '@/mixins/introduction';
 
 import LayoutMixin from '@/mixins/layout';
-import { mapState } from 'vuex';
+import { mapState, mapGetters, mapMutations } from 'vuex';
 
 export default {
   name: 'UserStories',
@@ -39,11 +41,15 @@ export default {
     CircularLoader
   },
   mixins: [
-    LayoutMixin
+    LayoutMixin,
+    IntroductionMixin
   ],
   data () {
     return {
       processing: true,
+      collections: [
+        'userInfo', 'invite', 'project'
+      ],
       loaded: {
         dictionary: false,
         section: false,
@@ -58,14 +64,20 @@ export default {
     ...mapState({
       storyViewMode: state => state.system.storyViewMode
     }),
+    ...mapGetters('entity', [
+      'items'
+    ]),
     sections () {
-      return this.$store.getters['entity/items']('section');
+      return this.items('section');
     },
     storyType () {
       return _.first(this.$route.params.storyType.split('-'));
     }
   },
   methods: {
+    ...mapMutations('system', [
+      'setLoadedState'
+    ]),
     share () {
       this.$store.commit('story/setActiveStoryOnTab', null);
       this.$nextTick(() => {
@@ -76,17 +88,11 @@ export default {
       this.processing = true;
       this.resetData();
 
-      this.connect('comment', 'entity/setList', this.filter, true, () => {
-        this.loaded['comment'] = true;
-      });
-      this.connect('dictionary', 'entity/setList', this.filter, true, () => {
-        this.loaded['dictionary'] = true;
-      });
-      this.connect('projectShare', 'entity/setList', this.filter, true, () => {
-        this.loaded['projectShare'] = true;
-      });
-      this.connect('userProject', 'entity/setList', this.filter, true, () => {
-        this.loaded['userProject'] = true;
+      _.each(['userProject', 'comment', 'dictionary', 'projectShare'], key => {
+        this.connect(key, 'entity/setList', this.filter, true, () => {
+          this.loaded[key] = true;
+          this.setLoadedState({ key, value: true });
+        });
       });
 
       let filter = JSON.parse(JSON.stringify(this.filter));
@@ -162,7 +168,7 @@ export default {
       deep: true,
       handler () {
         let loaded = _.every(this.loaded, item => item);
-        if (loaded) {
+        if (loaded && !this.initialization) {
           this.processing = false;
           this.fixRoute();
         }
