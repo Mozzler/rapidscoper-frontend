@@ -2,7 +2,7 @@
   <div
     ref="comment"
     class="comment-dialog"
-    :class="{'comment-dialog--invisible': !show}"
+    :class="{'comment-dialog--invisible': !visible}"
     @click="writeComment">
     <comment-icon class="mr-1"/>
     <span>Comment</span>
@@ -18,10 +18,11 @@ export default {
   components: {
     CommentIcon
   },
-  data () {
-    return {
-      show: false
-    };
+  props: {
+    visible: {
+      default: false,
+      type: Boolean
+    }
   },
   computed: {
     ...mapState('system', [
@@ -48,8 +49,6 @@ export default {
           this.show = false;
           return;
         }
-
-        this.show = this.comment.state;
 
         await this.$nextTick();
 

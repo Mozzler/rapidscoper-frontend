@@ -86,7 +86,7 @@ export default {
         }
 
         story.placeholder = story.markup + story.tail;
-        this.collapseToEnd();
+        c
       }
     },
     async keyupEvent ($event) {

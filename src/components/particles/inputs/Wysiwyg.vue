@@ -103,6 +103,8 @@
           <v-flex text-xs-left align-center row fill-height
             class="word-break-word">
             <div class="user-story__wysiwyg" :id="`wysiwyg-${item.id}`">
+              <comment
+                :visible="comment.state === item.id" />
               <div class="comment-dialog"
                 :class="{'comment-dialog--invisible': description.id !== item.id}"
                 :id="`description-container-${ item.id }`">
@@ -163,8 +165,9 @@
 <script>
 import ToolList from '../lists/ToolList';
 import LabelList from '../lists/LabelList';
-import CircularLoader from '../../particles/loaders/Circular';
-import PriorityIndicator from '../../particles/indicators/Priority';
+import CircularLoader from '../loaders/Circular';
+import PriorityIndicator from '../indicators/Priority';
+import Comment from '../hint/Comment';
 
 import WysiwygMixin from '@/mixins/wysiwyg';
 import IntroductionMixin from '@/mixins/introduction';
@@ -180,7 +183,8 @@ export default {
     PriorityIndicator,
     LabelList,
     CommentIcon,
-    DragIcon
+    DragIcon,
+    Comment
   },
   mixins: [
     WysiwygMixin,
