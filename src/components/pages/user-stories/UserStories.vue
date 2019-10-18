@@ -58,10 +58,14 @@ export default {
       }
     };
   },
+  beforeMount () {
+    document.addEventListener('click', this.documentClick);
+  },
   computed: {
     ...mapState({
       storyViewMode: state => state.system.storyViewMode
     }),
+    ...mapState('system', [ 'comment' ]),
     ...mapGetters('entity', [
       'items'
     ]),
@@ -74,8 +78,16 @@ export default {
   },
   methods: {
     ...mapMutations('system', [
-      'setLoadedState'
+      'setLoadedState',
+      'setComment'
     ]),
+    documentClick () {
+      this.$nextTick(() => {
+        if (!document.getSelection().toString().length) {
+          this.setComment({ state: null });
+        }
+      });
+    },
     fetchData () {
       this.processing = true;
       this.resetData();
@@ -145,6 +157,7 @@ export default {
     }
   },
   beforeDestroy () {
+    document.removeEventListener('click', this.documentClick);
     this.resetData();
   },
   watch: {
