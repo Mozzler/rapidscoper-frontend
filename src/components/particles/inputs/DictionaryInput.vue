@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="!stub" class="user-story__placeholder text-greyed">
+    <div v-if="!stub && placeholder" class="user-story__placeholder text-greyed">
       {{ placeholder }}
     </div>
     <div v-html="word" ref="field"

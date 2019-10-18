@@ -42,7 +42,6 @@
                     :model="word.name"
                     :ref="`name-${word.id}`"
                     cls="user-story__editable user-story__editable--after text-bold"
-                    placeholder="Term"
                     @focus="() => focus(word.id, 'name')"
                     @enter="(value) => update(word.id, value, 'name', true)"
                     @blur="(value) => update(word.id, value, 'name')" />
