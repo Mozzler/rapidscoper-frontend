@@ -6,10 +6,12 @@ export default {
   },
   methods: {
     declineCustomPhrase () {
-      return !this.next || !this.next.includes('custom-') || !this.otherBuffer;
+      const nonSpaced = this.otherBuffer.replace(/&nbsp;|\u00a0| |/g, '');
+      return !this.next || !this.next.includes('custom-') || !nonSpaced || nonSpaced === 'I';
     },
     printCustomPhrase (corrected = this.withoutSpace()) {
       if (this.declineCustomPhrase()) {
+        this.otherBuffer = '';
         return;
       }
 
