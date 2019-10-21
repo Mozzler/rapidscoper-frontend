@@ -13,6 +13,9 @@ export default {
       }
 
       if (_.isObject(left) && _.isObject(right)) {
+        if (left.hasOwnProperty('id') && right.hasOwnProperty('id')) {
+          return left.id === right.id;
+        }
         return left[field] === right[field];
       }
 

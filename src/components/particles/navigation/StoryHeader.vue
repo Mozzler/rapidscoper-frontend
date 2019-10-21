@@ -49,7 +49,8 @@
           </div>
           <v-btn class="btn-rapid primary ml-2"
                  large
-                 @click="showModal">
+                 :disabled="initialization"
+                 @click="share">
             Share
           </v-btn>
         </v-layout>
@@ -88,6 +89,9 @@ export default {
   },
   data () {
     return {
+      collections: [
+        'userInfo', 'invite', 'project', 'userProject'
+      ],
       tabs: [
         'Edit', 'Estimates', 'Priorities', 'Labels', 'Comments'
       ],
@@ -116,10 +120,11 @@ export default {
     }
   },
   methods: {
-    ...mapMutations({
-      setSidebarFilter: 'system/setSidebarFilter',
-      setStoryViewMode: 'system/setStoryViewMode'
-    }),
+    ...mapMutations('system', [
+      'setSidebarFilter',
+      'setStoryViewMode',
+      'setLoadedState'
+    ]),
     setTab (item) {
       let params = this.$route.params;
       params.tab = item.toLowerCase();
@@ -139,10 +144,19 @@ export default {
       });
     },
     toDashboard () {
-      this.$router.push('/');
+      this.$router.push({
+        name: 'dashboard',
+        params: {
+          section: 'team',
+          name: this.currentProject.teamId
+        }
+      });
     },
-    showModal () {
-      this.$emit('share-project');
+    share () {
+      this.$store.commit('story/setActiveStoryOnTab', null);
+      this.$nextTick(() => {
+        this.$root.$emit('share-project', this.currentProjectId);
+      });
     },
     async submit (value, id) {
       if (value === this.currentProject.name) {
@@ -187,7 +201,9 @@ export default {
     }
   },
   beforeMount () {
-    this.connect('project', 'entity/setList', false);
+    _.each(this.collections, key => {
+      this.connect(key, 'entity/setList', null, true, () => this.setLoadedState({ key, value: true }));
+    });
   },
   watch: {
     tab () {

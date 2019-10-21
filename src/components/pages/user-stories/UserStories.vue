@@ -10,7 +10,7 @@
 
     <story-header
       :class="{'noprint': storyViewMode}"
-      @share-project="share"/>
+      :disabled="processing" />
 
     <editable-mode-layout
       v-if="!storyViewMode"
@@ -26,9 +26,10 @@ import StoryHeader from '../../particles/navigation/StoryHeader';
 import EditableModeLayout from '../../particles/layouts/mode/Editable';
 import ReadableModeLayout from '../../particles/layouts/mode/Readable';
 import CircularLoader from '../../particles/loaders/Circular';
+import IntroductionMixin from '@/mixins/introduction';
 
 import LayoutMixin from '@/mixins/layout';
-import { mapState } from 'vuex';
+import { mapState, mapGetters, mapMutations } from 'vuex';
 
 export default {
   name: 'UserStories',
@@ -39,54 +40,61 @@ export default {
     CircularLoader
   },
   mixins: [
-    LayoutMixin
+    LayoutMixin,
+    IntroductionMixin
   ],
   data () {
     return {
       processing: true,
+      collections: [
+        'userInfo', 'invite', 'project', 'userProject'
+      ],
       loaded: {
         dictionary: false,
         section: false,
         story: false,
         projectShare: false,
-        comment: false,
-        userProject: false
+        comment: false
       }
     };
+  },
+  beforeMount () {
+    document.addEventListener('click', this.documentClick);
   },
   computed: {
     ...mapState({
       storyViewMode: state => state.system.storyViewMode
     }),
+    ...mapGetters('entity', [
+      'items'
+    ]),
     sections () {
-      return this.$store.getters['entity/items']('section');
+      return this.items('section');
     },
     storyType () {
       return _.first(this.$route.params.storyType.split('-'));
     }
   },
   methods: {
-    share () {
-      this.$store.commit('story/setActiveStoryOnTab', null);
-      this.$nextTick(() => {
-        this.$root.$emit('share-project', this.$route.params.projectId);
-      });
+    ...mapMutations('system', [
+      'setLoadedState',
+      'setComment'
+    ]),
+    async documentClick () {
+      await this.$nextTick();
+      if (!document.getSelection().toString().length) {
+        this.setComment({ state: null });
+      }
     },
     fetchData () {
       this.processing = true;
       this.resetData();
 
-      this.connect('comment', 'entity/setList', this.filter, true, () => {
-        this.loaded['comment'] = true;
-      });
-      this.connect('dictionary', 'entity/setList', this.filter, true, () => {
-        this.loaded['dictionary'] = true;
-      });
-      this.connect('projectShare', 'entity/setList', this.filter, true, () => {
-        this.loaded['projectShare'] = true;
-      });
-      this.connect('userProject', 'entity/setList', this.filter, true, () => {
-        this.loaded['userProject'] = true;
+      _.each(['comment', 'dictionary', 'projectShare'], key => {
+        this.connect(key, 'entity/setList', this.filter, true, () => {
+          this.loaded[key] = true;
+          this.setLoadedState({ key, value: true });
+        });
       });
 
       let filter = JSON.parse(JSON.stringify(this.filter));
@@ -147,6 +155,7 @@ export default {
     }
   },
   beforeDestroy () {
+    document.removeEventListener('click', this.documentClick);
     this.resetData();
   },
   watch: {
@@ -162,7 +171,7 @@ export default {
       deep: true,
       handler () {
         let loaded = _.every(this.loaded, item => item);
-        if (loaded) {
+        if (loaded && !this.initialization) {
           this.processing = false;
           this.fixRoute();
         }

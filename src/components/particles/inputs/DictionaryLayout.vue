@@ -38,27 +38,23 @@
                   </div>
                 </v-flex>
                 <v-flex shrink>
-                  <div class="user-story__editable user-story__editable--after text-bold"
-                       v-html="word.name"
-                       :contenteditable="true"
-                       :ref="`name-${word.id}`"
-                       @focus="() => focus(word.id, 'name')"
-                       @keydown.enter.exact.prevent="() => update(word.id, 'name', true)"
-                       @blur="() => update(word.id, 'name')"
-                  ></div>
+                  <dictionary-input
+                    :model="word.name"
+                    :ref="`name-${word.id}`"
+                    cls="user-story__editable user-story__editable--after text-bold"
+                    @focus="() => focus(word.id, 'name')"
+                    @enter="(value) => update(word.id, value, 'name', true)"
+                    @blur="(value) => update(word.id, value, 'name')" />
                 </v-flex>
                 <v-flex text-xs-left wrap>
-                  <div class="user-story__placeholder text-greyed">
-                    {{ !word.description  ? 'It is a description of this term' : '' }}
-                  </div>
-                  <div class="user-story__editable word-break-word"
-                       v-html="word.description"
-                       :contenteditable="true"
-                       :ref="`description-${word.id}`"
-                       @focus="() => focus(word.id, 'description')"
-                       @keydown.enter.exact.prevent="() => update(word.id, 'description', true)"
-                       @blur="() => update(word.id, 'description')"
-                  ></div>
+                  <dictionary-input
+                    :model="word.description"
+                    :ref="`description-${word.id}`"
+                    cls="word-break-word"
+                    placeholder="It is a description of this term"
+                    @focus="() => focus(word.id, 'description')"
+                    @enter="(value) => update(word.id, value, 'description', true)"
+                    @blur="(value) => update(word.id, value, 'description')" />
                 </v-flex>
               </v-layout>
             </template>
@@ -75,8 +71,13 @@
 </template>
 
 <script>
+import DictionaryInput from './DictionaryInput';
+
 export default {
   name: 'DictionaryLayout',
+  components: {
+    DictionaryInput
+  },
   data () {
     return {
       processing: false,
@@ -131,27 +132,27 @@ export default {
         this.processing = false;
       });
     },
-    async update (id, property, next = false, input = this.$refs[`${property}-${id}`][0].innerText) {
+    async update (id, value, property, next = false) {
       this.processing = id;
-      await this.submit(id, { [property]: input });
+      await this.submit(id, { [property]: value });
       this.processing = false;
 
       if (!next) {
         return;
       }
 
-      this.$nextTick(() => {
-        if (property === 'name') {
-          this.$refs[`description-${id}`][0].focus();
-        } else {
-          let index = _.findIndex(this.order, item => item === id);
-          let nextId = index + 1 < this.order.length ? this.order[index + 1] : this.order[0];
+      await this.$nextTick();
 
-          this.$refs[`name-${nextId}`][0].focus();
-        }
+      if (property === 'name') {
+        this.$refs[`description-${id}`][0].$refs.field.focus();
+      } else {
+        let index = _.findIndex(this.order, item => item === id);
+        let nextId = index + 1 < this.order.length ? this.order[index + 1] : this.order[0];
 
-        this.collapseToEnd();
-      });
+        this.$refs[`name-${nextId}`][0].$refs.field.focus();
+      }
+
+      this.collapseToEnd();
     },
     submit (id, data) {
       return this.$store.dispatch('entity/update', {
@@ -162,7 +163,7 @@ export default {
         data: data
       });
     },
-    focus (id) {
+    async focus (id) {
       this.focused = id;
     },
     remove (id) {

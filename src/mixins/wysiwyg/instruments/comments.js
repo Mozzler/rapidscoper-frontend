@@ -188,6 +188,20 @@ export default {
 
       return this.stick(originalMarkup, updatedMarkup);
     },
+    calculateXY (hint, target, id) {
+      const phraseRect = target.getBoundingClientRect();
+      const wysiwygRect = document.getElementById(`wysiwyg-${id}`)
+        .getBoundingClientRect();
+
+      const x = (phraseRect.width - hint.clientWidth) / 2;
+      const y = hint.clientHeight;
+
+      _.assign(hint.style, {
+        position: 'absolute',
+        top: `${phraseRect.top - wysiwygRect.top - 5 - y}px`,
+        left: `${phraseRect.left - wysiwygRect.left + x}px`
+      });
+    },
     selectEvent ($event, id) {
       if (this.tab !== 'comments') {
         return;
@@ -200,10 +214,11 @@ export default {
         return this.setCommentData();
       }
 
-      let markup = this.getCommentedMarkup(range, id);
-      let rect = range.getBoundingClientRect();
+      const hint = document.getElementById(`comment-hint-${id}`);
+      const markup = this.getCommentedMarkup(range, id);
 
-      this.setCommentData(id, markup, id, rect.left + 15, rect.top - 30);
+      this.calculateXY(hint, range, id);
+      this.setCommentData(id, markup, id);
     },
     setCommentData (id = null, markup = '', state = null, x = 0, y = 0, parentCommentId = null) {
       const story = _.find(this.list, story => story.id === id);

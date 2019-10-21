@@ -39,6 +39,9 @@ export default {
     userTeam: false,
     userProject: false,
     userInfo: false,
-    invite: false
+    invite: false,
+    comment: false,
+    dictionary: false,
+    projectShare: false
   }
 };

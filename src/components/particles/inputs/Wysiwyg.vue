@@ -16,6 +16,9 @@
              'cursor-pointer': (tab !== 'edit' && tab !== 'estimate'),
              'cursor-default': tab === 'estimate',
              'user-story--draggable': replacement === item.id,
+             'onboarding': (index === 0 &&
+                (checkActiveChapter(C.INTRO_YOUR_FIRST_USER_STORY) ||
+                 checkActiveChapter(C.INTRO_COMPLETE_STORY_CREATION)))
            }"
            :tabindex="0"
            :key="`tool-panel-${item.id}`"
@@ -36,6 +39,7 @@
             :list="toolDictionary"
             :minified="true"
             :margin="true"
+            :activator="checkActiveChapter(C.INTRO_PRIORITY) || checkActiveChapter(C.INTRO_LABELS_DESCRIPTION)"
             :label-cls="'tool-block__label--minified'"
             @update="id => submitTool(id)"/>
         </div>
@@ -99,6 +103,9 @@
           <v-flex text-xs-left align-center row fill-height
             class="word-break-word">
             <div class="user-story__wysiwyg" :id="`wysiwyg-${item.id}`">
+              <comment
+                :id="`comment-hint-${ item.id }`"
+                :visible="comment.state === item.id" />
               <div class="comment-dialog"
                 :class="{'comment-dialog--invisible': description.id !== item.id}"
                 :id="`description-container-${ item.id }`">
@@ -115,9 +122,7 @@
                    tabindex="0"
                    :contenteditable="processing !== item.id"
                    :disabled="processing === item.id"
-                   :class="{
-                    'text-dark-grey': !item.type && beginning(item.markup)
-                   }"
+                   :class="{'text-dark-grey': !item.type && beginning(item.markup)}"
                    :ref="item.id"
                    :id="item.id"
                    @paste="ctrlV"
@@ -161,8 +166,9 @@
 <script>
 import ToolList from '../lists/ToolList';
 import LabelList from '../lists/LabelList';
-import CircularLoader from '../../particles/loaders/Circular';
-import PriorityIndicator from '../../particles/indicators/Priority';
+import CircularLoader from '../loaders/Circular';
+import PriorityIndicator from '../indicators/Priority';
+import Comment from '../hint/Comment';
 
 import WysiwygMixin from '@/mixins/wysiwyg';
 import IntroductionMixin from '@/mixins/introduction';
@@ -178,7 +184,8 @@ export default {
     PriorityIndicator,
     LabelList,
     CommentIcon,
-    DragIcon
+    DragIcon,
+    Comment
   },
   mixins: [
     WysiwygMixin,
@@ -251,6 +258,10 @@ export default {
     }
   },
   watch: {
+    tab () {
+      this.hintEditor = null;
+      this.setComment({ state: null });
+    },
     stories: {
       deep: true,
       handler () {
