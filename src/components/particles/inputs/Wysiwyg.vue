@@ -135,7 +135,6 @@
                    @keydown.esc.exact="() => hintEditor = null"
                    @keydown.tab.exact="fixStaticText"
                    @keydown.delete.exact="remove"
-                   @keydown.186.shift.exact="createSubstory"
                    @keydown.tab.shift.exact="decreaseStoryLevel"
                    @blur="() => updateStory(index)"
                    @mouseover="$event => hoverEvent($event, item.id)"
