@@ -76,8 +76,16 @@ export default {
       let el = null;
       let current = node.parentNode.className.replace(' text-greyed', '');
 
+      if (current === 'user-story__wysiwyg') {
+        const firstChild = _.last(node.children);
+        if (firstChild) {
+          current = firstChild.className;
+          el = firstChild;
+        }
+      }
+
       if (current === 'user-story__editable') {
-        el = node.previousSibling;
+        el = node.previousElementSibling;
         current = el.className;
 
         if (!current) {
