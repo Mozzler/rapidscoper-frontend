@@ -75,8 +75,20 @@ function replaceMarkup (markup, dictionary) {
       const matchedItem = item.match(/>(.*?)(?=<\/)/);
 
       if (matchedItem && dictionaryItem) {
-        const replaceable = item.match(/>(.*?)(?=<\/)/)[1];
-        spans[index] = item.replace(replaceable, dictionaryItem.name);
+        const replaceable = item.match(/data-id="(.*?)">((.*?)(?=<\/))<\/span>/)[2];
+        const cleared = replaceable
+          .split(/(\[\/?commentId=.*?])/g)
+          .filter(item => !item.includes('commentId'))
+          .join('');
+
+        if (cleared !== dictionaryItem.name) {
+          const particles = replaceable
+            .split(/(\[\/?commentId=.*?])/g)
+            .filter(item => item.includes('commentId'))
+            .join('');
+
+          spans[index] = item.replace(replaceable, `${particles}${dictionaryItem.name}`);
+        }
       }
     }
   });
@@ -134,6 +146,9 @@ function stories (storyOrder, stories, comments, dictionary = null, filters = nu
     if (dictionary !== null) {
       const construction = getConstructionByType(basic.type);
       const markup = replaceMarkup(basic.markup, dictionary);
+
+      /*console.error(basic.markup);
+      console.info(markup);*/
 
       _.assign(basic, {
         labels: basic.labels ? basic.labels : [],

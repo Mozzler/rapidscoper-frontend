@@ -136,7 +136,6 @@ export default {
     },
     initAlert (msg = 'Settings updated successfully!', cls = 'rapid-alert--success') {
       this.response = { msg, cls };
-      console.log(this.response);
     }
   },
   beforeDestroy () {
