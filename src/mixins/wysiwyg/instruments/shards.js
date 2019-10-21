@@ -16,17 +16,17 @@ export default {
       return resulted;
     },
     findShard (m1, m2, resulted) {
-      if (m2[0].includes(m1[0])) {
-        return this.checkIntersection(m1, m2, resulted);
-      }
-      if (m1[0].includes(m2[0])) {
-        return this.checkIntersection(m2, m1, resulted);
-      }
       if (m2[0].includes('commentId')) {
         return this.checkCommentId(m2, resulted);
       }
       if (m1[0].includes('commentId')) {
         return this.checkCommentId(m1, resulted);
+      }
+      if (m2[0].includes(m1[0])) {
+        return this.checkIntersection(m1, m2, resulted);
+      }
+      if (m1[0].includes(m2[0])) {
+        return this.checkIntersection(m2, m1, resulted);
       }
     },
     simplify (mp) {
@@ -48,8 +48,6 @@ export default {
         resulted = this.findShard(m1, m2, resulted);
         i++;
       }
-
-      //console.log(resulted, "\n\n", updatedMarkup);
 
       return updatedMarkup;
     }
