@@ -75,7 +75,7 @@ function replaceMarkup (markup, dictionary) {
       const matchedItem = item.match(/>(.*?)(?=<\/)/);
 
       if (matchedItem && dictionaryItem) {
-        const replaceable = item.match(/data-id="(.*?)">((.*?)(?=<\/))<\/span>/)[2];
+        const replaceable = item.match(/data-id=".*?">(.*?)<\/.*?>/)[1];
         const cleared = replaceable
           .split(/(\[\/?commentId=.*?])/g)
           .filter(item => !item.includes('commentId'))
