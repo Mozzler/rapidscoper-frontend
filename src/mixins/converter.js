@@ -33,7 +33,7 @@ export default {
     withoutDots (str) {
       let s = _.isObject(str) ? str.name : str;
 
-      if (s.indexOf('&nbsp;') === 0) {
+      if (s && s.indexOf('&nbsp;') === 0) {
         s = s.slice(6);
       }
 

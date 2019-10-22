@@ -85,8 +85,13 @@ export default {
       }
 
       if (current === 'user-story__editable') {
-        el = node.previousElementSibling;
-        current = el.className;
+        if (node.className && node.className.includes('user-story__editable--custom')) {
+          current = node.className;
+          el = node;
+        } else {
+          el = node.previousElementSibling;
+          current = el.className;
+        }
 
         if (!current) {
           el = node;
