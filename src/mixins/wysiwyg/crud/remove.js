@@ -53,8 +53,6 @@ export default {
         this.removableFlag = true;
         this.$refs[this.list[this.focused].id][0].classList.remove('text-greyed');
       }
-
-      this.collapseToEnd();
     }
   }
 };

@@ -103,6 +103,17 @@ export default {
       this.initDictionary();
       this.initStaticText();
 
+      const focusedNode = document.getSelection().focusNode;
+      if (this.event.key === 'Backspace' &&
+        focusedNode.nodeType === 1 &&
+        focusedNode.className.includes('custom-')) {
+        const children = _.last(focusedNode.children);
+        const range = document.createRange();
+        range.selectNode(children);
+        document.getSelection().removeAllRanges();
+        document.getSelection().addRange(range);
+      }
+
       this.$store.commit('entity/update', {
         entity: 'story',
         data: this.list[this.focused]
