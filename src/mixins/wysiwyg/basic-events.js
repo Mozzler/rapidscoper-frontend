@@ -51,7 +51,7 @@ export default {
     keydownEvent ($event) {
       this.event = $event;
 
-      if ($event.key === 'Escape') {
+      if (this.event.key === 'Escape' || this.event.key === 'Backspace') {
         return;
       }
 
@@ -87,7 +87,7 @@ export default {
       this.setSiblings();
 
       let printable = this.printable($event.which);
-      if (!printable && !this.isEditable()) {
+      if (!printable && !this.isEditable() && this.event.key !== 'Backspace') {
         this.list[this.focused].markup = this.event.target.innerHTML;
         this.collapseToEnd();
       }

@@ -27,25 +27,30 @@ export default {
       this.collapseToEnd();
     },
     removeKeyupEvent ($event) {
-      this.list[this.focused].markup = $event.target.innerHTML;
-      this.list[this.focused].placeholder = this.list[this.focused].markup;
+      if (this.removableFlag) {
+        this.list[this.focused].markup = $event.target.innerHTML;
+        this.list[this.focused].placeholder = this.list[this.focused].markup;
+      }
+
       this.removableFlag = false;
     },
-    async removeKeydownEvent ($event) {
+    removeKeydownEvent ($event) {
       this.event = $event;
 
       if (document.getSelection().toString()) {
+        console.log('keydown-1');
         document.execCommand('delete');
         this.removableFlag = true;
         return;
       }
 
       if (this.isEditable()) {
+        this.removableFlag = true;
         return;
       }
 
       if (this.list[this.focused].level > 0 && !this.getSpanList() && !this.getTail()) {
-        await this.decreaseStoryLevel($event);
+        this.decreaseStoryLevel($event);
       }
 
       if (this.list[this.focused].level === 0 && !this.list[this.focused].markup.length) {

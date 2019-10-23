@@ -30,7 +30,6 @@ export default {
         container.innerHTML = `${this.getSpanList()}&nbsp;${span}`;
       } else {
         const tail = this.getTail().replace(this.otherBuffer, custom);
-
         found.innerHTML += `&nbsp;${tail}`;
       }
 

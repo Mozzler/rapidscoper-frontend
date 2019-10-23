@@ -134,7 +134,7 @@
                    @keydown="keydownEvent"
                    @keydown.esc.exact="() => hintEditor = null"
                    @keydown.tab.exact="fixStaticText"
-                   @keypress.delete.exact="removeKeyupEvent"
+                   @keyup.delete.exact="removeKeyupEvent"
                    @keydown.delete.exact="removeKeydownEvent"
                    @keydown.tab.shift.exact="decreaseStoryLevel"
                    @blur="() => updateStory(index)"

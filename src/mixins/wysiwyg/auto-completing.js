@@ -120,6 +120,11 @@ export default {
         const text = this.createSpan(this.next, tail, false, editable);
         this.list[this.focused].markup = list + `&nbsp;` + (this.next ? text : ':');
       }
+    },
+    findSimilar () {
+      const container = document.getElementById(this.list[this.focused].id);
+      return _.find(container.children, i =>
+        i.className && i.className.includes(this.next));
     }
   }
 };
