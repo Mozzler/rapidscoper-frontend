@@ -36,6 +36,11 @@ export default {
       this.list[this.focused].markup = this.getSpanList();
       this.list[this.focused].placeholder = this.list[this.focused].markup;
       this.otherBuffer = '';
+
+      this.$store.commit('entity/update', {
+        entity: 'story',
+        data: this.list[this.focused]
+      });
     },
     async checkOtherDictionary (key, space = false) {
       const corrected = this.withoutSpace(this.otherBuffer);

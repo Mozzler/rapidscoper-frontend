@@ -4,6 +4,7 @@ export default {
       return _.isEqual(this.etalon, this.list[focused]);
     },
     async updateStory (focused = this.focused) {
+      this.setCustomText();
       if (!this.list[focused] || this.equal(focused)) {
         return;
       }

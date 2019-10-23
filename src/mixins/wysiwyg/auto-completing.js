@@ -112,7 +112,7 @@ export default {
 
       this.updateStory();
     },
-    setCustomText (editable = false) {
+    setCustomText (editable = (this.next && this.next.includes('custom'))) {
       this.printCustomPhrase();
       let [list, tail] = this.getLineParticles();
 
