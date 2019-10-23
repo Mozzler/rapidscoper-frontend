@@ -21,6 +21,14 @@ export default {
           $event.target.innerHTML = text;
           this.setText(text);
         });
+    },
+    restoreRange (selection) {
+      const range = document.createRange();
+      range.setStart(selection.anchorNode, selection.anchorOffset);
+      range.collapse(true);
+
+      selection.removeAllRanges();
+      selection.addRange(range);
     }
   }
 };

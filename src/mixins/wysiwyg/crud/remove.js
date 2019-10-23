@@ -26,19 +26,10 @@ export default {
 
       this.collapseToEnd();
     },
-    removeKeyupEvent ($event) {
-      if (this.removableFlag) {
-        this.list[this.focused].markup = $event.target.innerHTML;
-        this.list[this.focused].placeholder = this.list[this.focused].markup;
-      }
-
-      this.removableFlag = false;
-    },
-    removeKeydownEvent ($event) {
+    remove ($event) {
       this.event = $event;
 
       if (document.getSelection().toString()) {
-        console.log('keydown-1');
         document.execCommand('delete');
         this.removableFlag = true;
         return;
@@ -62,6 +53,8 @@ export default {
         this.removableFlag = true;
         this.$refs[this.list[this.focused].id][0].classList.remove('text-greyed');
       }
+
+      this.collapseToEnd();
     }
   }
 };

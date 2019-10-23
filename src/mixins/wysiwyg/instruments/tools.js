@@ -117,11 +117,7 @@ export default {
           } else if (selection.anchorNode.id) {
             this.collapseToEnd();
           } else {
-            const range = document.createRange();
-            range.setStart(selection.anchorNode, selection.anchorOffset);
-            range.collapse(true);
-            selection.removeAllRanges();
-            selection.addRange(range);
+            this.restoreRange(selection);
           }
         });
       } else {

@@ -89,7 +89,12 @@ export default {
       let printable = this.printable($event.which);
       if (!printable && !this.isEditable() && this.event.key !== 'Backspace') {
         this.list[this.focused].markup = this.event.target.innerHTML;
-        this.collapseToEnd();
+      }
+
+      if (this.removableFlag) {
+        this.list[this.focused].markup = $event.target.innerHTML;
+        this.list[this.focused].placeholder = this.list[this.focused].markup;
+        this.removableFlag = false;
       }
 
       this.$refs[this.list[this.focused].id][0].classList.remove('text-dark-grey');
