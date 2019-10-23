@@ -14,6 +14,7 @@ export default {
     },
     async fixStaticText ($event) {
       $event.preventDefault();
+
       this.event = $event;
       this.setSiblings();
 

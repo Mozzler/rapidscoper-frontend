@@ -7,7 +7,7 @@ export default {
   methods: {
     declineCustomPhrase () {
       const nonSpaced = this.otherBuffer.replace(/&nbsp;|\u00a0| |/g, '');
-      return !this.next || !this.next.includes('custom-') || !nonSpaced || nonSpaced === 'I';
+      return (this.next && !this.next.includes('custom-')) || !nonSpaced || nonSpaced === 'I';
     },
     printCustomPhrase (corrected = this.withoutSpace()) {
       if (this.declineCustomPhrase()) {
@@ -16,12 +16,27 @@ export default {
       }
 
       const text = this.submitField('custom', corrected, this.focused);
-      const custom = this.createSpan('other', text, false, false, true, 'i');
+      let custom = this.createSpan('other', text, false, false, true, 'i');
 
-      this.list[this.focused].markup = this.list[this.focused].markup.replace(this.otherBuffer, custom);
+      const container = document.getElementById(this.list[this.focused].id);
+      const found = _.find(container.children, i =>
+        i.className && i.className.includes(this.next));
+
+      if (!found) {
+        const tail = this.getTail(true);
+        const updated = tail.replace(this.otherBuffer, custom);
+        const span = this.createSpan(this.next, updated, false, true);
+
+        container.innerHTML = `${this.getSpanList()}&nbsp;${span}`;
+      } else {
+        const tail = this.getTail().replace(this.otherBuffer, custom);
+
+        found.innerHTML += `&nbsp;${tail}`;
+      }
+
+      this.list[this.focused].markup = this.getSpanList();
+      this.list[this.focused].placeholder = this.list[this.focused].markup;
       this.otherBuffer = '';
-
-      return this.list[this.focused].markup;
     },
     async checkOtherDictionary (key, space = false) {
       const corrected = this.withoutSpace(this.otherBuffer);

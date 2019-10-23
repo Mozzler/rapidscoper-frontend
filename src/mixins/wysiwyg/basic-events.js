@@ -51,7 +51,7 @@ export default {
     keydownEvent ($event) {
       this.event = $event;
 
-      if (this.isEditable() || $event.key === 'Escape') {
+      if ($event.key === 'Escape') {
         return;
       }
 

@@ -1,4 +1,9 @@
 export default {
+  data () {
+    return {
+      removableFlag: false
+    };
+  },
   methods: {
     async removeStory (index = this.focused) {
       this.processing = this.list[index].id;
@@ -21,13 +26,17 @@ export default {
 
       this.collapseToEnd();
     },
-    async remove ($event) {
+    removeKeyupEvent ($event) {
+      this.list[this.focused].markup = $event.target.innerHTML;
+      this.list[this.focused].placeholder = this.list[this.focused].markup;
+      this.removableFlag = false;
+    },
+    async removeKeydownEvent ($event) {
       this.event = $event;
 
       if (document.getSelection().toString()) {
         document.execCommand('delete');
-        this.list[this.focused].markup = $event.target.innerHTML;
-        this.list[this.focused].placeholder = this.list[this.focused].markup;
+        this.removableFlag = true;
         return;
       }
 
@@ -45,11 +54,9 @@ export default {
       }
 
       if (this.list[this.focused].markup) {
-        this.list[this.focused].markup = $event.target.innerHTML;
+        this.removableFlag = true;
         this.$refs[this.list[this.focused].id][0].classList.remove('text-greyed');
       }
-
-      this.collapseToEnd();
     }
   }
 };

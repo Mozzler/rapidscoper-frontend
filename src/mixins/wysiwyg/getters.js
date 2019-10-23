@@ -68,7 +68,7 @@ export default {
     getCurrentSpan () {
       const node = this.event.view.getSelection().focusNode;
 
-      if (!this.list[this.focused].markup || !this.list[this.focused].template || !node ||  !node.previousSibling) {
+      if (!this.list[this.focused].markup || !this.list[this.focused].template || !node || !node.previousSibling) {
         this.list[this.focused].template = '';
         return null;
       }
@@ -122,8 +122,10 @@ export default {
         return 'beginning';
       }
 
-      const next = parts.indexOf(this.previous) + 1;
-      return parts[next];
+      const index = parts.indexOf(this.previous);
+      const next = index !== -1 ? index + 1 : index;
+
+      return parts[next] ? parts[next] : parts[index];
     },
     getLineParticles (clearedTail = false) {
       return [this.getSpanList(), this.getTail(clearedTail)];
