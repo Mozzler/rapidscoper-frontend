@@ -116,9 +116,15 @@ export default {
       this.printCustomPhrase();
       let [list, tail] = this.getLineParticles();
 
+      const existed = this.findSimilar();
       if (tail) {
-        const text = this.createSpan(this.next, tail, false, editable);
-        this.list[this.focused].markup = list + `&nbsp;` + (this.next ? text : ':');
+        if (existed) {
+          existed.innerHTML += tail;
+          this.list[this.focused].markup = this.getSpanList();
+        } else {
+          const text = this.createSpan(this.next, tail, false, editable);
+          this.list[this.focused].markup = `${list}&nbsp;${text}`;
+        }
       }
     },
     findSimilar () {
