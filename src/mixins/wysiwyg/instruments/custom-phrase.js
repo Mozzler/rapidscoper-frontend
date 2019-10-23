@@ -30,7 +30,7 @@ export default {
         container.innerHTML = `${this.getSpanList()}&nbsp;${span}`;
       } else {
         const tail = this.getTail().replace(this.otherBuffer, custom);
-        found.innerHTML += `&nbsp;${tail}`;
+        found.innerHTML += tail;
       }
 
       this.list[this.focused].markup = this.getSpanList();
