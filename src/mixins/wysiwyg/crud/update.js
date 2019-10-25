@@ -5,20 +5,20 @@ export default {
     },
     async updateStory (focused = this.focused) {
       this.setCustomText();
-      if (!this.list[focused] || this.equal(focused)) {
+
+      const excluded = !this.list[focused] ||
+        this.equal(focused) ||
+        this.tab !== 'edit' ||
+        this.hintEditor !== null;
+
+      if (excluded) {
         return;
       }
 
       this.processing = this.list[focused].id;
-
-      if (this.tab !== 'edit' || this.hintEditor !== null) {
-        this.processing = false;
-        return;
-      }
-
       const payload = this.getUpdateRequestPayload(focused);
 
-      this.$store.commit('entity/update', payload);
+      this.resetFocusedAutocomplete();
       await this.$store.dispatch('entity/update', payload);
       this.processing = false;
     }
