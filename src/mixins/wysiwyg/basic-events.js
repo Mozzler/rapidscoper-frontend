@@ -48,10 +48,14 @@ export default {
         this.hintEditor = null;
       }
     },
+    disabledKeys () {
+      return ['Escape', 'Backspace'].includes(this.event.key) ||
+        (this.event.ctrlKey && this.event.key === 'v');
+    },
     keydownEvent ($event) {
       this.event = $event;
 
-      if (this.event.key === 'Escape' || this.event.key === 'Backspace') {
+      if (this.disabledKeys()) {
         return;
       }
 
