@@ -203,7 +203,8 @@
   right: 0;
 }
 
-.user-story__editable--beginning {
+.user-story__editable--beginning,
+.user-story__editable--static-text {
   white-space: nowrap;
 }
 
