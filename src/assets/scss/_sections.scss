@@ -203,6 +203,10 @@
   right: 0;
 }
 
+.user-story__editable--beginning {
+  white-space: nowrap;
+}
+
 .user-story__editable--actor {
   @include set-bottom-border($light-green);
 }
