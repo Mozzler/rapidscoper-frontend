@@ -7,7 +7,11 @@ export default {
   methods: {
     declineCustomPhrase () {
       const nonSpaced = this.otherBuffer.replace(/&nbsp;|\u00a0| |/g, '');
-      return (this.next && !this.next.includes('custom-')) || !nonSpaced || nonSpaced === 'I';
+
+      const next = this.next && !this.next.includes('custom-');
+      const previous = this.previous && !this.previous.includes('custom-');
+
+      return (next && previous) || !nonSpaced || nonSpaced === 'I';
     },
     printCustomPhrase (corrected = this.withoutSpace()) {
       if (this.declineCustomPhrase()) {
@@ -15,12 +19,15 @@ export default {
         return;
       }
 
+      const cls = (this.previous.includes('custom-') && !this.next.includes('custom-')) ?
+        this.previous : this.next;
+
       const text = this.submitField('custom', corrected, this.focused);
       let custom = this.createSpan('other', text, false, false, true, 'i');
 
       const container = document.getElementById(this.list[this.focused].id);
       const found = _.find(container.children, i =>
-        i.className && i.className.includes(this.next));
+        i.className && i.className.includes(cls));
 
       if (!found) {
         const tail = this.getTail(true);
@@ -36,6 +43,8 @@ export default {
       this.list[this.focused].markup = this.getSpanList();
       this.list[this.focused].placeholder = this.list[this.focused].markup;
       this.otherBuffer = '';
+
+      this.initPlaceholder();
 
       this.$store.commit('entity/update', {
         entity: 'story',

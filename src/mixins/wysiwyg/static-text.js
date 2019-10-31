@@ -41,6 +41,7 @@ export default {
       }
 
       if (this.next.includes('static-text')) {
+        this.setCustomText(true);
         const [type, text] = this.getStaticTextByType();
         this.list[this.focused].markup += this.createSpan(type, text, false);
       }
